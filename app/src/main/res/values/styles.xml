@@ -1,0 +1,60 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="android:divider">@color/divider</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+
+
+    </style>
+
+    <style name="MyToolbar" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="searchViewStyle">@style/searchStyle</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+
+    </style>
+
+   <style name="TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title" >
+
+       <item name="android:fontFamily">sans-serif</item>
+       <item name="android:textColor">#cd000000</item>
+       <item name="android:textSize">16sp</item>
+
+
+
+   </style>
+
+<style name="SubTitleText" parent="TextAppearance.AppCompat.Caption">
+
+</style>
+
+
+    <style name="searchStyle" parent="Widget.AppCompat.SearchView.ActionBar">
+        <item name="queryHint">@string/search</item>
+        <item name="searchIcon">@null</item>
+
+
+    </style>
+
+
+    <style name="CollapsingToolbarLayoutExpandedTextStyle" parent="AppTheme">
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="android:textSize">0.1sp</item>
+    </style>
+
+
+
+
+</resources>

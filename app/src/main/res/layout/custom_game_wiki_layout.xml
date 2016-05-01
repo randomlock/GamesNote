@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="@dimen/leftmargin"
+    android:layout_marginRight="@dimen/leftmargin"
+    android:layout_marginTop="@dimen/leftmargin"
+    android:layout_marginBottom="@dimen/bottommargin"
+    app:elevation="4dp"
+    android:layout_height="wrap_content">
+
+  <!-- change scale type to see the difference -->
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
+<ImageView
+    android:layout_width="100dp"
+    android:layout_height="150dp"
+    android:src="@drawable/testimage"
+    android:id="@+id/imageView"
+    />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<TextView
+    android:id="@+id/title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Game Title"
+    android:gravity="center_horizontal"
+    style="@style/TitleText"
+    android:layout_alignParentTop="true"
+    android:layout_toStartOf="@+id/dropdown"
+    android:layout_toLeftOf="@+id/dropdown"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Release date"
+            style="@style/SubTitleText"
+            android:layout_below="@+id/title"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/view" />
+
+
+     <View
+         android:id="@+id/view"
+         android:layout_width="match_parent"
+         android:layout_height="@dimen/line"
+         android:background="#ece67b"
+         android:layout_centerVertical="true"
+
+          />
+
+    <View
+        android:id="@+id/dropdown"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_arrow_drop_down_black_24dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        >
+
+    </View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLATFORM"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/textView"
+        android:layout_below="@+id/view"
+        android:layout_centerHorizontal="true" />
+
+
+
+
+
+
+    <Button
+        android:background="@null"
+        android:id="@+id/platform1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Xbox"
+        android:drawableLeft="@drawable/xbox"
+        android:drawableStart="@drawable/xbox"
+        android:gravity="center_vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/platform2"
+        android:background="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="PC"
+        android:drawableLeft="@drawable/pc"
+        android:drawableStart="@drawable/pc"
+        android:gravity="left|center_vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/platform1"
+        android:layout_toEndOf="@+id/platform1" />
+
+    <Button
+        android:id="@+id/platform3"
+        android:layout_width="wrap_content"
+        android:text="PS3"
+        android:background="@null"
+        android:drawableLeft="@drawable/playstation"
+        android:drawableStart="@drawable/playstation"
+        android:gravity="left|center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/platform1"
+        android:layout_toStartOf="@+id/platform1" />
+
+</RelativeLayout>
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textStyle="italic"
+        android:background="#ece67b"
+        android:gravity="center_horizontal"
+        android:text="@string/desc"
+        android:id="@+id/description" />
+
+
+</LinearLayout>
+
+</android.support.v7.widget.CardView>

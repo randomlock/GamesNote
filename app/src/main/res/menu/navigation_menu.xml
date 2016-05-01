@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- add icons appropriately -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+
+        <item android:id="@+id/nav_home"
+            android:title="@string/home"
+            android:icon="@mipmap/ic_launcher"
+            >
+
+        </item>
+
+
+        <item android:id="@+id/nav_mylist"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/List"
+            >
+
+
+        </item>
+
+            <item
+                android:id="@+id/nav_wiki"
+                android:icon="@mipmap/ic_launcher"
+                android:title="@string/Wiki"
+                >
+                </item>
+
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/games_news">
+
+        </item>
+
+        <item
+            android:id="@+id/nav_calender"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/games_calender">
+
+        </item>
+
+
+
+        <item
+            android:id="@+id/nav_trailer"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/game_trailer">
+
+        </item>
+
+
+    </group>
+
+<item android:title="@string/help_and_support">
+    <menu>
+        <item
+            android:id="@+id/nav_giantbomb"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/giantbomb_site" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/Settings" />
+
+        <item
+            android:id="@+id/nav_contact_us"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/email_me">
+
+        </item>
+
+    </menu>
+
+
+</item>
+
+</menu>

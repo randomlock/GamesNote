@@ -1,0 +1,82 @@
+<resources>
+    <string name="app_name">GamesNote</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="drawer_open">Open Navigation Drawer</string>
+    <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="List">My List</string>
+    <string name="Wiki">Games Wiki</string>
+    <string name="games_news">News</string>
+    <string name="game_trailer">Trailers</string>
+    <string name="help_and_support"><![CDATA[Help & Support]]></string>
+    <string name="giantbomb_site">Visit giantbomb</string>
+    <string name="email_me">ContactUs</string>
+    <string name="Settings">Settings</string>
+    <string name="username">MyUserName</string>
+    <string name="home">Home</string>
+    <string name="GameListFragment">My List</string>
+    <string name="games_calender">Game Calender</string>
+    <string name="desc">Description</string>
+    <string name="search">Search Games...</string>
+    <string name="no_description">No available description</string>
+    <string name="smallImageUrl">smallUrl</string>
+    <string name="mediumImageUrl">mediumUrl</string>
+    <string name="info">options</string>
+
+    <string-array name="hello">
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+        <item>"SDFsdf"</item>
+
+
+    </string-array>
+
+
+    <string-array name="bottomsheet">
+        <item>Share</item>
+        <item>Save to gallery</item>
+        <item>Set as wallPaper</item>
+    </string-array>
+</resources>

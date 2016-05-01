@@ -1,0 +1,83 @@
+Problem                                                                         solution
+
+On opening app , mylist is not highlighted                                      check main activity
+
+No humburger                                                                       search humberger with fragments
+
+Collapsing toolbar game wiki                                                        check if its possible without toolbar;
+
+
+
+remove humberger animation from main activity                                          wasting animation resource .
+
+
+
+try to use gamelist and gamewiki layout                                                         check common and study <include>
+
+
+
+(optional) disable right navigation view when sliding viewpager
+
+
+
+
+you should have all dpi for icon and small images                                           use online patcher if only one image is available
+
+
+
+
+recommended games if any should be in horizontal recycler view list
+
+
+
+check drawable circular progress for other uses
+
+
+add viewpager gallery for images
+
+
+In videos or other , instead of tablayout we will use - http://share.framerjs.com/lg0nu9ecekfy/ . the background will be of games wallpaper
+
+
+
+
+remove the placeholder text,view,images etc from your layout / very expensice operation
+
+animation for clicking image icons . Check nifty modal dialog effects to select one animatiom
+
+
+
+
+Todo today
+
+
+
+platform UI with more option
+
+
+
+
+
+TODO tomorrow
+
+image on click listener
+Filters
+add beautiful scroll bar for game wiki
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Settting option
+
+Change the quality of image (iconURL,mediumUrl) in gamewiki

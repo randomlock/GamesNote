@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    android:alpha="0.8"
+    android:background="@drawable/headerbackground"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:text="@string/username"
+        android:textColor="@color/white"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:gravity="end"
+        />
+
+</FrameLayout>
