@@ -58,7 +58,7 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:theme="@style/MyToolbar"
+                app:theme="@style/MyToolbarLight"
                 app:layout_collapseMode="pin"
                 />
 

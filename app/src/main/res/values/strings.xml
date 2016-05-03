@@ -73,10 +73,13 @@
 
     </string-array>
 
+<string-array name="search_filter">
 
-    <string-array name="bottomsheet">
-        <item>Share</item>
-        <item>Save to gallery</item>
-        <item>Set as wallPaper</item>
-    </string-array>
+    <item>Original release date</item>
+    <item>Date added</item>
+    <item>Date updated</item>
+    <item>No of user review</item>
+    <item>None</item>
+</string-array>
+
 </resources>

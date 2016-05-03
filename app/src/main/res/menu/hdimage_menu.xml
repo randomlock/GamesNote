@@ -6,6 +6,6 @@
 <item
     android:title="@string/info"
     android:id="@+id/info"
-    android:icon="@drawable/ic_info_black_24dp"
+    android:icon="@drawable/ic_info_outline_white_24dp"
     app:showAsAction="always"/>
 </menu>

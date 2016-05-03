@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -32,8 +33,10 @@ import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
+import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.EndlessRecyclerOnScrollListener;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
 import com.example.randomlocks.gamesnote.MainActivity;
@@ -42,6 +45,9 @@ import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +60,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GamesWikiFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
+public class GamesWikiFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface {
 
 ViewPager viewPager;
     View customView;
@@ -68,6 +74,8 @@ ViewPager viewPager;
     List<GameWikiModal> listModals;
     GameWikiAdapter adapter;
     ObjectAnimator animation;
+     Map<String,String> map;
+    GameWikiListInterface gameWikiListInterface;
 
     public static final String LIMIT = "50";
 
@@ -101,7 +109,6 @@ ViewPager viewPager;
         progressBar = (ProgressBar) customView.findViewById(R.id.progressBar);
 
 
-        setRetainInstance(true);
         return v ;
     }
 
@@ -133,8 +140,8 @@ ViewPager viewPager;
 
         /***************************** MAKING THE API CALL **************************/
 
-       final GameWikiListInterface gameWikiListInterface =  GiantBomb.createService(GameWikiListInterface.class);
-        final Map<String,String> map = new HashMap<>();
+         gameWikiListInterface =  GiantBomb.createService(GameWikiListInterface.class);
+        map = new HashMap<>();
         map.put(GiantBomb.KEY,GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT,"JSON");
         map.put(GiantBomb.LIMIT, LIMIT);
@@ -196,8 +203,17 @@ ViewPager viewPager;
 
             case R.id.search :
 
-                //handle the search
+
+
+
                 break;
+
+            case R.id.filter :
+
+                SearchFilterFragment filterFragment = SearchFilterFragment.newInstance();
+                filterFragment.setTargetFragment(this,0);
+                filterFragment.show(getActivity().getSupportFragmentManager(),"seach filter");
+
             default:
                 super.onOptionsItemSelected(item);
         }
@@ -242,6 +258,10 @@ ViewPager viewPager;
                 return true;
             }
         });
+
+   searchView.setOnQueryTextListener(this);
+
+
     }
 
 
@@ -256,7 +276,7 @@ ViewPager viewPager;
 /***************************** ACTUAL ASYNCHRONOUS API CALL ******************************/
 
 
-    public void getGameWiki(GameWikiListInterface gameWikiListInterface,Map<String,String> map){
+    public void getGameWiki(GameWikiListInterface gameWikiListInterface, final Map<String,String> map){
 
 progressBar.setVisibility(View.VISIBLE);
 
@@ -264,18 +284,23 @@ progressBar.setVisibility(View.VISIBLE);
             @Override
             public void onResponse(Call<GameWikiListModal> call, Response<GameWikiListModal> response) {
 
+                Toaster.make(getContext(), "on response");
+
                 progressBar.setVisibility(View.GONE);
 
 
+
                 if (listModals.isEmpty()) {
+                    Toaster.make(getContext(),"list is empty");
                     listModals = response.body().results;
                     adapter = new GameWikiAdapter(listModals,getContext(),recyclerView.getChildCount());
                     recyclerView.setAdapter(adapter);
                 }
                 else {
+                    Toaster.make(getContext(),"list not empty");
                     int size = adapter.getItemCount();
                     listModals.addAll(response.body().results);
-                    adapter.notifyItemRangeInserted(size,listModals.size());
+                    adapter.notifyItemRangeInserted(size, listModals.size());
 
                 }
 
@@ -292,4 +317,36 @@ progressBar.setVisibility(View.VISIBLE);
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        String field = "name:"+query;
+        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(),getContext());
+
+            map.put(GiantBomb.FIELD,field);
+            map.put(GiantBomb.OFFSET, "0");
+        Toaster.make(getContext(), map.toString());
+        listModals.clear();
+
+        getGameWiki(gameWikiListInterface, map);
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public void onSelect(int which, boolean asc) {
+
+        List<String> arrayList =  Arrays.asList(getContext().getResources().getStringArray(R.array.search_filter));
+
+
+
+
+
+    }
 }

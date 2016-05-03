@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -16,6 +16,10 @@
 
     <style name="MyToolbar" parent="AppTheme">
         <item name="android:textColorPrimary">@color/white</item>
+        <item name="searchViewStyle">@style/searchStyle</item>
+    </style>
+
+    <style name="MyToolbarLight" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="searchViewStyle">@style/searchStyle</item>
     </style>
 
@@ -54,6 +58,36 @@
         <item name="android:textSize">0.1sp</item>
     </style>
 
+
+    <style name="bottomSheet">
+        <item name="android:textAlignment" tools:ignore="NewApi">viewStart</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog">
+    <!--item RadioButton or CheckBox color-->
+    <item name="colorControlNormal">@android:color/white</item>
+    <item name="colorControlActivated">@color/accent</item>
+    <!--item text color-->
+    <item name="textColorAlertDialogListItem">@color/white</item>
+    <!--buttons color-->
+    <item name="colorAccent">@color/accent</item>
+    <!--title and message color-->
+    <item name="android:textColorPrimary">@android:color/white</item>
+    <!--dialog background-->
+    <item name="android:windowBackground">@color/primary</item>
+</style>
+
+    <style name="MyCheckBox" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/accent</item>
+    </style>
 
 
 

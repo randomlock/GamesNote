@@ -1,6 +1,8 @@
 package com.example.randomlocks.gamesnote;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,6 +25,7 @@ import com.example.randomlocks.gamesnote.Modal.BottomSheetImage;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -35,6 +39,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
     ListView listView;
     PhotoViewAttacher mAttacher;
     Toolbar toolbar;
+    boolean isLoaded=false;
 
 
     @Override
@@ -62,6 +67,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
                 @Override
                 public void onSuccess() {
                     progressBar.setVisibility(View.GONE);
+                    isLoaded = true;
                     mAttacher = new PhotoViewAttacher(imageView);
                     mAttacher.setOnViewTapListener(HdImageViewerActivity.this);
 
@@ -69,6 +75,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
 
                 @Override
                 public void onError() {
+                    progressBar.setVisibility(View.GONE);
                     Toaster.make(HdImageViewerActivity.this, "cannot load image");
                 }
             });
@@ -85,7 +92,39 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toaster.make(HdImageViewerActivity.this,"TODO");
+
+
+        if (isLoaded) {
+            switch (i){
+
+                //share
+                case  0 :
+
+                    File myFile = new File(imageUrl);
+                    MimeTypeMap mime = MimeTypeMap.getSingleton();
+                    String ext = myFile.getName().substring(myFile.getName().lastIndexOf(".") + 1);
+                    String type = mime.getMimeTypeFromExtension(ext);
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    sharingIntent.setType(type);
+                    sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(myFile));
+                    startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                    break;
+
+                case  1 :
+                    Toaster.make(HdImageViewerActivity.this,"todo");
+                    break;
+
+                case 3 :
+                    Toaster.make(HdImageViewerActivity.this,"todo");
+                    break;
+
+
+
+
+            }
+        }
+
+
     }
 });
 

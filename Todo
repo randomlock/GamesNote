@@ -45,6 +45,8 @@ remove the placeholder text,view,images etc from your layout / very expensice op
 
 animation for clicking image icons . Check nifty modal dialog effects to select one animatiom
 
+seach icon need to be in white color . maybe applying toolbar theme at runtime will do trick
+
 
 
 

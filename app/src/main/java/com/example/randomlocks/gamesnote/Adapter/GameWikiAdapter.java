@@ -29,12 +29,17 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
     private List<GameWikiModal> list;
     Context context;
     int lastPosition;
+    private static GameWikiAdapter gameWikiAdapter = null;
 
     public GameWikiAdapter(List<GameWikiModal> list,Context context,int lastPosition){
         this.list = list;
         this.context = context;
         this.lastPosition=lastPosition;
     }
+
+
+
+
 
 
     @Override

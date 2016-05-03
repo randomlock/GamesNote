@@ -5,11 +5,18 @@
 
     <item
         android:id="@+id/search"
-        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+
+        android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/search"
         yourapp:showAsAction="ifRoom|collapseActionView"
         yourapp:actionViewClass="android.support.v7.widget.SearchView"
         />
+
+    <item
+        android:id="@+id/filter"
+        android:title="Filter Result"
+        android:icon="@drawable/ic_info_outline_white_24dp"
+        yourapp:showAsAction="ifRoom"/>
 
 
 </menu>

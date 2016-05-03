@@ -23,6 +23,7 @@ public class GiantBomb {
     public static final String FIELD_LIST="field_list";
     public static final String LIMIT="limit";
     public static final String OFFSET="offset";
+    public static final String FIELD="filter";
     public static final int SMALL_IMAGE_URL=1;
     public static final int MEDIUM_IMAGE_URL=2;
 

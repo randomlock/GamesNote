@@ -148,7 +148,7 @@ mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.ge
                 break;
 
             case R.id.nav_wiki :
-                Toast.makeText(this,"Game Wiki",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Game Wiki restaring ?",Toast.LENGTH_SHORT).show();
                 FragmentTransactionHelper("replace", new GamesWikiFragment(), "GamesWiki");
                 break;
 
