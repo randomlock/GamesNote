@@ -73,13 +73,13 @@
 
     </string-array>
 
-<string-array name="search_filter">
+    <string-array name="search_filter">
 
-    <item>Original release date</item>
-    <item>Date added</item>
-    <item>Date updated</item>
-    <item>No of user review</item>
-    <item>None</item>
-</string-array>
+        <item>Original release date</item>
+        <item>Date added</item>
+        <item>Date updated</item>
+        <item>No of user review</item>
+        <item>Default</item>
+    </string-array>
 
 </resources>

@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 
@@ -23,6 +25,7 @@ public class SearchFilterFragment extends DialogFragment {
     CheckBox checkbox;
     View view;
     SearchFilterInterface searchFilterInterface=null;
+    int which_one;
 
 
     public interface SearchFilterInterface{
@@ -57,6 +60,8 @@ public class SearchFilterFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH,4,getContext());
+
     }
 
 
@@ -71,10 +76,15 @@ public class SearchFilterFragment extends DialogFragment {
                 .setCancelable(true)
                 .setTitle("Sort Result")
 
-                .setSingleChoiceItems(getResources().getStringArray(R.array.search_filter), 4, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(getResources().getStringArray(R.array.search_filter), which_one, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        searchFilterInterface.onSelect(which,!checkbox.isChecked());
+                        if(which == which_one )
+                            dismiss();
+
+                        SharedPreference.saveToSharedPreference(GiantBomb.WHICH,which,getContext());
+                        searchFilterInterface.onSelect(which, !checkbox.isChecked());
+                        dismiss();
                     }
                 })
                 .setView(view)

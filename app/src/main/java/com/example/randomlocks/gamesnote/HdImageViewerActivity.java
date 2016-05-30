@@ -1,11 +1,9 @@
 package com.example.randomlocks.gamesnote;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.example.randomlocks.gamesnote.Adapter.BottomSheetAdapter;
+import com.example.randomlocks.gamesnote.Adapter.HdImageBottomSheetAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.BottomSheetImage;
@@ -88,7 +86,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
         arrayList.add(new BottomSheetImage(R.drawable.ic_wallpaper_black_24dp, "Set as Wallpaper"));
 
 
-        listView.setAdapter(new BottomSheetAdapter(this, arrayList));
+        listView.setAdapter(new HdImageBottomSheetAdapter(this, arrayList));
 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

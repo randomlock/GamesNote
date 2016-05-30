@@ -45,7 +45,9 @@ remove the placeholder text,view,images etc from your layout / very expensice op
 
 animation for clicking image icons . Check nifty modal dialog effects to select one animatiom
 
-seach icon need to be in white color . maybe applying toolbar theme at runtime will do trick
+search icon need to be in white color . maybe applying toolbar theme at runtime will do trick
+
+change the request API for search from /games to /search to descrease API request/resource
 
 
 
@@ -62,8 +64,7 @@ platform UI with more option
 
 TODO tomorrow
 
-image on click listener
-Filters
+
 add beautiful scroll bar for game wiki
 
 

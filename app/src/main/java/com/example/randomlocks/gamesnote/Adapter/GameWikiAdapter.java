@@ -1,8 +1,10 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
+import com.example.randomlocks.gamesnote.GameDetailActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
@@ -42,6 +45,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
 
 
 
+
+
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -52,7 +58,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder( MyViewHolder holder, int position) {
+    public void onBindViewHolder( final MyViewHolder holder, int position) {
         final GameWikiModal modal = list.get(position);
         holder.title.setText(modal.name);
 
@@ -114,7 +120,16 @@ if(modal.image!=null && modal.image.smallUrl!=null){
         }
 
 
+/****************** SET ON CLICK LISTENER *************************/
 
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(context, GameDetailActivity.class);
+                it.putExtra("apiUrl",modal.apiDetailUrl);
+                context.startActivity(it);
+            }
+        });
 
 
        // holder.description.setText(modal.getDescription());
@@ -146,9 +161,12 @@ if(modal.image!=null && modal.image.smallUrl!=null){
 
           public View view;
 
+          public CardView cardView;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            cardView = (CardView) itemView.findViewById(R.id.cardView);
             title = (TextView) itemView.findViewById(R.id.title);
             description = (TextView)itemView.findViewById(R.id.description);
             date = (TextView) itemView.findViewById(R.id.date);

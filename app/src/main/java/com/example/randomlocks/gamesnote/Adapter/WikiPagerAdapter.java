@@ -50,6 +50,7 @@ private ImageView imageView;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view =  inflater.inflate(R.layout.viewpager_wiki_image, container, false);
         imageView = (ImageView) view.findViewById(R.id.image);
+
         container.addView(view);
 
 

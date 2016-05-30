@@ -54,6 +54,9 @@
 
 
 
+
+
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
@@ -66,11 +69,9 @@
 
 
 
-
-
-
-
         </android.support.design.widget.CollapsingToolbarLayout>
+
+
 
 
 
@@ -89,12 +90,15 @@
     >
 
 
+
+
         <android.support.v7.widget.RecyclerView
             android:background="#e4dfdf"
             android:id="@+id/recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:scrollbars="vertical"
             >
 
         </android.support.v7.widget.RecyclerView>

@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.randomlocks.gamesnote.Adapter.MyPagerAdapter;
+import com.example.randomlocks.gamesnote.Adapter.GameListPagerAdapter;
 import com.example.randomlocks.gamesnote.R;
 
 /**
@@ -76,7 +76,7 @@ public class GamesListFragment extends Fragment {
 
 
 
-        viewPager.setAdapter(new MyPagerAdapter(getChildFragmentManager(), getContext()));
+        viewPager.setAdapter(new GameListPagerAdapter(getChildFragmentManager(), getContext()));
 
 
       //  if (savedInstanceState!=null) {

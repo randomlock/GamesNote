@@ -325,7 +325,6 @@ progressBar.setVisibility(View.VISIBLE);
 
             map.put(GiantBomb.FIELD,field);
             map.put(GiantBomb.OFFSET, "0");
-        Toaster.make(getContext(), map.toString());
         listModals.clear();
 
         getGameWiki(gameWikiListInterface, map);
@@ -344,9 +343,41 @@ progressBar.setVisibility(View.VISIBLE);
 
         List<String> arrayList =  Arrays.asList(getContext().getResources().getStringArray(R.array.search_filter));
 
+    String sort = sortValue(which);
+
+        if(!asc){
+            sort+=":desc";
+        }
+
+        map.put(GiantBomb.SORT,sort);
+        map.put(GiantBomb.OFFSET,"0");
+        listModals.clear();
+        Toaster.make(getContext(), map.toString());
+
+        getGameWiki(gameWikiListInterface,map);
 
 
 
+    }
+
+    String sortValue(int which){
+
+        switch (which){
+
+            case 0 : return "original_release_date";
+
+            case 1 : return  "date_added";
+
+            case 2 : return "date_last_updated";
+
+            case 3 : return "number_of_user_reviews";
+
+            case 4 :
+
+            default: return "none";
+
+
+        }
 
     }
 }

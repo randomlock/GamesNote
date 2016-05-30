@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by randomlocks on 4/30/2016.
  */
-public class BottomSheetAdapter extends ArrayAdapter {
+public class HdImageBottomSheetAdapter extends ArrayAdapter {
 
     Context context;
     ArrayList<BottomSheetImage> arrayList;
@@ -26,7 +26,7 @@ public class BottomSheetAdapter extends ArrayAdapter {
 
 
 
-    public BottomSheetAdapter(Context context,ArrayList<BottomSheetImage> arrayList) {
+    public HdImageBottomSheetAdapter(Context context, ArrayList<BottomSheetImage> arrayList) {
         super(context,0);
         this.context = context;
         this.arrayList = arrayList;

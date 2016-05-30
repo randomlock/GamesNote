@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.randomlocks.gamesnote">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,10 +23,10 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchablewiki" />
         </activity>
-        <activity android:name=".HdImageViewerActivity"
-            android:parentActivityName=".MainActivity"
-            >
-        </activity>
+        <activity
+            android:name=".HdImageViewerActivity"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".GameDetailActivity"></activity>
     </application>
 
 </manifest>

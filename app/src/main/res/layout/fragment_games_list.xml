@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             app:expandedTitleGravity="right|bottom"
             app:contentScrim="?attr/colorPrimary"
-            app:theme="@style/MyToolbar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
