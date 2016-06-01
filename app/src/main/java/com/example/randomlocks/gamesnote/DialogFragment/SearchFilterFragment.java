@@ -1,12 +1,12 @@
 package com.example.randomlocks.gamesnote.DialogFragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -21,7 +21,7 @@ import com.example.randomlocks.gamesnote.R;
  */
 public class SearchFilterFragment extends DialogFragment {
 
-    boolean isAscending = true;
+    boolean isAscending;
     CheckBox checkbox;
     View view;
     SearchFilterInterface searchFilterInterface=null;
@@ -61,7 +61,7 @@ public class SearchFilterFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH,4,getContext());
-
+        isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING,true,getContext());
     }
 
 
@@ -83,6 +83,7 @@ public class SearchFilterFragment extends DialogFragment {
                             dismiss();
 
                         SharedPreference.saveToSharedPreference(GiantBomb.WHICH,which,getContext());
+                        SharedPreference.saveToSharedPreference(GiantBomb.ASCENDING,!checkbox.isChecked(),getContext());
                         searchFilterInterface.onSelect(which, !checkbox.isChecked());
                         dismiss();
                     }

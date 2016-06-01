@@ -1,13 +1,16 @@
 package com.example.randomlocks.gamesnote.Modal;
 
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by randomlocks on 4/9/2016.
  */
-public class GameWikiModal {
+public class GameWikiModal  {
 
     public String apiDetailUrl;
     public String deck;

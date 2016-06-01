@@ -27,6 +27,7 @@ public class GiantBomb {
     public static final String WHICH = "which";
     public static final int SMALL_IMAGE_URL=1;
     public static final int MEDIUM_IMAGE_URL=2;
+    public static final String ASCENDING = "ascending";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
     private static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();

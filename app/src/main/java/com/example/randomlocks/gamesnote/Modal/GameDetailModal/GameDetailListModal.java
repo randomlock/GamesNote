@@ -7,8 +7,8 @@ import java.util.List;
 /**
  * Created by randomlocks on 5/29/2016.
  */
-public class GameDetailModalList {
+public class GameDetailListModal {
 
-    public List<GameDetailModal> results;
+    public GameDetailModal results;
 
 }

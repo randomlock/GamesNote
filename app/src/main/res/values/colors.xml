@@ -14,4 +14,5 @@
     <color name="tab_selected_text">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="black_alpha_40">#66000000</color>
+    <color name="gameDetailColor">#E91E63</color>
 </resources>

@@ -5,17 +5,15 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,27 +25,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.example.randomlocks.gamesnote.Adapter.GameDetailPagerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.EndlessRecyclerOnScrollListener;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
+import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
-import com.example.randomlocks.gamesnote.MainActivity;
 import com.example.randomlocks.gamesnote.Modal.GameWikiListModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +57,8 @@ import retrofit2.Response;
  */
 public class GamesWikiFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface {
 
-ViewPager viewPager;
+    private static final String MODAL = "list_modal" ;
+    ViewPager viewPager;
     View customView;
     Activity activity;
     Toolbar toolbar;
@@ -123,7 +119,7 @@ ViewPager viewPager;
 
 
 /***************************  SETTING THE VIEW PAGER ***********************/
-        viewPager.setAdapter(new WikiPagerAdapter(getContext()));
+        viewPager.setAdapter(new GameDetailPagerAdapter(getContext(), 4));
         CircleIndicator indicator = (CircleIndicator) customView.findViewById(R.id.indicator);
         indicator.setViewPager(viewPager);
 
@@ -143,9 +139,20 @@ ViewPager viewPager;
          gameWikiListInterface =  GiantBomb.createService(GameWikiListInterface.class);
         map = new HashMap<>();
         map.put(GiantBomb.KEY,GiantBomb.API_KEY);
+
         map.put(GiantBomb.FORMAT,"JSON");
         map.put(GiantBomb.LIMIT, LIMIT);
         map.put(GiantBomb.OFFSET,"0");
+
+        String sort = sortValue(SharedPreference.getFromSharedPreferences(GiantBomb.WHICH,4,getContext()));
+        boolean asc = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING,true,getContext());
+
+        if(!asc){
+            sort+=":desc";
+        }
+
+        map.put(GiantBomb.SORT,sort);
+
 
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
@@ -379,5 +386,11 @@ progressBar.setVisibility(View.VISIBLE);
 
         }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+      //  outState.putParcelableArrayList(MODAL,  listModals);
     }
 }

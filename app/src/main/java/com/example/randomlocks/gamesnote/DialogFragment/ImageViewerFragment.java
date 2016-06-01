@@ -56,7 +56,7 @@ public class ImageViewerFragment extends DialogFragment   {
         View v = inflater.inflate(R.layout.dialog_image_viewer,container,false);
         getDialog().requestWindowFeature(STYLE_NO_TITLE);
         setCancelable(true);
-
+        getDialog().setCancelable(true);
 
         imageView = (ImageView) v.findViewById(R.id.imageview);
         hdButton = (Button)v.findViewById(R.id.button);
