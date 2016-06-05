@@ -212,7 +212,7 @@ if(modal.image!=null && modal.image.iconUrl!=null){
 
 
                 ImageViewerFragment dialog = ImageViewerFragment.newInstance((String) view.getTag(R.string.smallImageUrl),(String)view.getTag(R.string.mediumImageUrl));
-                
+
 
                  dialog.show(((FragmentActivity)context).getSupportFragmentManager(),"ImageViewer");
 
