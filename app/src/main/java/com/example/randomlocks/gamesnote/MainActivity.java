@@ -22,6 +22,7 @@ import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 
 
 /*
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
 
+
+
         frameLayout = (FrameLayout) findViewById(R.id.fragment_parent_layout);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigation = (NavigationView) findViewById(R.id.navigation_view);
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
 
-mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
         selectDrawerItem(mselectedId, mtitle);
 
@@ -192,13 +195,16 @@ mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.ge
     }
 
 
-    @Override
+ /*   @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY, mselectedId);
-        outState.putString(TITLE,mtitle);
+        outState.putString(TITLE, mtitle);
+     //   getSupportFragmentManager().putFragment(outState,"GameWiki",game);
+
     }
 
+*/
 
     @Override
     public void onBackPressed() {

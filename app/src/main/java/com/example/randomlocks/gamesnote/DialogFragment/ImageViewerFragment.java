@@ -15,6 +15,8 @@ import com.example.randomlocks.gamesnote.HdImageViewerActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
+import com.kogitune.activity_transition.fragment.ExitFragmentTransition;
+import com.kogitune.activity_transition.fragment.FragmentTransition;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -56,7 +58,8 @@ public class ImageViewerFragment extends DialogFragment   {
         View v = inflater.inflate(R.layout.dialog_image_viewer,container,false);
         getDialog().requestWindowFeature(STYLE_NO_TITLE);
         setCancelable(true);
-        getDialog().setCancelable(true);
+        getDialog().setCanceledOnTouchOutside(true);
+
 
         imageView = (ImageView) v.findViewById(R.id.imageview);
         hdButton = (Button)v.findViewById(R.id.button);
@@ -84,7 +87,6 @@ public class ImageViewerFragment extends DialogFragment   {
 
             }
         });
-
 
 
 

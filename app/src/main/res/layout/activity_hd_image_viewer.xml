@@ -18,7 +18,7 @@
             android:id="@+id/hdimage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_arrow_drop_down_black_18dp"
+            android:src="@drawable/ic_arrow_drop_down_black_36dp"
             android:layout_gravity="center" />
 
 

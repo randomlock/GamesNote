@@ -98,6 +98,7 @@ public class SearchFilterFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
 
         checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+        checkbox.setChecked(!isAscending);
 
 
     }

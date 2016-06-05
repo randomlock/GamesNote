@@ -40,7 +40,7 @@ public class MyAnimation {
         // 1dp/ms
         a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
-        icon.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_drop_up_black_24dp));
+        icon.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_drop_up_black_36dp));
 
     }
 
@@ -69,7 +69,7 @@ public class MyAnimation {
         a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
 
-        icon.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_drop_down_black_24dp));
+        icon.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_drop_down_black_36dp));
     }
 
 }

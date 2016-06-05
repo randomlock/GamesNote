@@ -20,7 +20,6 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:contentScrim="?attr/colorPrimary"
             app:theme="@style/MyToolbar"
@@ -111,11 +110,26 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:indeterminate="true"
-          android:layout_gravity="center"
+          android:layout_gravity="center|top"
           android:visibility="gone"
           style="@style/Widget.AppCompat.ProgressBar"
 
           />
+
+
+
+            <TextView
+                android:id="@+id/errortext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Result Found"
+                android:drawableTop="@drawable/ic_error_outline_black_48dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                />
+
+
+
 
 
 

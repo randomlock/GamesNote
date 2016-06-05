@@ -23,6 +23,9 @@
     <string name="smallImageUrl">smallUrl</string>
     <string name="mediumImageUrl">mediumUrl</string>
     <string name="info">options</string>
+    <string name="transition_viewpager">transactionViewpager</string>
+    <string name="foo">foo</string>
+    <string name="bar">bar</string>
 
     <string-array name="hello">
         <item>"SDFsdf"</item>

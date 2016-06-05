@@ -10,10 +10,11 @@
     
 
     <ImageView
+        android:id="@+id/imageview"
         android:layout_height="450dp"
         android:layout_width="300dp"
         android:src="@drawable/testimage"
-        android:id="@+id/imageview" />
+        />
 
         <ProgressBar
             android:layout_width="wrap_content"

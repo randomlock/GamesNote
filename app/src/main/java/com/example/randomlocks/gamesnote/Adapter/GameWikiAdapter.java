@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -20,6 +21,7 @@ import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
+import com.kogitune.activity_transition.fragment.FragmentTransitionLauncher;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -106,10 +108,10 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
        // Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
 
 
-if(modal.image!=null && modal.image.smallUrl!=null){
+if(modal.image!=null && modal.image.iconUrl!=null){
     holder.imageView.setTag(R.string.smallImageUrl,modal.image.smallUrl);
     holder.imageView.setTag(R.string.mediumImageUrl,modal.image.mediumUrl);
-     Picasso.with(context).load(modal.image.smallUrl).fit().into(holder.imageView);
+     Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
 }
 
         String date_time = modal.originalReleaseDate;
@@ -210,6 +212,8 @@ if(modal.image!=null && modal.image.smallUrl!=null){
 
 
                 ImageViewerFragment dialog = ImageViewerFragment.newInstance((String) view.getTag(R.string.smallImageUrl),(String)view.getTag(R.string.mediumImageUrl));
+                
+
                  dialog.show(((FragmentActivity)context).getSupportFragmentManager(),"ImageViewer");
 
 

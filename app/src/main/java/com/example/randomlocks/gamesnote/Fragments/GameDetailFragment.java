@@ -19,6 +19,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailPagerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.PagerDepthAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailImages;
@@ -129,6 +130,7 @@ public class GameDetailFragment extends Fragment {
 
                    WikiPagerAdapter pagerAdapter = new WikiPagerAdapter(getContext(),images.size(),images);
                    viewPager.setAdapter(pagerAdapter);
+                   viewPager.setPageTransformer(true,new PagerDepthAnimation());
 
 
 
