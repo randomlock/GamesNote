@@ -7,4 +7,10 @@ public class GameDetailThemes {
 
    public String apiDetailUrl ;
    public String name;
+
+   @Override
+   public String toString() {
+      return name;
+   }
+
 }

@@ -3,9 +3,9 @@ package com.example.randomlocks.gamesnote;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -142,11 +142,15 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
     @Override
     public void onViewTap(View view, float v, float v1) {
-        if(toolbar.getVisibility()==View.VISIBLE){
-            toolbar.setVisibility(View.INVISIBLE);
+        float alpha = toolbar.getAlpha();
+        if (alpha == 1) {
+            toolbar.animate().alpha(0).setDuration(200);
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
         else {
-            toolbar.setVisibility(View.VISIBLE);
+            toolbar.animate().alpha(1).setDuration(200);
+
         }
     }
 

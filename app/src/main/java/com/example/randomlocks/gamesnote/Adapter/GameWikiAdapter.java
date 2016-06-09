@@ -2,9 +2,7 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,11 +15,9 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
 import com.example.randomlocks.gamesnote.GameDetailActivity;
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
-import com.kogitune.activity_transition.fragment.FragmentTransitionLauncher;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -108,10 +104,10 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
        // Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
 
 
-if(modal.image!=null && modal.image.iconUrl!=null){
+        if (modal.image != null && modal.image.smallUrl != null && modal.image.mediumUrl != null) {
     holder.imageView.setTag(R.string.smallImageUrl,modal.image.smallUrl);
     holder.imageView.setTag(R.string.mediumImageUrl,modal.image.mediumUrl);
-     Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
+            Picasso.with(context).load(modal.image.smallUrl).fit().into(holder.imageView);
 }
 
         String date_time = modal.originalReleaseDate;
@@ -129,6 +125,9 @@ if(modal.image!=null && modal.image.iconUrl!=null){
             public void onClick(View v) {
                 Intent it = new Intent(context, GameDetailActivity.class);
                 it.putExtra("apiUrl",modal.apiDetailUrl);
+                if (modal.image != null && modal.image.mediumUrl != null) {
+                    it.putExtra("imageUrl", modal.image.mediumUrl);
+                }
                 context.startActivity(it);
             }
         });

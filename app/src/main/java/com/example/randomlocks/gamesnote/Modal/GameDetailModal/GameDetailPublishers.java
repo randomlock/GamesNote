@@ -7,4 +7,11 @@ public class GameDetailPublishers {
 
   public   String apiDetailUrl ;
   public   String name;
+
+
+  @Override
+  public String toString() {
+    return name;
+  }
+
 }

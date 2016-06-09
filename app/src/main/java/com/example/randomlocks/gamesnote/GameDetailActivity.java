@@ -1,10 +1,10 @@
 package com.example.randomlocks.gamesnote;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 
@@ -20,7 +20,7 @@ public class GameDetailActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("GameDetail");
         if(fragment == null){
-            fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL));
+            fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL), getIntent().getStringExtra(GameDetailFragment.IMAGE_URL));
         }
 
 

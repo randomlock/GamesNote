@@ -8,14 +8,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by randomlocks on 4/24/2016.
@@ -63,7 +60,16 @@ private ImageView imageView;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view =  inflater.inflate(R.layout.viewpager_wiki_image, container, false);
         imageView = (ImageView) view.findViewById(R.id.image);
-        Picasso.with(context).load(imageUrl).fit().into(imageView);
+        Picasso.with(context).load(imageUrl).fit().into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
 
         container.addView(view);
 

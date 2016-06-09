@@ -7,7 +7,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -25,14 +24,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameDetailPagerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
-import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
+import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.EndlessRecyclerOnScrollListener;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
@@ -68,7 +65,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     DrawerLayout mDrawer;
     NavigationView mNavigation;
     RecyclerView recyclerView;
-    ProgressBar progressBar;
+    AVLoadingIndicatorView progressBar;
     LinearLayoutManager manager;
     List<GameWikiModal> listModals;
     GameWikiAdapter adapter;
@@ -105,7 +102,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         mNavigation = (NavigationView) v.findViewById(R.id.navigation);
         viewPager = (ViewPager) customView.findViewById(R.id.viewpager);
         recyclerView = (RecyclerView) customView.findViewById(R.id.recycler_view);
-        progressBar = (ProgressBar) customView.findViewById(R.id.progressBar);
+        progressBar = (AVLoadingIndicatorView) customView.findViewById(R.id.progressBar);
         errorText = (TextView) customView.findViewById(R.id.errortext);
 
 
@@ -317,6 +314,7 @@ progressBar.setVisibility(View.VISIBLE);
 
 
                 if (listModals.isEmpty()) {
+                    Toaster.make(getContext(), "coming here?");
                     listModals = response.body().results;
                     adapter = new GameWikiAdapter(listModals,getContext(),recyclerView.getChildCount());
                     recyclerView.setAdapter(adapter);
@@ -351,15 +349,17 @@ progressBar.setVisibility(View.VISIBLE);
     public boolean onQueryTextSubmit(String query) {
 
         String field = "name:"+query;
-        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(),getContext());
+        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
 
             map.put(GiantBomb.FIELD,field);
             map.put(GiantBomb.OFFSET, "0");
-        listModals.clear();
 
+        listModals.clear();
         if(errorText.getVisibility()==View.VISIBLE){
             errorText.setVisibility(View.GONE);
         }
+
+        Toaster.make(getContext(), "atleast here");
         getGameWiki(gameWikiListInterface, map);
 
 

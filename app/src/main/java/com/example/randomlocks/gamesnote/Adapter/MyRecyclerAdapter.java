@@ -1,5 +1,6 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +19,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
 
 List<String> stringList;
+    Context context;
 
-    public MyRecyclerAdapter(List<String> stringList) {
+    public MyRecyclerAdapter(List<String> stringList, Context context) {
         this.stringList = stringList;
+        this.context = context;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_layout,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_similar_game_character, parent, false);
 
-MyViewHolder holder = new MyViewHolder(v);
+        MyViewHolder holder = new MyViewHolder(v);
         return holder;
 
 

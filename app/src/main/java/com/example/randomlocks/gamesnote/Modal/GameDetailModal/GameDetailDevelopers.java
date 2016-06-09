@@ -5,6 +5,12 @@ package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
  */
 public class GameDetailDevelopers {
 
-    String apiDetailUrl ;
-    String name;
+  public String apiDetailUrl;
+  public String name;
+
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }

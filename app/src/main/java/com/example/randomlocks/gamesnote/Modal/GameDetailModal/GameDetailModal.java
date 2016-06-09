@@ -1,7 +1,5 @@
 package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
-import com.example.randomlocks.gamesnote.Modal.GameWikiImage;
-
 import java.util.List;
 
 /**
@@ -19,4 +17,5 @@ public class GameDetailModal {
    public List<GameDetailPublishers> publishers;
    public List<GameDetailSimilarGames> similarGames;
    public List<GameDetailThemes> themes;
+
 }

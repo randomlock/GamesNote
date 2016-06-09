@@ -9,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -34,7 +33,7 @@ public class SearchFilterFragment extends DialogFragment {
     }
 
 
-    public static final SearchFilterFragment newInstance() {
+    public static SearchFilterFragment newInstance() {
 
         Bundle args = new Bundle();
 
