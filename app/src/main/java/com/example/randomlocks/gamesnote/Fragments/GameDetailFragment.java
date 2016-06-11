@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,23 +26,30 @@ import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailRecyclerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
+import com.example.randomlocks.gamesnote.AsyncTask.JsoupConnect;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PagerDepthAnimation;
+import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailImages;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.R;
-import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,10 +83,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     AppBarLayout appBarLayout;
     LinearLayout container;
     RecyclerView recyclerView, similarGameRecycleView, characterRecycleView;
-    ImageView imageView;
+    PicassoNestedScrollView nestedScrollView;
     TextView description;
     GameDetailRecyclerAdapter adapter;
     int style;
+    List<CharacterGamesImage> characterImage = null, similarGameImage = null;
 
 
 
@@ -114,7 +122,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         // Inflate the layout for this fragment
         String str[] = getArguments().getString(API_URL).split("/");
         apiUrl = str[str.length- 1];
-        Toaster.make(getContext(), getArguments().getString(IMAGE_URL));
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
 
@@ -123,42 +130,35 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         super.onActivityCreated(savedInstanceState);
 
 
-        /************************************** TOOLBAR SET *********************************/
-        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
-        toolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar_layout);
+        /************************************** FindViewById *********************************/
+        nestedScrollView = (PicassoNestedScrollView) getActivity().findViewById(R.id.scroll_view);
         appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
-        similarGameRecycleView = (RecyclerView) getActivity().findViewById(R.id.similar_game_list);
-        characterRecycleView = (RecyclerView) getActivity().findViewById(R.id.character_game_list);
-        imageView = (ImageView) getActivity().findViewById(R.id.image_background);
-        description = (TextView) getActivity().findViewById(R.id.description);
+        toolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
+        toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
+        viewPager = (ViewPager) toolbarLayout.findViewById(R.id.viewpager);
+        similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
+        similarGameRecycleView.setNestedScrollingEnabled(false);
+        characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
+        characterRecycleView.setNestedScrollingEnabled(false);
+        description = (TextView) nestedScrollView.findViewById(R.id.description);
+        recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
+        recyclerView.setNestedScrollingEnabled(false);
         style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 1, getContext()) + 1);
+
+
+        /************************** BACKGROUND ********************************/
+
+        //  Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).into(nestedScrollView);
+
+        /***************************** TYPEFACE ************************************/
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             description.setTextAppearance(style);
         } else {
             description.setTextAppearance(getContext(), style);
         }
-        Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).into(imageView);
-     /*   container = (LinearLayout) getActivity().findViewById(R.id.layout_container);
-        Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                container.setBackground(new BitmapDrawable(getResources(),bitmap));
-                container.getBackground().setAlpha((110));
-                Toaster.make(getContext(),"done");
-            }
 
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                Toaster.make(getContext(),"failed");
 
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Toaster.make(getContext(),"onload");
-
-            }
-        }); */
 
         //Show toolbar icon after parallex is finished
 
@@ -174,16 +174,15 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         });
 
+        /******************************* TOOLBAR *************************************/
 
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.list);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         // toolbar.setTitle("Game Detail");   //to be changed to game title
 
-       /************************************** VIEWPAGER SET *********************************/
-        viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
+
 
 
 
@@ -194,6 +193,70 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         map.put(GiantBomb.KEY,GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT,"JSON");
         getGameDetail(gameWikiDetailInterface, map);
+
+        new JsoupConnect(new JsoupConnect.AsyncResponse() {
+            @Override
+            public void processFinish(Elements elements) {
+
+
+                try {
+
+                    if (elements != null) {
+
+
+                        if (elements.size() != 0) {
+                            characterImage = new ArrayList<>();
+                            similarGameImage = new ArrayList<>();
+                        }
+
+                        Elements elem[] = new Elements[2];
+
+                        for (int i = 0; i < elements.size(); i++) {
+                            elem[i] = elements.get(i).getElementById("wiki-relatedList")
+                                    .select("div.tab-content").first().select("div.tab-pane.active").first().select("div.js-table-pagintor-table").first().select("ul.wiki-relation").first()
+                                    .children();
+
+                        }
+
+                        for (Element mElement : elem[0]) {
+                            similarGameImage.add(new CharacterGamesImage(mElement.getElementsByTag("img").first().attr("src"), mElement.text()));
+                        }
+
+                        for (Element mElement : elem[1]) {
+                            characterImage.add(new CharacterGamesImage(mElement.getElementsByTag("img").first().attr("src"), mElement.text()));
+                        }
+
+
+                        Collections.sort(similarGameImage, new Comparator<CharacterGamesImage>() {
+                            @Override
+                            public int compare(CharacterGamesImage lhs, CharacterGamesImage rhs) {
+                                return lhs.name.compareTo(rhs.name);
+                            }
+                        });
+
+                        Collections.sort(characterImage, new Comparator<CharacterGamesImage>() {
+                            @Override
+                            public int compare(CharacterGamesImage lhs, CharacterGamesImage rhs) {
+                                return lhs.name.compareTo(rhs.name);
+                            }
+                        });
+
+
+                    }
+
+
+                } catch (Exception e) {
+                    characterImage = null;
+                    similarGameImage = null;
+                    Toaster.make(getContext(), "null baby");
+                }
+
+            }
+
+        }).execute("http://www.giantbomb.com/bioshock-infinite/" + apiUrl + "/");
+
+
+
 
     }
 
@@ -264,19 +327,37 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
                    /******************* SETTING THE CHARACTER **************************************/
 
-                   characterRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-                   characterRecycleView.setAdapter(new GameDetailCharacterAdapter(gameDetailModal.characters, style, getContext()));
+                   List<GameDetailCharacters> characters = gameDetailModal.characters;
 
+                   if (characters != null) {
+                       Collections.sort(characters, new Comparator<GameDetailCharacters>() {
+                           @Override
+                           public int compare(GameDetailCharacters lhs, GameDetailCharacters rhs) {
+                               return lhs.name.compareTo(rhs.name);
+                           }
+                       });
+
+
+                       characterRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                       characterRecycleView.setAdapter(new GameDetailCharacterAdapter(characters, characterImage, style, getContext()));
+                   }
 
                    /******************** SETTING  THE SIMILAR GAMES ******************************/
 
+                   List<GameDetailSimilarGames> games = gameDetailModal.similarGames;
+                   if (games != null) {
+                       Collections.sort(games, new Comparator<GameDetailSimilarGames>() {
+                           @Override
+                           public int compare(GameDetailSimilarGames lhs, GameDetailSimilarGames rhs) {
+                               return lhs.name.compareTo(rhs.name);
+                           }
+                       });
 
-                   similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                   similarGameRecycleView.setAdapter(new SimilarGameAdapter(gameDetailModal.similarGames, style, getContext()));
+                       similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
+                       similarGameRecycleView.setAdapter(new SimilarGameAdapter(games, similarGameImage, style, getContext()));
 
-
-
+                   }
 
 
                }
@@ -343,19 +424,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public void onSelect(int which) {
 
 
-        if (adapter != null) {
-            int style = selectStyle(which + 1);
-            adapter.setStyle(style);
-            adapter.notifyDataSetChanged();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 description.setTextAppearance(style);
             } else {
                 description.setTextAppearance(getContext(), style);
             }
-
-
-        }
 
 
     }

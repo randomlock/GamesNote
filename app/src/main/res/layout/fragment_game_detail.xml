@@ -74,60 +74,64 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+        >
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:orientation="vertical">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Add To list" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
 
-                <ImageView
-                    android:id="@+id/image_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:alpha="0.6" />
 
 
-                <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-                    android:orientation="vertical"
-            >
 
                     <android.support.v7.widget.CardView
                         android:id="@+id/game_info_cardview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:alpha="0.8"
                         app:cardCornerRadius="4dp"
+
                         app:elevation="14dp">
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/list"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
-                            >
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/overview_heading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Overview"
+                                android:padding="16dp"
+                                android:background="@color/teal_500"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="36sp" />
+
+                            <android.support.v7.widget.RecyclerView
+                            android:id="@+id/list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
 
-                        </android.support.v7.widget.RecyclerView>
+                        </LinearLayout>
 
 
                     </android.support.v7.widget.CardView>
@@ -139,18 +143,35 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
                         app:cardCornerRadius="4dp"
-                        app:elevation="14dp"
-                        android:alpha="0.75">
+                        app:elevation="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/description_heading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Description"
+                                android:padding="16dp"
+                                android:background="@color/teal_500"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="36sp" />
 
 
-                        <TextView
+                            <TextView
                             android:id="@+id/description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLines="12"
+                                android:maxLines="250"
                             android:ellipsize="end"
                             android:padding="6dp"
                             style="@style/TextStyle12" />
+
+                        </LinearLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -160,19 +181,36 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:alpha="0.8"
                         app:cardCornerRadius="4dp"
                         app:elevation="14dp">
 
-                        <android.support.v7.widget.RecyclerView
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/character_heading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Character"
+                                android:padding="16dp"
+                                android:background="@color/teal_500"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="36sp" />
+
+                            <android.support.v7.widget.RecyclerView
                             android:id="@+id/character_game_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             >
 
 
                         </android.support.v7.widget.RecyclerView>
+
+                        </LinearLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -182,26 +220,40 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
-                        android:alpha="0.8"
                         app:cardCornerRadius="4dp"
                         app:elevation="14dp">
 
-                        <android.support.v7.widget.RecyclerView
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/similar_game_heading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Similar games"
+                                android:padding="16dp"
+                                android:background="@color/teal_500"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="36sp" />
+
+                            <android.support.v7.widget.RecyclerView
                             android:id="@+id/similar_game_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             >
 
 
                         </android.support.v7.widget.RecyclerView>
 
+                        </LinearLayout>
                     </android.support.v7.widget.CardView>
 
                 </LinearLayout>
 
-
-            </FrameLayout>
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView>
+    >
 </android.support.design.widget.CoordinatorLayout>

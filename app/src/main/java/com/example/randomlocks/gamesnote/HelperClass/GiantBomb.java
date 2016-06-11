@@ -4,7 +4,13 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -31,6 +37,7 @@ public class GiantBomb {
     public static final String FONT = "fontoption";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static OkHttpClient client = new OkHttpClient();
     private static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
 
@@ -46,6 +53,37 @@ public class GiantBomb {
         return retrofit.create(serviceClass);
 
     }
+
+
+    public static String runOkHttp(String url) throws IOException {
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        final String[] result = new String[1];
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                result[0] = response.body().string();
+
+
+            }
+        });
+
+
+        return result[0];
+
+
+    }
+
 
 
 

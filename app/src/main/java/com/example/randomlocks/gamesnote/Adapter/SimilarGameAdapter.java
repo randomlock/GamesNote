@@ -6,11 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.R;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,14 +24,28 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
 
     List<GameDetailSimilarGames> stringList;
+    List<CharacterGamesImage> images = null;
     List<String> apiUrl;
     Context context;
     int style;
 
-    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, int style, Context context) {
+    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, Context context) {
         this.stringList = stringList;
         this.style = style;
         this.context = context;
+
+        if (images != null) {
+            this.images = images;
+        }
+
+
+        this.apiUrl = new ArrayList<>();
+
+        for (int i = 0; i < stringList.size(); i++) {
+            apiUrl.add(stringList.get(i).apiDetailUrl);
+        }
+
+
     }
 
     @Override
@@ -42,22 +60,33 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     @Override
     public int getItemCount() {
-        return stringList.size();
+        return stringList.size() <= 10 ? stringList.size() : 10;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.name.setText(stringList.get(position).name);
+
+        if (images != null) {
+            Picasso.with(context).load(images.get(position).imageUrl).into(holder.image);
+        }
+
+
+
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
+        ImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            name = (TextView) itemView;
+            name = (TextView) itemView.findViewById(R.id.text);
+            image = (ImageView) itemView.findViewById(R.id.image);
+
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
