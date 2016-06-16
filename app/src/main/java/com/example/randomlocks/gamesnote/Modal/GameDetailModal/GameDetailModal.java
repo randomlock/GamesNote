@@ -1,21 +1,39 @@
 package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
 
 /**
  * Created by randomlocks on 5/29/2016.
  */
-public class GameDetailModal {
+public class GameDetailModal extends RealmObject {
 
+   public int api_url_key;
+   @Expose
    public String description;
+   @Expose
    public String name;
-   public List<GameDetailImages> images;
-   public List<GameDetailCharacters> characters;
-   public List<GameDetailDevelopers> developers;
-   public List<GameDetailFranchises> franchises;
-   public List<GameDetailGenres> genres;
-   public List<GameDetailPublishers> publishers;
-   public List<GameDetailSimilarGames> similarGames;
-   public List<GameDetailThemes> themes;
+   @Expose
+   public RealmList<GameDetailImages> images;
+   @Expose
+   public RealmList<GameDetailCharacters> characters;
+   @Expose
+   public RealmList<GameDetailDevelopers> developers;
+   @Expose
+   public RealmList<GameDetailFranchises> franchises;
+   @Expose
+   public RealmList<GameDetailGenres> genres;
+   @Expose
+   public RealmList<GameDetailPublishers> publishers;
+   @Expose
+   public RealmList<GameDetailSimilarGames> similarGames;
+   @Expose
+   public RealmList<GameDetailThemes> themes;
+
+
 
 }

@@ -134,6 +134,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setRetainInstance(true);
 
 
         /************************************** FindViewById *********************************/
@@ -386,6 +387,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                     similarGameRecycleView.setAdapter(new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext()));
 
                 }
+
+                Toaster.make(getContext(),String.valueOf(gameDetailModal.api_url_key));
 
 
             }

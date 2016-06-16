@@ -1,5 +1,7 @@
 package com.example.randomlocks.gamesnote.Modal;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,7 @@ import java.util.List;
  */
 public class GameWikiListModal {
 
-
+     @Expose
      public List<GameWikiModal> results;
 
 }

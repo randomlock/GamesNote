@@ -3,6 +3,7 @@ package com.example.randomlocks.gamesnote.Modal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -13,15 +14,25 @@ import java.util.List;
  */
 public class GameWikiModal implements Parcelable {
 
+    @Expose
     public String apiDetailUrl;
+    @Expose
     public String deck;
+    @Expose
     public String description;
+    @Expose
     public int expectedReleaseDay;
+    @Expose
     public int expectedReleaseMonth;
+    @Expose
     public int expectedReleaseYear;
+    @Expose
     public GameWikiImage image;
+    @Expose
     public String name;
+    @Expose
     public String originalReleaseDate;
+    @Expose
     public List<GameWikiPlatform> platforms;
 
 

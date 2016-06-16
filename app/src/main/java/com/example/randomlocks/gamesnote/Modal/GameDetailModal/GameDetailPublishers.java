@@ -1,12 +1,18 @@
 package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
+import com.google.gson.annotations.Expose;
+
+import io.realm.RealmObject;
+
 /**
  * Created by randomlocks on 5/29/2016.
  */
-public class GameDetailPublishers {
+public class GameDetailPublishers extends RealmObject {
 
-  public   String apiDetailUrl ;
-  public   String name;
+  @Expose
+  public String apiDetailUrl ;
+  @Expose
+  public String name;
 
 
   @Override

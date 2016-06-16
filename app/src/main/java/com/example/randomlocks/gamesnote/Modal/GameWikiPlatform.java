@@ -3,13 +3,16 @@ package com.example.randomlocks.gamesnote.Modal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by randomlocks on 4/25/2016.
  */
 public class GameWikiPlatform implements Parcelable {
 
-
+    @Expose
     public String name;
+    @Expose
     public String abbreviation;
 
     @Override
