@@ -1,6 +1,10 @@
 package com.example.randomlocks.gamesnote.AsyncTask;
 
 import android.os.AsyncTask;
+import android.os.Looper;
+import android.util.Log;
+
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,6 +41,7 @@ public class JsoupConnect extends AsyncTask<String, Integer, Elements> {
         } catch (Exception e) {
             element = null;
         }
+
 
         return element;
     }

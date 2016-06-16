@@ -3,6 +3,8 @@ package com.example.randomlocks.gamesnote;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,16 +15,22 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.randomlocks.gamesnote.DialogFragment.ImageUrlFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesHomeFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout;
+import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 
 /*
@@ -31,21 +39,21 @@ add share preference so that when user open app he is automatically in correct f
 
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ImageUrlFragment.ImageUrlInterface {
 
 
     private Toolbar mytoolbar;
     public static final String KEY = "NAViGATION_SELECTED_ID"; //FOR SAVING MENU ITEM
     public static final String TITLE = "NAVIGATION_SELECTED_TITLE"; //FOR MENU TOOLBAR TITLE
-    public static final String API_Key = "b318d66445bfc79e6d74a65fe52744b45b345948";
-    public static final String DEFAULT_TITLE = "My list";
+    public static final String DEFAULT_TITLE = "Game Wiki";
     private FrameLayout frameLayout;
+    PicassoFrameLayout navHeaderLayout;
     public String mtitle;
     int mselectedId;
     private DrawerLayout mDrawer;
     private NavigationView mNavigation;
     private ActionBarDrawerToggle mDrawableToggle;
-
+    Fragment fragment = null ;
 
 
     @Override
@@ -55,14 +63,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
         frameLayout = (FrameLayout) findViewById(R.id.fragment_parent_layout);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigation = (NavigationView) findViewById(R.id.navigation_view);
         mytoolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        View headerView = mNavigation.inflateHeaderView(R.layout.navigaion_header);
+
+        navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
+
+
+        String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL,null,this);
+        if(imageUrl!=null){
+            navHeaderLayout.setUrl(imageUrl);
+            Picasso.with(this).load(imageUrl).into(navHeaderLayout);
+        }else
+        navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
+
+
 
         setSupportActionBar(mytoolbar);
-
 
 
         mDrawableToggle = setupDrawerToggle(mDrawer);
@@ -70,13 +89,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
 
+
+
+
         mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
-        selectDrawerItem(mselectedId, mtitle);
 
+        navHeaderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageUrlFragment imageUrlFragment = new ImageUrlFragment();
+                imageUrlFragment.show(getSupportFragmentManager(), "imageUrl");
+            }
+        });
+
+
+
+
+   /*     if(savedInstanceState!=null){
+            fragment = getSupportFragmentManager().findFragmentByTag("GamesHome");
+            if(fragment==null){
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesList");
+            }
+            if(fragment==null){
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesNews");
+
+            }
+            if(fragment==null){
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesWiki");
+            }
+
+            if(fragment==null){
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesVideo");
+            }
+
+        } */
+
+
+            selectDrawerItem(mselectedId,mtitle);
 
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,59 +159,80 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-    public  ActionBarDrawerToggle setupDrawerToggle(DrawerLayout drawerLayout) {
-      return  new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open,  R.string.drawer_close);
+    public ActionBarDrawerToggle setupDrawerToggle(DrawerLayout drawerLayout) {
+        return new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
     }
 
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-    item.setChecked(true);
+        item.setChecked(true);
         mselectedId = item.getItemId();
-    mtitle = (String) item.getTitle();
+        mtitle = (String) item.getTitle();
         selectDrawerItem(mselectedId, (String) item.getTitle());
-        return  true ;
+        return true;
 
 
     }
 
     //Selecting Item from Nav Drawer
 
-    private void selectDrawerItem(int mselectedId,String title) {
+    private void selectDrawerItem(int mselectedId, String title) {
+
+            Toaster.make(this,title);
+
+        switch (mselectedId) {
 
 
 
-
-        switch (mselectedId){
-
-            case R.id.nav_home :
-                FragmentTransactionHelper("replace",new GamesHomeFragment(),"GamesHome");
+            case R.id.nav_home:
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesHome");
+                if (fragment==null) {
+                    fragment = new GamesHomeFragment();
+                    FragmentTransactionHelper("replace", fragment, "GamesHome");
+                }
                 break;
 
-            case R.id.nav_mylist :
-                Toast.makeText(this,"My list",Toast.LENGTH_SHORT).show();
-                FragmentTransactionHelper("replace",new GamesListFragment(),"GamesList");
+            case R.id.nav_mylist:
+                 fragment = getSupportFragmentManager().findFragmentByTag("GamesList");
+
+                if (fragment==null) {
+                    fragment = new GamesListFragment();
+                    FragmentTransactionHelper("replace", fragment, "GamesList");
+                }
                 break;
 
-            case R.id.nav_news :
-                Toast.makeText(this,"Games News",Toast.LENGTH_SHORT).show();
-                FragmentTransactionHelper("replace", new GamesNewsFragment(), "GamesNews");
+            case R.id.nav_news:
+                 fragment = getSupportFragmentManager().findFragmentByTag("GamesNews");
+
+                if (fragment==null) {
+                    fragment = new GamesNewsFragment();
+                    FragmentTransactionHelper("replace", fragment, "GamesNews");
+                }
                 break;
 
-            case R.id.nav_trailer :
-                Toast.makeText(this,"Games trailer",Toast.LENGTH_SHORT).show();
-                FragmentTransactionHelper("replace", new GamesVideoFragment(), "GamesVideo");
+            case R.id.nav_trailer:
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesVideo");
+
+                if (fragment==null) {
+                    fragment = new GamesVideoFragment();
+                    FragmentTransactionHelper("replace",fragment, "GamesVideo");
+                }
                 break;
 
-            case R.id.nav_wiki :
-                Toast.makeText(this,"Game Wiki restaring ?",Toast.LENGTH_SHORT).show();
-                FragmentTransactionHelper("replace", new GamesWikiFragment(), "GamesWiki");
+            case R.id.nav_wiki:
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesWiki");
+                if(fragment==null){
+
+                    fragment = new GamesWikiFragment();
+                    FragmentTransactionHelper("replace", fragment, "GamesWiki");
+                }
+
                 break;
 
             default:
-                Toast.makeText(this,"default",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "default", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -169,50 +245,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Fragment Transaction Method
 
 
-    private void FragmentTransactionHelper(String operation,Fragment fragment,String tag) {
+    private void FragmentTransactionHelper(String operation, Fragment fragment, String tag) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
 
-        if(operation.equals("replace")){
-            ft.replace(R.id.fragment_parent_layout, fragment, tag);
-            ft.addToBackStack(null);
+        switch (operation) {
+            case "replace":
+                ft.replace(R.id.fragment_parent_layout, fragment, tag);
 
+
+                break;
+            case "add":
+                ft.add(R.id.fragment_parent_layout, fragment, tag);
+
+                break;
+            case "remove":
+                ft.add(R.id.fragment_parent_layout, fragment, tag);
+
+                break;
         }
 
-       else if(operation.equals("add")){
-            ft.add(R.id.fragment_parent_layout,fragment,tag);
-
-        }
-
-       else if(operation.equals("remove")){
-            ft.add(R.id.fragment_parent_layout,fragment,tag);
-
-        }
 
         ft.commit();
 
     }
 
 
- /*   @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(KEY, mselectedId);
-        outState.putString(TITLE, mtitle);
-     //   getSupportFragmentManager().putFragment(outState,"GameWiki",game);
-
+    @Override
+    protected void onSaveInstanceState(Bundle out) {
+        super.onSaveInstanceState(out);
+        out.putInt(KEY, mselectedId);
+        out.putString(TITLE, mtitle);
     }
-
-*/
 
     @Override
     public void onBackPressed() {
-        if(mDrawer.isDrawerOpen(GravityCompat.START)){
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawers();
-        }
-        else
+        } else
             super.onBackPressed();
+
+    }
+
+
+
+    @Override
+    public void onSelect(String url) {
+
+        if(url==null){
+            navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
+            SharedPreference.removeFromSharedPreference(GiantBomb.NAV_HEADER_URL,this);
+        }
+
+        else{
+            navHeaderLayout.setUrl(url);
+            Picasso.with(this).load(url).into(navHeaderLayout);
+        }
+
 
     }
 }

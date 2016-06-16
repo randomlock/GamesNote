@@ -45,7 +45,6 @@
         android:layout_gravity="start"
         android:background="@color/white"
         app:menu="@menu/navigation_menu"
-        app:headerLayout="@layout/navigaion_header"
         app:itemTextAppearance="@style/Widget.Design.NavigationView"
         app:itemTextColor="@color/state_list"
         >

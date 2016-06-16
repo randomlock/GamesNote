@@ -50,6 +50,9 @@ search icon need to be in white color . maybe applying toolbar theme at runtime 
 change the request API for search from /games to /search to descrease API request/resource
 
 
+app crash if change orientation before data is loaded :D
+
+
 
 
 Todo today

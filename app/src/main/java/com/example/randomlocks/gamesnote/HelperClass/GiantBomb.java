@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,8 +36,9 @@ public class GiantBomb {
     public static final int MEDIUM_IMAGE_URL=2;
     public static final String ASCENDING = "ascending";
     public static final String FONT = "fontoption";
+    public static final String NAV_HEADER_URL = "navHeaderUrl" ;
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder().readTimeout(30, TimeUnit.SECONDS).connectTimeout(30, TimeUnit.SECONDS);
     private static OkHttpClient client = new OkHttpClient();
     private static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 

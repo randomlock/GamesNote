@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -19,8 +21,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailRecyclerAdapter;
@@ -28,11 +31,13 @@ import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupConnect;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
+import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PagerDepthAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.HelperClass.VerticalSpaceItemDecoration;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
@@ -81,20 +86,21 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     GameDetailModal gameDetailModal;
     CollapsingToolbarLayout toolbarLayout;
     AppBarLayout appBarLayout;
-    LinearLayout container;
     RecyclerView recyclerView, similarGameRecycleView, characterRecycleView;
     PicassoNestedScrollView nestedScrollView;
     TextView description;
     GameDetailRecyclerAdapter adapter;
     int style;
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
-
+    ProgressBar overviewProgress;
+    CoordinatorLayout coordinatorLayout;
 
 
 
 
     public GameDetailFragment() {
         // Required empty public constructor
+
     }
 
     public static GameDetailFragment newInstance(String apiUrl, String imageUrl) {
@@ -131,8 +137,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
         /************************************** FindViewById *********************************/
-        nestedScrollView = (PicassoNestedScrollView) getActivity().findViewById(R.id.scroll_view);
-        appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
+        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
+        nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
+        appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         toolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
         toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
         viewPager = (ViewPager) toolbarLayout.findViewById(R.id.viewpager);
@@ -141,6 +148,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         characterRecycleView.setNestedScrollingEnabled(false);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
+        overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
         recyclerView.setNestedScrollingEnabled(false);
         style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 1, getContext()) + 1);
@@ -191,8 +199,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         gameWikiDetailInterface = GiantBomb.createService(GameWikiDetailInterface.class);
         map = new HashMap<>();
         map.put(GiantBomb.KEY,GiantBomb.API_KEY);
-        map.put(GiantBomb.FORMAT,"JSON");
+        map.put(GiantBomb.FORMAT, "JSON");
         getGameDetail(gameWikiDetailInterface, map);
+
+
 
         new JsoupConnect(new JsoupConnect.AsyncResponse() {
             @Override
@@ -242,14 +252,20 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                         });
 
 
+                        if(recyclerView.getAdapter()!=null && recyclerView.getAdapter().getItemCount()!=0){
+                            recyclerView.getAdapter().notifyDataSetChanged();
+                        }
+
+
                     }
 
 
                 } catch (Exception e) {
                     characterImage = null;
                     similarGameImage = null;
-                    Toaster.make(getContext(), "null baby");
                 }
+
+
 
             }
 
@@ -260,113 +276,140 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
     }
 
-    private void getGameDetail(final GameWikiDetailInterface gameWikiDetailInterface, Map<String, String> map) {
-
-           gameWikiDetailInterface.getResult(apiUrl,map).enqueue(new Callback<GameDetailListModal>() {
-               @Override
-               public void onResponse(Call<GameDetailListModal> call, Response<GameDetailListModal> response) {
-                  gameDetailModal =  response.body().results;
-                   List<GameDetailImages> image = gameDetailModal.images;
-                   ArrayList<String> images = new ArrayList<>();
-                   for (int i = 0; i <image.size() ; i++) {
-                       images.add(image.get(i).thumbUrl);
-                   }
-
-                   WikiPagerAdapter pagerAdapter = new WikiPagerAdapter(getContext(),images.size(),images);
-                   viewPager.setAdapter(pagerAdapter);
-                   viewPager.setPageTransformer(true, new PagerDepthAnimation());
-
-                   toolbarLayout.setTitle(gameDetailModal.name);
-
-                   /*********************** SETTING RECYCLER VIEW ****************************/
+    private void getGameDetail(final GameWikiDetailInterface gameWikiDetailInterface, final Map<String, String> map) {
 
 
-                   String developer = listToString(gameDetailModal.developers);
-                   String publisher = listToString(gameDetailModal.publishers);
-                   String genres = listToString(gameDetailModal.genres);
-                   String theme = listToString(gameDetailModal.themes);
-                   String franchise = listToString(gameDetailModal.franchises);
-                   ArrayList<String> values = new ArrayList<String>();
+        overviewProgress.setVisibility(View.VISIBLE);
 
-                   values.add(developer);
-                   values.add(publisher);
-                   values.add(theme);
-                   values.add(franchise);
-                   values.add(genres);
-
-                   ArrayList<String> key = new ArrayList<String>();
-                   key.add("Developer");
-                   key.add("Publisher");
-                   key.add("Theme");
-                   key.add("Franchise");
-                   key.add("Genres");
+        gameWikiDetailInterface.getResult(apiUrl,map).enqueue(new Callback<GameDetailListModal>() {
+            @Override
+            public void onResponse(Call<GameDetailListModal> call, Response<GameDetailListModal> response) {
 
 
-                   recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                   adapter = new GameDetailRecyclerAdapter(key, values, GameDetailFragment.this, style);
-                   recyclerView.setAdapter(adapter);
+                overviewProgress.setVisibility(View.GONE);
 
 
-                   /************************** SETTING THE DESCRIPTION*****************************/
+                gameDetailModal = response.body().results;
+                List<GameDetailImages> image = gameDetailModal.images;
+                ArrayList<String> images = new ArrayList<>();
+                for (int i = 0; i < image.size(); i++) {
+                    images.add(image.get(i).thumbUrl);
+                }
+
+                WikiPagerAdapter pagerAdapter = new WikiPagerAdapter(getContext(), images.size(), images);
+                viewPager.setAdapter(pagerAdapter);
+                viewPager.setPageTransformer(true, new PagerDepthAnimation());
+
+                toolbarLayout.setTitle(gameDetailModal.name);
+
+                /*********************** SETTING RECYCLER VIEW ****************************/
 
 
-                   if (gameDetailModal.description != null) {
+                String developer = listToString(gameDetailModal.developers);
+                String publisher = listToString(gameDetailModal.publishers);
+                String genres = listToString(gameDetailModal.genres);
+                String theme = listToString(gameDetailModal.themes);
+                String franchise = listToString(gameDetailModal.franchises);
+                ArrayList<String> values = new ArrayList<String>();
+
+                values.add(developer);
+                values.add(publisher);
+                values.add(theme);
+                values.add(franchise);
+                values.add(genres);
+
+                ArrayList<String> key = new ArrayList<String>();
+                key.add("Developer");
+                key.add("Publisher");
+                key.add("Theme");
+                key.add("Franchise");
+                key.add("Genres");
 
 
-                       Document doc = Jsoup.parse(gameDetailModal.description);
-
-                       if (doc != null) {
-
-                           Elements info = doc.getElementsByTag("p");
-                           description.setText(info.get(0).text());
-
-                       }
-
-                   }
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new GameDetailRecyclerAdapter(key, values, GameDetailFragment.this, style);
+                recyclerView.setAdapter(adapter);
 
 
-                   /******************* SETTING THE CHARACTER **************************************/
-
-                   List<GameDetailCharacters> characters = gameDetailModal.characters;
-
-                   if (characters != null) {
-                       Collections.sort(characters, new Comparator<GameDetailCharacters>() {
-                           @Override
-                           public int compare(GameDetailCharacters lhs, GameDetailCharacters rhs) {
-                               return lhs.name.compareTo(rhs.name);
-                           }
-                       });
+                /************************** SETTING THE DESCRIPTION*****************************/
 
 
-                       characterRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                       characterRecycleView.setAdapter(new GameDetailCharacterAdapter(characters, characterImage, style, getContext()));
-                   }
-
-                   /******************** SETTING  THE SIMILAR GAMES ******************************/
-
-                   List<GameDetailSimilarGames> games = gameDetailModal.similarGames;
-                   if (games != null) {
-                       Collections.sort(games, new Comparator<GameDetailSimilarGames>() {
-                           @Override
-                           public int compare(GameDetailSimilarGames lhs, GameDetailSimilarGames rhs) {
-                               return lhs.name.compareTo(rhs.name);
-                           }
-                       });
+                if (gameDetailModal.description != null) {
 
 
-                       similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-                       similarGameRecycleView.setAdapter(new SimilarGameAdapter(games, similarGameImage, style, getContext()));
+                    Document doc = Jsoup.parse(gameDetailModal.description);
 
-                   }
+                    if (doc != null) {
+
+                        Elements info = doc.getElementsByTag("p");
+                        if(info.size()>0)
+                        description.setText(info.get(0).text());
+
+                    }
+
+                }
 
 
-               }
+                /******************* SETTING THE CHARACTER **************************************/
 
-               @Override
-               public void onFailure(Call<GameDetailListModal> call, Throwable t) {
-                   Toaster.make(getContext(), "connectivity problem");
-               }
-           });
+                List<GameDetailCharacters> characters = gameDetailModal.characters;
+
+                if (characters != null) {
+                    Collections.sort(characters, new Comparator<GameDetailCharacters>() {
+                        @Override
+                        public int compare(GameDetailCharacters lhs, GameDetailCharacters rhs) {
+                            return lhs.name.compareTo(rhs.name);
+                        }
+                    });
+
+
+                    characterRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
+                    characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
+                    characterRecycleView.setAdapter(new GameDetailCharacterAdapter(characters, characterImage, style, getContext()));
+                }
+
+                /******************** SETTING  THE SIMILAR GAMES ******************************/
+
+                List<GameDetailSimilarGames> games = gameDetailModal.similarGames;
+                if (games != null) {
+                    Collections.sort(games, new Comparator<GameDetailSimilarGames>() {
+                        @Override
+                        public int compare(GameDetailSimilarGames lhs, GameDetailSimilarGames rhs) {
+                            return lhs.name.compareTo(rhs.name);
+                        }
+                    });
+
+
+                    similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    similarGameRecycleView.addItemDecoration(new VerticalSpaceItemDecoration(6));
+                    similarGameRecycleView.setAdapter(new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext()));
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<GameDetailListModal> call, Throwable t) {
+
+
+                overviewProgress.setVisibility(View.GONE);
+
+                Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("RETRY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getGameDetail(gameWikiDetailInterface, map);
+
+                            }
+                        }).show();
+
+
+
+
+            }
+        });
     }
 
 
@@ -431,6 +474,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 description.setTextAppearance(getContext(), style);
             }
 
+        Toaster.make(getContext(),"Font will be changed after going back");
+
 
     }
 
@@ -469,5 +514,18 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         return R.style.TextStyle1;
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        appBarLayout.addOnOffsetChangedListener(null);
+        appBarLayout = null;
+        gameWikiDetailInterface = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

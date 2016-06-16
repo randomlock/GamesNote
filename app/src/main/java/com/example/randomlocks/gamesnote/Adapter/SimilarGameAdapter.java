@@ -2,6 +2,10 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.R;
@@ -25,14 +30,16 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     List<GameDetailSimilarGames> stringList;
     List<CharacterGamesImage> images = null;
+    GameDetailFragment fragment;
     List<String> apiUrl;
     Context context;
     int style;
 
-    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, Context context) {
+    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, GameDetailFragment fragment, Context context) {
         this.stringList = stringList;
         this.style = style;
         this.context = context;
+        this.fragment = fragment;
 
         if (images != null) {
             this.images = images;
@@ -56,6 +63,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
         return holder;
 
 
+
     }
 
     @Override
@@ -76,7 +84,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView name;
         ImageView image;
@@ -97,10 +105,24 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
             }
 
+            itemView.setOnClickListener(this);
+
 
         }
 
 
+        @Override
+        public void onClick(View v) {
+
+            GameDetailFragment fragment = null;
+            fragment = (GameDetailFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("GameDetail");
+            FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+
+            fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl.get(getLayoutPosition()));
+            ft.detach(fragment).attach(fragment).commit();
+
+
+        }
     }
 
 

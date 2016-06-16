@@ -48,7 +48,16 @@ public class SharedPreference {
 
     public static boolean getFromSharedPreferences(String key,boolean defaultValue, Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getBoolean(key,defaultValue);
+        return preferences.getBoolean(key, defaultValue);
+    }
+
+    public static boolean removeFromSharedPreference(String key,Context context){
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preference.edit();
+        editor.remove(key);
+        editor.apply();
+
+        return true;
     }
 
 }

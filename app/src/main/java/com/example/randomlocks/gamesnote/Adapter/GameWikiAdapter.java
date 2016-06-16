@@ -2,6 +2,8 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +17,12 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
 import com.example.randomlocks.gamesnote.GameDetailActivity;
+import com.example.randomlocks.gamesnote.HelperClass.DynamicHeightImageView;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -107,7 +111,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         if (modal.image != null && modal.image.smallUrl != null && modal.image.mediumUrl != null) {
     holder.imageView.setTag(R.string.smallImageUrl,modal.image.smallUrl);
     holder.imageView.setTag(R.string.mediumImageUrl,modal.image.mediumUrl);
-            Picasso.with(context).load(modal.image.smallUrl).fit().into(holder.imageView);
+            Picasso.with(context).load(modal.image.smallUrl).resize(100,150).centerCrop().into(holder.imageView);
 }
 
         String date_time = modal.originalReleaseDate;
@@ -153,12 +157,12 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         return list.size();
     }
 
-      class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+      class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
 
         public TextView title,description,date,platform1,platform2,platform3;
 
-        public ImageView imageView;
+        public DynamicHeightImageView imageView;
 
           public View view;
 
@@ -174,7 +178,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             platform1 = (TextView) itemView.findViewById(R.id.platform1);
             platform2 = (TextView) itemView.findViewById(R.id.platform2);
             platform3 = (TextView)itemView.findViewById(R.id.platform3);
-            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView = (DynamicHeightImageView) itemView.findViewById(R.id.imageView);
             view = itemView.findViewById(R.id.dropdown);
             view.setOnClickListener(this);
             imageView.setOnClickListener(this);
@@ -225,7 +229,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
 
 
          }
-     }
+
+
+      }
 
     @Override
     public void onViewDetachedFromWindow(MyViewHolder holder) {

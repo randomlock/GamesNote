@@ -9,12 +9,8 @@
 
 
 
-    <include
-        android:id="@+id/custom"
-        layout="@layout/custom_game_wiki_content">
-
-    </include>
-
+    <include android:id="@+id/custom_view"
+        layout="@layout/custom_game_wiki_content"/>
 
 
 

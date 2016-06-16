@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_header"
     android:layout_width="match_parent"
     android:layout_height="230dp"
-    android:alpha="0.8"
-    android:background="@drawable/headerbackground"
-    >
+    android:alpha="0.8">
 
 
     <TextView
@@ -18,4 +16,4 @@
         android:gravity="end"
         />
 
-</FrameLayout>
+</com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout>
