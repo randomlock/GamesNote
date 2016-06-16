@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.example.randomlocks.gamesnote.Adapter.HdImageBottomSheetAdapter;
+import com.example.randomlocks.gamesnote.DialogFragment.BottomSheetImageOption;
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.BottomSheetImage;
@@ -38,6 +40,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
     PhotoViewAttacher mAttacher;
     Toolbar toolbar;
     boolean isLoaded=false;
+    BottomSheetDialog dialog;
 
 
     @Override
@@ -87,47 +90,48 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
 
 
         listView.setAdapter(new HdImageBottomSheetAdapter(this, arrayList));
-listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
-        if (isLoaded) {
-            switch (i){
+                if (isLoaded) {
 
-                //share
-                case  0 :
+                    Toaster.make(HdImageViewerActivity.this,i+"");
+                    switch (i){
 
-                    File myFile = new File(imageUrl);
-                    MimeTypeMap mime = MimeTypeMap.getSingleton();
-                    String ext = myFile.getName().substring(myFile.getName().lastIndexOf(".") + 1);
-                    String type = mime.getMimeTypeFromExtension(ext);
-                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                    sharingIntent.setType(type);
-                    sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(myFile));
-                    startActivity(Intent.createChooser(sharingIntent, "Share using"));
-                    break;
+                        //share
+                        case  0 :
 
-                case  1 :
-                    Toaster.make(HdImageViewerActivity.this,"todo");
-                    break;
+                            File myFile = new File(imageUrl);
+                            MimeTypeMap mime = MimeTypeMap.getSingleton();
+                            String ext = myFile.getName().substring(myFile.getName().lastIndexOf(".") + 1);
+                            String type = mime.getMimeTypeFromExtension(ext);
+                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                            sharingIntent.setType(type);
+                            sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(myFile));
+                            startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                            break;
 
-                case 3 :
-                    Toaster.make(HdImageViewerActivity.this,"todo");
-                    break;
+                        case  1 :
+                            Toaster.make(HdImageViewerActivity.this,"todo");
+                            break;
+
+                        case 3 :
+                            Toaster.make(HdImageViewerActivity.this,"todo");
+                            break;
 
 
+
+
+                    }
+                }
 
 
             }
-        }
-
-
-    }
-});
+        });
 
         /**************SETTING BOTTOM SHEET ******************************/
-
 
         bottomSheetBehavior = BottomSheetBehavior.from(listView);
 
@@ -142,6 +146,8 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
     @Override
     public void onViewTap(View view, float v, float v1) {
+
+
         float alpha = toolbar.getAlpha();
         if (alpha == 1) {
             toolbar.animate().alpha(0).setDuration(200);
@@ -172,7 +178,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             case R.id.info :
 
                 if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_COLLAPSED)
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 else
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 

@@ -76,16 +76,7 @@
     </style>
 
 
-    <style name="bottomSheet">
-        <item name="android:textAlignment" tools:ignore="NewApi">viewStart</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:minHeight">56dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
+
 
     <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog">
     <!--item RadioButton or CheckBox color-->

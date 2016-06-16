@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,20 @@ import java.util.ArrayList;
 /**
  * Created by randomlocks on 4/30/2016.
  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class HdImageBottomSheetAdapter extends ArrayAdapter {
 
     Context context;
@@ -46,7 +61,7 @@ public class HdImageBottomSheetAdapter extends ArrayAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
        View view = layoutInflater.inflate(R.layout.custombottomimage, parent, false);
         TextView textView = (TextView) view.findViewById(R.id.textview);
-        ImageView imageView = (ImageView)view.findViewById(R.id.imageview);
+        AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.imageview);
 
         BottomSheetImage modal = arrayList.get(position);
         textView.setText(modal.title);

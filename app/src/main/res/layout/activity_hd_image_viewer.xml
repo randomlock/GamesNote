@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,15 +53,21 @@
     </FrameLayout>
 
 
+
+
     <ListView
         android:id="@+id/list"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@null"
-        android:background="#FFF"
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-        >
+        android:background="@color/white"
+        app:elevation="14dp"
+        android:layout_marginBottom="@dimen/bottomsheet_vertical_margin"
+        android:layout_marginTop="@dimen/bottomsheet_vertical_margin"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
     </ListView>
+
+
 
 </android.support.design.widget.CoordinatorLayout>
 

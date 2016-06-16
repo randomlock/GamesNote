@@ -7,4 +7,9 @@
     <dimen name="bottommargin">10dp</dimen>
     <dimen name="line">1dp</dimen>
 
+
+    <dimen name="bottomsheet_list_item_height">48dp</dimen>
+<dimen name="bottomsheet_horizontal_margin">16dp</dimen>
+<dimen name="bottomsheet_vertical_margin">8dp</dimen>
+
 </resources>
