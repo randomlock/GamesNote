@@ -13,7 +13,6 @@ android:id="@+id/cardView"
     android:layout_marginTop="@dimen/leftmargin"
     android:layout_marginBottom="@dimen/bottommargin"
     android:foreground="?android:attr/selectableItemBackground"
-    app:elevation="4dp"
     app:cardCornerRadius="3dp"
     >
 
@@ -64,11 +63,13 @@ android:id="@+id/cardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Release date"
-            android:paddingBottom="16dp"
+
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             style="@style/SubTitleText"
             android:layout_above="@+id/view"
-            android:layout_toRightOf="@+id/platform3"
-            android:layout_toEndOf="@+id/platform3" />
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView" />
 
 
      <View
@@ -105,48 +106,44 @@ android:id="@+id/cardView"
 
 
 
-
-
-    <Button
-        android:background="@null"
-        android:id="@+id/platform1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Xbox"
-        android:fontFamily="sans-serif"
-        android:drawableLeft="@drawable/xbox"
-        android:drawableStart="@drawable/xbox"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/platform2"
-        android:background="@null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:text="PC"
-        android:drawableLeft="@drawable/pc"
-        android:drawableStart="@drawable/pc"
-        android:gravity="left|center_vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/platform1"
-        android:layout_toEndOf="@+id/platform1" />
-
     <Button
         android:id="@+id/platform3"
         android:layout_width="wrap_content"
-        android:text="PS3"
+        android:layout_height="wrap_content"
         android:background="@null"
         android:fontFamily="sans-serif"
-        android:drawableLeft="@drawable/playstation"
-        android:drawableStart="@drawable/playstation"
-        android:gravity="left|center_vertical"
-        android:layout_height="wrap_content"
+        android:text="PC"
+        android:textColor="@color/accent"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/platform1"
-        android:layout_toStartOf="@+id/platform1" />
+        android:layout_toRightOf="@+id/platform2"
+        android:layout_toEndOf="@+id/platform2" />
+
+    <Button
+        android:id="@+id/platform1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PS3"
+        android:background="@null"
+        android:textColor="@color/accent"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/platform2"
+        android:layout_toStartOf="@+id/platform2" />
+
+    <Button
+        android:id="@+id/platform2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="Xbox"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/accent"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
 
 </RelativeLayout>
 
@@ -155,15 +152,16 @@ android:id="@+id/cardView"
 
 
     <TextView
-        android:layout_gravity="bottom"
+        android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:visibility="gone"
         android:textStyle="italic"
         android:background="#ece67b"
         android:gravity="center_horizontal"
         android:text="@string/desc"
-        android:id="@+id/description" />
+        android:fontFamily="sans-serif-light" />
 
 
 </LinearLayout>

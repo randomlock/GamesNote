@@ -32,7 +32,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@null"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:text="HD"
         android:textColor="@color/accent"
         android:id="@+id/button"

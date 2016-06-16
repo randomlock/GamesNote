@@ -2,7 +2,7 @@
 <com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="180dp"
     android:alpha="0.8">
 
 

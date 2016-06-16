@@ -1,9 +1,15 @@
 package com.example.randomlocks.gamesnote.Fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -15,15 +21,17 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailRecyclerAdapter;
@@ -88,12 +96,17 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     AppBarLayout appBarLayout;
     RecyclerView recyclerView, similarGameRecycleView, characterRecycleView;
     PicassoNestedScrollView nestedScrollView;
-    TextView description;
+    TextView description,bottomSheetText;
+    View bottomSheet;
     GameDetailRecyclerAdapter adapter;
     int style;
+    String completeDescription;
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
     ProgressBar overviewProgress;
     CoordinatorLayout coordinatorLayout;
+    SimilarGameAdapter similarGameAdapter;
+    GameDetailCharacterAdapter characterAdapter;
+    CommunicationInterface mCommunicationInterface;
 
 
 
@@ -101,6 +114,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public GameDetailFragment() {
         // Required empty public constructor
 
+    }
+
+    public interface CommunicationInterface{
+        void loadWebView(String string);
     }
 
     public static GameDetailFragment newInstance(String apiUrl, String imageUrl) {
@@ -114,6 +131,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     }
 
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCommunicationInterface = (CommunicationInterface) getActivity();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -245,6 +267,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                             }
                         });
 
+                        if(similarGameRecycleView.getAdapter()!=null && similarGameRecycleView.getAdapter().getItemCount()!=0){
+                            similarGameAdapter.setImages(similarGameImage);
+                            similarGameRecycleView.getAdapter().notifyDataSetChanged();
+                        }
+
                         Collections.sort(characterImage, new Comparator<CharacterGamesImage>() {
                             @Override
                             public int compare(CharacterGamesImage lhs, CharacterGamesImage rhs) {
@@ -252,10 +279,13 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                             }
                         });
 
-
-                        if(recyclerView.getAdapter()!=null && recyclerView.getAdapter().getItemCount()!=0){
-                            recyclerView.getAdapter().notifyDataSetChanged();
+                        if(characterRecycleView.getAdapter()!=null && characterRecycleView.getAdapter().getItemCount()!=0){
+                            characterAdapter.setImages(characterImage);
+                            characterRecycleView.getAdapter().notifyDataSetChanged();
                         }
+
+
+
 
 
                     }
@@ -270,7 +300,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
             }
 
-        }).execute("http://www.giantbomb.com/bioshock-infinite/" + apiUrl + "/");
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/bioshock-infinite/" + apiUrl + "/");
 
 
 
@@ -306,7 +336,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 /*********************** SETTING RECYCLER VIEW ****************************/
 
 
-                String developer = listToString(gameDetailModal.developers);
+                final String developer = listToString(gameDetailModal.developers);
                 String publisher = listToString(gameDetailModal.publishers);
                 String genres = listToString(gameDetailModal.genres);
                 String theme = listToString(gameDetailModal.themes);
@@ -332,23 +362,73 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 recyclerView.setAdapter(adapter);
 
 
-                /************************** SETTING THE DESCRIPTION*****************************/
-
+                /************************** SETTING THE DESCRIPTION And BottomSheet*****************************/
 
                 if (gameDetailModal.description != null) {
 
 
+
+
                     Document doc = Jsoup.parse(gameDetailModal.description);
+                    completeDescription = doc.toString();
 
                     if (doc != null) {
 
-                        Elements info = doc.getElementsByTag("p");
-                        if(info.size()>0)
-                        description.setText(info.get(0).text());
+                        Element info = doc.getElementsByTag("p").first();
+                        if(info!=null)
+                        description.setText(info.text());
+                        description.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                mCommunicationInterface.loadWebView("http://www.giantbomb.com/grand-theft-auto-iv/3030-20457/");
+
+                            }
+                        });
 
                     }
 
+
+
+
+
                 }
+
+
+                /*   behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                    @Override
+                    public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                        // React to state change
+                        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                            new AsyncTask<String, Void, Spanned>(){
+                        @Override
+                        protected Spanned doInBackground(String... params) {
+
+                            String desc = params[0];
+
+
+
+                            return Html.fromHtml(desc);
+                        }
+
+                        @Override
+                        protected void onPostExecute(Spanned s) {
+                            super.onPostExecute(s);
+
+                            bottomSheetText.setText(s);
+                        }
+                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,completeDescription);
+
+                        }
+                    }
+
+                    @Override
+                    public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                        // React to dragging events
+                    }
+                }); */
+
+
 
 
                 /******************* SETTING THE CHARACTER **************************************/
@@ -367,7 +447,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                     characterRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
                     characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
-                    characterRecycleView.setAdapter(new GameDetailCharacterAdapter(characters, characterImage, style, getContext()));
+                    characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, style, getContext());
+                    characterRecycleView.setAdapter(characterAdapter);
                 }
 
                 /******************** SETTING  THE SIMILAR GAMES ******************************/
@@ -384,11 +465,16 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
                     similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
                     similarGameRecycleView.addItemDecoration(new VerticalSpaceItemDecoration(6));
-                    similarGameRecycleView.setAdapter(new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext()));
+                    similarGameAdapter = new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext());
+                    similarGameRecycleView.setAdapter(similarGameAdapter);
 
                 }
 
-                Toaster.make(getContext(),String.valueOf(gameDetailModal.api_url_key));
+
+
+
+
+
 
 
             }
@@ -522,6 +608,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onStop() {
         super.onStop();
+
         appBarLayout.addOnOffsetChangedListener(null);
         appBarLayout = null;
         gameWikiDetailInterface = null;

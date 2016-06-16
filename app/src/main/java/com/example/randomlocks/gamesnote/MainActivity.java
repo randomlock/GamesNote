@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -72,10 +73,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
 
 
-        String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL,null,this);
+        final String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL,null,this);
         if(imageUrl!=null){
             navHeaderLayout.setUrl(imageUrl);
-            Picasso.with(this).load(imageUrl).into(navHeaderLayout);
+            navHeaderLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(),navHeaderLayout.getHeight()).centerInside().into(navHeaderLayout);
+                }
+            });
         }else
         navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
 

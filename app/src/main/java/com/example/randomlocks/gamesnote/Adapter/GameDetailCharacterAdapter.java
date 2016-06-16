@@ -48,6 +48,10 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
     }
 
+    public void setImages(List<CharacterGamesImage> images) {
+        this.images = images;
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_similar_game_character, parent, false);

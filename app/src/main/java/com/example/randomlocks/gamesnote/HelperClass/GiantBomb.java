@@ -40,7 +40,10 @@ public class GiantBomb {
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder().readTimeout(30, TimeUnit.SECONDS).connectTimeout(30, TimeUnit.SECONDS);
     private static OkHttpClient client = new OkHttpClient();
-    private static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+    private static Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .excludeFieldsWithoutExposeAnnotation()
+            .create();
 
 
 
@@ -48,6 +51,7 @@ public class GiantBomb {
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
             .baseUrl(BASE_URL)
+
             .addConverterFactory(GsonConverterFactory.create(gson));
 
     public static <S> S createService(Class<S> serviceClass) {

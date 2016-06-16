@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.Fragments.ImprovedWebViewFragment;
 
-public class GameDetailActivity extends AppCompatActivity {
+public class GameDetailActivity extends AppCompatActivity implements GameDetailFragment.CommunicationInterface {
 
     FragmentTransaction fragmentTransaction;
     FragmentManager fragmentManager;
@@ -39,6 +39,19 @@ public class GameDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    public void loadWebView(String string) {
+        Fragment fragment =   fragmentManager.findFragmentByTag("WebView");
+
+        if(fragment==null){
+            fragment = ImprovedWebViewFragment.newInstance(string);
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container, fragment, "WebView");
+            fragmentTransaction.commit();
+        }
 
     }
 }

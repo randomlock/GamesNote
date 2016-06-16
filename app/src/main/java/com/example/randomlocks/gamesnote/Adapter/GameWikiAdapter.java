@@ -2,8 +2,6 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,17 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
 import com.example.randomlocks.gamesnote.GameDetailActivity;
 import com.example.randomlocks.gamesnote.HelperClass.DynamicHeightImageView;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
+import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -122,6 +121,53 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         }
 
 
+
+        /**************** SETTING PLATFORMS*************************/
+        List<GameWikiPlatform> platform = modal.platforms;
+
+
+
+        if(platform!=null){
+            holder.platform1.setVisibility(View.VISIBLE);
+            holder.platform2.setVisibility(View.VISIBLE);
+            holder.platform3.setVisibility(View.VISIBLE);
+
+
+            switch (platform.size()){
+                case 0 :
+                    holder.platform1.setVisibility(View.INVISIBLE);
+                    holder.platform2.setVisibility(View.INVISIBLE);
+                    holder.platform3.setVisibility(View.INVISIBLE);
+
+                    break;
+                case 1 :  holder.platform1.setVisibility(View.INVISIBLE);
+                            holder.platform3.setVisibility(View.INVISIBLE);
+                          holder.platform2.setText(platform.get(0).abbreviation);
+                    break;
+                case 2 :
+                    holder.platform2.setVisibility(View.INVISIBLE);
+                    holder.platform1.setText(platform.get(0).abbreviation);
+                    holder.platform3.setText(platform.get(1).abbreviation);
+                    break;
+                case 3 :
+
+
+                    holder.platform1.setText(platform.get(0).abbreviation);
+                    holder.platform2.setText(platform.get(1).abbreviation);
+                    holder.platform3.setText(platform.get(2).abbreviation);
+                    break;
+
+                default: holder.platform1.setText(platform.get(0).abbreviation);
+                    holder.platform2.setText(platform.get(1).abbreviation);
+                    holder.platform3.setText("+"+(platform.size()-2)+" more");
+
+            }
+        }
+
+
+
+
+
 /****************** SET ON CLICK LISTENER *************************/
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +206,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
       class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
 
 
-        public TextView title,description,date,platform1,platform2,platform3;
+        public TextView title,description,date;
+        public Button  platform1,platform2,platform3;
 
         public DynamicHeightImageView imageView;
 
@@ -175,14 +222,15 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             title = (TextView) itemView.findViewById(R.id.title);
             description = (TextView)itemView.findViewById(R.id.description);
             date = (TextView) itemView.findViewById(R.id.date);
-            platform1 = (TextView) itemView.findViewById(R.id.platform1);
-            platform2 = (TextView) itemView.findViewById(R.id.platform2);
-            platform3 = (TextView)itemView.findViewById(R.id.platform3);
+            platform1 = (Button) itemView.findViewById(R.id.platform1);
+            platform2 = (Button) itemView.findViewById(R.id.platform2);
+            platform3 = (Button) itemView.findViewById(R.id.platform3);
             imageView = (DynamicHeightImageView) itemView.findViewById(R.id.imageView);
             view = itemView.findViewById(R.id.dropdown);
             view.setOnClickListener(this);
             imageView.setOnClickListener(this);
-
+            platform1.setOnClickListener(this);
+            platform2.setOnClickListener(this);
 
 
 
@@ -221,6 +269,21 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
 
 
 
+                 break;
+
+             case R.id.platform1 :
+                 if (list.get(getLayoutPosition()).platforms!=null) {
+                     Toaster.make(context,list.get(getLayoutPosition()).platforms.get(0).name);
+                 }
+                 break;
+
+             case R.id.platform2 :
+                 if (list.get(getLayoutPosition()).platforms!=null) {
+                     if(list.get(getLayoutPosition()).platforms.size()==1)
+                     Toaster.make(context,list.get(getLayoutPosition()).platforms.get(0).name);
+                     else
+                         Toaster.make(context,list.get(getLayoutPosition()).platforms.get(1).name);
+                 }
                  break;
 
          }

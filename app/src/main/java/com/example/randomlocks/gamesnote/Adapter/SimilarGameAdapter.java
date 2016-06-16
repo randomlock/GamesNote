@@ -46,6 +46,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
         }
 
 
+
         this.apiUrl = new ArrayList<>();
 
         for (int i = 0; i < stringList.size(); i++) {
@@ -53,6 +54,10 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
         }
 
 
+    }
+
+    public void setImages(List<CharacterGamesImage> images) {
+        this.images = images;
     }
 
     @Override

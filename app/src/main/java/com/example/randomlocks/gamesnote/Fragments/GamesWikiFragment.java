@@ -32,6 +32,7 @@ import com.example.randomlocks.gamesnote.Adapter.GameDetailPagerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.EndlessRecyclerOnScrollListener;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
@@ -68,7 +69,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     NavigationView mNavigation;
     RecyclerView recyclerView;
     AVLoadingIndicatorView progressBar;
-    LinearLayoutManager manager;
+    ConsistentLinearLayoutManager manager;
     List<GameWikiModal> listModals=null;
     GameWikiAdapter adapter;
     ObjectAnimator animation;
@@ -126,12 +127,11 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
 
         if(savedInstanceState!=null && listModals!=null){
             listModals =  savedInstanceState.getParcelableArrayList(MODAL);
-            if (!listModals.isEmpty()) {
+            if (listModals!=null && !listModals.isEmpty()) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(new GameWikiAdapter(listModals, getContext(), recyclerView.getChildCount()));
                 recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(SCROLL_POSITION));
             }
-            Toaster.make(getContext(),"fragment saveinstancve");
 
         }
 
@@ -175,7 +175,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         map.put(GiantBomb.SORT,sort);
 
 
-        manager = new LinearLayoutManager(getContext());
+        manager = new ConsistentLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
 
         if (savedInstanceState == null || (listModals.isEmpty() && savedInstanceState!=null)) {
@@ -333,7 +333,7 @@ progressBar.setVisibility(View.VISIBLE);
 
                 }
 
-                if (listModals.isEmpty()) {
+                if (listModals.isEmpty() && recyclerView.getAdapter().getItemCount()!=0) {
                     errorText.setVisibility(View.VISIBLE);
                 } else {
                     errorText.setVisibility(View.GONE);
@@ -440,8 +440,6 @@ progressBar.setVisibility(View.VISIBLE);
 
 
     }
-
-
 
 
 }
