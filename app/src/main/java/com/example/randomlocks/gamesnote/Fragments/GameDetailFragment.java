@@ -2,18 +2,19 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,15 +22,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,7 +37,9 @@ import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailRecyclerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
-import com.example.randomlocks.gamesnote.AsyncTask.JsoupConnect;
+import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
+import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
+import com.example.randomlocks.gamesnote.DialogFragment.BottomSheetImageOption;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -54,11 +56,11 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListMod
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.R;
+import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -96,8 +98,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     AppBarLayout appBarLayout;
     RecyclerView recyclerView, similarGameRecycleView, characterRecycleView;
     PicassoNestedScrollView nestedScrollView;
-    TextView description,bottomSheetText;
-    View bottomSheet;
+    TextView description;
     GameDetailRecyclerAdapter adapter;
     int style;
     String completeDescription;
@@ -107,6 +108,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     SimilarGameAdapter similarGameAdapter;
     GameDetailCharacterAdapter characterAdapter;
     CommunicationInterface mCommunicationInterface;
+    JsoupCharacters asyncCharacters;
+    JsoupGames asyncGames;
+    ImageView appbarImage;
 
 
 
@@ -140,7 +144,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
         setHasOptionsMenu(true);
     }
 
@@ -160,26 +164,29 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
         /************************************** FindViewById *********************************/
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
-        nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
+        coordinatorLayout = (CoordinatorLayout) getView().findViewById(R.id.root_coordinator);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
+        appbarImage = (ImageView) getActivity().findViewById(R.id.appbar_image);
         toolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
         toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
-        viewPager = (ViewPager) toolbarLayout.findViewById(R.id.viewpager);
+        viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
+        nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
-        similarGameRecycleView.setNestedScrollingEnabled(false);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
-        characterRecycleView.setNestedScrollingEnabled(false);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
         overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
-        recyclerView.setNestedScrollingEnabled(false);
         style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 1, getContext()) + 1);
 
+        recyclerView.setNestedScrollingEnabled(false);
+        characterRecycleView.setNestedScrollingEnabled(false);
+        similarGameRecycleView.setNestedScrollingEnabled(false);
 
-        /************************** BACKGROUND ********************************/
 
-        //  Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).into(nestedScrollView);
+        /************************** APPBARLATOUT ********************************/
+
+          Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).fit().centerCrop().into(appbarImage);
+
 
         /***************************** TYPEFACE ************************************/
 
@@ -193,22 +200,25 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         //Show toolbar icon after parallex is finished
 
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+      /*  appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
-                    toolbar.animate().alpha(1).setDuration(300);
+                    coverImage.animate().alpha(0).setDuration(300);
                 } else {
-                    toolbar.animate().alpha(0).setDuration(300);
+                    coverImage.animate().alpha(1).setDuration(300);
                 }
             }
 
-        });
+        }); */
 
         /******************************* TOOLBAR *************************************/
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
 
         // toolbar.setTitle("Game Detail");   //to be changed to game title
@@ -227,7 +237,45 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
 
-        new JsoupConnect(new JsoupConnect.AsyncResponse() {
+
+         asyncCharacters = new JsoupCharacters(new JsoupCharacters.AsyncResponse() {
+            @Override
+            public void processFinish(List<CharacterGamesImage> characters) {
+
+                if(characters!=null){
+                    if(characterRecycleView.getAdapter()!=null){
+                        Toaster.make(getContext(),"coming here");
+                        characterAdapter.setImages(characters);
+                        characterAdapter.notifyDataSetChanged();
+                    }else {
+                        characterImage = characters;
+                    }
+                }
+
+            }
+        });
+        asyncCharacters.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/characters/");
+
+
+               asyncGames =   new JsoupGames(new JsoupGames.AsyncResponse() {
+            @Override
+            public void processFinish(List<CharacterGamesImage> similarGame) {
+                if(similarGame!=null){
+                    if (similarGameRecycleView.getAdapter()!=null) {
+                        similarGameAdapter.setImages(similarGame);
+                        similarGameAdapter.notifyDataSetChanged();
+                    }else {
+                        similarGameImage = similarGame;
+                    }
+                }
+            }
+        });
+        asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/similar-games/");
+
+
+
+
+    /*    new JsoupCharacterDelete(new JsoupCharacterDelete.AsyncResponse() {
             @Override
             public void processFinish(Elements elements) {
 
@@ -244,7 +292,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
                         Elements elem[] = new Elements[2];
 
-                        for (int i = 0; i < elements.size(); i++) {
+                        for (int i = 0,size=elements.size(); i < size; i++) {
                             elem[i] = elements.get(i).getElementById("wiki-relatedList")
                                     .select("div.tab-content").first().select("div.tab-pane.active").first().select("div.js-table-pagintor-table").first().select("ul.wiki-relation").first()
                                     .children();
@@ -300,7 +348,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
             }
 
-        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/bioshock-infinite/" + apiUrl + "/");
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/" + apiUrl + "/"); */
+
+
 
 
 
@@ -322,8 +372,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
                 gameDetailModal = response.body().results;
                 List<GameDetailImages> image = gameDetailModal.images;
-                ArrayList<String> images = new ArrayList<>();
-                for (int i = 0; i < image.size(); i++) {
+                ArrayList<String> images = new ArrayList<>(image.size());
+                for (int i = 0,size=image.size(); i < size; i++) {
                     images.add(image.get(i).thumbUrl);
                 }
 
@@ -341,7 +391,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 String genres = listToString(gameDetailModal.genres);
                 String theme = listToString(gameDetailModal.themes);
                 String franchise = listToString(gameDetailModal.franchises);
-                ArrayList<String> values = new ArrayList<String>();
+                ArrayList<String> values = new ArrayList<>(5);
 
                 values.add(developer);
                 values.add(publisher);
@@ -349,7 +399,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 values.add(franchise);
                 values.add(genres);
 
-                ArrayList<String> key = new ArrayList<String>();
+                ArrayList<String> key = new ArrayList<>(5);
                 key.add("Developer");
                 key.add("Publisher");
                 key.add("Theme");
@@ -372,7 +422,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                     Document doc = Jsoup.parse(gameDetailModal.description);
                     completeDescription = doc.toString();
 
-                    if (doc != null) {
 
                         Element info = doc.getElementsByTag("p").first();
                         if(info!=null)
@@ -381,12 +430,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                             @Override
                             public void onClick(View v) {
 
-                                mCommunicationInterface.loadWebView("http://www.giantbomb.com/grand-theft-auto-iv/3030-20457/");
+                                mCommunicationInterface.loadWebView("http://www.giantbomb.com/game/"+apiUrl);
 
                             }
                         });
 
-                    }
+
 
 
 
@@ -446,7 +495,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
                     characterRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
-                    characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
                     characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, style, getContext());
                     characterRecycleView.setAdapter(characterAdapter);
                 }
@@ -463,8 +511,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                     });
 
 
-                    similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    similarGameRecycleView.addItemDecoration(new VerticalSpaceItemDecoration(6));
+                    similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+                   // similarGameRecycleView.addItemDecoration(new VerticalSpaceItemDecoration(6));
                     similarGameAdapter = new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext());
                     similarGameRecycleView.setAdapter(similarGameAdapter);
 
@@ -502,6 +550,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     }
 
 
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -514,16 +564,20 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         switch (item.getItemId()) {
 
-            case R.id.fontSelect: {
+            case R.id.fontSelect:
 
                 FontOptionFragment fontOptionFragment = FontOptionFragment.newInstance();
                 fontOptionFragment.setTargetFragment(this, 0);
                 fontOptionFragment.show(getActivity().getSupportFragmentManager(), "fontoption");
 
 
-                break;
-            }
 
+
+                break;
+
+
+            case android.R.id.home :
+                getActivity().onBackPressed();
 
         }
 
@@ -606,6 +660,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
 
@@ -615,7 +674,14 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onDestroy() {
+
+        if(asyncCharacters!=null)
+            asyncCharacters.cancel(false);
+        if(asyncGames!=null)
+            asyncGames.cancel(false);
+
+
+        super.onDestroy();
     }
 }

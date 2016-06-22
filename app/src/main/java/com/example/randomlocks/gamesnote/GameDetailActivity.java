@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote;
 
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -53,5 +54,10 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
             fragmentTransaction.commit();
         }
 
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 }

@@ -2,7 +2,11 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +43,12 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         this.list = list;
         this.context = context;
         this.lastPosition=lastPosition;
+    }
+
+    public void swap(List<GameWikiModal> newList){
+        list.clear();
+        list.addAll(newList);
+        notifyDataSetChanged();
     }
 
 
@@ -110,7 +120,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         if (modal.image != null && modal.image.smallUrl != null && modal.image.mediumUrl != null) {
     holder.imageView.setTag(R.string.smallImageUrl,modal.image.smallUrl);
     holder.imageView.setTag(R.string.mediumImageUrl,modal.image.mediumUrl);
-            Picasso.with(context).load(modal.image.smallUrl).resize(100,150).centerCrop().into(holder.imageView);
+            Picasso.with(context).load(modal.image.mediumUrl).resize(100,150).centerCrop().into(holder.imageView);
 }
 
         String date_time = modal.originalReleaseDate;
@@ -175,10 +185,11 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             public void onClick(View v) {
                 Intent it = new Intent(context, GameDetailActivity.class);
                 it.putExtra("apiUrl",modal.apiDetailUrl);
+                Bundle bundle = ActivityOptionsCompat.makeScaleUpAnimation(v,0,0,v.getWidth(),v.getHeight()).toBundle();
                 if (modal.image != null && modal.image.mediumUrl != null) {
                     it.putExtra("imageUrl", modal.image.mediumUrl);
                 }
-                context.startActivity(it);
+                context.startActivity(it,bundle);
             }
         });
 

@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Key"
+        android:textColor="@color/black"
         style="@style/TextStyle12" />
 
     <TextView
@@ -17,6 +18,7 @@
         android:layout_width="200sp"
         android:layout_height="wrap_content"
         android:text="-"
+        android:gravity="right"
         style="@style/TextStyle12"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"

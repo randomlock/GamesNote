@@ -3,13 +3,13 @@ package com.example.randomlocks.gamesnote.Adapter;
 import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
 import com.example.randomlocks.gamesnote.R;
@@ -54,7 +54,7 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_similar_game_character, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_characters, parent, false);
         return new MyViewHolder(v);
 
 
@@ -62,14 +62,16 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
     @Override
     public int getItemCount() {
-        return stringList.size() <= 10 ? stringList.size() : 10;
+        return stringList.size() <= 30 ? stringList.size() : 30;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        Log.d("hi","onbindholder");
         holder.name.setText(stringList.get(position).name);
 
         if (images != null) {
+            holder.image.setTag(images.get(position));
             Picasso.with(context).load(images.get(position).imageUrl).into(holder.image);
         }
 
@@ -105,7 +107,7 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
         @Override
         public void onClick(View v) {
-            Toaster.make(context, String.valueOf(apiUrl.get(2)));
+
         }
     }
 

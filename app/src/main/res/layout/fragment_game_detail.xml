@@ -21,9 +21,8 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:theme="@style/MyToolbar"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
             >
@@ -34,18 +33,11 @@
 
 
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpager"
+            <ImageView
+                android:id="@+id/appbar_image"
                 android:layout_width="match_parent"
-                android:layout_height="192dp"
-                app:layout_collapseMode="parallax"
-                >
-
-
-
-
-            </android.support.v4.view.ViewPager>
-
+                android:layout_height="300dp"
+                />
 
 
 
@@ -67,6 +59,7 @@
 
 
 
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
 
@@ -76,14 +69,155 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+
+
+
     <com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
         >
+
+
+
+
+
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/game_info_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="4dp"
+
+        app:elevation="14dp">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/overview_heading"
+                style="@style/cardview_textstyle"
+                android:text="Overview"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/description_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="4dp"
+        app:elevation="14dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/description_heading"
+                style="@style/cardview_textstyle"
+                android:text="Description"
+                />
+
+
+            <ProgressBar
+                android:id="@+id/overview_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:theme="@style/LinearProgress"
+                android:layout_marginTop="12dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="12"
+                android:ellipsize="end"
+                android:padding="6dp"
+                style="@style/TextStyle12" />
+
+
+        </LinearLayout>
+
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/game_image_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="4dp"
+        app:elevation="14dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+            android:id="@+id/image_heading"
+            style="@style/cardview_textstyle"
+            android:text="Images"
+            />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:padding="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="192dp"
+        app:layout_collapseMode="parallax"
+        />
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/game_character_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="4dp"
+        app:elevation="14dp">
 
 
         <LinearLayout
@@ -91,165 +225,70 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/character_heading"
+                style="@style/cardview_textstyle"
+                android:text="Character"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/character_game_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/game_similar_cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="4dp"
+        app:elevation="14dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/similar_game_heading"
+                style="@style/cardview_textstyle"
+                android:text="Similar games"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/similar_game_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                >
+
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 
 
 
 
-
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/game_info_cardview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="12dp"
-                        app:cardCornerRadius="4dp"
-
-                        app:elevation="14dp">
+</LinearLayout>
 
 
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/overview_heading"
-                                style="@style/cardview_textstyle"
-                                android:text="Overview"
-                                />
-
-                            <android.support.v7.widget.RecyclerView
-                            android:id="@+id/list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-
-                        </LinearLayout>
-
-
-
-                    </android.support.v7.widget.CardView>
-
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/description_cardview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="12dp"
-                        app:cardCornerRadius="4dp"
-                        app:elevation="14dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/description_heading"
-                                style="@style/cardview_textstyle"
-                                android:text="Description"
-                               />
-
-
-                            <ProgressBar
-                                android:id="@+id/overview_progress"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:indeterminate="true"
-                                android:theme="@style/LinearProgress"
-                                android:layout_marginTop="12dp"
-                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                                />
-
-                            <TextView
-                                android:id="@+id/description"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:maxLines="12"
-                                android:ellipsize="end"
-                                android:padding="6dp"
-                                style="@style/TextStyle12" />
-
-
-                        </LinearLayout>
-
-
-
-                    </android.support.v7.widget.CardView>
-
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/game_character_cardview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="12dp"
-                        app:cardCornerRadius="4dp"
-                        app:elevation="14dp">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/character_heading"
-                                style="@style/cardview_textstyle"
-                                android:text="Character"
-                                />
-
-                            <android.support.v7.widget.RecyclerView
-                            android:id="@+id/character_game_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            >
-
-
-                        </android.support.v7.widget.RecyclerView>
-
-                        </LinearLayout>
-
-                    </android.support.v7.widget.CardView>
-
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/game_similar_cardview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="12dp"
-                        app:cardCornerRadius="4dp"
-                        app:elevation="14dp">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/similar_game_heading"
-                                style="@style/cardview_textstyle"
-                                android:text="Similar games"
-                                 />
-
-                            <android.support.v7.widget.RecyclerView
-                            android:id="@+id/similar_game_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            >
-
-
-                        </android.support.v7.widget.RecyclerView>
-
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
-
-                </LinearLayout>
 
     </com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView>
+
 
 
 

@@ -63,7 +63,6 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     private static final String MODAL = "list_modal" ;
     private static final String SCROLL_POSITION = "recyclerScrollPosition" ;
     ViewPager viewPager;
-    View customView;
     Toolbar toolbar;
     DrawerLayout mDrawer;
     NavigationView mNavigation;
@@ -77,7 +76,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     GameWikiListInterface gameWikiListInterface;
     TextView errorText;
     CoordinatorLayout coordinatorLayout;
-    View v;
+    Context context;
 
     public static final String LIMIT = "50";
 
@@ -93,6 +92,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         listModals = new ArrayList<>();
+        context = getContext();
     }
 
     @Override
@@ -100,8 +100,16 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-         v = inflater.inflate(R.layout.fragment_games_wiki, container, false);
+        View v = inflater.inflate(R.layout.fragment_games_wiki, container, false);
+        mDrawer = (DrawerLayout) v.findViewById(R.id.drawer);
+        mNavigation = (NavigationView) v.findViewById(R.id.navigation);
 
+        coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.custom_view);
+        toolbar = (Toolbar) coordinatorLayout.findViewById(R.id.my_toolbar);
+        viewPager = (ViewPager) coordinatorLayout.findViewById(R.id.viewpager);
+        recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.recycler_view);
+        progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
+        errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
 
 
 
@@ -112,13 +120,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        coordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.custom_view);
-        mDrawer = (DrawerLayout) v.findViewById(R.id.drawer);
-        mNavigation = (NavigationView) v.findViewById(R.id.navigation);
-        viewPager = (ViewPager) coordinatorLayout.findViewById(R.id.viewpager);
-        recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.recycler_view);
-        progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
-        errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
+
 
 
 
@@ -128,8 +130,8 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         if(savedInstanceState!=null && listModals!=null){
             listModals =  savedInstanceState.getParcelableArrayList(MODAL);
             if (listModals!=null && !listModals.isEmpty()) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new GameWikiAdapter(listModals, getContext(), recyclerView.getChildCount()));
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                recyclerView.setAdapter(new GameWikiAdapter(listModals, context, recyclerView.getChildCount()));
                 recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(SCROLL_POSITION));
             }
 
@@ -140,7 +142,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
 
 
 /***************************  SETTING THE VIEW PAGER ***********************/
-        viewPager.setAdapter(new GameDetailPagerAdapter(getContext(), 4));
+        viewPager.setAdapter(new GameDetailPagerAdapter(context, 4));
         CircleIndicator indicator = (CircleIndicator) coordinatorLayout.findViewById(R.id.indicator);
         indicator.setViewPager(viewPager);
 
@@ -149,7 +151,6 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         /***************************  SETTING THE TOOLBAR ***********************/
 
 
-        toolbar = (Toolbar) coordinatorLayout.findViewById(R.id.my_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
 
@@ -158,15 +159,14 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         /***************************** MAKING THE API CALL **************************/
 
          gameWikiListInterface =  GiantBomb.createService(GameWikiListInterface.class);
-        map = new HashMap<>();
+        map = new HashMap<>(6);
         map.put(GiantBomb.KEY,GiantBomb.API_KEY);
-
         map.put(GiantBomb.FORMAT,"JSON");
         map.put(GiantBomb.LIMIT, LIMIT);
         map.put(GiantBomb.OFFSET,"0");
 
-        String sort = sortValue(SharedPreference.getFromSharedPreferences(GiantBomb.WHICH,4,getContext()));
-        boolean asc = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING,true,getContext());
+        String sort = sortValue(SharedPreference.getFromSharedPreferences(GiantBomb.WHICH,4,context));
+        boolean asc = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING,true,context);
 
         if(!asc){
             sort+=":desc";
@@ -175,7 +175,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         map.put(GiantBomb.SORT,sort);
 
 
-        manager = new ConsistentLinearLayoutManager(getContext());
+        manager = new ConsistentLinearLayoutManager(context);
         recyclerView.setLayoutManager(manager);
 
         if (savedInstanceState == null || (listModals.isEmpty() && savedInstanceState!=null)) {
@@ -224,7 +224,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.game_wiki_menu, menu);
-       getSearchManager(getContext(), menu, false);
+       getSearchManager(context, menu, false);
     }
 
 
@@ -263,7 +263,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     /*********************** SEARCH MANAGER FUNCTION ********************************/
 
 
-    public void getSearchManager(Context context, Menu menu,boolean isDefaultIconified) {
+    public void getSearchManager(final Context context, Menu menu, boolean isDefaultIconified) {
 
         SearchManager searchManager = (SearchManager)context. getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
@@ -272,13 +272,13 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
         searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default
 
         MenuItem searchMenuItem = menu.findItem(R.id.search);
-        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+     /*   MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
 
 
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 if (toolbar != null) {
-                    toolbar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+                    toolbar.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
                 }
                 return true;
             }
@@ -290,7 +290,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
                 }
                 return true;
             }
-        });
+        }); */
 
    searchView.setOnQueryTextListener(this);
 
@@ -321,16 +321,20 @@ progressBar.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
 
 
-                if (listModals.isEmpty()) {
+                if(listModals.isEmpty() && recyclerView.getAdapter()!=null){
                     listModals = response.body().results;
-                    adapter = new GameWikiAdapter(listModals, getContext(), recyclerView.getChildCount());
+                    adapter.swap(listModals);
+                }
+
+
+               else if (listModals.isEmpty()) {
+                    listModals = response.body().results;
+                    adapter = new GameWikiAdapter(listModals, context, recyclerView.getChildCount());
                     recyclerView.setAdapter(adapter);
                 } else {
-
                     int size = adapter.getItemCount();
                     listModals.addAll(response.body().results);
                     adapter.notifyItemRangeInserted(size, listModals.size());
-
                 }
 
                 if (listModals.isEmpty() && recyclerView.getAdapter().getItemCount()!=0) {
@@ -365,7 +369,7 @@ progressBar.setVisibility(View.VISIBLE);
     public boolean onQueryTextSubmit(String query) {
 
         String field = "name:"+query;
-        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
+        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(),context);
 
             map.put(GiantBomb.FIELD,field);
             map.put(GiantBomb.OFFSET, "0");
@@ -389,7 +393,7 @@ progressBar.setVisibility(View.VISIBLE);
     @Override
     public void onSelect(int which, boolean asc) {
 
-        List<String> arrayList =  Arrays.asList(getContext().getResources().getStringArray(R.array.search_filter));
+        List<String> arrayList =  Arrays.asList(context.getResources().getStringArray(R.array.search_filter));
 
     String sort = sortValue(which);
 
@@ -400,7 +404,7 @@ progressBar.setVisibility(View.VISIBLE);
         map.put(GiantBomb.SORT,sort);
         map.put(GiantBomb.OFFSET,"0");
         listModals.clear();
-        Toaster.make(getContext(), map.toString());
+        Toaster.make(context, map.toString());
 
         getGameWiki(gameWikiListInterface,map);
 
@@ -442,4 +446,9 @@ progressBar.setVisibility(View.VISIBLE);
     }
 
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        context = null;
+    }
 }

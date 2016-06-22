@@ -3,6 +3,7 @@ package com.example.randomlocks.gamesnote.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +82,8 @@ public class ImageViewerFragment extends DialogFragment   {
                 dismiss();
 
                 Intent it = new Intent(getContext(), HdImageViewerActivity.class);
+                int[] coordinate = new int[2];
+                imageView.getLocationOnScreen(coordinate);
                 it.putExtra(MEDIUM_IMAGE_URL, mediumImageUrl);
                 startActivity(it);
 

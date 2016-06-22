@@ -2,8 +2,6 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +60,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_similar_game_character, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_similar, parent, false);
 
         MyViewHolder holder = new MyViewHolder(v);
         return holder;
@@ -73,15 +71,15 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     @Override
     public int getItemCount() {
-        return stringList.size() <= 10 ? stringList.size() : 10;
+        return stringList.size() <= 30 ? stringList.size() : 30;
+
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.name.setText(stringList.get(position).name);
 
         if (images != null) {
-            Picasso.with(context).load(images.get(position).imageUrl).into(holder.image);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().centerCrop().into((ImageView) holder.itemView);
         }
 
 
@@ -91,24 +89,16 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView name;
-        ImageView image;
+
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            name = (TextView) itemView.findViewById(R.id.text);
-            image = (ImageView) itemView.findViewById(R.id.image);
 
 
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                name.setTextAppearance(style);
 
-            } else {
-                name.setTextAppearance(context, style);
 
-            }
 
             itemView.setOnClickListener(this);
 
@@ -124,6 +114,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
             FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
 
             fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl.get(getLayoutPosition()));
+            fragment.getArguments().putString(GameDetailFragment.IMAGE_URL,images.get(getLayoutPosition()).imageUrl);
             ft.detach(fragment).attach(fragment).commit();
 
 

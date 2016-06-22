@@ -27,7 +27,9 @@
         <activity
             android:name=".HdImageViewerActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".GameDetailActivity" />
+        <activity android:name=".GameDetailActivity"
+            android:parentActivityName=".MainActivity"
+            />
         <activity android:name=".ViewPagerActivity"></activity>
     </application>
 

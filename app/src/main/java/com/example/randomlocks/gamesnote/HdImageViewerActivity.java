@@ -40,7 +40,6 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
     PhotoViewAttacher mAttacher;
     Toolbar toolbar;
     boolean isLoaded=false;
-    BottomSheetDialog dialog;
 
 
     @Override

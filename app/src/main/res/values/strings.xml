@@ -26,6 +26,7 @@
     <string name="transition_viewpager">transactionViewpager</string>
     <string name="foo">foo</string>
     <string name="bar">bar</string>
+    <string name="status">Status</string>
 
     <string-array name="hello">
         <item>"SDFsdf"</item>
@@ -99,6 +100,18 @@
         <item>Thin-italic</item>
         <item>Condensed regular</item>
         <item>Condensed italic</item>
+
+    </string-array>
+
+
+    <string-array name="add_to_list">
+
+        <item>Planning</item>
+        <item>Playing</item>
+        <item>Completed</item>
+        <item>Dropped</item>
+        <item>OnHold</item>
+        <item>Replaying</item>
 
     </string-array>
 

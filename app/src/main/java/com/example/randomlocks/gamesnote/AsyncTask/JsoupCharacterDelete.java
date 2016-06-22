@@ -1,10 +1,6 @@
 package com.example.randomlocks.gamesnote.AsyncTask;
 
 import android.os.AsyncTask;
-import android.os.Looper;
-import android.util.Log;
-
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,13 +9,13 @@ import org.jsoup.select.Elements;
 /**
  * Created by randomlocks on 6/10/2016.
  */
-public class JsoupConnect extends AsyncTask<String, Integer, Elements> {
+public class JsoupCharacterDelete extends AsyncTask<String, Integer, Elements> {
 
     public interface AsyncResponse {
         void processFinish(Elements output);
     }
 
-    public JsoupConnect(AsyncResponse delegate) {
+    public JsoupCharacterDelete(AsyncResponse delegate) {
         this.delegate = delegate;
     }
 

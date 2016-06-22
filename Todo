@@ -16,7 +16,6 @@ try to use gamelist and gamewiki layout                                         
 
 
 
-(optional) disable right navigation view when sliding viewpager
 
 
 
@@ -26,14 +25,12 @@ you should have all dpi for icon and small images                               
 
 
 
-recommended games if any should be in horizontal recycler view list
 
 
 
 check drawable circular progress for other uses
 
 
-add viewpager gallery for images
 
 
 In videos or other , instead of tablayout we will use - http://share.framerjs.com/lg0nu9ecekfy/ . the background will be of games wallpaper
@@ -45,21 +42,16 @@ remove the placeholder text,view,images etc from your layout / very expensice op
 
 animation for clicking image icons . Check nifty modal dialog effects to select one animatiom
 
-search icon need to be in white color . maybe applying toolbar theme at runtime will do trick
 
 change the request API for search from /games to /search to descrease API request/resource
 
 
-app crash if change orientation before data is loaded :D
 
 
 
 
-Todo today
 
 
-
-platform UI with more option
 
 
 

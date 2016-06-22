@@ -60,7 +60,7 @@ private ImageView imageView;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view =  inflater.inflate(R.layout.viewpager_wiki_image, container, false);
         imageView = (ImageView) view.findViewById(R.id.image);
-        Picasso.with(context).load(imageUrl).fit().into(imageView, new Callback() {
+        Picasso.with(context).load(imageUrl).fit().centerCrop().into(imageView, new Callback() {
             @Override
             public void onSuccess() {
             }

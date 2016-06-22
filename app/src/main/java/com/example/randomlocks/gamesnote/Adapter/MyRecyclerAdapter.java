@@ -28,7 +28,7 @@ List<String> stringList;
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_similar_game_character, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_characters, parent, false);
 
         MyViewHolder holder = new MyViewHolder(v);
         return holder;
