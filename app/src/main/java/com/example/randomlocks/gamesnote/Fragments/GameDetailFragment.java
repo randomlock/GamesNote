@@ -2,10 +2,6 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,15 +10,12 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
@@ -39,7 +33,6 @@ import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
-import com.example.randomlocks.gamesnote.DialogFragment.BottomSheetImageOption;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -47,7 +40,6 @@ import com.example.randomlocks.gamesnote.HelperClass.PagerDepthAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
-import com.example.randomlocks.gamesnote.HelperClass.VerticalSpaceItemDecoration;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
@@ -88,6 +80,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
     public static final String API_URL = "apiUrl";
     public static final String IMAGE_URL = "imageUrl" ;
+    public static final String NAME = "name" ;
     Toolbar toolbar;
     String apiUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
@@ -110,7 +103,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     CommunicationInterface mCommunicationInterface;
     JsoupCharacters asyncCharacters;
     JsoupGames asyncGames;
-    ImageView appbarImage;
+    ImageView appbarImage,coverImage;
+    TextView gameTitle;
+    RelativeLayout relativeLayout;
 
 
 
@@ -124,10 +119,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         void loadWebView(String string);
     }
 
-    public static GameDetailFragment newInstance(String apiUrl, String imageUrl) {
+    public static GameDetailFragment newInstance(String apiUrl, String name ,  String imageUrl) {
 
         Bundle args = new Bundle();
         args.putString(API_URL,apiUrl);
+        args.putString(NAME,name);
         args.putString(IMAGE_URL, imageUrl);
         GameDetailFragment fragment = new GameDetailFragment();
         fragment.setArguments(args);
@@ -171,6 +167,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
         viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
+        relativeLayout = (RelativeLayout) nestedScrollView.findViewById(R.id.cover_layout);
+        coverImage = (ImageView) relativeLayout.findViewById(R.id.cover_image);
+        gameTitle = (TextView) relativeLayout.findViewById(R.id.game_title);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
@@ -186,7 +185,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         /************************** APPBARLATOUT ********************************/
 
           Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).fit().centerCrop().into(appbarImage);
-
+          Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).fit().into(coverImage);
+          gameTitle.setText(getArguments().getString(NAME));
 
         /***************************** TYPEFACE ************************************/
 

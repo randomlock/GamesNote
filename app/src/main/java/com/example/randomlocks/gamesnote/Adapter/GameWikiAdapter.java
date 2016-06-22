@@ -185,6 +185,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             public void onClick(View v) {
                 Intent it = new Intent(context, GameDetailActivity.class);
                 it.putExtra("apiUrl",modal.apiDetailUrl);
+                it.putExtra("name",modal.name);
                 Bundle bundle = ActivityOptionsCompat.makeScaleUpAnimation(v,0,0,v.getWidth(),v.getHeight()).toBundle();
                 if (modal.image != null && modal.image.mediumUrl != null) {
                     it.putExtra("imageUrl", modal.image.mediumUrl);

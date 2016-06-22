@@ -168,9 +168,8 @@
     <style name="cardview_textstyle">
         <item name="android:layout_width">match_parent </item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">12dp</item>
-        <item name="android:background">@color/accent</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/accent</item>
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-thin|bold</item>
     </style>

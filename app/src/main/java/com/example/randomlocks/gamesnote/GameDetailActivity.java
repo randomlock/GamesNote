@@ -22,7 +22,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("GameDetail");
         if(fragment == null){
-            fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL), getIntent().getStringExtra(GameDetailFragment.IMAGE_URL));
+            fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL),getIntent().getStringExtra(GameDetailFragment.NAME), getIntent().getStringExtra(GameDetailFragment.IMAGE_URL));
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container, fragment, "GameDetail");
             fragmentTransaction.commit();

@@ -71,10 +71,8 @@ public class GameDetailRecyclerAdapter extends RecyclerView.Adapter<GameDetailRe
             value = (TextView) itemView.findViewById(R.id.value);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                key.setTextAppearance(style);
                 value.setTextAppearance(style);
             } else {
-                key.setTextAppearance(fragment.getContext(), style);
                 value.setTextAppearance(fragment.getContext(), style);
             }
 
