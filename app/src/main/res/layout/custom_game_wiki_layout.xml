@@ -13,7 +13,6 @@ android:id="@+id/cardView"
     android:layout_marginTop="@dimen/leftmargin"
     android:layout_marginBottom="@dimen/bottommargin"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardBackgroundColor="#FAFAFA"
     app:cardCornerRadius="3dp"
     app:cardElevation="0dp"
     >
@@ -34,7 +33,7 @@ android:id="@+id/cardView"
         android:orientation="horizontal"
         android:layout_height="match_parent">
 
-<com.example.randomlocks.gamesnote.HelperClass.DynamicHeightImageView
+<ImageView
     android:layout_width="100dp"
     android:layout_height="150dp"
     android:src="@drawable/testimage"
@@ -99,6 +98,7 @@ android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PLATFORM"
+        android:textColor="?android:attr/textColorPrimary"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:id="@+id/textView"
@@ -163,6 +163,7 @@ android:id="@+id/cardView"
         android:background="@color/linecolor"
         android:gravity="center_horizontal"
         android:text="@string/desc"
+        android:textColor="?android:attr/textColorPrimary"
         android:fontFamily="sans-serif-light" />
 
 

@@ -122,7 +122,8 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
 
 
 
-
+            if(savedInstanceState!=null)
+                Toaster.make(getContext(),"not null");
 
 
         /*************** SAVE INSTANCE *************************/

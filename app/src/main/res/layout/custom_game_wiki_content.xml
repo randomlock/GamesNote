@@ -92,7 +92,6 @@
 
 
         <android.support.v7.widget.RecyclerView
-            android:background="#e4dfdf"
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -121,6 +120,7 @@
                 android:text="No Result Found"
                 android:drawableTop="@drawable/ic_error_outline_black_48dp"
                 android:layout_gravity="center"
+                android:textColor="?android:attr/textColorPrimary"
                 android:visibility="gone"
                 />
 

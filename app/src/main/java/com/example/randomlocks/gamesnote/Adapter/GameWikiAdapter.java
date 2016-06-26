@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
@@ -120,7 +121,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         if (modal.image != null && modal.image.smallUrl != null && modal.image.mediumUrl != null) {
     holder.imageView.setTag(R.string.smallImageUrl,modal.image.smallUrl);
     holder.imageView.setTag(R.string.mediumImageUrl,modal.image.mediumUrl);
-            Picasso.with(context).load(modal.image.mediumUrl).resize(100,150).centerCrop().into(holder.imageView);
+            Picasso.with(context).load(modal.image.smallUrl).fit().into(holder.imageView);
 }
 
         String date_time = modal.originalReleaseDate;
@@ -221,7 +222,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         public TextView title,description,date;
         public Button  platform1,platform2,platform3;
 
-        public DynamicHeightImageView imageView;
+        public ImageView imageView;
 
           public View view;
 
@@ -237,7 +238,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             platform1 = (Button) itemView.findViewById(R.id.platform1);
             platform2 = (Button) itemView.findViewById(R.id.platform2);
             platform3 = (Button) itemView.findViewById(R.id.platform3);
-            imageView = (DynamicHeightImageView) itemView.findViewById(R.id.imageView);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
             view = itemView.findViewById(R.id.dropdown);
             view.setOnClickListener(this);
             imageView.setOnClickListener(this);

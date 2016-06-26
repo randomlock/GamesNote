@@ -6,9 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 
+import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.Fragments.ImprovedWebViewFragment;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 
 public class GameDetailActivity extends AppCompatActivity implements GameDetailFragment.CommunicationInterface {
 
@@ -34,6 +37,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
 
 
+
     }
 
 
@@ -51,6 +55,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
             fragment = ImprovedWebViewFragment.newInstance(string);
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container, fragment, "WebView");
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
 
@@ -60,4 +65,36 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
     public void finish() {
         super.finish();
     }
+
+    public void startCharacterFragment(String apiUrl, String imageUrl) {
+
+        Fragment fragment = fragmentManager.findFragmentByTag("characterDetail");
+
+        if(fragment==null){
+            fragment = CharacterDetailFragment.newInstance(apiUrl,imageUrl);
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container,fragment,"characterDetail");
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
+
+
+    }
+
+
+    public void restartGameDetail(String apiUrl, String imageUrl) {
+
+        Fragment fragment = fragmentManager.findFragmentByTag("GameDetail");
+
+        if(fragment!=null){
+            fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl);
+            fragment.getArguments().putString(GameDetailFragment.IMAGE_URL,imageUrl);
+            fragmentTransaction.replace(R.id.container,fragment,"GameDetail").commit();
+
+        }
+
+
+    }
+
 }

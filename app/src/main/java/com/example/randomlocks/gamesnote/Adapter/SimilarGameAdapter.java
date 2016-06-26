@@ -26,14 +26,20 @@ import java.util.List;
 public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.MyViewHolder> {
 
 
+    public interface OnClickInterface{
+        void onItemClick(String apiUrl,String image);
+    }
+
+
     List<GameDetailSimilarGames> stringList;
     List<CharacterGamesImage> images = null;
     GameDetailFragment fragment;
     List<String> apiUrl;
     Context context;
     int style;
+    OnClickInterface onClickInterface;
 
-    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, GameDetailFragment fragment, Context context) {
+    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, GameDetailFragment fragment, Context context,OnClickInterface onClickInterface) {
         this.stringList = stringList;
         this.style = style;
         this.context = context;
@@ -51,6 +57,8 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
             apiUrl.add(stringList.get(i).apiDetailUrl);
         }
 
+        this.onClickInterface = onClickInterface;
+
 
     }
 
@@ -62,8 +70,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_game_detail_similar, parent, false);
 
-        MyViewHolder holder = new MyViewHolder(v);
-        return holder;
+        return new MyViewHolder(v);
 
 
 
@@ -79,7 +86,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         if (images != null) {
-            Picasso.with(context).load(images.get(position).imageUrl).fit().centerCrop().into((ImageView) holder.itemView);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().centerCrop().into((ImageView) holder.imageView);
         }
 
 
@@ -89,12 +96,12 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-
+        ImageView imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-
+            imageView = (ImageView) itemView.findViewById(R.id.image);
 
 
 
@@ -115,7 +122,14 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
             fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl.get(getLayoutPosition()));
             fragment.getArguments().putString(GameDetailFragment.IMAGE_URL,images.get(getLayoutPosition()).imageUrl);
-            ft.detach(fragment).attach(fragment).commit();
+            fragment.getArguments().putString(GameDetailFragment.NAME,stringList.get(getLayoutPosition()).name);
+            ft.remove(fragment);
+            //GameDetailFragment.comingFromSimilarGamesAdapter=true;
+            fragment = GameDetailFragment.newInstance(apiUrl.get(getLayoutPosition()),stringList.get(getLayoutPosition()).name,images.get(getLayoutPosition()).imageUrl);
+            ft.add(R.id.container,fragment,"GameDetail");
+            ft.commit();
+
+          //  onClickInterface.onItemClick(apiUrl.get(getLayoutPosition()),images.get(getLayoutPosition()).imageUrl);
 
 
         }

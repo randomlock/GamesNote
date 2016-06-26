@@ -64,7 +64,7 @@ public class ImageViewerFragment extends DialogFragment   {
         imageView = (ImageView) v.findViewById(R.id.imageview);
         hdButton = (Button)v.findViewById(R.id.button);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
-        Picasso.with(getContext()).load(smallImageUrl).resize(300,450).centerCrop().into(imageView, new Callback() {
+        Picasso.with(getContext()).load(smallImageUrl).fit().centerCrop().into(imageView, new Callback() {
             @Override
             public void onSuccess() {
                 progressBar.setVisibility(View.GONE);

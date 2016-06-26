@@ -13,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,12 +57,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mDrawableToggle;
     Fragment fragment = null ;
 
+    /*static {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+    }*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         frameLayout = (FrameLayout) findViewById(R.id.fragment_parent_layout);
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(),navHeaderLayout.getHeight()).centerInside().into(navHeaderLayout);
                 }
             });
-        }else
+        } else
         navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
 
 

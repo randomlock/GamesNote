@@ -2,6 +2,8 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
+import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
+import com.example.randomlocks.gamesnote.GameDetailActivity;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
 import com.example.randomlocks.gamesnote.R;
@@ -21,16 +27,16 @@ import java.util.List;
 /**
  * Created by randomlocks on 6/10/2016.
  */
-public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailCharacterAdapter.MyViewHolder> {
+public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailCharacterAdapter.MyViewHolder>  {
 
 
     List<GameDetailCharacters> stringList;
-    List<String> apiUrl;
     List<CharacterGamesImage> images = null;
+    OnClickInterface onClickInterface;
     Context context;
     int style;
 
-    public GameDetailCharacterAdapter(List<GameDetailCharacters> stringList, List<CharacterGamesImage> images, int style, Context context) {
+    public GameDetailCharacterAdapter(List<GameDetailCharacters> stringList, List<CharacterGamesImage> images, int style, Context context,OnClickInterface onClickInterface) {
         this.stringList = stringList;
         this.style = style;
         this.context = context;
@@ -39,14 +45,14 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
         }
 
 
-        this.apiUrl = new ArrayList<>();
-
-        for (int i = 0; i < stringList.size(); i++) {
-            apiUrl.add(stringList.get(i).apiDetailUrl);
-        }
-
+    this.onClickInterface = onClickInterface;
 
     }
+
+    public interface OnClickInterface{
+        void onItemClick(String apiUrl,String image);
+    }
+
 
     public void setImages(List<CharacterGamesImage> images) {
         this.images = images;
@@ -67,7 +73,6 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Log.d("hi","onbindholder");
         holder.name.setText(stringList.get(position).name);
 
         if (images != null) {
@@ -79,7 +84,9 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
     }
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         ImageView image;
@@ -99,17 +106,18 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
             }
 
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getLayoutPosition();
+                    onClickInterface.onItemClick(stringList.get(pos).apiDetailUrl,images.get(pos).imageUrl);
+                }
+            });
 
 
         }
 
 
-        @Override
-        public void onClick(View v) {
-
-        }
     }
-
 
 }
