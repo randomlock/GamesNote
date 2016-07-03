@@ -35,6 +35,7 @@ public class NewsModal   {
     public   String description;
     public String pubDate;
     public String content;
+    public boolean isClicked;
 
     public NewsModal(String title, String link, String description, String pubDate,String content) {
         this.title = title;
@@ -42,6 +43,7 @@ public class NewsModal   {
         this.description = description;
         this.pubDate = pubDate;
         this.content = content;
+        isClicked = false;
     }
 
 

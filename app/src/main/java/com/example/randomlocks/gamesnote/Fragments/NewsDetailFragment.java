@@ -14,8 +14,13 @@ import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -28,6 +33,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.PacmanLoadingIndicator;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.MainActivity;
@@ -47,12 +54,14 @@ public class NewsDetailFragment extends Fragment {
     private static final String TITLE = "title" ;
     private static final String IMAGE_URL = "image_url" ;
     public static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
+    private static final String LINK = "news_link" ;
 
     String description;
     TextView title;
     WebView webView;
     LinearLayout parentLayout;
     ImageView titleImage;
+    Toolbar toolbar;
 CustomTabActivityHelper customTabActivityHelper;
 
 
@@ -63,12 +72,13 @@ CustomTabActivityHelper customTabActivityHelper;
 
     }
 
-    public static NewsDetailFragment newInstance(String description,String imageUrl,String title) {
+    public static NewsDetailFragment newInstance(String description,String imageUrl,String title,String link) {
 
         Bundle args = new Bundle();
         args.putString(DESCRIPTION,description);
         args.putString(TITLE,title);
         args.putString(IMAGE_URL,imageUrl);
+        args.putString(LINK,link);
         NewsDetailFragment fragment = new NewsDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -77,6 +87,7 @@ CustomTabActivityHelper customTabActivityHelper;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         description = getArguments().getString(DESCRIPTION);
         customTabActivityHelper = new CustomTabActivityHelper();
     }
@@ -104,8 +115,13 @@ CustomTabActivityHelper customTabActivityHelper;
         super.onActivityCreated(savedInstanceState);
         titleImage = (ImageView) getView().findViewById(R.id.appbar_image);
         parentLayout = (LinearLayout) getView().findViewById(R.id.parent_layout);
-        webView = (WebView) getView().findViewById(R.id.web_view);
-        title = (TextView) getView().findViewById(R.id.news_heading);
+        webView = (WebView) parentLayout.findViewById(R.id.web_view);
+        title = (TextView) parentLayout.findViewById(R.id.news_heading);
+        toolbar = (Toolbar) getView().findViewById(R.id.my_toolbar);
+
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (getArguments().getString(IMAGE_URL)!=null) {
             Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).fit().centerCrop().into(titleImage);
@@ -152,9 +168,7 @@ CustomTabActivityHelper customTabActivityHelper;
 
               //  ((MainActivity)(getActivity())).loadWebView(url);
 
-                CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-                CustomTabActivityHelper.openCustomTab(
-                        getActivity(), customTabsIntent, Uri.parse(url), new WebViewFallback());
+                 runBrowser(url);
 
 
                 return true;
@@ -181,7 +195,39 @@ CustomTabActivityHelper customTabActivityHelper;
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.game_news_menu,menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case android.R.id.home :
+                getActivity().onBackPressed();
+                return true;
+
+            case R.id.internet :
+                runBrowser(getArguments().getString(LINK));
+
+
+
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    void runBrowser(String url){
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+        CustomTabActivityHelper.openCustomTab(
+                getActivity(), customTabsIntent, Uri.parse(url), new WebViewFallback());
+    }
 
 
 }

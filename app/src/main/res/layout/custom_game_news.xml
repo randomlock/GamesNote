@@ -50,23 +50,26 @@
         />
 
     <TextView
+        android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="status"
+        android:textColor="@color/accent"
         android:drawableLeft="@drawable/ic_check_black_24dp"
         android:gravity="center"
         android:layout_alignTop="@+id/news_date"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView2" />
+        android:layout_alignBottom="@+id/news_date" />
 
     <ImageView
         android:id="@+id/web_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_info_black_24dp"
-        android:layout_alignTop="@+id/textView2"
+        android:layout_alignTop="@+id/status"
         android:layout_alignRight="@+id/news_heading"
-        android:layout_alignEnd="@+id/news_heading" />
+        android:layout_alignEnd="@+id/news_heading"
+        android:layout_alignBottom="@+id/status" />
 
 
 </RelativeLayout>

@@ -1,19 +1,28 @@
 package com.example.randomlocks.gamesnote.Fragments;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Adapter.GameNewsAdapter;
+import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -37,10 +46,15 @@ import okhttp3.Response;
 public class GamesNewsFragment extends Fragment {
 
         RecyclerView recyclerView;
+    AVLoadingIndicatorView progressBar;
+    Toolbar toolbar;
+    CoordinatorLayout coordinatorLayout;
+
     List<NewsModal> modals;
     OkHttpClient client;
     Request request;
     public static String URL = "http://www.gamespot.com/feeds/news/";
+
 
     public GamesNewsFragment() {
         // Required empty public constructor
@@ -49,6 +63,7 @@ public class GamesNewsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         client = new OkHttpClient();
     }
 
@@ -62,8 +77,20 @@ public class GamesNewsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.news_recycler_view);
+        coordinatorLayout = (CoordinatorLayout) getView().findViewById(R.id.coordinator);
+        recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.news_recycler_view);
+        toolbar = (Toolbar) coordinatorLayout.findViewById(R.id.my_toolbar);
+        progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.indicator);
+
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        activity.getSupportActionBar().setTitle("Game News");
+
+
         if (modals==null) {
+            progressBar.setVisibility(View.VISIBLE);
             request = new Request.Builder()
                    .url(URL)
                    .build();
@@ -101,7 +128,19 @@ public class GamesNewsFragment extends Fragment {
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toaster.make(getContext(),"Connectivity Problem");
+                        progressBar.setVisibility(View.GONE);
+                        Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("RETRY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        try {
+                                            runOkHttp();
+                                        } catch (IOException e1) {
+                                            e1.printStackTrace();
+                                        }
+
+                                    }
+                                }).show();
                     }
                 });
             }
@@ -128,6 +167,7 @@ public class GamesNewsFragment extends Fragment {
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            progressBar.setVisibility(View.GONE);
                             Toaster.make(getContext(),"Unknown Error . Contact Lord kratos");
                         }
                     });
@@ -142,7 +182,9 @@ public class GamesNewsFragment extends Fragment {
 
     private void loadRecycler(List<NewsModal> modals) {
 
-            Toaster.make(getContext(),"coming here");
+        if (progressBar.getVisibility()==View.VISIBLE) {
+            progressBar.setVisibility(View.GONE);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new GameNewsAdapter(modals,getContext()));
 
@@ -150,4 +192,24 @@ public class GamesNewsFragment extends Fragment {
     }
 
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+
+            case android.R.id.home :
+                getActivity().onBackPressed();
+                return true ;
+
+
+
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

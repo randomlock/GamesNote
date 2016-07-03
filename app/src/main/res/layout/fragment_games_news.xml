@@ -1,18 +1,43 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-<android.support.v7.widget.RecyclerView
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            app:theme="@style/MyToolbarLight"
+            />
+
+
+        <com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:indicator="Pacman"
+
+            app:indicator_color="@color/accent"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal" />
+
+        <android.support.v7.widget.RecyclerView
     android:id="@+id/news_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 
 
+  </LinearLayout>
 
 
-
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

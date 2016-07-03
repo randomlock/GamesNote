@@ -33,6 +33,7 @@ import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -320,17 +321,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void newsDetailFragmnet(String mDescription,String imageUrl,String title){
+    public void newsDetailFragmnet(NewsModal newsModal){
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("news_detail");
         if(fragment==null){
-            fragment = NewsDetailFragment.newInstance(mDescription,imageUrl,title);
+            fragment = NewsDetailFragment.newInstance(newsModal.description,newsModal.content,newsModal.title,newsModal.link);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.addToBackStack(null);
             transaction.replace(R.id.fragment_parent_layout,fragment,"news_detail");
             transaction.commit();
-        }else {
-            fragment.getArguments().putString("news_description",mDescription);
         }
 
     }
