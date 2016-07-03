@@ -27,6 +27,8 @@ import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
+import com.example.randomlocks.gamesnote.Fragments.ImprovedWebViewFragment;
+import com.example.randomlocks.gamesnote.Fragments.NewsDetailFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mDrawableToggle;
     Fragment fragment = null ;
 
-    /*static {
+   /* static {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }*/
 
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_news : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -146,11 +148,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+       /*  switch (item.getItemId()) {
+           case android.R.id.home:
                 mDrawer.openDrawer(GravityCompat.START);
                 return true;
-        }
+        } */
 
         return super.onOptionsItemSelected(item);
 
@@ -316,4 +318,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+
+    public void newsDetailFragmnet(String mDescription,String imageUrl,String title){
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("news_detail");
+        if(fragment==null){
+            fragment = NewsDetailFragment.newInstance(mDescription,imageUrl,title);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.fragment_parent_layout,fragment,"news_detail");
+            transaction.commit();
+        }else {
+            fragment.getArguments().putString("news_description",mDescription);
+        }
+
+    }
+
+    public void loadWebView(String string) {
+        Fragment fragment =   getSupportFragmentManager().findFragmentByTag("WebView");
+
+        if(fragment==null){
+            fragment = ImprovedWebViewFragment.newInstance(string);
+           FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "WebView");
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
+    }
+
+
+
+
 }

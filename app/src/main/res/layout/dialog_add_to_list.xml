@@ -9,20 +9,50 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_marginEnd="@dimen/bottomsheet_horizontal_margin"
+        android:layout_marginLeft="@dimen/bottomsheet_horizontal_margin"
+        android:layout_marginRight="@dimen/bottomsheet_horizontal_margin"
+        android:layout_marginStart="@dimen/bottomsheet_horizontal_margin"
         >
 
+        <TextView
+            android:id="@+id/statusQ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            />
 
+        <TextView
+            android:id="@+id/statusA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Playing"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statusQ"
+            android:text="Score"
+            />
 
         <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:entries="@array/add_to_list"
-            android:layout_centerHorizontal="true"
-            android:prompt="@string/status"
-
+            android:layout_below="@+id/statusA"
+            android:layout_alignRight="@+id/statusA"
+            android:layout_alignEnd="@+id/statusA"
+            android:entries="@array/score"
             />
+
+
+
+
+
+
+
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

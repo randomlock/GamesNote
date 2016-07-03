@@ -2,9 +2,11 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -29,20 +31,25 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.Adapter.GameDetailBottomSheet;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailRecyclerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
+import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.GameDetailActivity;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
+import com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PagerDepthAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
@@ -78,7 +85,7 @@ import retrofit2.Response;
  ************/
 
 
-public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface {
+public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener {
 
 
     public static final String API_URL = "apiUrl";
@@ -111,11 +118,43 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     TextView gameTitle;
     RelativeLayout relativeLayout;
     FloatingActionButton videoButton;
+    FloatingActionsMenu floatingActionsMenu;
+    com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton replaying,planning,dropped,playing,completed;
 
 
 
     public GameDetailFragment() {
         // Required empty public constructor
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        floatingActionsMenu.collapse();
+
+        switch (v.getId()){
+
+            case R.id.replaying :
+                break;
+            case R.id.planning :
+                break;
+            case R.id.dropped :
+                break;
+            case R.id.playing :
+                break;
+            case R.id.completed :
+                break;
+
+
+
+
+
+
+        }
+
+        AddToBottomFragment addToBottomFragment = AddToBottomFragment.newInstance();
+        addToBottomFragment.show(getActivity().getSupportFragmentManager(),"addto");
 
     }
 
@@ -165,8 +204,14 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
         /************************************** FindViewById *********************************/
-        coordinatorLayout = (CoordinatorLayout) getView().findViewById(R.id.root_coordinator);
+        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
         videoButton = (FloatingActionButton) coordinatorLayout.findViewById(R.id.video);
+        floatingActionsMenu = (FloatingActionsMenu) coordinatorLayout.findViewById(R.id.floating_menu);
+        coordinatorLayout.findViewById(R.id.replaying).setOnClickListener(this);
+        coordinatorLayout.findViewById(R.id.planning).setOnClickListener(this);
+        coordinatorLayout.findViewById(R.id.dropped).setOnClickListener(this);
+        coordinatorLayout.findViewById(R.id.playing).setOnClickListener(this);
+        coordinatorLayout.findViewById(R.id.completed).setOnClickListener(this);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         appbarImage = (ImageView) getActivity().findViewById(R.id.appbar_image);
         toolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
@@ -183,6 +228,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         description = (TextView) nestedScrollView.findViewById(R.id.description);
         overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
        recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
+
+
+
+
+
         style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 1, getContext()) + 1);
 
         recyclerView.setNestedScrollingEnabled(false);
@@ -472,7 +522,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 @Override
                 public void onClick(View v) {
 
-                    mCommunicationInterface.loadWebView("http://www.giantbomb.com/game/"+apiUrl);
+                    String str="http://www.giantbomb.com/game/"+apiUrl;
+                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+                    CustomTabActivityHelper.openCustomTab(
+                            getActivity(), customTabsIntent, Uri.parse(str), new WebViewFallback());
 
                 }
             });
@@ -693,9 +746,13 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public void onStop() {
         super.onStop();
 
-        appBarLayout.addOnOffsetChangedListener(null);
-        appBarLayout = null;
+        if (appBarLayout!=null) {
+            appBarLayout.addOnOffsetChangedListener(null);
+            appBarLayout = null;
+
+        }
         gameWikiDetailInterface = null;
+
     }
 
     @Override
@@ -710,5 +767,5 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         super.onDestroy();
     }
 
-    
+
 }

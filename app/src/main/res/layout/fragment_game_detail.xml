@@ -78,7 +78,6 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
@@ -89,255 +88,261 @@
 
 
 
-<LinearLayout
-
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="4dp"
-        app:elevation="14dp"
-        >
-
-    <RelativeLayout
-
-        android:id="@+id/cover_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
-
-
-        <ImageView
-            android:id="@+id/cover_image"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/headerbackground"
-            />
-
-        <TextView
-            android:id="@+id/game_title"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_toEndOf="@+id/cover_image"
-            android:layout_toRightOf="@+id/cover_image"
-            android:text="Title"
-            android:textColor="?android:attr/textColorPrimary"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-             />
-
-
-
-    </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
-
-
-
-
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/game_info_cardview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="4dp"
-        app:elevation="14dp"
-        >
-
-
-
         <LinearLayout
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            >
-
-            <TextView
-                android:id="@+id/overview_heading"
-                style="@style/cardview_textstyle"
-                android:text="Overview"
-                />
-
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                />
-
-
-        </LinearLayout>
-
-
-
-    </android.support.v7.widget.CardView>
-
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/description_cardview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="4dp"
-        app:elevation="14dp"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             >
 
-            <TextView
-                android:id="@+id/description_heading"
-                style="@style/cardview_textstyle"
-                android:text="Description"
 
-                />
-
-
-
-            <ProgressBar
-                android:id="@+id/overview_progress"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:theme="@style/LinearProgress"
-                android:layout_marginTop="12dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                />
+                android:layout_margin="12dp"
+                app:cardCornerRadius="4dp"
+                app:elevation="14dp"
+                app:cardBackgroundColor="@color/cardColor"
+                >
 
-            <TextView
-                android:id="@+id/description"
+                <RelativeLayout
+
+                    android:id="@+id/cover_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+
+                    <ImageView
+                        android:id="@+id/cover_image"
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/headerbackground"
+                        />
+
+                    <TextView
+                        android:id="@+id/game_title"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        style="@style/Base.TextAppearance.AppCompat.Large"
+                        android:layout_toEndOf="@+id/cover_image"
+                        android:layout_toRightOf="@+id/cover_image"
+                        android:text="Title"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        />
+
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/game_info_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="12"
-                android:ellipsize="end"
-                android:padding="6dp"
-                android:textColor="?android:attr/textColorPrimary"
-                style="@style/TextStyle12" />
+                android:layout_margin="12dp"
+                app:cardCornerRadius="4dp"
+                app:elevation="14dp"
+                app:cardBackgroundColor="@color/cardColor"
 
-
-        </LinearLayout>
-
-
-
-    </android.support.v7.widget.CardView>
-
-
-
-
-
-
-
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/game_character_cardview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="4dp"
-        app:elevation="14dp">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/character_heading"
-                style="@style/cardview_textstyle"
-                android:text="Character"
-                />
-
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/character_game_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 >
 
 
-            </android.support.v7.widget.RecyclerView>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true"
+                    >
 
-    </android.support.v7.widget.CardView>
-
-    <LinearLayout
-        android:id="@+id/game_image_cardview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/image_heading"
-            style="@style/cardview_textstyle"
-            android:text="Images"
-            />
+                    <TextView
+                        android:id="@+id/overview_heading"
+                        style="@style/cardview_textstyle"
+                        android:text="Overview"
+                        />
 
 
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:padding="3dp"
-            android:layout_width="match_parent"
-            android:layout_height="192dp"
-            app:layout_collapseMode="parallax"
-            />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        />
 
 
-    </LinearLayout>
-
+                </LinearLayout>
 
 
 
-        <LinearLayout
-            android:id="@+id/game_similar_cardview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            </android.support.v7.widget.CardView>
 
-            <TextView
-                android:id="@+id/similar_game_heading"
-                style="@style/cardview_textstyle"
-                android:text="Similar games"
-                />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/similar_game_list"
+            <android.support.v7.widget.CardView
+                android:id="@+id/description_cardview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="4dp"
+                app:elevation="14dp"
+                app:cardBackgroundColor="@color/cardColor"
+
                 >
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
 
-            </android.support.v7.widget.RecyclerView>
+                    <TextView
+                        android:id="@+id/description_heading"
+                        style="@style/cardview_textstyle"
+                        android:text="Description"
+
+                        />
+
+
+
+                    <ProgressBar
+                        android:id="@+id/overview_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:theme="@style/LinearProgress"
+                        android:layout_marginTop="12dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        />
+
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="12"
+                        android:ellipsize="end"
+                        android:padding="6dp"
+                        android:textColor="@color/primary_text"
+                        style="@style/TextStyle12" />
+
+
+                </LinearLayout>
+
+
+
+            </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/game_character_cardview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="4dp"
+                app:cardBackgroundColor="@color/cardColor"
+                app:elevation="14dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/character_heading"
+                        style="@style/cardview_textstyle"
+                        android:text="Character"
+                        />
+
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/character_game_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/game_image_cardview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/image_heading"
+                    style="@style/cardview_textstyle"
+                    android:text="Images"
+                    />
+
+
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager"
+                    android:padding="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="192dp"
+                    app:layout_collapseMode="parallax"
+                    />
+
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:id="@+id/game_similar_cardview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/similar_game_heading"
+                    style="@style/cardview_textstyle"
+                    android:text="Similar games"
+                    />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/similar_game_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    >
+
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+
+
+
 
         </LinearLayout>
-
-
-
-
-
-</LinearLayout>
 
 
 
@@ -358,6 +363,7 @@
         />
 
     <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu
+        android:id="@+id/floating_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fab_labelsPosition="left"
@@ -369,45 +375,50 @@
         >
 
         <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton
+            android:id="@+id/completed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_colorNormal="@color/white"
-            app:fab_title="Action A"
+            app:fab_title="Completed"
             app:fab_colorPressed="@color/accent"
             />
 
         <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton
+            android:id="@+id/playing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_colorNormal="@color/white"
-            app:fab_title="Action A"
-            app:fab_colorPressed="@color/accent"
-            />
-
-
-        <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/white"
-            app:fab_title="Action A"
+            app:fab_title="Playing"
             app:fab_colorPressed="@color/accent"
             />
 
 
         <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton
+            android:id="@+id/dropped"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_colorNormal="@color/white"
-            app:fab_title="Action A"
+            app:fab_title="Dropped"
             app:fab_colorPressed="@color/accent"
             />
 
 
         <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton
+            android:id="@+id/planning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_colorNormal="@color/white"
-            app:fab_title="Action A"
+            app:fab_title="Planning"
+            app:fab_colorPressed="@color/accent"
+            />
+
+
+        <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton
+            android:id="@+id/replaying"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/white"
+            app:fab_title="Replaying"
             app:fab_colorPressed="@color/accent"
             />
 

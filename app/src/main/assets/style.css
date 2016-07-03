@@ -1,0 +1,15 @@
+a {
+color: #FF3F80;
+text-decoration:none}
+
+img,figure{
+display: inline;
+height: auto;
+max-width: 100%%;
+margin-right: 0px;
+padding-right: 0px;
+margin-left: 0px;
+padding-left: 0px;
+margin-top: 10px;
+}
+

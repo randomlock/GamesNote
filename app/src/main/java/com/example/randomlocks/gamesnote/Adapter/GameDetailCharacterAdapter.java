@@ -77,7 +77,7 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
         if (images != null) {
             holder.image.setTag(images.get(position));
-            Picasso.with(context).load(images.get(position).imageUrl).into(holder.image);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().into(holder.image);
         }
 
 

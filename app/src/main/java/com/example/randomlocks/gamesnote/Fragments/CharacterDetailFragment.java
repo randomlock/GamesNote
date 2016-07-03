@@ -134,7 +134,10 @@ public class CharacterDetailFragment extends Fragment {
            @Override
            public void onResponse(Call<CharacterListModal> call, Response<CharacterListModal> response) {
                characterDetailModal = response.body().results;
-                   mGender.setText(getGender(characterDetailModal.gender));
+
+               Picasso.with(getContext()).load(characterDetailModal.image.mediumUrl).fit().centerCrop().into(coverImage);
+
+               mGender.setText(getGender(characterDetailModal.gender));
 
                mTotalGames.setText(String.valueOf(characterDetailModal.games.size()));
                if (characterDetailModal.birthday!=null) {

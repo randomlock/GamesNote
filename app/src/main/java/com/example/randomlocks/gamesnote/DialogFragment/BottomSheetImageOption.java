@@ -32,7 +32,7 @@ public class BottomSheetImageOption extends BottomSheetDialogFragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_add_to_list,container,false);
-        RelativeLayout linearLayout = (RelativeLayout) view.findViewById(R.id.layout);
+        RelativeLayout linearLayout = (RelativeLayout) view.findViewById(R.id.image);
 
 
 

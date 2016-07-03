@@ -1,10 +1,18 @@
 package com.example.randomlocks.gamesnote.HelperClass;
 
+import android.util.Log;
+
+import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -64,31 +72,47 @@ public class GiantBomb {
     public static String runOkHttp(String url) throws IOException {
 
 
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-        final String[] result = new String[1];
+
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                Log.d("hi","fail");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                result[0] = response.body().string();
+                List<NewsModal> modal;
+                String str = response.body().string();
+                NewsModal mod = new NewsModal();
+                try {
+                    Log.d("hi","first"+str.substring(0,21));
+                    modal = mod.parse(str);
+                    Log.d("hi",modal.size()+"");
+                    for (NewsModal m : modal){
+                        Log.d("hi",m.title);
+                    }
 
+                } catch (XmlPullParserException e) {
+                    Log.d("hi","exception");
 
+                    e.printStackTrace();
+                }
             }
         });
 
 
-        return result[0];
-
+        return  null;
 
     }
+
+
+
 
 
 
