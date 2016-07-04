@@ -9,9 +9,8 @@
 
 
     <dimen name="bottomsheet_list_item_height">48dp</dimen>
-<dimen name="bottomsheet_horizontal_margin">16dp</dimen>
-<dimen name="bottomsheet_vertical_margin">8dp</dimen>
-
+    <dimen name="bottomsheet_horizontal_margin">16dp</dimen>
+    <dimen name="bottomsheet_vertical_margin">8dp</dimen>
 
 
     <dimen name="fab_size_normal">56dp</dimen>
@@ -29,7 +28,6 @@
 
     <dimen name="fab_actions_spacing">16dp</dimen>
     <dimen name="fab_labels_margin">8dp</dimen>
-
 
 
 </resources>

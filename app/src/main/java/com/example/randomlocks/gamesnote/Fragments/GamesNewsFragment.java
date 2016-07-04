@@ -1,10 +1,10 @@
 package com.example.randomlocks.gamesnote.Fragments;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +22,6 @@ import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Adapter.GameNewsAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
-import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
@@ -32,6 +30,7 @@ import com.example.randomlocks.gamesnote.R;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -45,15 +44,14 @@ import okhttp3.Response;
  */
 public class GamesNewsFragment extends Fragment {
 
-        RecyclerView recyclerView;
+    private static final String MODAL = "news_modal" ;
+    private static final String SCROLL_POSITION = "recycler_scroll_position" ;
+    RecyclerView recyclerView;
     AVLoadingIndicatorView progressBar;
     Toolbar toolbar;
     CoordinatorLayout coordinatorLayout;
-
     List<NewsModal> modals;
-    OkHttpClient client;
-    Request request;
-    public static String URL = "http://www.gamespot.com/feeds/news/";
+    public static String URL = "http://www.giantbomb.com/feeds/news/";
 
 
     public GamesNewsFragment() {
@@ -64,7 +62,6 @@ public class GamesNewsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        client = new OkHttpClient();
     }
 
     @Override
@@ -88,21 +85,29 @@ public class GamesNewsFragment extends Fragment {
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         activity.getSupportActionBar().setTitle("Game News");
 
+        if(savedInstanceState!=null){
+            modals = savedInstanceState.getParcelableArrayList(MODAL);
 
-        if (modals==null) {
-            progressBar.setVisibility(View.VISIBLE);
-            request = new Request.Builder()
-                   .url(URL)
-                   .build();
+            loadRecycler(modals,savedInstanceState.getParcelable(SCROLL_POSITION));
+        }
+
+        else  {
+            if (modals==null) {
 
 
-            try {
-                runOkHttp();
-            } catch (IOException e) {
-                Toaster.make(getContext(),"connectivity problem");
+
+                progressBar.setVisibility(View.VISIBLE);
+
+
+
+                try {
+                    runOkHttp();
+                } catch (IOException e) {
+                    Toaster.make(getContext(),"connectivity problem");
+                }
+            }else {
+                loadRecycler(modals,null);
             }
-        }else {
-            loadRecycler(modals);
         }
 
 
@@ -118,7 +123,7 @@ public class GamesNewsFragment extends Fragment {
 
 
 
-        client.newCall(request).enqueue(new Callback() {
+        GiantBomb.getHttpClient().newCall(GiantBomb.getRequest(URL)).enqueue(new Callback() {
 
             Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -156,7 +161,7 @@ public class GamesNewsFragment extends Fragment {
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                           loadRecycler(modals);
+                           loadRecycler(modals,null);
                         }
                     });
 
@@ -180,12 +185,15 @@ public class GamesNewsFragment extends Fragment {
 
     }
 
-    private void loadRecycler(List<NewsModal> modals) {
+    private void loadRecycler(List<NewsModal> modals, Parcelable parcelable) {
 
         if (progressBar.getVisibility()==View.VISIBLE) {
             progressBar.setVisibility(View.GONE);
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (parcelable!=null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
+        }
         recyclerView.setAdapter(new GameNewsAdapter(modals,getContext()));
 
 
@@ -212,4 +220,11 @@ public class GamesNewsFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Toaster.make(getContext(),"coming here");
+        outState.putParcelableArrayList(MODAL, new ArrayList<>(modals));
+        outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());    }
 }

@@ -210,8 +210,9 @@
                         android:id="@+id/description_heading"
                         style="@style/cardview_textstyle"
                         android:text="Description"
-
-                        />
+                        android:drawableEnd="@drawable/ic_open_in_browser_black_24dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:drawableRight="@drawable/ic_open_in_browser_black_24dp" />
 
 
 

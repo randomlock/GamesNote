@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.MainActivity;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
+import com.example.randomlocks.gamesnote.NewsDetailActivity;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
@@ -84,7 +86,10 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         public void onClick(View v) {
             NewsModal newsModal = modals.get(getLayoutPosition());
             newsModal.isClicked=true;
-            ((MainActivity)context).newsDetailFragmnet(newsModal);
+            Intent intent = new Intent(context, NewsDetailActivity.class);
+            intent.putExtra("DATA",newsModal);
+            context.startActivity(intent);
+
         }
     }
 }

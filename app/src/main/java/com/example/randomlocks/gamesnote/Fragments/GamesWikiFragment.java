@@ -122,8 +122,7 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
 
 
 
-            if(savedInstanceState!=null)
-                Toaster.make(getContext(),"not null");
+
 
 
         /*************** SAVE INSTANCE *************************/
@@ -153,13 +152,13 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 
         /***************************** MAKING THE API CALL **************************/
 
-         gameWikiListInterface =  GiantBomb.createService(GameWikiListInterface.class);
+         gameWikiListInterface =  GiantBomb.createGameWikiService();
         map = new HashMap<>(6);
         map.put(GiantBomb.KEY,GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT,"JSON");
@@ -235,18 +234,23 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
 
+            case android.R.id.home :
+                getActivity().onBackPressed();
+                return true ;
+
             case R.id.search :
 
 
 
 
-                break;
+                return true;
 
             case R.id.filter :
 
                 SearchFilterFragment filterFragment = SearchFilterFragment.newInstance();
                 filterFragment.setTargetFragment(this,0);
                 filterFragment.show(getActivity().getSupportFragmentManager(),"seach filter");
+                return true;
 
             default:
                 super.onOptionsItemSelected(item);

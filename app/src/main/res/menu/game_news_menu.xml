@@ -4,6 +4,7 @@
 
     <item android:id="@+id/internet"
         android:title="Open in browser"
+        android:icon="@drawable/ic_open_in_browser_black_24dp"
         app:showAsAction="always"
         />
 

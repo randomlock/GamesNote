@@ -23,12 +23,14 @@ public class WebViewFallback implements CustomTabActivityHelper.CustomTabFallbac
 
         Fragment fragment =  fragmentManager.findFragmentByTag("WebView");
 
-        if(fragment==null){
+        if(fragment==null) {
             fragment = ImprovedWebViewFragment.newInstance(uri.toString());
+
+        }
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "WebView");
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }
-}
+

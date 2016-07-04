@@ -119,7 +119,7 @@ public class CharacterDetailFragment extends Fragment {
 
         Picasso.with(getContext()).load(imageUrl).fit().centerCrop().into(coverImage);
 
-        mGameCharacterInterface = GiantBomb.createService(GameCharacterInterface.class);
+        mGameCharacterInterface = GiantBomb.createGameCharacterService();
         map = new HashMap<>();
         map.put(GiantBomb.KEY,GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");

@@ -24,13 +24,14 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         setContentView(R.layout.activity_game_detail);
         fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("GameDetail");
-        if(fragment == null){
-            fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL),getIntent().getStringExtra(GameDetailFragment.NAME), getIntent().getStringExtra(GameDetailFragment.IMAGE_URL));
+        if(fragment == null) {
+            fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL), getIntent().getStringExtra(GameDetailFragment.NAME), getIntent().getStringExtra(GameDetailFragment.IMAGE_URL));
+        }
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container, fragment, "GameDetail");
             fragmentTransaction.commit();
 
-        }
+        
 
 
 
@@ -51,13 +52,14 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
     public void loadWebView(String string) {
         Fragment fragment =   fragmentManager.findFragmentByTag("WebView");
 
-        if(fragment==null){
+        if(fragment==null) {
             fragment = ImprovedWebViewFragment.newInstance(string);
+        }
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container, fragment, "WebView");
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-        }
+
 
     }
 
@@ -70,13 +72,14 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
         Fragment fragment = fragmentManager.findFragmentByTag("characterDetail");
 
-        if(fragment==null){
-            fragment = CharacterDetailFragment.newInstance(apiUrl,imageUrl);
+        if(fragment==null) {
+            fragment = CharacterDetailFragment.newInstance(apiUrl, imageUrl);
+        }
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container,fragment,"characterDetail");
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
-        }
+
 
 
 

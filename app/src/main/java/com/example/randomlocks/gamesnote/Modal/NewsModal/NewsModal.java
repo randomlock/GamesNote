@@ -1,5 +1,7 @@
 package com.example.randomlocks.gamesnote.Modal.NewsModal;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Xml;
@@ -28,7 +30,7 @@ import okhttp3.Response;
 /**
  * Created by randomlocks on 6/30/2016.
  */
-public class NewsModal   {
+public class NewsModal implements Parcelable {
 
     public   String title;
     public   String link;
@@ -218,14 +220,39 @@ public class NewsModal   {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.link);
+        dest.writeString(this.description);
+        dest.writeString(this.pubDate);
+        dest.writeString(this.content);
+        dest.writeByte(this.isClicked ? (byte) 1 : (byte) 0);
+    }
 
+    protected NewsModal(Parcel in) {
+        this.title = in.readString();
+        this.link = in.readString();
+        this.description = in.readString();
+        this.pubDate = in.readString();
+        this.content = in.readString();
+        this.isClicked = in.readByte() != 0;
+    }
 
+    public static final Parcelable.Creator<NewsModal> CREATOR = new Parcelable.Creator<NewsModal>() {
+        @Override
+        public NewsModal createFromParcel(Parcel source) {
+            return new NewsModal(source);
+        }
 
-
-
-
-
-
-
+        @Override
+        public NewsModal[] newArray(int size) {
+            return new NewsModal[size];
+        }
+    };
 }

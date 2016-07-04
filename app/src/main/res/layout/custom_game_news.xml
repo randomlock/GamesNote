@@ -65,11 +65,10 @@
         android:id="@+id/web_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_info_black_24dp"
+        android:background="@drawable/ic_open_in_browser_black_24dp"
         android:layout_alignTop="@+id/status"
         android:layout_alignRight="@+id/news_heading"
-        android:layout_alignEnd="@+id/news_heading"
-        android:layout_alignBottom="@+id/status" />
+        android:layout_alignEnd="@+id/news_heading" />
 
 
 </RelativeLayout>

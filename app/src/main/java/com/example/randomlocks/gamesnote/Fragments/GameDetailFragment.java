@@ -289,49 +289,54 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         /**************** RETROFIT ************************/
 
-        if (gameDetailModal==null) {
-            Toaster.make(getContext(),"its null");
-            gameWikiDetailInterface = GiantBomb.createService(GameWikiDetailInterface.class);
-            map = new HashMap<>();
-            map.put(GiantBomb.KEY,GiantBomb.API_KEY);
-            map.put(GiantBomb.FORMAT, "JSON");
-            getGameDetail(gameWikiDetailInterface, map);
+        if(savedInstanceState!=null){
+            //TODO
+        }
+
+        else  {
+            if (gameDetailModal==null) {
+                gameWikiDetailInterface = GiantBomb.createGameDetailService();
+                map = new HashMap<>();
+                map.put(GiantBomb.KEY,GiantBomb.API_KEY);
+                map.put(GiantBomb.FORMAT, "JSON");
+                getGameDetail(gameWikiDetailInterface, map);
 
 
-            asyncCharacters = new JsoupCharacters(new JsoupCharacters.AsyncResponse() {
-               @Override
-               public void processFinish(List<CharacterGamesImage> characters) {
+                asyncCharacters = new JsoupCharacters(new JsoupCharacters.AsyncResponse() {
+                   @Override
+                   public void processFinish(List<CharacterGamesImage> characters) {
 
-                   if(characters!=null){
-                       if(characterRecycleView.getAdapter()!=null){
-                           characterAdapter.setImages(characters);
-                           characterAdapter.notifyDataSetChanged();
-                       }else {
-                           characterImage = characters;
+                       if(characters!=null){
+                           if(characterRecycleView.getAdapter()!=null){
+                               characterAdapter.setImages(characters);
+                               characterAdapter.notifyDataSetChanged();
+                           }else {
+                               characterImage = characters;
+                           }
                        }
+
                    }
-
-               }
-           });
-            asyncCharacters.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/characters/");
+               });
+                asyncCharacters.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/characters/");
 
 
-            asyncGames =   new JsoupGames(new JsoupGames.AsyncResponse() {
-         @Override
-         public void processFinish(List<CharacterGamesImage> similarGame) {
-             if(similarGame!=null){
-                 if (similarGameRecycleView.getAdapter()!=null) {
-                     similarGameAdapter.setImages(similarGame);
-                     similarGameAdapter.notifyDataSetChanged();
-                 }else {
-                     similarGameImage = similarGame;
+                asyncGames =   new JsoupGames(new JsoupGames.AsyncResponse() {
+             @Override
+             public void processFinish(List<CharacterGamesImage> similarGame) {
+                 if(similarGame!=null){
+                     if (similarGameRecycleView.getAdapter()!=null) {
+                         similarGameAdapter.setImages(similarGame);
+                         similarGameAdapter.notifyDataSetChanged();
+                     }else {
+                         similarGameImage = similarGame;
+                     }
                  }
              }
-         }
-     });
-            asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/similar-games/");
-        }else {
-            fillData(gameDetailModal);
+         });
+                asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/similar-games/");
+            }else {
+                fillData(gameDetailModal);
+            }
         }
 
 
