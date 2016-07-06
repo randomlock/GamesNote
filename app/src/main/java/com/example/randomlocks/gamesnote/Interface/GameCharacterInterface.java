@@ -1,8 +1,6 @@
 package com.example.randomlocks.gamesnote.Interface;
 
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterListModal;
-import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterModal;
-import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListModal;
 
 import java.util.Map;
 

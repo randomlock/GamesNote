@@ -31,7 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.Adapter.GameDetailBottomSheet;
+import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailRecyclerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
@@ -40,7 +40,6 @@ import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
-import com.example.randomlocks.gamesnote.GameDetailActivity;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -434,6 +433,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             public void onResponse(Call<GameDetailListModal> call, Response<GameDetailListModal> response) {
 
                 gameDetailModal = response.body().results;
+
                 fillData(gameDetailModal);
             }
 

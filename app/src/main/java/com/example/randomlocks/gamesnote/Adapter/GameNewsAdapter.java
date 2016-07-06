@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
-import com.example.randomlocks.gamesnote.MainActivity;
+import com.example.randomlocks.gamesnote.Activity.NewsDetailActivity;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
-import com.example.randomlocks.gamesnote.NewsDetailActivity;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.List;
 
@@ -46,10 +49,35 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         holder.heading.setText(newsModal.title);
         if (newsModal.content!=null) {
             Picasso.with(context).load(newsModal.content).fit().into(holder.image);
+        } else {
+            Document document = Jsoup.parse(newsModal.description);
+            Elements elements = document.getElementsByTag("img");
+            String jsoupImageUrl = null;
+            if (elements.size() > 0) {
+                Element element = elements.get(0);
+                if (element.hasAttr("src")) {
+                    jsoupImageUrl = element.attr("src");
+                }
+            }
+
+
+            if (jsoupImageUrl != null) {
+                if (jsoupImageUrl.substring(0, 2).equals("//")) {
+                    jsoupImageUrl = "http:" + jsoupImageUrl;
+                }
+                Picasso.with(context).load(jsoupImageUrl).fit().into(holder.image);
+                newsModal.content = jsoupImageUrl;
+            }
+
         }
         String dateArray[] = newsModal.pubDate.split(" ");
-        String date = dateArray[0] +" " +dateArray[1] +" "+dateArray[2];
-        holder.date.setText(date);
+        if (dateArray.length >= 3) {
+            String date = dateArray[0] + " " + dateArray[1] + " " + dateArray[2];
+            holder.date.setText(date);
+        } else if (newsModal.pubDate.length() >= 10) {
+
+            holder.date.setText(newsModal.pubDate.substring(0, 10));
+        }
         String str;
         if(newsModal.isClicked){
             str = "Read";

@@ -2,8 +2,6 @@ package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
@@ -33,6 +31,10 @@ public class GameDetailModal extends RealmObject {
    public RealmList<GameDetailSimilarGames> similarGames;
    @Expose
    public RealmList<GameDetailThemes> themes;
+   @Expose
+   public RealmList<GameDetailReview> reviews;
+   @Expose
+   public RealmList<GameDetailReleases> releases;
 
 
 

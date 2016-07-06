@@ -2,17 +2,13 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +35,6 @@ import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
-import com.example.randomlocks.gamesnote.MainActivity;
 import com.example.randomlocks.gamesnote.Modal.GameWikiListModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
@@ -200,17 +195,6 @@ public class GamesWikiFragment extends Fragment implements NavigationView.OnNavi
 
         /************************ PROGRESS BAR ANIMATION ****************************/
 
-        ;
-
-
-
-
-
-
-
-
-
-
 
         /*************************TOOLBAR PROPERTIES************************************/
 
@@ -324,7 +308,6 @@ progressBar.setVisibility(View.VISIBLE);
 
 
                 progressBar.setVisibility(View.GONE);
-
 
                 if(listModals.isEmpty() && recyclerView.getAdapter()!=null){
                     listModals = response.body().results;

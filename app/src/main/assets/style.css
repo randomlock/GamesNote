@@ -1,9 +1,10 @@
 a {
 color: #FF3F80;
 text-decoration:none}
-
-img,figure{
-display: inline;
+* {
+display : inline;
+}
+img,figur{
 height: auto;
 max-width: 100%%;
 margin-right: 0px;

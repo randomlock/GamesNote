@@ -3,6 +3,7 @@
     package="com.example.randomlocks.gamesnote">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".ExampleApplication"
@@ -11,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,13 +26,15 @@
                 android:resource="@xml/searchablewiki" />
         </activity>
         <activity
-            android:name=".HdImageViewerActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Activity.HdImageViewerActivity"
+            android:parentActivityName=".Activity.MainActivity" />
         <activity
-            android:name=".GameDetailActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".ViewPagerActivity" />
-        <activity android:name=".NewsDetailActivity"></activity>
+            android:name=".Activity.GameDetailActivity"
+            android:parentActivityName=".Activity.MainActivity" />
+        <activity android:name=".Activity.ViewPagerActivity" />
+        <activity android:name=".Activity.NewsDetailActivity" />
+        <activity android:name=".Activity.GameReviewActivity" />
+        <activity android:name=".Activity.UserReviewActivity"></activity>
     </application>
 
 </manifest>

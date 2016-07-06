@@ -42,7 +42,7 @@ private ImageView imageView;
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view==(FrameLayout)object;
+        return view == object;
     }
 
 

@@ -7,7 +7,7 @@
     <string name="drawer_close">Close Navigation Drawer</string>
     <string name="List">My List</string>
     <string name="Wiki">Games Wiki</string>
-    <string name="games_news">News</string>
+    <string name="games_news">News &amp; Reviews</string>
     <string name="game_trailer">Trailers</string>
     <string name="help_and_support"><![CDATA[Help & Support]]></string>
     <string name="giantbomb_site">Visit giantbomb</string>
@@ -27,6 +27,20 @@
     <string name="foo">foo</string>
     <string name="bar">bar</string>
     <string name="status">Status</string>
+    <string name="giantbomb">GiantBomb</string>
+    <string name="gamespot">Gamespot</string>
+    <string name="eurogamer">Eurogamer</string>
+    <string name="kotaku">Kotaku</string>
+    <string name="gameinformer">GameInformer</string>
+    <string name="videogamer">VideoGamer</string>
+    <string name="pcworld">PcWorld</string>
+    <string name="venturebeat">VentureBeat</string>
+    <string name="tomshardware">Tom\'s Hadrware</string>
+    <string name="ign">IGN</string>
+    <string name="g4tv">G4tv</string>
+    <string name="playstaion">Playstation4</string>
+    <string name="purexbox">pureXbox</string>
+    <string name="metaleater">Metaleater</string>
 
     <string-array name="hello">
         <item>"SDFsdf"</item>

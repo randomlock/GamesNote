@@ -1,17 +1,15 @@
-package com.example.randomlocks.gamesnote;
+package com.example.randomlocks.gamesnote.Activity;
 
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.Fragments.ImprovedWebViewFragment;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.R;
 
 public class GameDetailActivity extends AppCompatActivity implements GameDetailFragment.CommunicationInterface {
 
@@ -29,7 +27,8 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         }
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container, fragment, "GameDetail");
-            fragmentTransaction.commit();
+
+        fragmentTransaction.commit();
 
         
 

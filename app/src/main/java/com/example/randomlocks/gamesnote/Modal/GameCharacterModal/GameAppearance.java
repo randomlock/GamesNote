@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 
-import io.realm.RealmObject;
-
 /**
  * Created by randomlocks on 6/25/2016.
  */

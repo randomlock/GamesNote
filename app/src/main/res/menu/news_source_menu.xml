@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="News">
+        <menu>
+            <group android:checkableBehavior="single"
+
+                >
+
+                <item
+                    android:id="@+id/nav_eurogamer"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/eurogamer"></item>
+
+
+                <item
+                    android:id="@+id/nav_gameinformer"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/gameinformer">
+
+                </item>
+
+                <item
+                    android:id="@+id/nav_gamespot"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/gamespot">
+
+
+                </item>
+
+                <item
+                    android:id="@+id/nav_giantbomb"
+                    android:title="@string/giantbomb"
+                    android:icon="@mipmap/ic_launcher">
+
+                </item>
+
+                <item
+                    android:id="@+id/ign"
+                    android:title="@string/ign"
+                    android:icon="@mipmap/ic_launcher">
+
+                </item>
+
+
+                <item
+                    android:id="@+id/nav_g4tv"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/g4tv">
+
+                </item>
+
+
+                <item
+                    android:id="@+id/nav_pcworld"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/pcworld">
+
+                </item>
+
+                <item
+                    android:id="@+id/nav_playstation4"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/playstaion"></item>
+
+                <item
+                    android:id="@+id/nav_purexbox"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/purexbox">
+
+                </item>
+
+
+                <item
+                    android:id="@+id/toms_harware"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/tomshardware">
+
+                </item>
+
+                <item
+                    android:id="@+id/nav_venturebeat"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/venturebeat">
+
+                </item>
+
+                <item
+                    android:id="@+id/nav_videogamer"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/videogamer">
+
+                </item>
+
+
+            </group>
+
+        </menu>
+
+
+    </item>
+
+    <item android:title="Reviews">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_news_gameinformer"
+                    android:title="@string/gameinformer"
+                    android:icon="@mipmap/ic_launcher" />
+
+                <item
+                    android:id="@+id/nav_news_gamespot"
+                    android:title="@string/gamespot"
+                    android:icon="@mipmap/ic_launcher" />
+
+                <item
+                    android:id="@+id/nav_news_giantbomb"
+                    android:title="@string/giantbomb"
+                    android:icon="@mipmap/ic_launcher" />
+
+                <item
+                    android:id="@+id/nav_news_ign"
+                    android:title="@string/ign"
+                    android:icon="@mipmap/ic_launcher" />
+
+
+                <item
+                    android:id="@+id/nav_news_metaleater"
+                    android:title="@string/metaleater"
+                    android:icon="@mipmap/ic_launcher" />
+
+                <item
+                    android:id="@+id/nav_news_pcworld"
+                    android:title="@string/pcworld"
+                    android:icon="@mipmap/ic_launcher" />
+
+
+            </group>
+
+
+        </menu>
+
+
+    </item>
+
+
+</menu>

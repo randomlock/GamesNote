@@ -3,8 +3,10 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <group android:checkableBehavior="single">
 
+        <item android:title="News"></item>
 
         <item android:id="@+id/nav_home"
             android:title="@string/home"
@@ -57,14 +59,18 @@
 
 <item android:title="@string/help_and_support">
     <menu>
-        <item
-            android:id="@+id/nav_giantbomb"
-            android:icon="@mipmap/ic_launcher"
-            android:title="@string/giantbomb_site" />
+
         <item
             android:id="@+id/nav_settings"
             android:icon="@mipmap/ic_launcher"
             android:title="@string/Settings" />
+
+
+        <item
+            android:id="@+id/nav_giantbomb"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/giantbomb_site" />
+
 
         <item
             android:id="@+id/nav_contact_us"

@@ -1,10 +1,7 @@
 package com.example.randomlocks.gamesnote.AsyncTask;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 
 import org.jsoup.Jsoup;

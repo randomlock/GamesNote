@@ -29,7 +29,7 @@ public class SearchFilterFragment extends DialogFragment {
 
     public interface SearchFilterInterface{
 
-        public void onSelect(int which,boolean asc);
+        void onSelect(int which, boolean asc);
     }
 
 

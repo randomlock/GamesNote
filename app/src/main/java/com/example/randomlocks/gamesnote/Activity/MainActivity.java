@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote;
+package com.example.randomlocks.gamesnote.Activity;
 
 
 import android.content.res.Configuration;
@@ -27,6 +27,7 @@ import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
 
@@ -298,8 +299,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
+
+        GamesNewsFragment gamesNewsFragment = (GamesNewsFragment) getSupportFragmentManager().findFragmentByTag("GamesNews");
+
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawers();
+        } else if (gamesNewsFragment != null && gamesNewsFragment.mDrawer.isDrawerOpen(GravityCompat.END)) {
+            gamesNewsFragment.mDrawer.closeDrawers();
         } else
             super.onBackPressed();
 

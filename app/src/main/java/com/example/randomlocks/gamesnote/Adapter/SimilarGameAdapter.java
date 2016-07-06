@@ -1,7 +1,6 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
@@ -86,7 +84,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         if (images != null) {
-            Picasso.with(context).load(images.get(position).imageUrl).fit().centerCrop().into((ImageView) holder.imageView);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().centerCrop().into(holder.imageView);
         }
 
 

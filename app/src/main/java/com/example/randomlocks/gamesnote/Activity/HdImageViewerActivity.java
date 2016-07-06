@@ -1,11 +1,10 @@
-package com.example.randomlocks.gamesnote;
+package com.example.randomlocks.gamesnote.Activity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,10 +17,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.example.randomlocks.gamesnote.Adapter.HdImageBottomSheetAdapter;
-import com.example.randomlocks.gamesnote.DialogFragment.BottomSheetImageOption;
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.BottomSheetImage;
+import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

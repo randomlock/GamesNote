@@ -1,15 +1,13 @@
-package com.example.randomlocks.gamesnote;
+package com.example.randomlocks.gamesnote.Activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -21,6 +19,7 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
+import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -134,8 +133,6 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         });
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setDisplayZoomControls(false);
         webView.loadDataWithBaseURL("file:///android_asset/.", doc.toString(), "text/html", "UTF-8",null);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {

@@ -2,30 +2,15 @@ package com.example.randomlocks.gamesnote.Modal.NewsModal;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.util.Xml;
-
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by randomlocks on 6/30/2016.
@@ -143,6 +128,12 @@ public class NewsModal implements Parcelable {
                 case "media:content":
                     content = readMediaContent(parser);
                     break;
+
+                case "content:encoded":
+                    description += readEncodedContent(parser);
+                    break;
+
+
                 default:
                     skip(parser);
                     break;
@@ -194,6 +185,16 @@ public class NewsModal implements Parcelable {
         return summary;
     }
 
+    private String readEncodedContent(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, null, "content:encoded");
+        String summary = readText(parser);
+        parser.require(XmlPullParser.END_TAG, null, "content:encoded");
+        return summary;
+    }
+
+
+
+
     private String readPubDate(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, "pubDate");
         String summary = readText(parser);
@@ -205,7 +206,6 @@ public class NewsModal implements Parcelable {
         parser.require(XmlPullParser.START_TAG, null, "media:content");
         String summary = parser.getAttributeValue(null,"url");
         parser.nextTag();
-        parser.require(XmlPullParser.END_TAG, null, "media:content");
         return summary;
     }
 

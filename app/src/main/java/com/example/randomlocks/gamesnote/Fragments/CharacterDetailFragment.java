@@ -2,7 +2,6 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +10,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -135,7 +132,7 @@ public class CharacterDetailFragment extends Fragment {
            public void onResponse(Call<CharacterListModal> call, Response<CharacterListModal> response) {
                characterDetailModal = response.body().results;
 
-               Picasso.with(getContext()).load(characterDetailModal.image.mediumUrl).fit().centerCrop().into(coverImage);
+               Picasso.with(getContext()).load(characterDetailModal.image.mediumUrl).fit().centerCrop().noFade().into(coverImage);
 
                mGender.setText(getGender(characterDetailModal.gender));
 

@@ -5,11 +5,12 @@ import com.google.gson.annotations.Expose;
 import io.realm.RealmObject;
 
 /**
- * Created by randomlocks on 5/29/2016.
+ * Created by randomlocks on 7/7/2016.
  */
-public class GameDetailListModal extends RealmObject {
+public class GameDetailReleases extends RealmObject {
+
 
     @Expose
-    public GameDetailModal results;
+    public int id;
 
 }

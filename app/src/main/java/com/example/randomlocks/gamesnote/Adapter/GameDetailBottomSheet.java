@@ -1,16 +1,11 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-
-import com.example.randomlocks.gamesnote.R;
 
 /**
  * Created by randomlocks on 6/16/2016.

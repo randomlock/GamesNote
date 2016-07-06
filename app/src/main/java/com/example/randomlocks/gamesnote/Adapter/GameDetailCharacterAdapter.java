@@ -2,26 +2,18 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
-import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
-import com.example.randomlocks.gamesnote.GameDetailActivity;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

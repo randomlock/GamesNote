@@ -10,8 +10,6 @@ import android.widget.ImageView;
 
 import com.example.randomlocks.gamesnote.R;
 
-import java.util.ArrayList;
-
 /**
  * Created by randomlocks on 5/31/2016.
  */
@@ -39,7 +37,7 @@ public class GameDetailPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view==(FrameLayout)object;
+        return view == object;
     }
 
 

@@ -11,6 +11,7 @@ import android.graphics.drawable.shapes.Shape;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
+
 import com.example.randomlocks.gamesnote.R;
 
 

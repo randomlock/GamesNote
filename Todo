@@ -47,7 +47,10 @@ change the request API for search from /games to /search to descrease API reques
 
 
 
-
+picasso cache
+okhttp online and offline cache
+chrome custom tab warm up url
+leak of main activity when no internet
 
 
 
