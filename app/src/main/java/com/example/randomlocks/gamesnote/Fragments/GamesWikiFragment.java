@@ -312,10 +312,7 @@ progressBar.setVisibility(View.VISIBLE);
                 if(listModals.isEmpty() && recyclerView.getAdapter()!=null){
                     listModals = response.body().results;
                     adapter.swap(listModals);
-                }
-
-
-               else if (listModals.isEmpty()) {
+                } else if (listModals.isEmpty()) {
                     listModals = response.body().results;
                     adapter = new GameWikiAdapter(listModals, context, recyclerView.getChildCount());
                     recyclerView.setAdapter(adapter);
@@ -325,7 +322,7 @@ progressBar.setVisibility(View.VISIBLE);
                     adapter.notifyItemRangeInserted(size, listModals.size());
                 }
 
-                if (listModals.isEmpty() && recyclerView.getAdapter().getItemCount()!=0) {
+                if (listModals.isEmpty()) {
                     errorText.setVisibility(View.VISIBLE);
                 } else {
                     errorText.setVisibility(View.GONE);

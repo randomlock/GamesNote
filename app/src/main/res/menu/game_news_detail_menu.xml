@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/drawer_right"
-        android:title="News Source"
-        android:icon="@drawable/ic_keyboard_arrow_left_white_24dp"
+        android:id="@+id/internet"
+        android:title="Open in browser"
+        android:icon="@drawable/ic_open_in_browser_black_24dp"
         app:showAsAction="always" />
-
 
 </menu>

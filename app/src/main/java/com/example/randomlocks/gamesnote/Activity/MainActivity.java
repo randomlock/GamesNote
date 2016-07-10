@@ -37,7 +37,7 @@ add share preference so that when user open app he is automatically in correct f
 
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ImageUrlFragment.ImageUrlInterface {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ImageUrlFragment.ImageUrlInterface {
 
 
     private static final String FRAGMENT_KEY = "restored_fragment" ;
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation = (NavigationView) findViewById(R.id.navigation_view);
         mytoolbar = (Toolbar) findViewById(R.id.my_toolbar);
         View headerView = mNavigation.inflateHeaderView(R.layout.navigaion_header);
-
         navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
 
 
@@ -97,10 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
 
-
-
-
-        mselectedId = savedInstanceState == null ? R.id.nav_news : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -328,12 +324,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
-
-
-
-
-
-
 
 
 

@@ -1,5 +1,6 @@
 package com.example.randomlocks.gamesnote.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
-import com.example.randomlocks.gamesnote.Fragments.ImprovedWebViewFragment;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.R;
 
 public class GameDetailActivity extends AppCompatActivity implements GameDetailFragment.CommunicationInterface {
@@ -47,8 +48,8 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
     }
 
-    @Override
-    public void loadWebView(String string) {
+
+   /* public void loadWebView(String string) {
         Fragment fragment =   fragmentManager.findFragmentByTag("WebView");
 
         if(fragment==null) {
@@ -60,7 +61,8 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
             fragmentTransaction.commit();
 
 
-    }
+    } */
+
 
     @Override
     public void finish() {
@@ -99,4 +101,21 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
     }
 
+    @Override
+    public void onReviewClick(String apiUrl, String gameTitle, String imageUrl) {
+        Intent intent = new Intent(this, GameReviewActivity.class);
+        intent.putExtra(GiantBomb.TITLE, gameTitle);
+        intent.putExtra(GiantBomb.REVIEW, apiUrl);
+        intent.putExtra(GiantBomb.IMAGE_URL, imageUrl);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onUserReviewClick(String reviews_id, String gameTitle, String imageUrl) {
+        Intent intent = new Intent(this, UserReviewActivity.class);
+        intent.putExtra(GiantBomb.REVIEW, reviews_id);
+        intent.putExtra(GiantBomb.TITLE, gameTitle);
+        intent.putExtra(GiantBomb.IMAGE_URL, imageUrl);
+        startActivity(intent);
+    }
 }

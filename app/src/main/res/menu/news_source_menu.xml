@@ -10,7 +10,9 @@
                 <item
                     android:id="@+id/nav_eurogamer"
                     android:icon="@mipmap/ic_launcher"
-                    android:title="@string/eurogamer"></item>
+                    android:title="@string/eurogamer">
+
+                </item>
 
 
                 <item
@@ -31,6 +33,13 @@
                 <item
                     android:id="@+id/nav_giantbomb"
                     android:title="@string/giantbomb"
+                    android:icon="@mipmap/ic_launcher">
+
+                </item>
+
+                <item
+                    android:id="@+id/nav_giantbomb_release"
+                    android:title="@string/giantbombRelease"
                     android:icon="@mipmap/ic_launcher">
 
                 </item>

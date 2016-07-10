@@ -11,6 +11,8 @@ public class GameDetailReleases extends RealmObject {
 
 
     @Expose
-    public int id;
+    public String id;
+    @Expose
+    public String name;
 
 }

@@ -31,7 +31,12 @@
         <item name="searchViewStyle">@style/searchStyle</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="popupTheme">@style/popMenu</item>
+    </style>
 
+
+    <style name="MyTransparentToolbar" parent="Base.ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">

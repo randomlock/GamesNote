@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
@@ -15,6 +14,8 @@ import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by randomlocks on 6/10/2016.
@@ -81,13 +82,13 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
-        ImageView image;
+        CircleImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.text);
-            image = (ImageView) itemView.findViewById(R.id.image);
+            image = (CircleImageView) itemView.findViewById(R.id.image);
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

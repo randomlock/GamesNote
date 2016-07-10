@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -33,13 +32,14 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
-import com.example.randomlocks.gamesnote.Adapter.GameDetailRecyclerAdapter;
+import com.example.randomlocks.gamesnote.Adapter.GameDetailOverviewAdapter;
 import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
+import com.example.randomlocks.gamesnote.DialogFragment.ListDialogFragment;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -84,15 +84,14 @@ import retrofit2.Response;
  ************/
 
 
-public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener {
+public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ListDialogFragment.CommunicationInterface {
 
 
     public static final String API_URL = "apiUrl";
     public static final String IMAGE_URL = "imageUrl" ;
     public static final String NAME = "name" ;
     Toolbar toolbar;
-    String apiUrl;
-    String fullUrl;
+    String apiUrl, fullUrl, imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
     ViewPager viewPager;
     Map<String,String> map;
@@ -102,9 +101,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     RecyclerView recyclerView, similarGameRecycleView, characterRecycleView;
     PicassoNestedScrollView nestedScrollView;
     TextView description;
-    GameDetailRecyclerAdapter adapter;
+    GameDetailOverviewAdapter adapter;
     int style;
-    String completeDescription;
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
     ProgressBar overviewProgress;
     CoordinatorLayout coordinatorLayout;
@@ -114,12 +112,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     JsoupCharacters asyncCharacters;
     JsoupGames asyncGames;
     ImageView appbarImage,coverImage;
-    TextView gameTitle;
+    TextView gameTitle, review, userReview;
     RelativeLayout relativeLayout;
     FloatingActionButton videoButton;
     FloatingActionsMenu floatingActionsMenu;
     com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton replaying,planning,dropped,playing,completed;
-
+    String title;
 
 
     public GameDetailFragment() {
@@ -157,9 +155,13 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
     }
 
+
     public interface CommunicationInterface{
-        void loadWebView(String string);
+        void onReviewClick(String apiUrl, String gameTitle, String imageUrl);
+
+        void onUserReviewClick(String apiUrl, String gameTitle, String imageUrl);
     }
+
 
     public static GameDetailFragment newInstance(String apiUrl, String name ,  String imageUrl) {
 
@@ -183,16 +185,18 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
+
+        fullUrl = getArguments().getString(API_URL);
+        String str[] = fullUrl.split("/");
+        apiUrl = str[str.length - 1];
+        title = getArguments().getString(NAME);
+        imageUrl = getArguments().getString(IMAGE_URL);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fullUrl = getArguments().getString(API_URL);
-        String str[] = fullUrl.split("/");
-        apiUrl = str[str.length- 1];
 
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
@@ -220,19 +224,16 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         relativeLayout = (RelativeLayout) coordinatorLayout.findViewById(R.id.cover_layout);
         coverImage = (ImageView) relativeLayout.findViewById(R.id.cover_image);
         gameTitle = (TextView) relativeLayout.findViewById(R.id.game_title);
-
-
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
         overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
        recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
+        review = (TextView) nestedScrollView.findViewById(R.id.review);
+        userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
 
 
-
-
-
-        style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 1, getContext()) + 1);
+        style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 0, getContext()) + 1);
 
         recyclerView.setNestedScrollingEnabled(false);
         characterRecycleView.setNestedScrollingEnabled(false);
@@ -241,11 +242,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
 
+
         /************************** APPBARLATOUT ********************************/
 
-          Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).fit().centerCrop().into(appbarImage);
-          Picasso.with(getContext()).load(getArguments().getString(IMAGE_URL)).fit().into(coverImage);
-          gameTitle.setText(getArguments().getString(NAME));
+        Picasso.with(getContext()).load(imageUrl).fit().centerCrop().into(appbarImage);
+        Picasso.with(getContext()).load(imageUrl).fit().into(coverImage);
+        gameTitle.setText(title);
 
         /***************************** TYPEFACE ************************************/
 
@@ -289,7 +291,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         /**************** RETROFIT ************************/
 
         if(savedInstanceState!=null){
-            //TODO
+            Toaster.make(getContext(), "hello save instance");
         }
 
         else  {
@@ -460,9 +462,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     }
 
 
-    void fillData(GameDetailModal gameDetailModal){
+    void fillData(final GameDetailModal gameDetailModal) {
         overviewProgress.setVisibility(View.GONE);
-        List<GameDetailImages> image = gameDetailModal.images;
+        final List<GameDetailImages> image = gameDetailModal.images;
         ArrayList<String> images = new ArrayList<>(image.size());
         for (int i = 0,size=image.size(); i < size; i++) {
             images.add(image.get(i).thumbUrl);
@@ -487,8 +489,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         final String developer = listToString(gameDetailModal.developers);
         String publisher = listToString(gameDetailModal.publishers);
         String genres = listToString(gameDetailModal.genres);
-        String theme = listToString(gameDetailModal.themes);
-        String franchise = listToString(gameDetailModal.franchises);
+        final String theme = listToString(gameDetailModal.themes);
+        final String franchise = listToString(gameDetailModal.franchises);
         ArrayList<String> values = new ArrayList<>(5);
 
         values.add(developer);
@@ -506,7 +508,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new GameDetailRecyclerAdapter(key, values, GameDetailFragment.this, style);
+        adapter = new GameDetailOverviewAdapter(key, values, GameDetailFragment.this, style);
         recyclerView.setAdapter(adapter);
 
 
@@ -593,7 +595,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             });
 
 
-            characterRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            characterRecycleView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
             characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, style, getContext(), new GameDetailCharacterAdapter.OnClickInterface() {
                 @Override
@@ -629,10 +631,73 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         }
 
 
+        /*************** reviews **************************/
+        review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gameDetailModal.reviews != null) {
+
+                    if (gameDetailModal.reviews.size() == 1) {
+                        mCommunicationInterface.onReviewClick(gameDetailModal.reviews.get(0).apiDetailUrl, title, imageUrl);
+                    } else if (gameDetailModal.reviews.size() > 1) {
+                        CharSequence item[] = new CharSequence[gameDetailModal.reviews.size()];
+
+                        for (int i = 0, size = gameDetailModal.reviews.size(); i < size; i++) {
+                            item[i] = gameDetailModal.reviews.get(i).name;
+                        }
+
+
+                        ListDialogFragment dialogFragment = ListDialogFragment.newInstance(item, true);
+                        dialogFragment.setTargetFragment(GameDetailFragment.this, 0);
+                        dialogFragment.show(getActivity().getSupportFragmentManager(), "List_Dialog");
+
+                    }
+
+                } else {
+                    Toaster.make(getContext(), "No Review Found");
+                }
+            }
+        });
+
+        userReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gameDetailModal.releases != null) {
+
+                    if (gameDetailModal.releases.size() == 1) {
+                        mCommunicationInterface.onUserReviewClick(gameDetailModal.releases.get(0).id, title, imageUrl);
+                    } else if (gameDetailModal.releases.size() > 1) {
+                        CharSequence item[] = new CharSequence[gameDetailModal.releases.size()];
+
+                        for (int i = 0, size = gameDetailModal.releases.size(); i < size; i++) {
+                            item[i] = gameDetailModal.releases.get(i).name;
+                        }
+
+
+                        ListDialogFragment dialogFragment = ListDialogFragment.newInstance(item, false);
+                        dialogFragment.setTargetFragment(GameDetailFragment.this, 0);
+                        dialogFragment.show(getActivity().getSupportFragmentManager(), "List_Dialog");
+                    }
+
+                } else {
+                    Toaster.make(getContext(), "No User Reviews Found");
+                }
+            }
+        });
+
+
 
     }
 
-
+    @Override
+    public void onItemSelected(int position, boolean isGameReview) {
+        if (isGameReview && gameDetailModal.reviews != null) {
+            mCommunicationInterface.onReviewClick(gameDetailModal.reviews.get(position).apiDetailUrl, title, imageUrl);
+        } else {
+            if (gameDetailModal.releases != null)
+                mCommunicationInterface.onUserReviewClick(gameDetailModal.releases.get(position).id, title, imageUrl);
+        }
+    }
 
 
     @Override

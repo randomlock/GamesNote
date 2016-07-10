@@ -11,8 +11,6 @@ public class GameDetailReview extends RealmObject {
 
     @Expose
     public String apiDetailUrl;
-
     @Expose
-    public String siteDetailUrl;
-
+    public String name;
 }

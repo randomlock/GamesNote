@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -132,7 +133,7 @@ public class CharacterDetailFragment extends Fragment {
            public void onResponse(Call<CharacterListModal> call, Response<CharacterListModal> response) {
                characterDetailModal = response.body().results;
 
-               Picasso.with(getContext()).load(characterDetailModal.image.mediumUrl).fit().centerCrop().noFade().into(coverImage);
+               //  Picasso.with(getContext()).load(characterDetailModal.image.mediumUrl).fit().centerCrop().into(coverImage);
 
                mGender.setText(getGender(characterDetailModal.gender));
 
@@ -149,9 +150,18 @@ public class CharacterDetailFragment extends Fragment {
                Document doc = null;
                if (characterDetailModal.description!=null) {
                    doc = Jsoup.parse(characterDetailModal.description);
-                   Element info = doc.getElementsByTag("p").first();
-                   if(info!=null)
-                       mBigDescription.setText(info.text());
+                   Elements info = doc.getElementsByTag("p");
+                   Elements heading = doc.getElementsByTag("h2");
+                   StringBuilder builder = new StringBuilder();
+                   if (info != null) {
+
+                       for (Element element : info) {
+                           builder.append(element.text()).append("\n\n");
+                       }
+
+
+                   }
+                   mBigDescription.setText(builder);
                }
 
 

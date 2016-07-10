@@ -15,14 +15,14 @@ import java.util.ArrayList;
 /**
  * Created by randomlocks on 6/5/2016.
  */
-public class GameDetailRecyclerAdapter extends RecyclerView.Adapter<GameDetailRecyclerAdapter.MyViewHolder> {
+public class GameDetailOverviewAdapter extends RecyclerView.Adapter<GameDetailOverviewAdapter.MyViewHolder> {
 
     ArrayList<String> key;
     ArrayList<String> values;
     GameDetailFragment fragment;
     int style;
 
-    public GameDetailRecyclerAdapter(ArrayList<String> key, ArrayList<String> values, GameDetailFragment fragment, int style) {
+    public GameDetailOverviewAdapter(ArrayList<String> key, ArrayList<String> values, GameDetailFragment fragment, int style) {
         this.key = key;
         this.values = values;
         this.fragment = fragment;

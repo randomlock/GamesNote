@@ -21,4 +21,6 @@
     <color name="colorSheetTitle">#8A000000</color>
     <color name="linecolor">#ece67b</color>
     <color name="black_semi_transparent">#B2000000</color>
+    <color name="alpha_color">#c6efe8e8</color>
+    <color name="wikibackground">#E0E0E0</color>
 </resources>

@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -132,19 +131,18 @@ public class NewsDetailActivity extends AppCompatActivity {
                 return true;
             }
         });
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.loadDataWithBaseURL("file:///android_asset/.", doc.toString(), "text/html", "UTF-8",null);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             webView.setBackgroundColor(Color.argb(1, 0, 0, 0));
         }
-        if (Build.VERSION.SDK_INT >= 19) {
+    /*    if (Build.VERSION.SDK_INT >= 19) {
             // chromium, enable hardware acceleration
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         } else {
             // older android version, disable hardware acceleration
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
+        } */
 
 
 
@@ -156,7 +154,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.game_news_menu,menu);
+        getMenuInflater().inflate(R.menu.game_news_detail_menu, menu);
         return true;
     }
 

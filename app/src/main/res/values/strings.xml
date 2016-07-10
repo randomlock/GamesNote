@@ -41,6 +41,9 @@
     <string name="playstaion">Playstation4</string>
     <string name="purexbox">pureXbox</string>
     <string name="metaleater">Metaleater</string>
+    <string name="giantbombRelease">GiantBomb Game Release</string>
+    <string name="no_result_found">No Result Found</string>
+    <string name="list_fragment_title">Pick a game</string>
 
     <string-array name="hello">
         <item>"SDFsdf"</item>

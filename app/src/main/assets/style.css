@@ -3,14 +3,21 @@ color: #FF3F80;
 text-decoration:none}
 * {
 display : inline;
+margin: 0;
+padding: 0
 }
-img,figur{
+img,figure{
 height: auto;
-max-width: 100%%;
+max-width: 100%;
 margin-right: 0px;
 padding-right: 0px;
 margin-left: 0px;
 padding-left: 0px;
-margin-top: 10px;
+margin-top: 10px
+}
+
+
+
+div,p,span,a {max-width: 100%;
 }
 

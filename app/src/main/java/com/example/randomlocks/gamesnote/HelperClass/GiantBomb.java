@@ -1,12 +1,13 @@
 package com.example.randomlocks.gamesnote.HelperClass;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.example.randomlocks.gamesnote.ExampleApplication;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
+import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
+import com.example.randomlocks.gamesnote.Interface.UserReviewInterface;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,6 +48,11 @@ public class GiantBomb {
     public static final String ASCENDING = "ascending";
     public static final String FONT = "fontoption";
     public static final String NAV_HEADER_URL = "navHeaderUrl";
+    public static final String TITLE = "gameTitle";
+    public static final String REVIEW = "gamereview";
+    public static final String IMAGE_URL = "imageUrl";
+    public static final String MODAL = "listModal";
+    public static final String IS_GAME_REVIEW = "isGameReview";
 
 
     private GiantBomb() {
@@ -217,6 +223,8 @@ public class GiantBomb {
     private static GameWikiListInterface gameWikiListInterface = null;
     private static GameWikiDetailInterface gameWikiDetailInterface = null;
     private static GameCharacterInterface gameCharacterInterface = null;
+    private static GameReviewInterface gameReviewInterface = null;
+    private static UserReviewInterface userReviewInterface = null;
 
 
     public static GameWikiListInterface createGameWikiService() {
@@ -242,14 +250,19 @@ public class GiantBomb {
         return gameCharacterInterface;
     }
 
-    Context context;
+    public static GameReviewInterface createGameReviewInterface() {
+        if (gameReviewInterface == null) {
+            gameReviewInterface = getRetrofit().create(GameReviewInterface.class);
+        }
+        return gameReviewInterface;
+    }
 
-
-
-
-
-
-
+    public static UserReviewInterface createUserReviewService() {
+        if (userReviewInterface == null) {
+            userReviewInterface = getRetrofit().create(UserReviewInterface.class);
+        }
+        return userReviewInterface;
+    }
 
 
 }

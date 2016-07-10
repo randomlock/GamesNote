@@ -3,6 +3,16 @@
 
     <style name="Mytheme" parent="AppTheme">
 
+
+    </style>
+
+    <style name="MyToolbarLight" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="searchViewStyle">@style/searchStyle</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="popupTheme">@style/popMenu</item>
+
+
     </style>
 
 

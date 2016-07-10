@@ -229,7 +229,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.game_news_menu2, menu);
+        inflater.inflate(R.menu.game_news_menu, menu);
     }
 
     @Override
@@ -338,6 +338,10 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
             case R.id.nav_news_metaleater:
                 URL = "http://metaleater.com/rss-feeds/game-reviews";
+                break;
+
+            case R.id.nav_giantbomb_release:
+                URL = "http://www.giantbomb.com/feeds/new_releases/";
                 break;
 
 
