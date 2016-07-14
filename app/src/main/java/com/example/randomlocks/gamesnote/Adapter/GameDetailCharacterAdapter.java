@@ -103,7 +103,11 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
                 @Override
                 public void onClick(View v) {
                     int pos = getLayoutPosition();
-                    onClickInterface.onItemClick(stringList.get(pos).apiDetailUrl,images.get(pos).imageUrl);
+                    if (images != null) {
+                        onClickInterface.onItemClick(stringList.get(pos).apiDetailUrl, images.get(pos).imageUrl);
+                    } else {
+                        onClickInterface.onItemClick(stringList.get(pos).apiDetailUrl, null);
+                    }
                 }
             });
 

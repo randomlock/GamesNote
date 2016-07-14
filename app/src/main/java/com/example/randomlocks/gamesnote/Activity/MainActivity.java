@@ -19,7 +19,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageUrlFragment;
-import com.example.randomlocks.gamesnote.Fragments.GamesHomeFragment;
+import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
+import com.example.randomlocks.gamesnote.Fragments.GamesCharacterWikiFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mDrawableToggle;
     Fragment fragment ;
 
-   /* static {
+    /*static {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }*/
 
@@ -141,7 +142,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
          switch (item.getItemId()) {
            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
+
+               if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                   getSupportFragmentManager().popBackStack();
+               } else {
+                   mDrawer.openDrawer(GravityCompat.START);
+               }
+
                 return true;
         }
 
@@ -194,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesHome");
 
                 if (fragment==null) {
-                    fragment = new GamesHomeFragment();
+                    fragment = new GamesCharacterWikiFragment();
                 }
                     FragmentTransactionHelper("replace", fragment, "GamesHome");
 
@@ -326,5 +333,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public void startCharacterFragment(String apiUrl, String imageUrl) {
 
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("characterDetail");
+
+        if (fragment == null) {
+            fragment = CharacterDetailFragment.newInstance(apiUrl, imageUrl);
+        }
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "characterDetail");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
+    }
 }

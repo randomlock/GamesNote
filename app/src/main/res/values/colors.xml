@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#3E50B4</color>
+    <color name="primary">#3F51B5</color>
     <color name="primary_dark">#303F9F</color>
-    <color name="primary_light">#E1BEE7</color>
-    <color name="accent">#FF3F80</color>
+    <color name="primary_light">#C5CAE9</color>
+    <color name="accent">#FF5722</color>
     <color name="lightaccent">#83ff5722</color>
     <color name="primary_text">#dd000000</color>
     <color name="secondary_text">#89000000</color>
@@ -22,5 +22,5 @@
     <color name="linecolor">#ece67b</color>
     <color name="black_semi_transparent">#B2000000</color>
     <color name="alpha_color">#c6efe8e8</color>
-    <color name="wikibackground">#E0E0E0</color>
+    <color name="wikibackground">#FAFAFA</color>
 </resources>

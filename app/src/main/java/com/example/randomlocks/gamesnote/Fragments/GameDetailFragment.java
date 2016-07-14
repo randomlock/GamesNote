@@ -10,15 +10,14 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +39,7 @@ import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.ListDialogFragment;
-import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
+import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PagerDepthAnimation;
@@ -91,7 +90,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public static final String IMAGE_URL = "imageUrl" ;
     public static final String NAME = "name" ;
     Toolbar toolbar;
-    String apiUrl, fullUrl, imageUrl;
+    String apiUrl, imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
     ViewPager viewPager;
     Map<String,String> map;
@@ -114,7 +113,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     ImageView appbarImage,coverImage;
     TextView gameTitle, review, userReview;
     RelativeLayout relativeLayout;
-    FloatingActionButton videoButton;
     FloatingActionsMenu floatingActionsMenu;
     com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton replaying,planning,dropped,playing,completed;
     String title;
@@ -179,6 +177,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d("tag", "onattach created");
         mCommunicationInterface = (CommunicationInterface) getActivity();
     }
 
@@ -186,8 +185,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        fullUrl = getArguments().getString(API_URL);
+        Log.d("tag", "oncreate");
+        String fullUrl = getArguments().getString(API_URL);
         String str[] = fullUrl.split("/");
         apiUrl = str[str.length - 1];
         title = getArguments().getString(NAME);
@@ -197,6 +196,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("tag", "oncreateview");
 
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
@@ -204,11 +204,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d("tag", "onactivity created");
 
 
         /************************************** FindViewById *********************************/
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
-        videoButton = (FloatingActionButton) coordinatorLayout.findViewById(R.id.video);
         floatingActionsMenu = (FloatingActionsMenu) coordinatorLayout.findViewById(R.id.floating_menu);
         coordinatorLayout.findViewById(R.id.replaying).setOnClickListener(this);
         coordinatorLayout.findViewById(R.id.planning).setOnClickListener(this);
@@ -245,8 +245,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         /************************** APPBARLATOUT ********************************/
 
-        Picasso.with(getContext()).load(imageUrl).fit().centerCrop().into(appbarImage);
-        Picasso.with(getContext()).load(imageUrl).fit().into(coverImage);
+        if (imageUrl != null) {
+            Picasso.with(getContext()).load(imageUrl).fit().centerCrop().into(appbarImage);
+            Picasso.with(getContext()).load(imageUrl).fit().into(coverImage);
+        }
         gameTitle.setText(title);
 
         /***************************** TYPEFACE ************************************/
@@ -265,9 +267,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
-                    videoButton.animate().scaleX(0).scaleY(0).setDuration(300);
-                } else {
-                    videoButton.animate().scaleX(1).scaleY(1).setDuration(300);
+
                 }
             }
 
@@ -290,16 +290,19 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         /**************** RETROFIT ************************/
 
-        if(savedInstanceState!=null){
-            Toaster.make(getContext(), "hello save instance");
-        }
+        //   if(savedInstanceState!=null){
+        //       Toaster.make(getContext(), "hello save instance");
+        //     }
 
-        else  {
+        //    else  {
             if (gameDetailModal==null) {
+                Log.d("tag", "its null");
                 gameWikiDetailInterface = GiantBomb.createGameDetailService();
                 map = new HashMap<>();
                 map.put(GiantBomb.KEY,GiantBomb.API_KEY);
                 map.put(GiantBomb.FORMAT, "JSON");
+                String field_list = "description,name,images,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
+                map.put(GiantBomb.FIELD_LIST, field_list);
                 getGameDetail(gameWikiDetailInterface, map);
 
 
@@ -311,6 +314,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                            if(characterRecycleView.getAdapter()!=null){
                                characterAdapter.setImages(characters);
                                characterAdapter.notifyDataSetChanged();
+                               characterImage = characters;
                            }else {
                                characterImage = characters;
                            }
@@ -328,6 +332,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                      if (similarGameRecycleView.getAdapter()!=null) {
                          similarGameAdapter.setImages(similarGame);
                          similarGameAdapter.notifyDataSetChanged();
+                         similarGameImage = similarGame;
                      }else {
                          similarGameImage = similarGame;
                      }
@@ -336,9 +341,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
          });
                 asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/similar-games/");
             }else {
+                Log.d("tag", "non null");
                 fillData(gameDetailModal);
             }
-        }
+        //    }
 
 
 
@@ -435,7 +441,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             public void onResponse(Call<GameDetailListModal> call, Response<GameDetailListModal> response) {
 
                 gameDetailModal = response.body().results;
-
                 fillData(gameDetailModal);
             }
 
@@ -464,10 +469,17 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
     void fillData(final GameDetailModal gameDetailModal) {
         overviewProgress.setVisibility(View.GONE);
+
+        if (imageUrl == null && gameDetailModal.images.size() > 0) {
+            Picasso.with(getContext()).load(gameDetailModal.images.first().mediumUrl).fit().centerCrop().into(appbarImage);
+            Picasso.with(getContext()).load(gameDetailModal.images.first().mediumUrl).fit().into(coverImage);
+        }
+
+
         final List<GameDetailImages> image = gameDetailModal.images;
         ArrayList<String> images = new ArrayList<>(image.size());
         for (int i = 0,size=image.size(); i < size; i++) {
-            images.add(image.get(i).thumbUrl);
+            images.add(image.get(i).mediumUrl);
         }
 
             /*    if (images.size()>0) {
@@ -507,7 +519,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         key.add("Genres");
 
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new ConsistentLinearLayoutManager(getContext()));
         adapter = new GameDetailOverviewAdapter(key, values, GameDetailFragment.this, style);
         recyclerView.setAdapter(adapter);
 
@@ -530,7 +542,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 public void onClick(View v) {
 
                     String str="http://www.giantbomb.com/game/"+apiUrl;
-                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
+
                     CustomTabActivityHelper.openCustomTab(
                             getActivity(), customTabsIntent, Uri.parse(str), new WebViewFallback());
 
@@ -580,6 +593,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 }); */
 
 
+        if (characterImage == null) {
+            Log.d("tag", "null character image");
+        }
+
 
 
         /******************* SETTING THE CHARACTER **************************************/
@@ -595,8 +612,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             });
 
 
-            characterRecycleView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            characterRecycleView.addItemDecoration(new DividerItemDecoration(getActivity()));
+            characterRecycleView.setLayoutManager(new ConsistentLinearLayoutManager(getContext(), ConsistentLinearLayoutManager.HORIZONTAL, false));
             characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, style, getContext(), new GameDetailCharacterAdapter.OnClickInterface() {
                 @Override
                 public void onItemClick(String apiUrl,String imageUrl) {
@@ -618,7 +634,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             });
 
 
-            similarGameRecycleView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+            similarGameRecycleView.setLayoutManager(new ConsistentLinearLayoutManager(getContext(), ConsistentLinearLayoutManager.HORIZONTAL, false));
             // similarGameRecycleView.addItemDecoration(new VerticalSpaceItemDecoration(6));
             similarGameAdapter = new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext(), new SimilarGameAdapter.OnClickInterface() {
                 @Override

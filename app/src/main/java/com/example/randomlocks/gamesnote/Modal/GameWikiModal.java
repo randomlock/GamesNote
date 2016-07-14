@@ -17,8 +17,6 @@ public class GameWikiModal implements Parcelable {
     @Expose
     public String deck;
     @Expose
-    public String description;
-    @Expose
     public int expectedReleaseDay;
     @Expose
     public int expectedReleaseMonth;
@@ -43,7 +41,6 @@ public class GameWikiModal implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.apiDetailUrl);
         dest.writeString(this.deck);
-        dest.writeString(this.description);
         dest.writeInt(this.expectedReleaseDay);
         dest.writeInt(this.expectedReleaseMonth);
         dest.writeInt(this.expectedReleaseYear);
@@ -59,7 +56,6 @@ public class GameWikiModal implements Parcelable {
     protected GameWikiModal(Parcel in) {
         this.apiDetailUrl = in.readString();
         this.deck = in.readString();
-        this.description = in.readString();
         this.expectedReleaseDay = in.readInt();
         this.expectedReleaseMonth = in.readInt();
         this.expectedReleaseYear = in.readInt();

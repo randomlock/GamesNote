@@ -3,14 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
-    android:padding="12dp">
+    android:padding="12dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/headerbackground"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:transitionName="profile_image"
+
+        />
 
     <TextView
         android:id="@+id/user_name"
@@ -24,7 +28,8 @@
         android:layout_toEndOf="@+id/profile_image"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="12dp"
+        android:transitionName="user_name" />
 
     <RatingBar
         android:id="@+id/myRatingBar"
@@ -35,7 +40,10 @@
         android:isIndicator="true"
         android:layout_above="@+id/date"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:transitionName="myRatingBar"
+
+        />
 
 
     <TextView
@@ -46,7 +54,8 @@
         android:text="Date"
         android:layout_below="@+id/user_name"
         android:layout_alignLeft="@+id/user_name"
-        android:layout_alignStart="@+id/user_name" />
+        android:layout_alignStart="@+id/user_name"
+        android:transitionName="date" />
 
     <TextView
         android:id="@+id/deck"
@@ -56,7 +65,8 @@
         android:layout_below="@+id/profile_image"
         android:layout_marginTop="12dp"
         android:textStyle="italic"
-        style="@style/TitleText" />
+        style="@style/TitleText"
+        android:transitionName="deck" />
 
     <TextView
         android:id="@+id/description"

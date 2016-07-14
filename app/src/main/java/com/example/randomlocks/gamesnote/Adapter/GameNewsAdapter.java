@@ -78,13 +78,6 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
             holder.date.setText(newsModal.pubDate.substring(0, 10));
         }
-        String str;
-        if(newsModal.isClicked){
-            str = "Read";
-        }else {
-            str = "Not Read";
-        }
-        holder.status.setText(str);
 
     }
 
@@ -95,7 +88,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
     class MyNewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView heading,date,status;
+        TextView heading, date;
         ImageView image;
 
 
@@ -105,7 +98,6 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
             heading = (TextView) itemView.findViewById(R.id.news_heading);
             image = (ImageView) itemView.findViewById(R.id.news_image);
             date = (TextView) itemView.findViewById(R.id.news_date);
-            status = (TextView) itemView.findViewById(R.id.status);
             itemView.setOnClickListener(this);
 
         }
@@ -113,7 +105,6 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         @Override
         public void onClick(View v) {
             NewsModal newsModal = modals.get(getLayoutPosition());
-            newsModal.isClicked=true;
             Intent intent = new Intent(context, NewsDetailActivity.class);
             intent.putExtra("DATA",newsModal);
             context.startActivity(intent);

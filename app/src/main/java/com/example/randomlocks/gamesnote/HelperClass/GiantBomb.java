@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.randomlocks.gamesnote.ExampleApplication;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
+import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterface;
 import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
@@ -225,6 +226,7 @@ public class GiantBomb {
     private static GameCharacterInterface gameCharacterInterface = null;
     private static GameReviewInterface gameReviewInterface = null;
     private static UserReviewInterface userReviewInterface = null;
+    private static GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
 
 
     public static GameWikiListInterface createGameWikiService() {
@@ -250,7 +252,7 @@ public class GiantBomb {
         return gameCharacterInterface;
     }
 
-    public static GameReviewInterface createGameReviewInterface() {
+    public static GameReviewInterface createGameReviewService() {
         if (gameReviewInterface == null) {
             gameReviewInterface = getRetrofit().create(GameReviewInterface.class);
         }
@@ -262,6 +264,13 @@ public class GiantBomb {
             userReviewInterface = getRetrofit().create(UserReviewInterface.class);
         }
         return userReviewInterface;
+    }
+
+    public static GameCharacterSearchWikiInterface createGameCharacterSearchService() {
+        if (gameCharacterSearchWikiInterface == null) {
+            gameCharacterSearchWikiInterface = getRetrofit().create(GameCharacterSearchWikiInterface.class);
+        }
+        return gameCharacterSearchWikiInterface;
     }
 
 

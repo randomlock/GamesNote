@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
-            app:theme="@style/MyToolbar"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
             >
 
@@ -49,7 +48,7 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:theme="@style/MyToolbarLight"
+                android:theme="@style/MyToolbarLight"
                 app:layout_collapseMode="pin"
                 />
 
@@ -102,8 +101,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp" />
-
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="24dp" />
 
 
         </LinearLayout>

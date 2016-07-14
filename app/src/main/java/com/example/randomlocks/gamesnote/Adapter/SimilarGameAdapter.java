@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.R;
@@ -92,7 +93,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         ImageView imageView;
 
@@ -106,6 +107,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
 
         }
@@ -119,17 +121,26 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
             FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
 
             fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl.get(getLayoutPosition()));
-            fragment.getArguments().putString(GameDetailFragment.IMAGE_URL,images.get(getLayoutPosition()).imageUrl);
+            if (images != null) {
+                fragment.getArguments().putString(GameDetailFragment.IMAGE_URL, images.get(getLayoutPosition()).imageUrl);
+            }
             fragment.getArguments().putString(GameDetailFragment.NAME,stringList.get(getLayoutPosition()).name);
             ft.remove(fragment);
             //GameDetailFragment.comingFromSimilarGamesAdapter=true;
             fragment = GameDetailFragment.newInstance(apiUrl.get(getLayoutPosition()),stringList.get(getLayoutPosition()).name,images.get(getLayoutPosition()).imageUrl);
-            ft.add(R.id.container,fragment,"GameDetail");
+            ft.add(R.id.fragment_parent_layout, fragment, "GameDetail");
             ft.commit();
 
           //  onClickInterface.onItemClick(apiUrl.get(getLayoutPosition()),images.get(getLayoutPosition()).imageUrl);
 
 
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+
+            Toaster.make(context, stringList.get(getLayoutPosition()).name);
+            return true;
         }
     }
 

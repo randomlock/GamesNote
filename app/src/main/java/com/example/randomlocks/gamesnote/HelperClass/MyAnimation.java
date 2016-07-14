@@ -1,12 +1,9 @@
 package com.example.randomlocks.gamesnote.HelperClass;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Transformation;
-
-import com.example.randomlocks.gamesnote.R;
 
 /**
  * Created by randomlocks on 4/27/2016.
@@ -14,7 +11,7 @@ import com.example.randomlocks.gamesnote.R;
 public class MyAnimation {
 
 
-    public static void expand(final View v,View icon,Context context) {
+    public static void expand(final View v, Context context) {
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         final int targetHeight = v.getMeasuredHeight();
 
@@ -40,11 +37,10 @@ public class MyAnimation {
         // 1dp/ms
         a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
-        icon.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_drop_up_black_36dp));
 
     }
 
-    public static void collapse(final View v,View icon,Context context) {
+    public static void collapse(final View v, Context context) {
         final int initialHeight = v.getMeasuredHeight();
 
         android.view.animation.Animation a = new android.view.animation.Animation()
@@ -69,7 +65,6 @@ public class MyAnimation {
         a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
 
-        icon.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_drop_down_black_36dp));
     }
 
 }

@@ -1,8 +1,8 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.CardView;
@@ -35,7 +35,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
     private List<GameWikiModal> list;
     Context context;
     int lastPosition;
-    private static GameWikiAdapter gameWikiAdapter = null;
 
     public GameWikiAdapter(List<GameWikiModal> list,Context context,int lastPosition){
         this.list = list;
@@ -178,19 +177,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
 
 /****************** SET ON CLICK LISTENER *************************/
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(context, GameDetailActivity.class);
-                it.putExtra("apiUrl",modal.apiDetailUrl);
-                it.putExtra("name",modal.name);
-                Bundle bundle = ActivityOptionsCompat.makeScaleUpAnimation(v,0,0,v.getWidth(),v.getHeight()).toBundle();
-                if (modal.image != null && modal.image.mediumUrl != null) {
-                    it.putExtra("imageUrl", modal.image.mediumUrl);
-                }
-                context.startActivity(it,bundle);
-            }
-        });
 
 
        // holder.description.setText(modal.getDescription());
@@ -213,97 +199,108 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         return list.size();
     }
 
-      class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
 
-        public TextView title,description,date;
-        public Button  platform1,platform2,platform3;
-
+        public TextView title, description, date;
+        public Button platform1, platform2, platform3;
         public ImageView imageView;
-
-          public View view;
-
-          public CardView cardView;
+        public View view;
+        public CardView cardView;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.cardView);
             title = (TextView) itemView.findViewById(R.id.title);
-            description = (TextView)itemView.findViewById(R.id.description);
+            description = (TextView) itemView.findViewById(R.id.description);
             date = (TextView) itemView.findViewById(R.id.date);
             platform1 = (Button) itemView.findViewById(R.id.platform1);
             platform2 = (Button) itemView.findViewById(R.id.platform2);
             platform3 = (Button) itemView.findViewById(R.id.platform3);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            view = itemView.findViewById(R.id.dropdown);
-            view.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             imageView.setOnClickListener(this);
             platform1.setOnClickListener(this);
             platform2.setOnClickListener(this);
 
 
+        }
 
 
+        @Override
+        public void onClick(View view) {
+
+            switch (view.getId()) {
+
+                case R.id.cardView:
+                    GameWikiModal modal = list.get(getLayoutPosition());
+                    Intent it = new Intent(context, GameDetailActivity.class);
+                    it.putExtra("apiUrl", modal.apiDetailUrl);
+                    it.putExtra("name", modal.name);
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation((Activity) context, imageView, "profile");
+
+
+                    if (modal.image != null && modal.image.mediumUrl != null) {
+                        it.putExtra("imageUrl", modal.image.mediumUrl);
+                    }
+                    context.startActivity(it, options.toBundle());
+
+
+                    break;
+
+
+                case R.id.imageView:
+
+
+                    ImageViewerFragment dialog = ImageViewerFragment.newInstance((String) view.getTag(R.string.smallImageUrl), (String) view.getTag(R.string.mediumImageUrl));
+
+
+                    dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");
+
+
+                    break;
+
+                case R.id.platform1:
+                    if (list.get(getLayoutPosition()).platforms != null) {
+                        Toaster.make(context, list.get(getLayoutPosition()).platforms.get(0).name);
+                    }
+                    break;
+
+                case R.id.platform2:
+                    if (list.get(getLayoutPosition()).platforms != null) {
+                        if (list.get(getLayoutPosition()).platforms.size() == 1)
+                            Toaster.make(context, list.get(getLayoutPosition()).platforms.get(0).name);
+                        else
+                            Toaster.make(context, list.get(getLayoutPosition()).platforms.get(1).name);
+                    }
+                    break;
+
+            }
 
 
         }
 
 
-         @Override
-         public void onClick(View view) {
+        @Override
+        public boolean onLongClick(View v) {
 
-         switch (view.getId()){
-             case R.id.dropdown :
-                 if(description.getVisibility()==View.GONE){
-                     // expand(description);
+            if (description.getVisibility() == View.GONE) {
+                // expand(description);
 
-                     MyAnimation.expand(description, view, context);
-                 }
+                MyAnimation.expand(description, context);
+            } else {
+                //   collapse(description);
 
-                 else {
-                     //   collapse(description);
-
-                     MyAnimation.collapse(description,view,context);
-                 }
-
-                 break;
-
-             case R.id.imageView :
+                MyAnimation.collapse(description, context);
+            }
 
 
-                ImageViewerFragment dialog = ImageViewerFragment.newInstance((String) view.getTag(R.string.smallImageUrl),(String)view.getTag(R.string.mediumImageUrl));
-
-
-                 dialog.show(((FragmentActivity)context).getSupportFragmentManager(),"ImageViewer");
-
-
-
-                 break;
-
-             case R.id.platform1 :
-                 if (list.get(getLayoutPosition()).platforms!=null) {
-                     Toaster.make(context,list.get(getLayoutPosition()).platforms.get(0).name);
-                 }
-                 break;
-
-             case R.id.platform2 :
-                 if (list.get(getLayoutPosition()).platforms!=null) {
-                     if(list.get(getLayoutPosition()).platforms.size()==1)
-                     Toaster.make(context,list.get(getLayoutPosition()).platforms.get(0).name);
-                     else
-                         Toaster.make(context,list.get(getLayoutPosition()).platforms.get(1).name);
-                 }
-                 break;
-
-         }
-
-
-
-
-         }
-
-
+            return true;
+        }
       }
 
     @Override
@@ -343,6 +340,5 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             } */
 
 
-
-        }
+}
 

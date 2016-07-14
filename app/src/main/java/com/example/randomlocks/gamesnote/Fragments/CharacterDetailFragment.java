@@ -2,6 +2,8 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterListModal;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterModal;
@@ -53,6 +55,9 @@ public class CharacterDetailFragment extends Fragment {
     TextView mGender,mBirthDay,mTotalGames;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
+    AVLoadingIndicatorView pacman;
+    CoordinatorLayout coordinatorLayout;
+
 
 
 
@@ -90,12 +95,12 @@ public class CharacterDetailFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-
-        scrollView = (PicassoNestedScrollView) getView().findViewById(R.id.scroll_view);
-        parentLayout = (LinearLayout) getView().findViewById(R.id.parentLinearLayout);
-        toolbar = (Toolbar) parentLayout.findViewById(R.id.my_toolbar);
-        coverImage = (ImageView) parentLayout.findViewById(R.id.character_image);
+        coordinatorLayout = (CoordinatorLayout) getView().findViewById(R.id.root_coordinator);
+        toolbar = (Toolbar) coordinatorLayout.findViewById(R.id.my_toolbar);
+        coverImage = (ImageView) coordinatorLayout.findViewById(R.id.character_image);
+        scrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
+        pacman = (AVLoadingIndicatorView) scrollView.findViewById(R.id.progressBar);
+        parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
         mGender = (TextView) parentLayout.findViewById(R.id.gender);
         mBirthDay = (TextView) parentLayout.findViewById(R.id.birthday);
         mTotalGames = (TextView) parentLayout.findViewById(R.id.games);
@@ -114,8 +119,9 @@ public class CharacterDetailFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
-        Picasso.with(getContext()).load(imageUrl).fit().centerCrop().into(coverImage);
+        if (imageUrl != null) {
+            Picasso.with(getContext()).load(imageUrl).into(coverImage);
+        }
 
         mGameCharacterInterface = GiantBomb.createGameCharacterService();
         map = new HashMap<>();
@@ -131,9 +137,13 @@ public class CharacterDetailFragment extends Fragment {
        mGameCharacterInterface.getResult(apiUrl,map).enqueue(new Callback<CharacterListModal>() {
            @Override
            public void onResponse(Call<CharacterListModal> call, Response<CharacterListModal> response) {
+               pacman.setVisibility(View.GONE);
+               parentLayout.setVisibility(View.VISIBLE);
                characterDetailModal = response.body().results;
 
-               //  Picasso.with(getContext()).load(characterDetailModal.image.mediumUrl).fit().centerCrop().into(coverImage);
+               if (imageUrl == null && characterDetailModal.image.mediumUrl != null) {
+                   Picasso.with(getContext()).load(characterDetailModal.image.mediumUrl).into(coverImage);
+               }
 
                mGender.setText(getGender(characterDetailModal.gender));
 
@@ -173,7 +183,17 @@ public class CharacterDetailFragment extends Fragment {
 
            @Override
            public void onFailure(Call<CharacterListModal> call, Throwable t) {
-               Toaster.make(getContext(),"Cannot Connect .Try Later");
+               pacman.setVisibility(View.GONE);
+               parentLayout.setVisibility(View.VISIBLE);
+
+               Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
+                       .setAction("RETRY", new View.OnClickListener() {
+                           @Override
+                           public void onClick(View v) {
+                               getCharacterDetail(mGameCharacterInterface, map);
+
+                           }
+                       }).show();
            }
        });
     }

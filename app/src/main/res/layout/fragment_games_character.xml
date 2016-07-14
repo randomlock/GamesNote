@@ -1,0 +1,124 @@
+<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:titleEnabled="false">
+
+
+            <ImageView
+                android:id="@+id/appbar_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="pin" />
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_gravity="bottom"
+                android:alpha="0.91"
+                app:elevation="16dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                app:layout_collapseMode="pin"
+
+                >
+
+
+                <EditText
+                    android:id="@+id/search_character"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:drawableStart="@drawable/ic_search_black_24dp"
+                    android:drawableLeft="@drawable/ic_search_black_24dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:drawablePadding="16dp"
+                    android:hint="Search Character"
+                    android:singleLine="true"
+                    android:drawableRight="@drawable/ic_clear_black_18dp"
+                    android:drawableEnd="@drawable/ic_clear_black_18dp"
+                    android:textColor="#000"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    app:layout_collapseMode="pin" />
+
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/MyToolbarLight"
+                app:layout_collapseMode="pin"
+                app:contentInsetStart="0dp"
+
+                >
+
+
+            </android.support.v7.widget.Toolbar>
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+
+        <com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:indicator="Pacman"
+            android:layout_gravity="center_horizontal"
+            app:indicator_color="@color/accent" />
+
+
+        <TextView
+            android:id="@+id/errortext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Result Found"
+            android:drawableTop="@drawable/ic_error_outline_black_48dp"
+            android:layout_gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:visibility="gone" />
+
+
+    </FrameLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

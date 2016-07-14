@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,7 +79,11 @@ public class GameReviewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Picasso.with(this).load(getIntent().getStringExtra(GiantBomb.IMAGE_URL)).into(coodinatorLayout);
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int screenWidth = displaymetrics.widthPixels;
+        int screenHeight = displaymetrics.heightPixels;
+        Picasso.with(this).load(getIntent().getStringExtra(GiantBomb.IMAGE_URL)).resize(screenWidth, screenHeight).centerCrop().into(coodinatorLayout);
 
         if (savedInstanceState != null) {
             modals = savedInstanceState.getParcelable(MODAL);
@@ -87,7 +92,7 @@ public class GameReviewActivity extends AppCompatActivity {
 
             if (modals == null) {
                 //coming for first time
-                gameReviewInterface = GiantBomb.createGameReviewInterface();
+                gameReviewInterface = GiantBomb.createGameReviewService();
                 map = new HashMap<>();
                 map.put(GiantBomb.KEY, GiantBomb.API_KEY);
                 map.put(GiantBomb.FORMAT, "JSON");
@@ -154,18 +159,18 @@ public class GameReviewActivity extends AppCompatActivity {
             else
                 color = "black";
 
-            builder.append("<HTML><HEAD><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:" + color + ";\">");
+            builder.append("<HTML><HEAD><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\">");
             builder.append(modals.description);
             builder.append("</body></HTML>");
-            webView.getSettings().setJavaScriptEnabled(true);
-
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                     //  ((MainActivity)(getActivity())).loadWebView(url);
-
-                    runBrowser(url);
+                    String relativeUrl[] = url.split("///");
+                    if (relativeUrl.length >= 1) {
+                        runBrowser(relativeUrl[1]);
+                    }
 
 
                     return true;
@@ -209,9 +214,9 @@ public class GameReviewActivity extends AppCompatActivity {
     }
 
     void runBrowser(String url) {
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
         CustomTabActivityHelper.openCustomTab(
-                this, customTabsIntent, Uri.parse(url), new WebViewFallback());
+                this, customTabsIntent, Uri.parse("http://www.giantbomb.com/" + url), new WebViewFallback());
     }
 
 
@@ -221,4 +226,6 @@ public class GameReviewActivity extends AppCompatActivity {
         outState.putParcelable(MODAL, modals);
 
     }
+
+
 }

@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
-            app:theme="@style/MyToolbar"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
             >
 
@@ -36,20 +35,22 @@
                 android:id="@+id/appbar_image"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
+                android:transitionName="image"
                 />
 
 
-
-
-
-
+            <View
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_play_circle_outline_white_48dp"
+                android:layout_gravity="center" />
 
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:theme="@style/MyToolbarLight"
+                android:theme="@style/MyToolbarLight"
                 app:layout_collapseMode="pin"
                 />
 
@@ -185,7 +186,6 @@
                         android:id="@+id/list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:animateLayoutChanges="true"
                         />
 
 
@@ -273,7 +273,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="12"
                         android:ellipsize="end"
-                        android:padding="6dp"
+                        android:padding="8dp"
                         android:textColor="@color/primary_text"
                         style="@style/TextStyle12" />
 
@@ -394,15 +394,6 @@
 
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/video"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="mini"
-        android:src="@drawable/ic_play_arrow_white_24dp"
-        app:layout_anchor="@+id/cover_image"
-        app:layout_anchorGravity="bottom|center"
-        />
 
     <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu
         android:id="@+id/floating_menu"

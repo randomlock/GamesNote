@@ -98,6 +98,9 @@ public class UserReviewActivity extends AppCompatActivity {
         if (pacman.getVisibility() == View.VISIBLE) {
             pacman.setVisibility(View.GONE);
         }
+        if (errorText.getVisibility() == View.VISIBLE) {
+            errorText.setVisibility(View.GONE);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
@@ -114,9 +117,14 @@ public class UserReviewActivity extends AppCompatActivity {
             public void onResponse(Call<UserReviewModalList> call, Response<UserReviewModalList> response) {
                 modalList = response.body().results;
                 if (modalList.size() == 0) {
+                    if (pacman.getVisibility() == View.VISIBLE) {
+                        pacman.setVisibility(View.GONE);
+                    }
                     errorText.setVisibility(View.VISIBLE);
+                } else {
+                    loadRecycler(modalList, null);
+
                 }
-                loadRecycler(modalList, null);
             }
 
             @Override

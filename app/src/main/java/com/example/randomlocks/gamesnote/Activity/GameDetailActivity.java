@@ -27,7 +27,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
             fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL), getIntent().getStringExtra(GameDetailFragment.NAME), getIntent().getStringExtra(GameDetailFragment.IMAGE_URL));
         }
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container, fragment, "GameDetail");
+        fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "GameDetail");
 
         fragmentTransaction.commit();
 
@@ -77,7 +77,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
             fragment = CharacterDetailFragment.newInstance(apiUrl, imageUrl);
         }
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container,fragment,"characterDetail");
+        fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "characterDetail");
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
@@ -94,7 +94,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         if(fragment!=null){
             fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl);
             fragment.getArguments().putString(GameDetailFragment.IMAGE_URL,imageUrl);
-            fragmentTransaction.replace(R.id.container,fragment,"GameDetail").commit();
+            fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "GameDetail").commit();
 
         }
 

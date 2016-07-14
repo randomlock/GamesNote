@@ -12,6 +12,9 @@ public class CharacterImage implements Parcelable {
 
     @Expose
    public String mediumUrl;
+    @Expose
+    public String thumbUrl;
+
 
     @Override
     public int describeContents() {
@@ -21,6 +24,7 @@ public class CharacterImage implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.mediumUrl);
+        dest.writeString(this.thumbUrl);
     }
 
     public CharacterImage() {
@@ -28,6 +32,7 @@ public class CharacterImage implements Parcelable {
 
     protected CharacterImage(Parcel in) {
         this.mediumUrl = in.readString();
+        this.thumbUrl = in.readString();
     }
 
     public static final Parcelable.Creator<CharacterImage> CREATOR = new Parcelable.Creator<CharacterImage>() {

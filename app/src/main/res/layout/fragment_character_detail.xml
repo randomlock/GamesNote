@@ -1,214 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView
+<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scroll_view"
-    android:layout_height="match_parent"
+    android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/parentLinearLayout"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
-            app:theme="@style/MyToolbarLight"
-            />
-
-    <ImageView
-        android:id="@+id/character_image"
-        android:layout_width="match_parent"
-        android:layout_height="384dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/headerbackground"
-        />
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:paddingTop="24dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        >
-
-        <TextView
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Gender"
-            android:layout_weight="1"
-            />
-
-        <TextView
-            android:id="@+id/gender"
-            android:layout_weight="1"
-            android:text="-"
-            style="@style/CharacterTextStyle"
-
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:paddingTop="24dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Total Games "
-            android:layout_weight="1"
-            />
-
-        <TextView
-            android:id="@+id/games"
-            android:layout_weight="1"
-            android:text="-"
-            style="@style/CharacterTextStyle"
-
-            />
-    </LinearLayout>
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
+            app:layout_scrollFlags="exitUntilCollapsed|scroll">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-       android:layout_margin="24dp"
-        android:padding="24dp"
+            <ImageView
+                android:id="@+id/character_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/headerbackground"
+                app:layout_collapseMode="parallax"
 
-        >
+                />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Birthday "
-            android:layout_weight="1"
-            />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/MyTransparentToolbar"
+                app:layout_collapseMode="pin"
 
-        <TextView
-            android:id="@+id/birthday"
-            android:layout_weight="1"
-            android:text="-"
-            style="@style/CharacterTextStyle"
-
-            />
-    </LinearLayout>
+                />
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:background="@color/accent"/>
-
-    <TextView
-        android:id="@+id/deck"
-        android:layout_margin="24dp"
-        android:textStyle="italic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="deck info"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:background="@color/accent"/>
+        </android.support.design.widget.CollapsingToolbarLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    </android.support.design.widget.AppBarLayout>
+
+
+    <com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:paddingTop="24dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-
-        >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="First Appearance" />
-
-
-
-        <TextView
-            android:id="@+id/first_appearance"
-           style="@style/CharacterTextStyle"
-            android:layout_weight="1"
-            android:text="-"
-            android:layout_gravity="center"
-            />
-
-
-
-
-
-
-
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="24dp"
-        android:padding="24dp"
-        android:orientation="horizontal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
+        <FrameLayout
+        android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/parentLinearLayout"
+                android:orientation="vertical"
+        android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
         >
 
-        <TextView
-            android:layout_width="0dp"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Alias" />
+                    android:orientation="horizontal"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Gender"
+                        android:layout_weight="1"
+                        android:textColor="@color/primary_text" />
+
+                    <TextView
+                        android:id="@+id/gender"
+                        android:layout_weight="1"
+                        android:text="-"
+                        style="@style/CharacterTextStyle"
+
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Total Games "
+                        android:layout_weight="1"
+                        android:textColor="@color/primary_text" />
+
+                    <TextView
+                        android:id="@+id/games"
+                        android:layout_weight="1"
+                        android:text="-"
+                        style="@style/CharacterTextStyle"
+
+                        />
+                </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="24dp"
+
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Birthday "
+                        android:layout_weight="1"
+                        android:textColor="@color/primary_text" />
+
+                    <TextView
+                        android:id="@+id/birthday"
+                        android:layout_weight="1"
+                        android:text="-"
+                        style="@style/CharacterTextStyle"
+
+                        />
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@color/accent" />
+
+
+                <TextView
+                    style="@style/cardview_textstyle"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:text="Summary"
+                    android:layout_marginLeft="24dp"
+                    android:padding="0dp"
+                    android:layout_marginTop="12dp"
+
+                    />
 
         <TextView
-            android:id="@+id/alias"
-            style="@style/CharacterTextStyle"
-            android:layout_weight="1"
-            android:text="-" />
+            android:id="@+id/deck"
+            android:layout_margin="24dp"
+            android:textStyle="italic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="deck info"
+            android:textColor="@color/primary_text" />
 
-    </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@color/accent" />
 
 
-<View
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+
+
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="First Appearance"
+                        android:textColor="@color/primary_text" />
+
+
+                    <TextView
+                        android:id="@+id/first_appearance"
+                        style="@style/CharacterTextStyle"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:layout_gravity="center" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="24dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Alias"
+                        android:textColor="@color/primary_text" />
+
+
+                    <TextView
+                        android:id="@+id/alias"
+                        style="@style/CharacterTextStyle"
+                        android:layout_weight="1"
+                        android:text="-" />
+
+                </LinearLayout>
+
+
+                <View
     android:layout_width="match_parent"
     android:layout_height="0.5dp"
     android:background="@color/accent"
@@ -217,29 +245,47 @@
     />
 
 
+                <TextView
+                    style="@style/cardview_textstyle"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:text="Detail Description"
+                    android:layout_marginLeft="24dp"
+                    android:padding="0dp"
+                    android:layout_marginTop="12dp"
+
+                    />
 
 
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="24dp"
+                    android:text="No Additional info"
+                    android:textColor="@color/primary_text" />
 
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:text="No Additional info"
-        />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_margin="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_margin="24dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicator="Pacman"
+                app:indicator_color="@color/accent"
+                android:layout_gravity="top|center_horizontal" />
 
 
-
-
-</LinearLayout>
+        </FrameLayout>
 
 
     </com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

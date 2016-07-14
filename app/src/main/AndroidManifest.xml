@@ -33,8 +33,12 @@
             android:parentActivityName=".Activity.MainActivity" />
         <activity android:name=".Activity.ViewPagerActivity" />
         <activity android:name=".Activity.NewsDetailActivity" />
-        <activity android:name=".Activity.GameReviewActivity" />
-        <activity android:name=".Activity.UserReviewActivity"></activity>
+        <activity android:name=".Activity.GameReviewActivity">
+
+        </activity>
+        <activity android:name=".Activity.UserReviewActivity" />
+        <activity android:name=".Activity.UserReviewDetailActivity" />
+        <activity android:name=".Activity.ImprovedWebViewActivity"></activity>
     </application>
 
 </manifest>

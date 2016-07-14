@@ -105,13 +105,14 @@
     <item name="colorControlActivated">@color/accent</item>
     <!--item text color-->
     <item name="textColorAlertDialogListItem">@color/white</item>
-    <!--buttons color-->
-    <item name="colorAccent">@color/accent</item>
-    <!--title and message color-->
-    <item name="android:textColorPrimary">@android:color/white</item>
-    <!--dialog background-->
-    <item name="android:windowBackground">@color/primary</item>
-</style>
+        <!--buttons color-->
+        <item name="colorAccent">@color/accent</item>
+        <!--title and message color-->
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/primary</item>
+
+
+    </style>
 
     <style name="MyCheckBox" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/white</item>
@@ -184,7 +185,7 @@
         <item name="android:layout_width">match_parent </item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">8dp</item>
-        <item name="android:textColor">@color/accent</item>
+        <item name="android:textColor">@color/primary</item>
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-thin|bold</item>
     </style>
@@ -193,8 +194,12 @@
         <item name="colorAccent">@color/primary</item>
     </style>
 
+    <style name="webviewToolbar" parent="MyToolbarLight">
+        <item name="colorControlNormal">@color/black</item>
+    </style>
 
-    <style name="CharacterTextStyle" parent="TextAppearance.AppCompat.Widget.Button">
+
+    <style name="CharacterTextStyle" parent="SubTitleText">
 
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -211,7 +216,11 @@
 
 
     <style name="webviewTitle">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="webviewSubtitle">
+        <item name="android:textSize">11sp</item>
     </style>
 
 </resources>

@@ -36,7 +36,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
-        android:background="@color/primary"
+        android:background="@color/accent"
         android:layout_below="@+id/news_heading"
         android:id="@+id/view2" />
 
@@ -47,26 +47,16 @@
         android:layout_margin="12dp"
         android:layout_below="@+id/news_heading"
         android:text="Date"
+        style="@style/TextStyle6"
         />
 
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="status"
-        android:textColor="@color/accent"
-        android:drawableLeft="@drawable/ic_check_black_24dp"
-        android:gravity="center"
-        android:layout_alignTop="@+id/news_date"
-        android:layout_centerHorizontal="true"
-        android:layout_alignBottom="@+id/news_date" />
 
     <ImageView
         android:id="@+id/web_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_open_in_browser_black_24dp"
-        android:layout_alignTop="@+id/status"
+        android:layout_alignBottom="@+id/news_date"
         android:layout_alignRight="@+id/news_heading"
         android:layout_alignEnd="@+id/news_heading" />
 

@@ -3,62 +3,61 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
+    <item android:title="Main">
+        <menu>
     <group android:checkableBehavior="single">
-
-        <item android:id="@+id/nav_home"
-            android:title="@string/home"
-            android:icon="@mipmap/ic_launcher"
-            >
-
-        </item>
-
 
         <item android:id="@+id/nav_mylist"
             android:icon="@mipmap/ic_launcher"
-            android:title="@string/List"
-            >
+            android:title="@string/List" />
 
 
-        </item>
 
             <item
                 android:id="@+id/nav_wiki"
                 android:icon="@mipmap/ic_launcher"
-                android:title="@string/Wiki"
-                >
-                </item>
+                android:title="@string/Wiki" />
+
+        <item
+            android:id="@+id/nav_home"
+            android:title="@string/characterwiki"
+            android:icon="@mipmap/ic_launcher" />
+
 
         <item
             android:id="@+id/nav_news"
             android:icon="@mipmap/ic_launcher"
-            android:title="@string/games_news">
+            android:title="@string/games_news" />
 
-        </item>
 
         <item
             android:id="@+id/nav_calender"
             android:icon="@mipmap/ic_launcher"
-            android:title="@string/games_calender">
+            android:title="@string/games_calender" />
 
-        </item>
 
 
 
         <item
             android:id="@+id/nav_trailer"
             android:icon="@mipmap/ic_launcher"
-            android:title="@string/game_trailer">
+            android:title="@string/game_trailer" />
 
-        </item>
 
 
     </group>
 
-<item android:title="@string/help_and_support">
-    <menu>
+        </menu>
 
-        <item
+    </item>
+
+    <item android:title="@string/help_and_support">
+
+    <menu>
+        <group android:checkableBehavior="single">
+
+
+            <item
             android:id="@+id/nav_settings"
             android:icon="@mipmap/ic_launcher"
             android:title="@string/Settings" />
@@ -77,8 +76,9 @@
 
         </item>
 
-    </menu>
+        </group>
 
+    </menu>
 
 </item>
 
