@@ -19,7 +19,9 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="searchViewStyle">@style/searchStyle</item>
         <item name="popupTheme">@style/popMenu</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
+
 
     <style name="popMenu" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:colorBackground">@color/white</item>
@@ -31,6 +33,8 @@
         <item name="searchViewStyle">@style/searchStyle</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="popupTheme">@style/popMenu</item>
+
+
     </style>
 
 
@@ -199,12 +203,13 @@
     </style>
 
 
-    <style name="CharacterTextStyle" parent="SubTitleText">
+    <style name="CharacterTextStyle" parent="TextAppearance.AppCompat">
 
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+
+        <item name="android:textColor">@color/primary_text</item>
 
     </style>
 

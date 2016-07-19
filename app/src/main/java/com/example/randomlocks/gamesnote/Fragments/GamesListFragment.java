@@ -71,7 +71,7 @@ public class GamesListFragment extends Fragment {
 
         viewPager = (ViewPager) fragmentActivity.findViewById(R.id.my_pager);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.GameListFragment));
 
 

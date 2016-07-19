@@ -3,6 +3,7 @@ package com.example.randomlocks.gamesnote.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
@@ -86,12 +87,12 @@ public class UserReviewDetailActivity extends AppCompatActivity {
             StringBuilder builder = new StringBuilder(description.length() + 100);
             String color;
             int night_mode = AppCompatDelegate.getDefaultNightMode();
-            if (night_mode == AppCompatDelegate.MODE_NIGHT_YES)
+            if (night_mode == AppCompatDelegate.MODE_NIGHT_YES) {
                 color = "white";
-            else
+            } else
                 color = "black";
 
-            builder.append("<HTML><HEAD><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:" + color + ";\">");
+            builder.append("<HTML><HEAD><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\">");
             builder.append(description);
             builder.append("</body></HTML>");
 
@@ -107,7 +108,9 @@ public class UserReviewDetailActivity extends AppCompatActivity {
                     return true;
                 }
             });
-            webView.loadDataWithBaseURL("file:///android_asset/", builder.toString().replaceAll("\\+", "%20"), "text/html", "UTF-8", null);
+            webView.loadDataWithBaseURL("file:///android_asst/", builder.toString().replaceAll("\\+", "%20"), "text/html", "UTF-8", null);
+            webView.setBackgroundColor(ContextCompat.getColor(this, R.color.webviewbackground));
+
 
 
         }

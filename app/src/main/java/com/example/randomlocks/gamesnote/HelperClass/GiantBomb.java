@@ -8,6 +8,7 @@ import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterf
 import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
+import com.example.randomlocks.gamesnote.Interface.GamesVideoInterface;
 import com.example.randomlocks.gamesnote.Interface.UserReviewInterface;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -54,6 +55,7 @@ public class GiantBomb {
     public static final String IMAGE_URL = "imageUrl";
     public static final String MODAL = "listModal";
     public static final String IS_GAME_REVIEW = "isGameReview";
+    public static String REDUCE_VIEW = "reduce_view";
 
 
     private GiantBomb() {
@@ -227,6 +229,7 @@ public class GiantBomb {
     private static GameReviewInterface gameReviewInterface = null;
     private static UserReviewInterface userReviewInterface = null;
     private static GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
+    private static GamesVideoInterface gamesVideoInterface = null;
 
 
     public static GameWikiListInterface createGameWikiService() {
@@ -271,6 +274,13 @@ public class GiantBomb {
             gameCharacterSearchWikiInterface = getRetrofit().create(GameCharacterSearchWikiInterface.class);
         }
         return gameCharacterSearchWikiInterface;
+    }
+
+    public static GamesVideoInterface createGameVideoService() {
+        if (gamesVideoInterface == null) {
+            gamesVideoInterface = getRetrofit().create(GamesVideoInterface.class);
+        }
+        return gamesVideoInterface;
     }
 
 

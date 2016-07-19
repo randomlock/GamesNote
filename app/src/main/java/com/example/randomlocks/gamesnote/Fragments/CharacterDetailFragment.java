@@ -139,6 +139,7 @@ public class CharacterDetailFragment extends Fragment {
            public void onResponse(Call<CharacterListModal> call, Response<CharacterListModal> response) {
                pacman.setVisibility(View.GONE);
                parentLayout.setVisibility(View.VISIBLE);
+
                characterDetailModal = response.body().results;
 
                if (imageUrl == null && characterDetailModal.image.mediumUrl != null) {
@@ -161,17 +162,16 @@ public class CharacterDetailFragment extends Fragment {
                if (characterDetailModal.description!=null) {
                    doc = Jsoup.parse(characterDetailModal.description);
                    Elements info = doc.getElementsByTag("p");
-                   Elements heading = doc.getElementsByTag("h2");
-                   StringBuilder builder = new StringBuilder();
                    if (info != null) {
+                       StringBuilder builder = new StringBuilder();
 
                        for (Element element : info) {
                            builder.append(element.text()).append("\n\n");
                        }
+                       mBigDescription.setText(builder.toString());
 
 
                    }
-                   mBigDescription.setText(builder);
                }
 
 
@@ -234,6 +234,7 @@ public class CharacterDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //TODO on savedinstance
     }
 
 

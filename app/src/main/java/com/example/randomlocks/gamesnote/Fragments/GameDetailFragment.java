@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.ListDialogFragment;
+import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -116,7 +118,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     FloatingActionsMenu floatingActionsMenu;
     com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton replaying,planning,dropped,playing,completed;
     String title;
-
+    AVLoadingIndicatorView pacman;
+    LinearLayout parentLayout;
 
     public GameDetailFragment() {
         // Required empty public constructor
@@ -224,6 +227,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         relativeLayout = (RelativeLayout) coordinatorLayout.findViewById(R.id.cover_layout);
         coverImage = (ImageView) relativeLayout.findViewById(R.id.cover_image);
         gameTitle = (TextView) relativeLayout.findViewById(R.id.game_title);
+        parentLayout = (LinearLayout) nestedScrollView.findViewById(R.id.parent_layout);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
@@ -231,7 +235,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
        recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
         review = (TextView) nestedScrollView.findViewById(R.id.review);
         userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
-
+        pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
 
         style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 0, getContext()) + 1);
 
@@ -449,6 +453,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
                 overviewProgress.setVisibility(View.GONE);
+                pacman.setVisibility(View.INVISIBLE);
 
                 Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
                         .setAction("RETRY", new View.OnClickListener() {
@@ -469,6 +474,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
     void fillData(final GameDetailModal gameDetailModal) {
         overviewProgress.setVisibility(View.GONE);
+        pacman.setVisibility(View.INVISIBLE);
+        parentLayout.setVisibility(View.VISIBLE);
+
 
         if (imageUrl == null && gameDetailModal.images.size() > 0) {
             Picasso.with(getContext()).load(gameDetailModal.images.first().mediumUrl).fit().centerCrop().into(appbarImage);

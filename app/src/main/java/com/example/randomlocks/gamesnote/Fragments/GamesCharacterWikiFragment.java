@@ -93,7 +93,10 @@ public class GamesCharacterWikiFragment extends Fragment {
         imageView = (ImageView) coordinator.findViewById(R.id.appbar_image);
 
 
-        Picasso.with(getContext()).load("http://images.popmatters.com/blog_art/m/max_payne_old.jpg").placeholder(R.drawable.headerbackground).fit().into(imageView);
+        Picasso.with(getContext()).load("http://images.popmatters.com/blog_art/m/max_payne_old.jpg").placeholder(R.drawable.headerbackground).fit().centerInside().into(imageView);
+
+
+
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);

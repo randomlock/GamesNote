@@ -120,14 +120,13 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
             fragment = (GameDetailFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("GameDetail");
             FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
 
-            fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl.get(getLayoutPosition()));
+           /* fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl.get(getLayoutPosition()));
             if (images != null) {
                 fragment.getArguments().putString(GameDetailFragment.IMAGE_URL, images.get(getLayoutPosition()).imageUrl);
             }
-            fragment.getArguments().putString(GameDetailFragment.NAME,stringList.get(getLayoutPosition()).name);
+            fragment.getArguments().putString(GameDetailFragment.NAME,stringList.get(getLayoutPosition()).name);*/
             ft.remove(fragment);
-            //GameDetailFragment.comingFromSimilarGamesAdapter=true;
-            fragment = GameDetailFragment.newInstance(apiUrl.get(getLayoutPosition()),stringList.get(getLayoutPosition()).name,images.get(getLayoutPosition()).imageUrl);
+            fragment = GameDetailFragment.newInstance(apiUrl.get(getLayoutPosition()), stringList.get(getLayoutPosition()).name, images != null ? images.get(getLayoutPosition()).imageUrl : null);
             ft.add(R.id.fragment_parent_layout, fragment, "GameDetail");
             ft.commit();
 

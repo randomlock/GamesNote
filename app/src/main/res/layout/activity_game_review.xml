@@ -131,8 +131,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reviewer :  "
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="20sp" />
+                    android:textColor="@color/primary_text_light"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/reviewer"
@@ -144,17 +144,17 @@
                     android:layout_toRightOf="@+id/reviewer_field"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/date_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Publish Date :  "
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:textColor="@color/primary_text_light"
                     android:layout_marginTop="12dp"
                     android:layout_below="@+id/reviewer_field"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/date"
@@ -168,7 +168,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_toRightOf="@+id/date_field"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
 
             </RelativeLayout>

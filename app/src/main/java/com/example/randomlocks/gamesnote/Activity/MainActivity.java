@@ -11,11 +11,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageUrlFragment;
@@ -42,11 +40,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private static final String FRAGMENT_KEY = "restored_fragment" ;
-    private Toolbar mytoolbar;
     public static final String KEY = "NAViGATION_SELECTED_ID"; //FOR SAVING MENU ITEM
     public static final String TITLE = "NAVIGATION_SELECTED_TITLE"; //FOR MENU TOOLBAR TITLE
     public static final String DEFAULT_TITLE = "Game Wiki";
-    private FrameLayout frameLayout;
     PicassoFrameLayout navHeaderLayout;
     public String mtitle;
     int mselectedId;
@@ -66,10 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         fragment = null;
-        frameLayout = (FrameLayout) findViewById(R.id.fragment_parent_layout);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigation = (NavigationView) findViewById(R.id.navigation_view);
-        mytoolbar = (Toolbar) findViewById(R.id.my_toolbar);
         View headerView = mNavigation.inflateHeaderView(R.layout.navigaion_header);
         navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
 
@@ -81,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onGlobalLayout() {
                     navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(),navHeaderLayout.getHeight()).centerInside().into(navHeaderLayout);
+                    Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().error(R.drawable.headerbackground).into(navHeaderLayout);
                 }
             });
         } else
@@ -89,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        setSupportActionBar(mytoolbar);
 
 
         mDrawableToggle = setupDrawerToggle(mDrawer);
@@ -97,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
 
-        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_trailer : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {

@@ -45,6 +45,9 @@
     <string name="no_result_found">No Result Found</string>
     <string name="list_fragment_title">Pick a game</string>
     <string name="characterwiki">Character Wiki</string>
+    <string name="GameVideoFragment">Game Videos</string>
+    <string name="title">Title</string>
+    <string name="time">time</string>
 
     <string-array name="hello">
         <item>"SDFsdf"</item>

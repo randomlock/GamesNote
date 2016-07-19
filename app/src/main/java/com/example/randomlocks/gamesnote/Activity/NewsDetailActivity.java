@@ -5,7 +5,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,9 +22,6 @@ import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallba
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 public class NewsDetailActivity extends AppCompatActivity {
 
@@ -85,10 +84,24 @@ public class NewsDetailActivity extends AppCompatActivity {
             title.setText(newsModal.title);
         }
 
-        Document doc =  Jsoup.parse(description);
+      /*  Document doc =  Jsoup.parse(description);
         doc.select("div[data-embed-type=video]").remove();
         doc.head().getElementsByTag("link").remove();
-        doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css");
+        doc.head().appendElement("link").attr("rel", "stylesheet").attr("type", "text/css").attr("href", "style.css");*/
+        StringBuilder builder = null;
+        if (newsModal.description != null) {
+            String color;
+            builder = new StringBuilder(description.length() + 100);
+            int night_mode = AppCompatDelegate.getDefaultNightMode();
+            if (night_mode == AppCompatDelegate.MODE_NIGHT_YES) {
+                color = "white";
+            } else
+                color = "black";
+
+            builder.append("<HTML><HEAD><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\">");
+            builder.append(description);
+            builder.append("</body></HTML>");
+        }
 
 
 
@@ -131,7 +144,10 @@ public class NewsDetailActivity extends AppCompatActivity {
                 return true;
             }
         });
-        webView.loadDataWithBaseURL("file:///android_asset/.", doc.toString(), "text/html", "UTF-8",null);
+        if (builder != null) {
+            webView.loadDataWithBaseURL("file:///android_asset/.", builder.toString(), "text/html", "UTF-8", null);
+        }
+        webView.setBackgroundColor(ContextCompat.getColor(this, R.color.webviewbackground));
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             webView.setBackgroundColor(Color.argb(1, 0, 0, 0));
@@ -183,7 +199,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
 
     void runBrowser(String url){
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).addDefaultShareMenuItem().build();
         CustomTabActivityHelper.openCustomTab(
                 this, customTabsIntent, Uri.parse(url), new WebViewFallback());
     }

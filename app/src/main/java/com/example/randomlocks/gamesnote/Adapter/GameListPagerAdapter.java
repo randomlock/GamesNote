@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.randomlocks.gamesnote.Fragments.GamesListPagerFragment;
+import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GamesListPagerFragment;
 
 /**
  * Created by randomlocks on 3/17/2016.

@@ -70,9 +70,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     Context context;
 
     public static final String LIMIT = "30";
-    private final String field_list = "api_detail_url,deck,expected_release_day,expected_release_month,expected_release_year,image,name,original_release_date,platforms";
-
-
 
 
     public GamesWikiFragment() {
@@ -90,6 +87,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         map.put(GiantBomb.FORMAT, "JSON");
         map.put(GiantBomb.LIMIT, LIMIT);
         map.put(GiantBomb.OFFSET, "0");
+        String field_list = "api_detail_url,deck,expected_release_day,expected_release_month,expected_release_year,image,name,original_release_date,platforms";
         map.put(GiantBomb.FIELD_LIST, field_list);
     }
 
@@ -300,7 +298,7 @@ progressBar.setVisibility(View.VISIBLE);
 
                 progressBar.setVisibility(View.GONE);
 
-                if(listModals.isEmpty() && recyclerView.getAdapter()!=null){
+                /*if(listModals.isEmpty() && recyclerView.getAdapter()!=null){
                     listModals = response.body().results;
                     adapter.swap(listModals);
                 } else if (listModals.isEmpty()) {
@@ -317,7 +315,35 @@ progressBar.setVisibility(View.VISIBLE);
                     errorText.setVisibility(View.VISIBLE);
                 } else {
                     errorText.setVisibility(View.GONE);
+                }*/
+
+
+                if (listModals.isEmpty()) {
+                    //coming for first time
+                    if (recyclerView.getAdapter() != null) {
+                        //search return 0 result
+                        listModals = response.body().results;
+
+                        if (listModals.isEmpty()) {
+                            errorText.setVisibility(View.VISIBLE);
+                        } else {
+                            errorText.setVisibility(View.GONE);
+                            adapter.swap(listModals);
+
+                        }
+                    } else {
+                        //adapter is null . setting for first time
+                        listModals = response.body().results;
+                        fillRecycler(listModals, null);
+                    }
+
+
+                } else {
+                    int size = adapter.getItemCount();
+                    listModals.addAll(response.body().results);
+                    adapter.notifyItemRangeInserted(size, listModals.size());
                 }
+
 
             }
 

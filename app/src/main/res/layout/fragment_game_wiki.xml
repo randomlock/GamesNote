@@ -23,6 +23,7 @@
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
+            android:theme="@style/MyToolbar"
             >
 
 
@@ -48,7 +49,7 @@
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"
                 android:layout_gravity="bottom"
-                android:layout_height="48dp"/>
+                android:layout_height="48dp" />
 
 
 
@@ -59,7 +60,6 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/MyToolbarLight"
                 app:layout_collapseMode="pin"
                 />
 

@@ -5,10 +5,12 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 
+import io.realm.RealmObject;
+
 /**
  * Created by randomlocks on 6/25/2016.
  */
-public class CharacterImage implements Parcelable {
+public class CharacterImage extends RealmObject implements Parcelable {
 
     @Expose
    public String mediumUrl;

@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.Fragments;
+package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
