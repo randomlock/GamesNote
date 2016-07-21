@@ -298,7 +298,7 @@ progressBar.setVisibility(View.VISIBLE);
 
                 progressBar.setVisibility(View.GONE);
 
-                /*if(listModals.isEmpty() && recyclerView.getAdapter()!=null){
+                if (listModals.isEmpty() && recyclerView.getAdapter() != null) {
                     listModals = response.body().results;
                     adapter.swap(listModals);
                 } else if (listModals.isEmpty()) {
@@ -315,10 +315,10 @@ progressBar.setVisibility(View.VISIBLE);
                     errorText.setVisibility(View.VISIBLE);
                 } else {
                     errorText.setVisibility(View.GONE);
-                }*/
+                }
 
 
-                if (listModals.isEmpty()) {
+            /*    if (listModals.isEmpty()) {
                     //coming for first time
                     if (recyclerView.getAdapter() != null) {
                         //search return 0 result
@@ -342,7 +342,7 @@ progressBar.setVisibility(View.VISIBLE);
                     int size = adapter.getItemCount();
                     listModals.addAll(response.body().results);
                     adapter.notifyItemRangeInserted(size, listModals.size());
-                }
+                }*/
 
 
             }

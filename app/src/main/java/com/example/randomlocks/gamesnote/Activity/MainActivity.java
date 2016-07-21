@@ -297,11 +297,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
 
         GamesNewsFragment gamesNewsFragment = (GamesNewsFragment) getSupportFragmentManager().findFragmentByTag("GamesNews");
+        GamesVideoFragment gamesVideoFragment = (GamesVideoFragment) getSupportFragmentManager().findFragmentByTag("GamesVideo");
 
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawers();
         } else if (gamesNewsFragment != null && gamesNewsFragment.mDrawer.isDrawerOpen(GravityCompat.END)) {
             gamesNewsFragment.mDrawer.closeDrawers();
+        } else if (gamesVideoFragment != null && gamesVideoFragment.mDrawer.isDrawerOpen(GravityCompat.END)) {
+            gamesVideoFragment.mDrawer.closeDrawers();
         } else
             super.onBackPressed();
 

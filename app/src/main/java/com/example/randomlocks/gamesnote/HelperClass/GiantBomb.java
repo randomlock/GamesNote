@@ -31,6 +31,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by randomlocks on 4/24/2016.
  */
 
+
+//TODO run restadapter and okhttp adatper in separate thread to remove skipped frame problem
+
 public class GiantBomb {
 
 
@@ -55,6 +58,8 @@ public class GiantBomb {
     public static final String IMAGE_URL = "imageUrl";
     public static final String MODAL = "listModal";
     public static final String IS_GAME_REVIEW = "isGameReview";
+    public static final String POSITION = "position";
+    public static final String VIDEO_TYPE = "video_type";
     public static String REDUCE_VIEW = "reduce_view";
 
 

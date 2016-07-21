@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ public class GamesVideoFragment extends Fragment {
     ViewPager viewPager;
     TabLayout tabLayout;
     CollapsingToolbarLayout mCollapsingToolbarLayout;
+    public DrawerLayout mDrawer;
+
 
 
 
@@ -50,10 +53,33 @@ public class GamesVideoFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) getView().findViewById(R.id.collapsing_toolbar_layout);
+        mDrawer = (DrawerLayout) getView().findViewById(R.id.drawer);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) mDrawer.findViewById(R.id.collapsing_toolbar_layout);
         toolbar = (Toolbar) mCollapsingToolbarLayout.findViewById(R.id.my_toolbar);
-        tabLayout = (TabLayout) getView().findViewById(R.id.my_tablayout);
-        viewPager = (ViewPager) getView().findViewById(R.id.my_pager);
+        tabLayout = (TabLayout) mDrawer.findViewById(R.id.my_tablayout);
+        viewPager = (ViewPager) mDrawer.findViewById(R.id.my_pager);
+
+        /****DRAWER LAYOUT ***/
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                } else {
+                    mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         /************* SETTING TOOLBAR *****************/
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -67,10 +93,5 @@ public class GamesVideoFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
     }
-
-
-
-
-
 
 }

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoOtherPagerAdapter;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoPagerFragment;
 
 /**
@@ -28,9 +29,9 @@ public class GameVideoPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return GameVideoPagerFragment.newInstance(position);
             case 1:
-                return GameVideoPagerFragment.newInstance(position);
+                return GameVideoOtherPagerAdapter.newInstance(position);
             case 2:
-                return GameVideoPagerFragment.newInstance(position);
+                return GameVideoOtherPagerAdapter.newInstance(position);
 
 
             default:

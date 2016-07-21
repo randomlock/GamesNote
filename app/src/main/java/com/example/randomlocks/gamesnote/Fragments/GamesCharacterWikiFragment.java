@@ -135,6 +135,9 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
 
+        modals.clear();
+        adapter.notifyDataSetChanged();
+
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }

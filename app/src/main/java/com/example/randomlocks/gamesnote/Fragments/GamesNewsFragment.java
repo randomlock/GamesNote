@@ -51,8 +51,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     private static final String MODAL = "news_modal" ;
     private static final String SCROLL_POSITION = "recycler_scroll_position" ;
     private static final String DEFAULT_TITLE = "GiantBomb";
-    public static final String KEY = "NAViGATION_SELECTED_ID"; //FOR SAVING MENU ITEM
-    public static final String TITLE = "NAVIGATION_SELECTED_TITLE"; //FOR MENU TOOLBAR TITLE
+    public static final String KEY = "navigation_news_id"; //FOR SAVING MENU ITEM
+    public static final String TITLE = "navigation_news_title"; //FOR MENU TOOLBAR TITLE
     public DrawerLayout mDrawer;
     NavigationView mNavigation;
     RecyclerView recyclerView;
@@ -64,7 +64,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     LinearLayoutManager layoutManager;
     public String URL = "http://www.eurogamer.net/?format=rss";
     String mTitle;
-    int mselectedId;
+    int mSelectedId;
 
 
 
@@ -101,10 +101,10 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mselectedId = SharedPreference.getFromSharedPreferences(KEY, R.id.nav_giantbomb, getContext());
-        mTitle = SharedPreference.getFromSharedPreferences(TITLE, "GiantBomb", getContext());
-        mNavigation.setCheckedItem(mselectedId);
-        selectDrawer(mselectedId, mTitle);
+        mSelectedId = SharedPreference.getFromSharedPreferences(KEY, R.id.nav_giantbomb, getContext());
+        mTitle = SharedPreference.getFromSharedPreferences(TITLE, getResources().getString(R.string.giantbomb), getContext());
+        mNavigation.setCheckedItem(mSelectedId);
+        selectDrawer(mSelectedId, mTitle);
 
 
         if(savedInstanceState!=null){
@@ -254,9 +254,9 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         item.setChecked(true);
-        mselectedId = item.getItemId();
+        mSelectedId = item.getItemId();
         mTitle = item.getTitle().toString();
-        selectDrawer(mselectedId, mTitle);
+        selectDrawer(mSelectedId, mTitle);
 
         changeNewsSource();
 
@@ -386,7 +386,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         super.onPause();
         Context context = getContext();
         if (context != null) {
-            SharedPreference.saveToSharedPreference(KEY, mselectedId, context);
+            SharedPreference.saveToSharedPreference(KEY, mSelectedId, context);
             SharedPreference.saveToSharedPreference(TITLE, mTitle, context);
         }
     }

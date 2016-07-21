@@ -7,6 +7,7 @@ import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage
 import com.google.gson.annotations.Expose;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by randomlocks on 7/18/2016.
@@ -19,6 +20,7 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     @Expose
     public String lowUrl;
     @Expose
+    @PrimaryKey
     public int id;
     @Expose
     public int lengthSeconds;
@@ -34,6 +36,13 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     public String videoType;
     @Expose
     public String youtubeId;
+
+    public static final int LIKE_TYPE = 1;
+    public static final int WATCH_LATER_TYPE = 2;
+
+    public boolean isFavorite = false;
+    public boolean isWatchLater = false;
+
 
 
     @Override

@@ -48,6 +48,27 @@
     <string name="GameVideoFragment">Game Videos</string>
     <string name="title">Title</string>
     <string name="time">time</string>
+    <string name="reviews">Reviews</string>
+    <string name="quick_looks">Quick Looks</string>
+    <string name="events">Events</string>
+    <string name="features">Features</string>
+    <string name="all_video">All Videos</string>
+    <string name="tang">TANG</string>
+    <string name="endurance_run">Endurance Run</string>
+    <string name="premium">Premium</string>
+    <string name="extra_life">Extra Life</string>
+    <string name="encyclopedia">Encyclopedia Bombastica</string>
+    <string name="unfinished">Unfinished</string>
+    <string name="metal_gear">Metal Gear Scanlon</string>
+    <string name="vinny">VinnyVania</string>
+    <string name="breaking_bad">Breaking Brad</string>
+    <string name="best">Best of Giant Bomb</string>
+    <string name="game_tapes">Game Tapes</string>
+    <string name="kerbal">Kerbal: Project B.E.A.S.T</string>
+    <string name="main">Main</string>
+    <string name="giantbomb_special">Giantbomb Speical</string>
+    <string name="compact_view">Compact view</string>
+    <string name="reduce_view">Card view</string>
 
     <string-array name="hello">
         <item>"SDFsdf"</item>

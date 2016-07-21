@@ -2,9 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
+    <!--it should be always at first place-->
     <item
         android:id="@+id/view"
-        android:title="Reduce View"
+        android:title="@string/compact_view"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/nav_open"
+        android:title="Video Categories"
+        android:icon="@drawable/ic_keyboard_arrow_left_white_24dp"
+        app:showAsAction="ifRoom" />
+
 </menu>
