@@ -53,17 +53,17 @@ import retrofit2.Response;
  */
 public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTextListener, SearchFilterFragment.SearchFilterInterface {
 
-    private static final String MODAL = "list_modal" ;
-    private static final String SCROLL_POSITION = "recyclerScrollPosition" ;
+    private static final String MODAL = "list_modal";
+    private static final String SCROLL_POSITION = "recyclerScrollPosition";
     ViewPager viewPager;
     Toolbar toolbar;
     RecyclerView recyclerView;
     AVLoadingIndicatorView progressBar;
     ConsistentLinearLayoutManager manager;
-    List<GameWikiModal> listModals=null;
+    List<GameWikiModal> listModals = null;
     GameWikiAdapter adapter;
     ObjectAnimator animation;
-     Map<String,String> map;
+    Map<String, String> map;
     GameWikiListInterface gameWikiListInterface;
     TextView errorText;
     CoordinatorLayout coordinatorLayout;
@@ -104,7 +104,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
         errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
 
-        return v ;
+        return v;
     }
 
     @Override
@@ -123,8 +123,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
 
 
         /*************** SAVE INSTANCE *************************/
@@ -168,8 +166,8 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
             public void onLoadMore(int current_page) {
 
                 int offset = Integer.parseInt(map.get(GiantBomb.OFFSET));
-                offset+=Integer.parseInt(LIMIT);
-                map.put(GiantBomb.OFFSET,String.valueOf(offset));
+                offset += Integer.parseInt(LIMIT);
+                map.put(GiantBomb.OFFSET, String.valueOf(offset));
 
                 getGameWiki(gameWikiListInterface, map);
 
@@ -182,11 +180,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
 
         /*************************TOOLBAR PROPERTIES************************************/
-
-
-
-
-
 
 
     }
@@ -202,32 +195,28 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.game_wiki_menu, menu);
-       getSearchManager(context, menu, false);
+        getSearchManager(context, menu, false);
     }
-
-
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
-            case android.R.id.home :
+            case android.R.id.home:
                 getActivity().onBackPressed();
-                return true ;
+                return true;
 
-            case R.id.search :
-
-
+            case R.id.search:
 
 
                 return true;
 
-            case R.id.filter :
+            case R.id.filter:
 
                 SearchFilterFragment filterFragment = SearchFilterFragment.newInstance();
-                filterFragment.setTargetFragment(this,0);
-                filterFragment.show(getActivity().getSupportFragmentManager(),"seach filter");
+                filterFragment.setTargetFragment(this, 0);
+                filterFragment.show(getActivity().getSupportFragmentManager(), "seach filter");
                 return true;
 
             default:
@@ -238,17 +227,14 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     }
 
 
-
-
-
-
-
-    /*********************** SEARCH MANAGER FUNCTION ********************************/
+    /***********************
+     * SEARCH MANAGER FUNCTION
+     ********************************/
 
 
     public void getSearchManager(final Context context, Menu menu, boolean isDefaultIconified) {
 
-        SearchManager searchManager = (SearchManager)context. getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity) context).getComponentName()));
@@ -275,22 +261,20 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
             }
         }); */
 
-   searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextListener(this);
 
 
     }
 
 
+    /*****************************
+     * ACTUAL ASYNCHRONOUS API CALL
+     ******************************/
 
 
+    public void getGameWiki(final GameWikiListInterface gameWikiListInterface, final Map<String, String> map) {
 
-
-/***************************** ACTUAL ASYNCHRONOUS API CALL ******************************/
-
-
-    public void getGameWiki(final GameWikiListInterface gameWikiListInterface, final Map<String,String> map){
-
-progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
 
         gameWikiListInterface.getResult(map).enqueue(new Callback<GameWikiListModal>() {
             @Override
@@ -363,21 +347,20 @@ progressBar.setVisibility(View.VISIBLE);
         });
 
 
-
     }
 
 
     @Override
     public boolean onQueryTextSubmit(String query) {
 
-        String field = "name:"+query;
-        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(),context);
+        String field = "name:" + query;
+        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), context);
 
-            map.put(GiantBomb.FIELD,field);
-            map.put(GiantBomb.OFFSET, "0");
+        map.put(GiantBomb.FIELD, field);
+        map.put(GiantBomb.OFFSET, "0");
 
         listModals.clear();
-        if(errorText.getVisibility()==View.VISIBLE){
+        if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
 
@@ -395,40 +378,44 @@ progressBar.setVisibility(View.VISIBLE);
     @Override
     public void onSelect(int which, boolean asc) {
 
-        List<String> arrayList =  Arrays.asList(context.getResources().getStringArray(R.array.search_filter));
+        List<String> arrayList = Arrays.asList(context.getResources().getStringArray(R.array.search_filter));
 
-    String sort = sortValue(which);
+        String sort = sortValue(which);
 
-        if(!asc){
-            sort+=":desc";
+        if (!asc) {
+            sort += ":desc";
         }
 
-        map.put(GiantBomb.SORT,sort);
-        map.put(GiantBomb.OFFSET,"0");
+        map.put(GiantBomb.SORT, sort);
+        map.put(GiantBomb.OFFSET, "0");
         listModals.clear();
         Toaster.make(context, map.toString());
 
-        getGameWiki(gameWikiListInterface,map);
-
+        getGameWiki(gameWikiListInterface, map);
 
 
     }
 
-    String sortValue(int which){
+    String sortValue(int which) {
 
-        switch (which){
+        switch (which) {
 
-            case 0 : return "original_release_date";
+            case 0:
+                return "original_release_date";
 
-            case 1 : return  "date_added";
+            case 1:
+                return "date_added";
 
-            case 2 : return "date_last_updated";
+            case 2:
+                return "date_last_updated";
 
-            case 3 : return "number_of_user_reviews";
+            case 3:
+                return "number_of_user_reviews";
 
-            case 4 :
+            case 4:
 
-            default: return "none";
+            default:
+                return "none";
 
 
         }
@@ -440,9 +427,8 @@ progressBar.setVisibility(View.VISIBLE);
         super.onSaveInstanceState(outState);
 
 
-            outState.putParcelableArrayList(MODAL, new ArrayList<>(listModals));
-            outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
-
+        outState.putParcelableArrayList(MODAL, new ArrayList<>(listModals));
+        outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
 
 
     }

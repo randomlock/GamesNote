@@ -16,8 +16,7 @@ public interface GameCharacterInterface {
 
 
     @GET("character/{id}")
-    Call<CharacterListModal> getResult(@Path("id") String gameId , @QueryMap Map<String,String> options);
-
+    Call<CharacterListModal> getResult(@Path("id") String gameId, @QueryMap Map<String, String> options);
 
 
 }

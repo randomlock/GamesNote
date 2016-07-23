@@ -20,7 +20,7 @@ public class CharacterGamesImage extends RealmObject {
         this.name = name;
     }
 
-    public CharacterGamesImage(){
+    public CharacterGamesImage() {
 
     }
 }

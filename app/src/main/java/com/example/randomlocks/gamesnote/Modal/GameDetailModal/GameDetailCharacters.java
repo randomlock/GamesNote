@@ -7,13 +7,12 @@ import io.realm.RealmObject;
 /**
  * Created by randomlocks on 5/29/2016.
  */
-public class GameDetailCharacters extends RealmObject{
+public class GameDetailCharacters extends RealmObject {
 
     @Expose
     public String apiDetailUrl;
     @Expose
     public String name;
-
 
 
     @Override

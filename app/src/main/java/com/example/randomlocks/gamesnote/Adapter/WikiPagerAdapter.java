@@ -20,19 +20,16 @@ import java.util.ArrayList;
 public class WikiPagerAdapter extends PagerAdapter {
 
 
-
-Context context;
+    Context context;
     int count;
-private ImageView imageView;
+    private ImageView imageView;
     ArrayList<String> images;
 
-    public WikiPagerAdapter(Context context,int count,ArrayList<String> images){
+    public WikiPagerAdapter(Context context, int count, ArrayList<String> images) {
         this.context = context;
         this.count = count;
         this.images = new ArrayList<>(images);
     }
-
-
 
 
     @Override
@@ -58,7 +55,7 @@ private ImageView imageView;
         String imageUrl = images.get(position);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view =  inflater.inflate(R.layout.viewpager_wiki_image, container, false);
+        View view = inflater.inflate(R.layout.viewpager_wiki_image, container, false);
         imageView = (ImageView) view.findViewById(R.id.image);
         Picasso.with(context).load(imageUrl).fit().centerCrop().into(imageView, new Callback() {
             @Override

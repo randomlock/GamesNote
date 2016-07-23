@@ -8,7 +8,7 @@ public class BottomSheetImage {
     public int imageResource;
     public String title;
 
-    public BottomSheetImage(int imageResource, String title){
+    public BottomSheetImage(int imageResource, String title) {
 
         this.imageResource = imageResource;
         this.title = title;

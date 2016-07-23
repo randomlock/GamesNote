@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.realm.Realm;
+import io.realm.RealmAsyncTask;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,7 +51,7 @@ import retrofit2.Response;
  * Created by randomlocks on 7/19/2016.
  */
 
-//TODO EDIT TEXT FIX for keyboard and cursor
+//TODO EDIT TEXT FIX for keyboard and cursor . Cancel the realmasynctask if query is not completed
 
 public class GameVideoPagerFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -68,6 +69,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     boolean isReduced = false, isAllVideo = false;
     AVLoadingIndicatorView pacman;
     Realm realm;
+    RealmAsyncTask realmAsyncTask;
     public DrawerLayout mDrawer;
     NavigationView mNavigation;
     String mTitle;
@@ -127,7 +129,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         mNavigation.setNavigationItemSelectedListener(this);
 
 
-
         if (savedInstanceState != null) {
             listModals = savedInstanceState.getParcelableArrayList(MODAL);
             fillRecyclerView(listModals, savedInstanceState.getParcelable(SCROLL_POSITION));
@@ -177,15 +178,16 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         });
 
 
-
     }
 
 
     private void performSearch(String text) {
 
         InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
-        listModals.clear();
-        adapter.notifyDataSetChanged();
+        if (listModals != null) {
+            listModals.clear();
+            adapter.notifyDataSetChanged();
+        }
 
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
@@ -369,23 +371,42 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     }
 
     private void deleteFromRealm(final GamesVideoModal modal) {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(GamesVideoModal.class).equalTo("id", modal.id).findFirst().deleteFromRealm();
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toaster.make(getContext(), "Deleted");
 
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                Toaster.make(getContext(), error.toString());
-            }
-        });
+        // if its in favourite or watch later then dont delete , just update
+        if (modal.isFavorite || modal.isWatchLater) {
+            realmAsyncTask = realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.copyToRealmOrUpdate(modal);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Toaster.make(getContext(), "Deleted");
+                }
+            });
+        } else {  // if not in fav and watch later then delete
+            realmAsyncTask = realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.where(GamesVideoModal.class).equalTo("id", modal.id).findFirst().deleteFromRealm();
+                    Log.d("tag", realm.where(GamesVideoModal.class).findAll().size() + "");
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Toaster.make(getContext(), "Deleted");
+
+                }
+            }, new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    Toaster.make(getContext(), error.toString());
+                }
+            });
+        }
+
+
     }
 
     private void writeToRealm(final GamesVideoModal modal, final int viewId) {
@@ -493,6 +514,10 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             SharedPreference.saveToSharedPreference(VIDEO_TITLE, mTitle, context);
         }
 
+        if (realm != null && realm.isInTransaction()) {
+            realm.cancelTransaction();
+        }
+
     }
 
 
@@ -504,6 +529,15 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         }
         if (recyclerView.getLayoutManager() != null) {
             outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
+        }
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (realmAsyncTask != null && !realmAsyncTask.isCancelled()) {
+            realmAsyncTask.cancel();
         }
     }
 
@@ -539,9 +573,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             getGameVideos(gamesVideoInterface, map);
         }
     }
-
-
-
 
 
 }

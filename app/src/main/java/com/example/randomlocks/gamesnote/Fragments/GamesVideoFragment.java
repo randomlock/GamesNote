@@ -30,8 +30,6 @@ public class GamesVideoFragment extends Fragment {
     public DrawerLayout mDrawer;
 
 
-
-
     public GamesVideoFragment() {
         // Required empty public constructor
     }

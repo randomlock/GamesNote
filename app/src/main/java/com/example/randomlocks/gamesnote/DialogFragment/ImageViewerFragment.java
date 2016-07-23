@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by randomlocks on 4/28/2016.
  */
-public class ImageViewerFragment extends DialogFragment   {
+public class ImageViewerFragment extends DialogFragment {
 
     ImageView imageView;
     ProgressBar progressBar;
@@ -29,13 +29,13 @@ public class ImageViewerFragment extends DialogFragment   {
     String mediumImageUrl;
 
     public static final String SMAll_IMAGE_URL = "smallURL";
-    public static final String MEDIUM_IMAGE_URL="mediumURL";
+    public static final String MEDIUM_IMAGE_URL = "mediumURL";
 
     public static final ImageViewerFragment newInstance(String smallImageUrl, String MediumImageUrl) {
 
         Bundle args = new Bundle();
-        args.putString(SMAll_IMAGE_URL,smallImageUrl);
-        args.putString(MEDIUM_IMAGE_URL,MediumImageUrl);
+        args.putString(SMAll_IMAGE_URL, smallImageUrl);
+        args.putString(MEDIUM_IMAGE_URL, MediumImageUrl);
         ImageViewerFragment fragment = new ImageViewerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -52,14 +52,14 @@ public class ImageViewerFragment extends DialogFragment   {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dialog_image_viewer,container,false);
+        View v = inflater.inflate(R.layout.dialog_image_viewer, container, false);
         getDialog().requestWindowFeature(STYLE_NO_TITLE);
         setCancelable(true);
         getDialog().setCanceledOnTouchOutside(true);
 
 
         imageView = (ImageView) v.findViewById(R.id.imageview);
-        hdButton = (Button)v.findViewById(R.id.button);
+        hdButton = (Button) v.findViewById(R.id.button);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
         Picasso.with(getContext()).load(smallImageUrl).fit().centerCrop().into(imageView, new Callback() {
             @Override
@@ -69,7 +69,7 @@ public class ImageViewerFragment extends DialogFragment   {
 
             @Override
             public void onError() {
-                Toaster.make(getContext(),"cannot load image");
+                Toaster.make(getContext(), "cannot load image");
             }
         });
 
@@ -86,11 +86,6 @@ public class ImageViewerFragment extends DialogFragment   {
 
             }
         });
-
-
-
-
-
 
 
         return v;

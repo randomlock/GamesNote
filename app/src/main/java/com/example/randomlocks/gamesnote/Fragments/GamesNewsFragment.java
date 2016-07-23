@@ -48,8 +48,8 @@ import okhttp3.Response;
  */
 public class GamesNewsFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String MODAL = "news_modal" ;
-    private static final String SCROLL_POSITION = "recycler_scroll_position" ;
+    private static final String MODAL = "news_modal";
+    private static final String SCROLL_POSITION = "recycler_scroll_position";
     private static final String DEFAULT_TITLE = "GiantBomb";
     public static final String KEY = "navigation_news_id"; //FOR SAVING MENU ITEM
     public static final String TITLE = "navigation_news_title"; //FOR MENU TOOLBAR TITLE
@@ -65,7 +65,6 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     public String URL = "http://www.eurogamer.net/?format=rss";
     String mTitle;
     int mSelectedId;
-
 
 
     public GamesNewsFragment() {
@@ -97,7 +96,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         layoutManager = new LinearLayoutManager(getContext());
         /****************** toolbar ************************/
 
-        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -107,27 +106,23 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         selectDrawer(mSelectedId, mTitle);
 
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             modals = savedInstanceState.getParcelableArrayList(MODAL);
-            loadRecycler(modals,savedInstanceState.getParcelable(SCROLL_POSITION));
-        }
-
-        else  {
-            if (modals==null) {
-
+            loadRecycler(modals, savedInstanceState.getParcelable(SCROLL_POSITION));
+        } else {
+            if (modals == null) {
 
 
                 progressBar.setVisibility(View.VISIBLE);
 
 
-
                 try {
                     runOkHttp();
                 } catch (IOException e) {
-                    Toaster.make(getContext(),"connectivity problem");
+                    Toaster.make(getContext(), "connectivity problem");
                 }
-            }else {
-                loadRecycler(modals,null);
+            } else {
+                loadRecycler(modals, null);
             }
         }
 
@@ -137,14 +132,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     }
 
 
-
-
-
-    public  void runOkHttp() throws IOException {
-
-
-
-
+    public void runOkHttp() throws IOException {
 
 
         GiantBomb.getHttpClient().newCall(GiantBomb.getRequest(URL)).enqueue(new Callback() {
@@ -186,10 +174,9 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                           loadRecycler(modals,null);
+                            loadRecycler(modals, null);
                         }
                     });
-
 
 
                 } catch (XmlPullParserException e) {
@@ -198,7 +185,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                         @Override
                         public void run() {
                             progressBar.setVisibility(View.GONE);
-                            Toaster.make(getContext(),"Unknown Error . Contact Lord kratos");
+                            Toaster.make(getContext(), "Unknown Error . Contact Lord kratos");
                         }
                     });
 
@@ -207,16 +194,15 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         });
 
 
-
     }
 
     private void loadRecycler(List<NewsModal> modals, Parcelable parcelable) {
 
-        if (progressBar.getVisibility()==View.VISIBLE) {
+        if (progressBar.getVisibility() == View.VISIBLE) {
             progressBar.setVisibility(View.GONE);
         }
         recyclerView.setLayoutManager(layoutManager);
-        if (parcelable!=null) {
+        if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
         gameNewsAdapter = new GameNewsAdapter(modals, getContext());
@@ -234,16 +220,15 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
-            case android.R.id.home :
+            case android.R.id.home:
                 getActivity().onBackPressed();
-                return true ;
+                return true;
 
             case R.id.drawer_right:
 
                 mDrawer.openDrawer(GravityCompat.END);
-
 
 
         }
@@ -375,9 +360,11 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Toaster.make(getContext(),"coming here");
-        outState.putParcelableArrayList(MODAL, new ArrayList<>(modals));
-        outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
+        Toaster.make(getContext(), "coming here");
+        if (modals != null) {
+            outState.putParcelableArrayList(MODAL, new ArrayList<>(modals));
+            outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
+        }
 
     }
 

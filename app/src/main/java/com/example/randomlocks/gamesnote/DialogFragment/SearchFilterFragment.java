@@ -23,11 +23,11 @@ public class SearchFilterFragment extends DialogFragment {
     boolean isAscending;
     CheckBox checkbox;
     View view;
-    SearchFilterInterface searchFilterInterface=null;
+    SearchFilterInterface searchFilterInterface = null;
     int which_one;
 
 
-    public interface SearchFilterInterface{
+    public interface SearchFilterInterface {
 
         void onSelect(int which, boolean asc);
     }
@@ -49,8 +49,8 @@ public class SearchFilterFragment extends DialogFragment {
 
         try {
             searchFilterInterface = (SearchFilterInterface) getTargetFragment();
-        } catch (Exception e){
-            Toaster.make(getContext(),"interface cast exception");
+        } catch (Exception e) {
+            Toaster.make(getContext(), "interface cast exception");
         }
 
     }
@@ -59,30 +59,29 @@ public class SearchFilterFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH,4,getContext());
-        isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING,true,getContext());
+        which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 4, getContext());
+        isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING, true, getContext());
     }
-
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        view = getActivity().getLayoutInflater().inflate(R.layout.search_option_layout,null);
+        view = getActivity().getLayoutInflater().inflate(R.layout.search_option_layout, null);
 
-       return new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
+        return new AlertDialog.Builder(getContext(), R.style.MyDialogTheme)
                 .setCancelable(true)
                 .setTitle("Sort Result")
 
                 .setSingleChoiceItems(getResources().getStringArray(R.array.search_filter), which_one, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(which == which_one )
+                        if (which == which_one)
                             dismiss();
 
-                        SharedPreference.saveToSharedPreference(GiantBomb.WHICH,which,getContext());
-                        SharedPreference.saveToSharedPreference(GiantBomb.ASCENDING,!checkbox.isChecked(),getContext());
+                        SharedPreference.saveToSharedPreference(GiantBomb.WHICH, which, getContext());
+                        SharedPreference.saveToSharedPreference(GiantBomb.ASCENDING, !checkbox.isChecked(), getContext());
                         searchFilterInterface.onSelect(which, !checkbox.isChecked());
                         dismiss();
                     }

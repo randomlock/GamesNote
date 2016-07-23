@@ -13,9 +13,17 @@ import io.realm.RealmObject;
 public class CharacterImage extends RealmObject implements Parcelable {
 
     @Expose
-   public String mediumUrl;
+    public String mediumUrl;
     @Expose
     public String thumbUrl;
+
+    public CharacterImage() {
+    }
+
+    public CharacterImage(String mediumUrl, String thumbUrl) {
+        this.mediumUrl = mediumUrl;
+        this.thumbUrl = thumbUrl;
+    }
 
 
     @Override
@@ -27,9 +35,6 @@ public class CharacterImage extends RealmObject implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.mediumUrl);
         dest.writeString(this.thumbUrl);
-    }
-
-    public CharacterImage() {
     }
 
     protected CharacterImage(Parcel in) {

@@ -11,9 +11,9 @@ import com.google.gson.annotations.Expose;
 public class FirstAppearance implements Parcelable {
 
     @Expose
-   public String apiDetailUrl;
+    public String apiDetailUrl;
     @Expose
-   public String name;
+    public String name;
 
     @Override
     public int describeContents() {

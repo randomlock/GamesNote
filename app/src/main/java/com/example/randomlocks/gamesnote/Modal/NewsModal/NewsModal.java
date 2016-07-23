@@ -17,14 +17,14 @@ import java.util.List;
  */
 public class NewsModal implements Parcelable {
 
-    public   String title;
-    public   String link;
-    public   String description;
+    public String title;
+    public String link;
+    public String description;
     public String pubDate;
     public String content;
     public boolean isClicked;
 
-    public NewsModal(String title, String link, String description, String pubDate,String content) {
+    public NewsModal(String title, String link, String description, String pubDate, String content) {
         this.title = title;
         this.link = link;
         this.description = description;
@@ -32,7 +32,6 @@ public class NewsModal implements Parcelable {
         this.content = content;
         isClicked = false;
     }
-
 
 
     public NewsModal() {
@@ -49,16 +48,14 @@ public class NewsModal implements Parcelable {
             parser.nextTag();
             return readFeed(parser);
         } finally {
-           // in.close();
+            // in.close();
         }
     }
 
     private List<NewsModal> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List<NewsModal> entries = new ArrayList<>();
 
-        parser.require(XmlPullParser.START_TAG, null,"rss");
-
-
+        parser.require(XmlPullParser.START_TAG, null, "rss");
 
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -68,31 +65,27 @@ public class NewsModal implements Parcelable {
             String name = parser.getName();
 
 
-            if(name.equalsIgnoreCase("channel")){
+            if (name.equalsIgnoreCase("channel")) {
 
                 while (true) {
 
                     int event = parser.next();
 
-                    if(event==XmlPullParser.START_TAG && parser.getName().equals("item")){
+                    if (event == XmlPullParser.START_TAG && parser.getName().equals("item")) {
                         entries.add(readEntry(parser));
 
-                    }
-
-                    else if(event==XmlPullParser.END_TAG && parser.getName().equals("channel")){
+                    } else if (event == XmlPullParser.END_TAG && parser.getName().equals("channel")) {
                         break;
                     }
 
                 }
 
 
-
-
-            }else {
+            } else {
                 skip(parser);
             }
 
-            }
+        }
 
 
         return entries;
@@ -139,7 +132,7 @@ public class NewsModal implements Parcelable {
                     break;
             }
         }
-        return new NewsModal(title,link,description,pubDate,content);
+        return new NewsModal(title, link, description, pubDate, content);
     }
 
 
@@ -193,8 +186,6 @@ public class NewsModal implements Parcelable {
     }
 
 
-
-
     private String readPubDate(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, "pubDate");
         String summary = readText(parser);
@@ -204,7 +195,7 @@ public class NewsModal implements Parcelable {
 
     private String readMediaContent(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, "media:content");
-        String summary = parser.getAttributeValue(null,"url");
+        String summary = parser.getAttributeValue(null, "url");
         parser.nextTag();
         return summary;
     }

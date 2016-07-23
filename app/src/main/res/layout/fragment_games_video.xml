@@ -75,7 +75,7 @@
                             android:singleLine="true"
                             android:drawableRight="@drawable/ic_clear_black_18dp"
                             android:drawableEnd="@drawable/ic_clear_black_18dp"
-                            android:textColor="#000"
+                            android:textColor="?android:attr/textColorPrimary"
                             android:imeOptions="actionSearch"
                             android:inputType="text" />
 

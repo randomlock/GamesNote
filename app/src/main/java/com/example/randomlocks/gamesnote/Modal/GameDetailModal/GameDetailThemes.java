@@ -9,14 +9,14 @@ import io.realm.RealmObject;
  */
 public class GameDetailThemes extends RealmObject {
 
-   @Expose
-   public String apiDetailUrl ;
-   @Expose
-   public String name;
+    @Expose
+    public String apiDetailUrl;
+    @Expose
+    public String name;
 
-   @Override
-   public String toString() {
-      return name;
-   }
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }

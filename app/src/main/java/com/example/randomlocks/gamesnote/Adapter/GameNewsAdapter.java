@@ -29,7 +29,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     List<NewsModal> modals;
     Context context;
 
-    public GameNewsAdapter(List<NewsModal> modals,Context context) {
+    public GameNewsAdapter(List<NewsModal> modals, Context context) {
         this.modals = modals;
         this.context = context;
     }
@@ -38,7 +38,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     @Override
     public MyNewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.custom_game_news,parent,false);
+        View v = inflater.inflate(R.layout.custom_game_news, parent, false);
         return new MyNewsHolder(v);
     }
 
@@ -47,7 +47,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     public void onBindViewHolder(MyNewsHolder holder, int position) {
         NewsModal newsModal = modals.get(position);
         holder.heading.setText(newsModal.title);
-        if (newsModal.content!=null) {
+        if (newsModal.content != null) {
             Picasso.with(context).load(newsModal.content).fit().into(holder.image);
         } else {
             Document document = Jsoup.parse(newsModal.description);
@@ -92,7 +92,6 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         ImageView image;
 
 
-
         public MyNewsHolder(View itemView) {
             super(itemView);
             heading = (TextView) itemView.findViewById(R.id.news_heading);
@@ -106,7 +105,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         public void onClick(View v) {
             NewsModal newsModal = modals.get(getLayoutPosition());
             Intent intent = new Intent(context, NewsDetailActivity.class);
-            intent.putExtra("DATA",newsModal);
+            intent.putExtra("DATA", newsModal);
             context.startActivity(intent);
 
         }

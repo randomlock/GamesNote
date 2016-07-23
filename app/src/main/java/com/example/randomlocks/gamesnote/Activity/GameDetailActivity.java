@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
+import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragmentDELETE;
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.R;
@@ -23,20 +23,13 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         setContentView(R.layout.activity_game_detail);
         fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("GameDetail");
-        if(fragment == null) {
+        if (fragment == null) {
             fragment = GameDetailFragment.newInstance(getIntent().getStringExtra(GameDetailFragment.API_URL), getIntent().getStringExtra(GameDetailFragment.NAME), getIntent().getStringExtra(GameDetailFragment.IMAGE_URL));
         }
-            fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "GameDetail");
 
         fragmentTransaction.commit();
-
-        
-
-
-
-
-
 
 
     }
@@ -69,19 +62,23 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         super.finish();
     }
 
-    public void startCharacterFragment(String apiUrl, String imageUrl) {
+    public void startCharacterActivity(String apiUrl, String imageUrl) {
 
         Fragment fragment = fragmentManager.findFragmentByTag("characterDetail");
 
-        if(fragment==null) {
-            fragment = CharacterDetailFragment.newInstance(apiUrl, imageUrl);
+        if (fragment == null) {
+            fragment = CharacterDetailFragmentDELETE.newInstance(apiUrl, imageUrl);
         }
-            fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "characterDetail");
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
 
+       /* Intent intent = new Intent(this,CharacterDetailActivity.class);
+        intent.putExtra(GiantBomb.API_URL,apiUrl);
+        intent.putExtra(GiantBomb.IMAGE_URL,imageUrl);
+        startActivity(intent);*/
 
 
     }
@@ -91,9 +88,9 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
         Fragment fragment = fragmentManager.findFragmentByTag("GameDetail");
 
-        if(fragment!=null){
-            fragment.getArguments().putString(GameDetailFragment.API_URL,apiUrl);
-            fragment.getArguments().putString(GameDetailFragment.IMAGE_URL,imageUrl);
+        if (fragment != null) {
+            fragment.getArguments().putString(GameDetailFragment.API_URL, apiUrl);
+            fragment.getArguments().putString(GameDetailFragment.IMAGE_URL, imageUrl);
             fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "GameDetail").commit();
 
         }

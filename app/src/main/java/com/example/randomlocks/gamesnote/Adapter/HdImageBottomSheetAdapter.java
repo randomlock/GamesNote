@@ -18,53 +18,31 @@ import java.util.ArrayList;
  */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 public class HdImageBottomSheetAdapter extends ArrayAdapter {
 
     Context context;
     ArrayList<BottomSheetImage> arrayList;
 
 
-
-
-
     public HdImageBottomSheetAdapter(Context context, ArrayList<BottomSheetImage> arrayList) {
-        super(context,0);
+        super(context, 0);
         this.context = context;
         this.arrayList = arrayList;
-
-
 
 
     }
 
 
-
-
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-       View view = layoutInflater.inflate(R.layout.custombottomimage, parent, false);
+        View view = layoutInflater.inflate(R.layout.custombottomimage, parent, false);
         TextView textView = (TextView) view.findViewById(R.id.textview);
         AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.imageview);
 
         BottomSheetImage modal = arrayList.get(position);
         textView.setText(modal.title);
         imageView.setImageResource(modal.imageResource);
-
 
 
         return view;

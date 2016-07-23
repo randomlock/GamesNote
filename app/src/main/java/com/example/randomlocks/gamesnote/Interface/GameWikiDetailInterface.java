@@ -15,5 +15,5 @@ import retrofit2.http.QueryMap;
 public interface GameWikiDetailInterface {
 
     @GET("game/{id}")
-    Call<GameDetailListModal> getResult(@Path("id") String gameId ,@QueryMap Map<String,String> options);
+    Call<GameDetailListModal> getResult(@Path("id") String gameId, @QueryMap Map<String, String> options);
 }

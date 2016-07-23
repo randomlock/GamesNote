@@ -10,7 +10,7 @@ import io.realm.RealmObject;
 public class GameDetailFranchises extends RealmObject {
 
     @Expose
-    public String apiDetailUrl ;
+    public String apiDetailUrl;
     @Expose
     public String name;
 

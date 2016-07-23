@@ -17,8 +17,7 @@ import java.util.List;
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
 
-
-List<String> stringList;
+    List<String> stringList;
     Context context;
 
     public MyRecyclerAdapter(List<String> stringList, Context context) {
@@ -43,15 +42,16 @@ List<String> stringList;
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-    holder.name.setText(stringList.get(position));
+        holder.name.setText(stringList.get(position));
     }
 
 
 }
 
-class MyViewHolder extends RecyclerView.ViewHolder{
+class MyViewHolder extends RecyclerView.ViewHolder {
 
     TextView name;
+
     public MyViewHolder(View itemView) {
         super(itemView);
 

@@ -89,13 +89,13 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
     public static final String API_URL = "apiUrl";
-    public static final String IMAGE_URL = "imageUrl" ;
-    public static final String NAME = "name" ;
+    public static final String IMAGE_URL = "imageUrl";
+    public static final String NAME = "name";
     Toolbar toolbar;
     String apiUrl, imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
     ViewPager viewPager;
-    Map<String,String> map;
+    Map<String, String> map;
     GameDetailModal gameDetailModal = null;
     CollapsingToolbarLayout toolbarLayout;
     AppBarLayout appBarLayout;
@@ -112,11 +112,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     CommunicationInterface mCommunicationInterface;
     JsoupCharacters asyncCharacters;
     JsoupGames asyncGames;
-    ImageView appbarImage,coverImage;
+    ImageView appbarImage, coverImage;
     TextView gameTitle, review, userReview;
     RelativeLayout relativeLayout;
     FloatingActionsMenu floatingActionsMenu;
-    com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton replaying,planning,dropped,playing,completed;
+    com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton replaying, planning, dropped, playing, completed;
     String title;
     AVLoadingIndicatorView pacman;
     LinearLayout parentLayout;
@@ -131,50 +131,45 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         floatingActionsMenu.collapse();
 
-        switch (v.getId()){
+        switch (v.getId()) {
 
-            case R.id.replaying :
+            case R.id.replaying:
                 break;
-            case R.id.planning :
+            case R.id.planning:
                 break;
-            case R.id.dropped :
+            case R.id.dropped:
                 break;
-            case R.id.playing :
+            case R.id.playing:
                 break;
-            case R.id.completed :
+            case R.id.completed:
                 break;
-
-
-
-
 
 
         }
 
         AddToBottomFragment addToBottomFragment = AddToBottomFragment.newInstance();
-        addToBottomFragment.show(getActivity().getSupportFragmentManager(),"addto");
+        addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
 
     }
 
 
-    public interface CommunicationInterface{
+    public interface CommunicationInterface {
         void onReviewClick(String apiUrl, String gameTitle, String imageUrl);
 
         void onUserReviewClick(String apiUrl, String gameTitle, String imageUrl);
     }
 
 
-    public static GameDetailFragment newInstance(String apiUrl, String name ,  String imageUrl) {
+    public static GameDetailFragment newInstance(String apiUrl, String name, String imageUrl) {
 
         Bundle args = new Bundle();
-        args.putString(API_URL,apiUrl);
-        args.putString(NAME,name);
+        args.putString(API_URL, apiUrl);
+        args.putString(NAME, name);
         args.putString(IMAGE_URL, imageUrl);
         GameDetailFragment fragment = new GameDetailFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
 
 
     @Override
@@ -232,7 +227,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
         overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
-       recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
+        recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
         review = (TextView) nestedScrollView.findViewById(R.id.review);
         userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
@@ -242,9 +237,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         recyclerView.setNestedScrollingEnabled(false);
         characterRecycleView.setNestedScrollingEnabled(false);
         similarGameRecycleView.setNestedScrollingEnabled(false);
-
-
-
 
 
         /************************** APPBARLATOUT ********************************/
@@ -264,7 +256,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         }
 
 
-
         //Show toolbar icon after parallex is finished
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -279,17 +270,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         /******************************* TOOLBAR *************************************/
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
-
         // toolbar.setTitle("Game Detail");   //to be changed to game title
-
-
-
 
 
         /**************** RETROFIT ************************/
@@ -299,61 +285,61 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         //     }
 
         //    else  {
-            if (gameDetailModal==null) {
-                Log.d("tag", "its null");
-                gameWikiDetailInterface = GiantBomb.createGameDetailService();
-                map = new HashMap<>();
-                map.put(GiantBomb.KEY,GiantBomb.API_KEY);
-                map.put(GiantBomb.FORMAT, "JSON");
-                String field_list = "description,name,images,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
-                map.put(GiantBomb.FIELD_LIST, field_list);
-                getGameDetail(gameWikiDetailInterface, map);
+        if (gameDetailModal == null) {
+            Log.d("tag", "its null");
+            gameWikiDetailInterface = GiantBomb.createGameDetailService();
+            map = new HashMap<>();
+            map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+            map.put(GiantBomb.FORMAT, "JSON");
+            String field_list = "description,name,images,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
+            map.put(GiantBomb.FIELD_LIST, field_list);
+            getGameDetail(gameWikiDetailInterface, map);
 
 
-                asyncCharacters = new JsoupCharacters(new JsoupCharacters.AsyncResponse() {
-                   @Override
-                   public void processFinish(List<CharacterGamesImage> characters) {
+            asyncCharacters = new JsoupCharacters(new JsoupCharacters.AsyncResponse() {
+                @Override
+                public void processFinish(List<CharacterGamesImage> characters) {
 
-                       if(characters!=null){
-                           if(characterRecycleView.getAdapter()!=null){
-                               characterAdapter.setImages(characters);
-                               characterAdapter.notifyDataSetChanged();
-                               characterImage = characters;
-                           }else {
-                               characterImage = characters;
-                           }
-                       }
+                    if (characters != null) {
+                        if (characterRecycleView.getAdapter() != null) {
+                            characterAdapter.setImages(characters);
+                            characterAdapter.notifyDataSetChanged();
+                            characterImage = characters;
+                        } else {
+                            characterImage = characters;
+                        }
+                    }
 
-                   }
-               });
-                asyncCharacters.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/characters/");
+                }
+            });
+            asyncCharacters.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "http://www.giantbomb.com/game/" + apiUrl + "/characters/");
 
 
-                asyncGames =   new JsoupGames(new JsoupGames.AsyncResponse() {
-             @Override
-             public void processFinish(List<CharacterGamesImage> similarGame) {
-                 if(similarGame!=null){
-                     if (similarGameRecycleView.getAdapter()!=null) {
-                         similarGameAdapter.setImages(similarGame);
-                         similarGameAdapter.notifyDataSetChanged();
-                         similarGameImage = similarGame;
-                     }else {
-                         similarGameImage = similarGame;
-                     }
-                 }
-             }
-         });
-                asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/"+apiUrl+"/similar-games/");
-            }else {
-                Log.d("tag", "non null");
-                fillData(gameDetailModal);
-            }
+            asyncGames = new JsoupGames(new JsoupGames.AsyncResponse() {
+                @Override
+                public void processFinish(List<CharacterGamesImage> similarGame) {
+                    if (similarGame != null) {
+                        if (similarGameRecycleView.getAdapter() != null) {
+                            similarGameAdapter.setImages(similarGame);
+                            similarGameAdapter.notifyDataSetChanged();
+                            similarGameImage = similarGame;
+                        } else {
+                            similarGameImage = similarGame;
+                        }
+                    }
+                }
+            });
+            asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "http://www.giantbomb.com/game/" + apiUrl + "/similar-games/");
+        } else {
+            Log.d("tag", "non null");
+            fillData(gameDetailModal);
+        }
         //    }
 
 
 
 
-    /*    new JsoupCharacterDelete(new JsoupCharacterDelete.AsyncResponse() {
+    /*    new JsoupCharacterWikiImage(new JsoupCharacterWikiImage.AsyncResponse() {
             @Override
             public void processFinish(Elements elements) {
 
@@ -429,10 +415,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/" + apiUrl + "/"); */
 
 
-
-
-
-
     }
 
     private void getGameDetail(final GameWikiDetailInterface gameWikiDetailInterface, final Map<String, String> map) {
@@ -440,7 +422,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         overviewProgress.setVisibility(View.VISIBLE);
 
-        gameWikiDetailInterface.getResult(apiUrl,map).enqueue(new Callback<GameDetailListModal>() {
+        gameWikiDetailInterface.getResult(apiUrl, map).enqueue(new Callback<GameDetailListModal>() {
             @Override
             public void onResponse(Call<GameDetailListModal> call, Response<GameDetailListModal> response) {
 
@@ -465,8 +447,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                         }).show();
 
 
-
-
             }
         });
     }
@@ -486,7 +466,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         final List<GameDetailImages> image = gameDetailModal.images;
         ArrayList<String> images = new ArrayList<>(image.size());
-        for (int i = 0,size=image.size(); i < size; i++) {
+        for (int i = 0, size = image.size(); i < size; i++) {
             images.add(image.get(i).mediumUrl);
         }
 
@@ -501,9 +481,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         toolbarLayout.setTitle(gameDetailModal.name);
 
         /*********************** SETTING RECYCLER VIEW ****************************/
-
-
-
 
 
         final String developer = listToString(gameDetailModal.developers);
@@ -543,13 +520,13 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
             Element info = doc.getElementsByTag("p").first();
-            if(info!=null)
+            if (info != null)
                 description.setText(info.text());
             description.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    String str="http://www.giantbomb.com/game/"+apiUrl;
+                    String str = "http://www.giantbomb.com/game/" + apiUrl;
                     CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
 
                     CustomTabActivityHelper.openCustomTab(
@@ -557,11 +534,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
                 }
             });
-
-
-
-
-
 
 
         }
@@ -606,7 +578,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         }
 
 
-
         /******************* SETTING THE CHARACTER **************************************/
 
         List<GameDetailCharacters> characters = gameDetailModal.characters;
@@ -623,8 +594,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             characterRecycleView.setLayoutManager(new ConsistentLinearLayoutManager(getContext(), ConsistentLinearLayoutManager.HORIZONTAL, false));
             characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, style, getContext(), new GameDetailCharacterAdapter.OnClickInterface() {
                 @Override
-                public void onItemClick(String apiUrl,String imageUrl) {
-                    ((GameDetailActivity)getActivity()).startCharacterFragment(apiUrl,imageUrl);
+                public void onItemClick(String apiUrl, String imageUrl) {
+                    ((GameDetailActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl);
                 }
             });
             characterRecycleView.setAdapter(characterAdapter);
@@ -647,7 +618,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             similarGameAdapter = new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext(), new SimilarGameAdapter.OnClickInterface() {
                 @Override
                 public void onItemClick(String apiUrl, String imageUrl) {
-                    ((GameDetailActivity)getActivity()).restartGameDetail(apiUrl,imageUrl);
+                    ((GameDetailActivity) getActivity()).restartGameDetail(apiUrl, imageUrl);
                 }
             });
             similarGameRecycleView.setAdapter(similarGameAdapter);
@@ -710,7 +681,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         });
 
 
-
     }
 
     @Override
@@ -743,12 +713,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 fontOptionFragment.show(getActivity().getSupportFragmentManager(), "fontoption");
 
 
-
-
                 break;
 
 
-            case android.R.id.home :
+            case android.R.id.home:
                 getActivity().onBackPressed();
 
         }
@@ -782,14 +750,13 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public void onSelect(int which) {
 
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            description.setTextAppearance(style);
+        } else {
+            description.setTextAppearance(getContext(), style);
+        }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                description.setTextAppearance(style);
-            } else {
-                description.setTextAppearance(getContext(), style);
-            }
-
-        Toaster.make(getContext(),"Font will be changed after going back");
+        Toaster.make(getContext(), "Font will be changed after going back");
 
 
     }
@@ -840,7 +807,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public void onStop() {
         super.onStop();
 
-        if (appBarLayout!=null) {
+        if (appBarLayout != null) {
             appBarLayout.addOnOffsetChangedListener(null);
             appBarLayout = null;
 
@@ -850,15 +817,15 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
 
-        if(asyncCharacters!=null)
-            asyncCharacters.cancel(false);
-        if(asyncGames!=null)
-            asyncGames.cancel(false);
+        if (asyncCharacters != null)
+            asyncCharacters.cancel(true);
+        if (asyncGames != null)
+            asyncGames.cancel(true);
 
 
-        super.onDestroy();
+        super.onPause();
     }
 
 

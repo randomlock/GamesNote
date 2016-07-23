@@ -33,7 +33,7 @@ public class GamesListPagerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_pager_games_list,container,false);
+        return inflater.inflate(R.layout.fragment_pager_games_list, container, false);
     }
 
     public static GamesListPagerFragment newInstance(int page) {
@@ -51,7 +51,7 @@ public class GamesListPagerFragment extends Fragment {
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         stringList = new ArrayList<>();
 
-        for (int i = 0; i < 40 ; i++) {
+        for (int i = 0; i < 40; i++) {
 
             stringList.add("hello brother");
 
@@ -59,7 +59,6 @@ public class GamesListPagerFragment extends Fragment {
 
         recyclerView.setAdapter(new MyRecyclerAdapter(stringList, getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
 
 
     }

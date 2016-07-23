@@ -9,8 +9,8 @@ import io.realm.RealmObject;
  */
 public class GameDetailSimilarGames extends RealmObject {
 
-   @Expose
-   public String apiDetailUrl ;
-   @Expose
-   public String name;
+    @Expose
+    public String apiDetailUrl;
+    @Expose
+    public String name;
 }

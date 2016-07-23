@@ -33,12 +33,28 @@
             android:parentActivityName=".Activity.MainActivity" />
         <activity android:name=".Activity.ViewPagerActivity" />
         <activity android:name=".Activity.NewsDetailActivity" />
-        <activity android:name=".Activity.GameReviewActivity">
-
-        </activity>
+        <activity android:name=".Activity.GameReviewActivity"></activity>
         <activity android:name=".Activity.UserReviewActivity" />
         <activity android:name=".Activity.UserReviewDetailActivity" />
-        <activity android:name=".Activity.ImprovedWebViewActivity"></activity>
+        <activity android:name=".Activity.ImprovedWebViewActivity" />
+        <activity
+            android:name=".Activity.PlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:launchMode="singleTop"
+            android:theme="@style/PlayerTheme">
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.demo.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="content" />
+                <data android:scheme="asset" />
+                <data android:scheme="file" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activity.CharacterDetailActivity"></activity>
     </application>
 
 </manifest>

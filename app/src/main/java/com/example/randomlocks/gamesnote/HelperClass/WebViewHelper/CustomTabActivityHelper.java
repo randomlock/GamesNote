@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * This is a helper class to manage the connection to the Custom Tabs Service.
  */
-public class CustomTabActivityHelper  {
+public class CustomTabActivityHelper {
     private CustomTabsSession mCustomTabsSession;
     private CustomTabsClient mClient;
     private CustomTabsServiceConnection mConnection;
@@ -27,10 +27,10 @@ public class CustomTabActivityHelper  {
     /**
      * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView
      *
-     * @param activity The host activity
+     * @param activity         The host activity
      * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available
-     * @param uri the Uri to be opened
-     * @param fallback a CustomTabFallback to be used if Custom Tabs is not available
+     * @param uri              the Uri to be opened
+     * @param fallback         a CustomTabFallback to be used if Custom Tabs is not available
      */
     public static void openCustomTab(Activity activity,
                                      CustomTabsIntent customTabsIntent,
@@ -52,6 +52,7 @@ public class CustomTabActivityHelper  {
 
     /**
      * Unbinds the Activity from the Custom Tabs Service
+     *
      * @param activity the activity that is connected to the service
      */
     public void unbindCustomTabsService(Activity activity) {
@@ -77,6 +78,7 @@ public class CustomTabActivityHelper  {
 
     /**
      * Register a Callback to be called when connected or disconnected from the Custom Tabs Service
+     *
      * @param connectionCallback
      */
     public void setConnectionCallback(ConnectionCallback connectionCallback) {
@@ -85,6 +87,7 @@ public class CustomTabActivityHelper  {
 
     /**
      * Binds the Activity to the Custom Tabs Service
+     *
      * @param activity the activity to be binded to the service
      */
     public void bindCustomTabsService(Activity activity) {
@@ -141,9 +144,8 @@ public class CustomTabActivityHelper  {
      */
     public interface CustomTabFallback {
         /**
-         *
          * @param activity The Activity that wants to open the Uri
-         * @param uri The uri to be opened by the fallback
+         * @param uri      The uri to be opened by the fallback
          */
         void openUri(Activity activity, Uri uri);
     }

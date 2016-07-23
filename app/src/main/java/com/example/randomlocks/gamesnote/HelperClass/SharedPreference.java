@@ -10,8 +10,6 @@ import android.preference.PreferenceManager;
 public class SharedPreference {
 
 
-
-
     public static void saveToSharedPreference(String key, String value, Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -34,24 +32,22 @@ public class SharedPreference {
     }
 
 
-
-
-    public static String getFromSharedPreferences(String key,String defaultValue, Context context) {
+    public static String getFromSharedPreferences(String key, String defaultValue, Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(key, defaultValue);
     }
 
-    public static int getFromSharedPreferences(String key,int defaultValue, Context context) {
+    public static int getFromSharedPreferences(String key, int defaultValue, Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getInt(key, defaultValue);
     }
 
-    public static boolean getFromSharedPreferences(String key,boolean defaultValue, Context context) {
+    public static boolean getFromSharedPreferences(String key, boolean defaultValue, Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(key, defaultValue);
     }
 
-    public static boolean removeFromSharedPreference(String key,Context context){
+    public static boolean removeFromSharedPreference(String key, Context context) {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preference.edit();
         editor.remove(key);

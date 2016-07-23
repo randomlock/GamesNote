@@ -96,9 +96,6 @@ public class GamesCharacterWikiFragment extends Fragment {
         Picasso.with(getContext()).load("http://images.popmatters.com/blog_art/m/max_payne_old.jpg").placeholder(R.drawable.headerbackground).fit().centerInside().into(imageView);
 
 
-
-
-
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -135,8 +132,10 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
 
-        modals.clear();
-        adapter.notifyDataSetChanged();
+        if (modals != null) {
+            modals.clear();
+            adapter.notifyDataSetChanged();
+        }
 
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
@@ -201,7 +200,7 @@ public class GamesCharacterWikiFragment extends Fragment {
         adapter = new CharacterSearchAdapter(modals, getContext(), new CharacterSearchAdapter.OnClickInterface() {
             @Override
             public void onItemClick(String apiUrl, String imageUrl) {
-                ((MainActivity) getActivity()).startCharacterFragment(apiUrl, imageUrl);
+                ((MainActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl);
             }
         });
         recyclerView.setAdapter(adapter);

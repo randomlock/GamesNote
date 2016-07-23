@@ -28,7 +28,7 @@ public class AddToBottomFragment extends BottomSheetDialogFragment {
         return fragment;
     }
 
-    public AddToBottomFragment(){
+    public AddToBottomFragment() {
         //empty constructor
     }
 
@@ -38,7 +38,7 @@ public class AddToBottomFragment extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.dialog_add_to_list,container,false);
+        View view = inflater.inflate(R.layout.dialog_add_to_list, container, false);
         dialog.setContentView(view);
         mBehavior = BottomSheetBehavior.from((View) view.getParent());
         return super.onCreateView(inflater, container, savedInstanceState);

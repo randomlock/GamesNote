@@ -7,16 +7,16 @@ import io.realm.RealmObject;
 /**
  * Created by randomlocks on 5/29/2016.
  */
-public class GameDetailGenres extends RealmObject{
+public class GameDetailGenres extends RealmObject {
 
-   @Expose
-   public String apiDetailUrl ;
-   @Expose
-   public String name;
+    @Expose
+    public String apiDetailUrl;
+    @Expose
+    public String name;
 
 
-   @Override
-   public String toString() {
-      return name;
-   }
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -51,6 +51,8 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
         }
         if (modal.image != null && modal.image.thumbUrl != null && !modal.image.thumbUrl.isEmpty()) {
             Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().into(holder.profileImage);
+        } else {
+            holder.profileImage.setImageResource(R.drawable.headerbackground);
         }
     }
 
@@ -75,7 +77,7 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
         @Override
         public void onClick(View v) {
             CharacterSearchModal modal = modals.get(getLayoutPosition());
-            mOnClickInterface.onItemClick(modal.apiDetailUrl, modal.image.mediumUrl);
+            mOnClickInterface.onItemClick(modal.apiDetailUrl, modal.image != null ? modal.image.mediumUrl : null);
         }
     }
 }

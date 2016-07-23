@@ -52,7 +52,6 @@ public class GameDetailOverviewAdapter extends RecyclerView.Adapter<GameDetailOv
             holder.value.setText(valueStr);
 
 
-
     }
 
     @Override

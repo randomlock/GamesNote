@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class GameWikiListModal {
 
-     @Expose
-     public List<GameWikiModal> results;
+    @Expose
+    public List<GameWikiModal> results;
 
 }

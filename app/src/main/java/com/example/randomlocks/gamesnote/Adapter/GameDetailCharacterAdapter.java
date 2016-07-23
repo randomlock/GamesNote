@@ -20,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by randomlocks on 6/10/2016.
  */
-public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailCharacterAdapter.MyViewHolder>  {
+public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailCharacterAdapter.MyViewHolder> {
 
 
     List<GameDetailCharacters> stringList;
@@ -29,7 +29,7 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
     Context context;
     int style;
 
-    public GameDetailCharacterAdapter(List<GameDetailCharacters> stringList, List<CharacterGamesImage> images, int style, Context context,OnClickInterface onClickInterface) {
+    public GameDetailCharacterAdapter(List<GameDetailCharacters> stringList, List<CharacterGamesImage> images, int style, Context context, OnClickInterface onClickInterface) {
         this.stringList = stringList;
         this.style = style;
         this.context = context;
@@ -38,12 +38,12 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
         }
 
 
-    this.onClickInterface = onClickInterface;
+        this.onClickInterface = onClickInterface;
 
     }
 
-    public interface OnClickInterface{
-        void onItemClick(String apiUrl,String image);
+    public interface OnClickInterface {
+        void onItemClick(String apiUrl, String image);
     }
 
 
@@ -70,13 +70,13 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
         if (images != null) {
             holder.image.setTag(images.get(position));
-            Picasso.with(context).load(images.get(position).imageUrl).fit().into(holder.image);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().error(R.drawable.headerbackground).into(holder.image);
+        } else {
+            holder.image.setImageResource(R.drawable.headerbackground);
         }
 
 
     }
-
-
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {

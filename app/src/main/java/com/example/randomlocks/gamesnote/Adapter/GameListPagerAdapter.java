@@ -14,7 +14,7 @@ public class GameListPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 4;
     private Context context;
-    String pageTitle[] = {"Playing","Planning","On hold","Dropped"};
+    String pageTitle[] = {"Playing", "Planning", "On hold", "Dropped"};
 
     public GameListPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -23,7 +23,7 @@ public class GameListPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return GamesListPagerFragment.newInstance(position+1);
+        return GamesListPagerFragment.newInstance(position + 1);
     }
 
     @Override

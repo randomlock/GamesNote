@@ -20,14 +20,11 @@ public class GameDetailPagerAdapter extends PagerAdapter {
     private ImageView imageView;
 
 
-
-    public GameDetailPagerAdapter(Context context,int count){
+    public GameDetailPagerAdapter(Context context, int count) {
         this.context = context;
         this.count = count;
 
     }
-
-
 
 
     @Override
@@ -51,7 +48,7 @@ public class GameDetailPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view =  inflater.inflate(R.layout.viewpager_wiki_image, container, false);
+        View view = inflater.inflate(R.layout.viewpager_wiki_image, container, false);
         imageView = (ImageView) view.findViewById(R.id.image);
 
         container.addView(view);

@@ -38,7 +38,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
     ListView listView;
     PhotoViewAttacher mAttacher;
     Toolbar toolbar;
-    boolean isLoaded=false;
+    boolean isLoaded = false;
 
 
     @Override
@@ -61,7 +61,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
         imageUrl = getIntent().getStringExtra(ImageViewerFragment.MEDIUM_IMAGE_URL);
 
 
-        if(imageUrl!=null){
+        if (imageUrl != null) {
             Picasso.with(this).load(imageUrl).into(imageView, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -81,7 +81,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
         }
 
 
-      ArrayList<BottomSheetImage>  arrayList = new ArrayList<>();
+        ArrayList<BottomSheetImage> arrayList = new ArrayList<>();
         arrayList.add(new BottomSheetImage(R.drawable.ic_share_black_24dp, "Share"));
         arrayList.add(new BottomSheetImage(R.drawable.ic_insert_photo_black_24dp, "Save to gallery"));
         arrayList.add(new BottomSheetImage(R.drawable.ic_wallpaper_black_24dp, "Set as Wallpaper"));
@@ -95,11 +95,11 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
 
                 if (isLoaded) {
 
-                    Toaster.make(HdImageViewerActivity.this,i+"");
-                    switch (i){
+                    Toaster.make(HdImageViewerActivity.this, i + "");
+                    switch (i) {
 
                         //share
-                        case  0 :
+                        case 0:
 
                             File myFile = new File(imageUrl);
                             MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -111,15 +111,13 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
                             startActivity(Intent.createChooser(sharingIntent, "Share using"));
                             break;
 
-                        case  1 :
-                            Toaster.make(HdImageViewerActivity.this,"todo");
+                        case 1:
+                            Toaster.make(HdImageViewerActivity.this, "todo");
                             break;
 
-                        case 3 :
-                            Toaster.make(HdImageViewerActivity.this,"todo");
+                        case 3:
+                            Toaster.make(HdImageViewerActivity.this, "todo");
                             break;
-
-
 
 
                     }
@@ -134,12 +132,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
         bottomSheetBehavior = BottomSheetBehavior.from(listView);
 
 
-
-
-
-
     }
-
 
 
     @Override
@@ -151,8 +144,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
             toolbar.animate().alpha(0).setDuration(200);
             if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        }
-        else {
+        } else {
             toolbar.animate().alpha(1).setDuration(200);
 
         }
@@ -160,22 +152,22 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.hdimage_menu,menu);
+        getMenuInflater().inflate(R.menu.hdimage_menu, menu);
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
-            case android.R.id.home :
+            case android.R.id.home:
                 onBackPressed();
                 break;
 
-            case R.id.info :
+            case R.id.info:
 
-                if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_COLLAPSED)
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 else
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);

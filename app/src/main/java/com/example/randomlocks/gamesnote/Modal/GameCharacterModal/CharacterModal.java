@@ -22,15 +22,15 @@ public class CharacterModal implements Parcelable {
     @Expose
     public String description;
     @Expose
-    public   FirstAppearance firstAppearedInGame;
+    public FirstAppearance firstAppearedInGame;
     @Expose
-    public    List<GameAppearance> games;
+    public List<GameAppearance> games;
     @Expose
-    public   int gender;
+    public int gender;
     @Expose
-    public   CharacterImage image;
+    public CharacterImage image;
     @Expose
-    public   String name;
+    public String name;
 
 
     @Override

@@ -91,7 +91,12 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
             StringBuilder date = new StringBuilder();
             if (hour > 0) {
                 minute = minute - hour * 60;
-                date.append(hour).append(":");
+                if (minute < 10) {
+                    date.append(hour).append(":0");
+                } else {
+                    date.append(hour).append(":");
+
+                }
             }
             if (seconds < 10) {
                 date.append(minute).append(":0").append(seconds);

@@ -21,7 +21,7 @@ import com.example.randomlocks.gamesnote.R;
  */
 public class GamesListFragment extends Fragment {
 
-    private static final String POSITION = "position" ;
+    private static final String POSITION = "position";
     Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -31,7 +31,6 @@ public class GamesListFragment extends Fragment {
     public GamesListFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -47,9 +46,8 @@ public class GamesListFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-     //   outState.putInt(POSITION,tabLayout.getSelectedTabPosition());
+        //   outState.putInt(POSITION,tabLayout.getSelectedTabPosition());
     }
-
 
 
     @Override
@@ -75,22 +73,17 @@ public class GamesListFragment extends Fragment {
         mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.GameListFragment));
 
 
-
         viewPager.setAdapter(new GameListPagerAdapter(getChildFragmentManager(), getContext()));
 
 
-      //  if (savedInstanceState!=null) {
-       //     viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
-       // }
+        //  if (savedInstanceState!=null) {
+        //     viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
+        // }
 
         tabLayout.setupWithViewPager(viewPager);
 
 
-
     }
-
-
-
 
 
 }

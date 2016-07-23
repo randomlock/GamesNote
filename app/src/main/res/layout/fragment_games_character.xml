@@ -21,7 +21,7 @@
             <ImageView
                 android:id="@+id/appbar_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:layout_collapseMode="pin" />
 
 
@@ -53,11 +53,11 @@
                     android:paddingEnd="8dp"
                     android:drawablePadding="16dp"
                     android:hint="Search Character"
-                    android:cursorVisible="false"
+                    android:focusableInTouchMode="true"
                     android:singleLine="true"
                     android:drawableRight="@drawable/ic_clear_black_18dp"
                     android:drawableEnd="@drawable/ic_clear_black_18dp"
-                    android:textColor="#000"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     app:layout_collapseMode="pin" />

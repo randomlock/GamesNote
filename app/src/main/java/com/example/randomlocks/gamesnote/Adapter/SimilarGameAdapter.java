@@ -25,8 +25,8 @@ import java.util.List;
 public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.MyViewHolder> {
 
 
-    public interface OnClickInterface{
-        void onItemClick(String apiUrl,String image);
+    public interface OnClickInterface {
+        void onItemClick(String apiUrl, String image);
     }
 
 
@@ -38,7 +38,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     int style;
     OnClickInterface onClickInterface;
 
-    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, GameDetailFragment fragment, Context context,OnClickInterface onClickInterface) {
+    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, GameDetailFragment fragment, Context context, OnClickInterface onClickInterface) {
         this.stringList = stringList;
         this.style = style;
         this.context = context;
@@ -47,7 +47,6 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
         if (images != null) {
             this.images = images;
         }
-
 
 
         this.apiUrl = new ArrayList<>();
@@ -72,7 +71,6 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
         return new MyViewHolder(v);
 
 
-
     }
 
     @Override
@@ -89,8 +87,6 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
         }
 
 
-
-
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -101,9 +97,6 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
             super(itemView);
 
             imageView = (ImageView) itemView.findViewById(R.id.image);
-
-
-
 
 
             itemView.setOnClickListener(this);
@@ -130,7 +123,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
             ft.add(R.id.fragment_parent_layout, fragment, "GameDetail");
             ft.commit();
 
-          //  onClickInterface.onItemClick(apiUrl.get(getLayoutPosition()),images.get(getLayoutPosition()).imageUrl);
+            //  onClickInterface.onItemClick(apiUrl.get(getLayoutPosition()),images.get(getLayoutPosition()).imageUrl);
 
 
         }

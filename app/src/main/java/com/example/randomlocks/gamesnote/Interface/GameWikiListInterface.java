@@ -14,14 +14,8 @@ import retrofit2.http.QueryMap;
 public interface GameWikiListInterface {
 
 
-
-
-
     @GET("games")
-    Call<GameWikiListModal> getResult(@QueryMap Map<String,String> options);
-
-
-
+    Call<GameWikiListModal> getResult(@QueryMap Map<String, String> options);
 
 
 }

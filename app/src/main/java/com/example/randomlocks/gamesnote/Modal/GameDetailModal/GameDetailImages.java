@@ -9,8 +9,8 @@ import io.realm.RealmObject;
  */
 public class GameDetailImages extends RealmObject {
 
-  @Expose
-  public   String thumbUrl;
-  @Expose
-  public String mediumUrl;
+    @Expose
+    public String thumbUrl;
+    @Expose
+    public String mediumUrl;
 }

@@ -33,8 +33,6 @@ public class ImprovedWebViewFragment extends Fragment {
 
     /**
      * Creates a new fragment which loads the supplied url as soon as it can
-     *
-     *
      */
     public ImprovedWebViewFragment() {
 
@@ -44,7 +42,7 @@ public class ImprovedWebViewFragment extends Fragment {
     public static ImprovedWebViewFragment newInstance(String string) {
 
         Bundle args = new Bundle();
-        args.putString(GiantBomb.BASE_URL,string);
+        args.putString(GiantBomb.BASE_URL, string);
         ImprovedWebViewFragment fragment = new ImprovedWebViewFragment();
         fragment.setArguments(args);
         return fragment;
@@ -64,7 +62,7 @@ public class ImprovedWebViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.webview,container,false);
+        View view = inflater.inflate(R.layout.webview, container, false);
 
         if (mWebView != null) {
             mWebView.destroy();
@@ -73,7 +71,7 @@ public class ImprovedWebViewFragment extends Fragment {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setMax(100);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,10 +87,9 @@ public class ImprovedWebViewFragment extends Fragment {
             }
 
 
-
         });
         mWebView.setWebViewClient(new InnerWebViewClient()); // forces it to open in app
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
@@ -121,7 +118,7 @@ public class ImprovedWebViewFragment extends Fragment {
     public void loadUrl(String url) {
         if (mIsWebViewAvailable) getWebView().loadUrl(mUrl = url);
         else
-            Toaster.make(getContext(),"cannot load page");
+            Toaster.make(getContext(), "cannot load page");
     }
 
     /**
@@ -180,16 +177,14 @@ public class ImprovedWebViewFragment extends Fragment {
         }
 
 
-
     }
-
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
 
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             getActivity().onBackPressed();
         }
 

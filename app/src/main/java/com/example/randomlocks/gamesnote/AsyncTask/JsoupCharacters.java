@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by randomlocks on 6/18/2016.
  */
-public class JsoupCharacters extends AsyncTask<String,Integer,List<CharacterGamesImage>> {
+public class JsoupCharacters extends AsyncTask<String, Integer, List<CharacterGamesImage>> {
 
 
     public interface AsyncResponse {
@@ -47,8 +47,8 @@ public class JsoupCharacters extends AsyncTask<String,Integer,List<CharacterGame
 
             Elements doclist = element.getElementsByTag("li");
 
-            for (Element childList : doclist){
-                list.add(new CharacterGamesImage(childList.select("div.img.imgboxart.imgcast").select("img").attr("src"),childList.select("h3").text()));
+            for (Element childList : doclist) {
+                list.add(new CharacterGamesImage(childList.select("div.img.imgboxart.imgcast").select("img").attr("src"), childList.select("h3").text()));
             }
 
             Collections.sort(list, new Comparator<CharacterGamesImage>() {
@@ -59,11 +59,9 @@ public class JsoupCharacters extends AsyncTask<String,Integer,List<CharacterGame
             });
 
 
-
         } catch (Exception e) {
             list = null;
         }
-
 
 
         return list;

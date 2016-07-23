@@ -26,10 +26,10 @@ import com.squareup.picasso.Picasso;
 public class NewsDetailActivity extends AppCompatActivity {
 
 
-    public static final String TITLE = "title" ;
-    public static final String IMAGE_URL = "image_url" ;
+    public static final String TITLE = "title";
+    public static final String IMAGE_URL = "image_url";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
-    public static final String LINK = "news_link" ;
+    public static final String LINK = "news_link";
     public static final String DESCRIPTION = "news_description";
 
     String description;
@@ -55,7 +55,6 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +64,8 @@ public class NewsDetailActivity extends AppCompatActivity {
         description = newsModal.description;
 
 
-
-
-        titleImage = (ImageView)findViewById(R.id.appbar_image);
-        parentLayout = (LinearLayout)findViewById(R.id.parent_layout);
+        titleImage = (ImageView) findViewById(R.id.appbar_image);
+        parentLayout = (LinearLayout) findViewById(R.id.parent_layout);
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         webView = (WebView) parentLayout.findViewById(R.id.web_view);
         title = (TextView) parentLayout.findViewById(R.id.news_heading);
@@ -77,10 +74,10 @@ public class NewsDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (newsModal.content!=null) {
+        if (newsModal.content != null) {
             Picasso.with(this).load(newsModal.content).fit().centerCrop().into(titleImage);
         }
-        if (newsModal.title!=null) {
+        if (newsModal.title != null) {
             title.setText(newsModal.title);
         }
 
@@ -132,7 +129,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         } */
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
@@ -161,10 +158,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         } */
 
 
-
-
-
-
     }
 
 
@@ -175,37 +168,31 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
-            case android.R.id.home :
+            case android.R.id.home:
                 onBackPressed();
                 return true;
 
-            case R.id.internet :
+            case R.id.internet:
                 runBrowser(newsModal.link);
 
 
-
         }
-
 
 
         return super.onOptionsItemSelected(item);
     }
 
 
-    void runBrowser(String url){
+    void runBrowser(String url) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).addDefaultShareMenuItem().build();
         CustomTabActivityHelper.openCustomTab(
                 this, customTabsIntent, Uri.parse(url), new WebViewFallback());
     }
-
-
-
 
 
 }

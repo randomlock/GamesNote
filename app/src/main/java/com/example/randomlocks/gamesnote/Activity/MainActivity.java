@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.Activity;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,19 +12,21 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageUrlFragment;
-import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesCharacterWikiFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
+import com.example.randomlocks.gamesnote.Fragments.SettingFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.R;
@@ -39,7 +42,7 @@ add share preference so that when user open app he is automatically in correct f
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ImageUrlFragment.ImageUrlInterface {
 
 
-    private static final String FRAGMENT_KEY = "restored_fragment" ;
+    private static final String FRAGMENT_KEY = "restored_fragment";
     public static final String KEY = "NAViGATION_SELECTED_ID"; //FOR SAVING MENU ITEM
     public static final String TITLE = "NAVIGATION_SELECTED_TITLE"; //FOR MENU TOOLBAR TITLE
     public static final String DEFAULT_TITLE = "Game Wiki";
@@ -49,9 +52,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout mDrawer;
     private NavigationView mNavigation;
     private ActionBarDrawerToggle mDrawableToggle;
-    Fragment fragment ;
+    Fragment fragment;
 
-    /*static {
+  /*  static {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }*/
 
@@ -68,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
 
 
-        final String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL,null,this);
-        if(imageUrl!=null){
+        final String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL, null, this);
+        if (imageUrl != null) {
             navHeaderLayout.setUrl(imageUrl);
             navHeaderLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -79,10 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         } else
-        navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
-
-
-
+            navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
 
 
         mDrawableToggle = setupDrawerToggle(mDrawer);
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
 
-        mselectedId = savedInstanceState == null ? R.id.nav_trailer : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -124,23 +124,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } */
 
 
-            selectDrawerItem(mselectedId,mtitle);
+        selectDrawerItem(mselectedId, mtitle);
 
 
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-         switch (item.getItemId()) {
-           case android.R.id.home:
+        switch (item.getItemId()) {
+            case android.R.id.home:
 
-               if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                   getSupportFragmentManager().popBackStack();
-               } else {
-                   mDrawer.openDrawer(GravityCompat.START);
-               }
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                } else {
+
+                    InputMethodHelper.hideKeyBoard(getWindow().getCurrentFocus(), this);
+                    mDrawer.openDrawer(GravityCompat.START);
+
+                }
 
                 return true;
         }
@@ -189,31 +191,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (mselectedId) {
 
 
-
             case R.id.nav_home:
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesHome");
 
-                if (fragment==null) {
+                if (fragment == null) {
                     fragment = new GamesCharacterWikiFragment();
                 }
-                    FragmentTransactionHelper("replace", fragment, "GamesHome");
+                FragmentTransactionHelper("replace", fragment, "GamesHome");
 
                 break;
 
             case R.id.nav_mylist:
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesList");
 
-                if (fragment==null) {
+                if (fragment == null) {
                     fragment = new GamesListFragment();
                 }
-                    FragmentTransactionHelper("replace", fragment, "GamesList");
+                FragmentTransactionHelper("replace", fragment, "GamesList");
 
                 break;
 
             case R.id.nav_news:
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesNews");
 
-                if (fragment==null) {
+                if (fragment == null) {
                     fragment = new GamesNewsFragment();
                 }
 
@@ -225,22 +226,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesVideo");
 
 
-                if (fragment==null) {
+                if (fragment == null) {
                     fragment = new GamesVideoFragment();
                 }
-                    FragmentTransactionHelper("replace",fragment, "GamesVideo");
+                FragmentTransactionHelper("replace", fragment, "GamesVideo");
 
                 break;
 
             case R.id.nav_wiki:
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesWiki");
 
-                if(fragment==null) {
+                if (fragment == null) {
 
                     fragment = new GamesWikiFragment();
                 }
-                    FragmentTransactionHelper("replace", fragment, "GamesWiki");
+                FragmentTransactionHelper("replace", fragment, "GamesWiki");
 
+
+                break;
+
+            case R.id.nav_settings:
+
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesSetting");
+
+                if (fragment == null) {
+
+                    fragment = new SettingFragment();
+                }
+                FragmentTransactionHelper("replace", fragment, "GamesSetting");
 
                 break;
 
@@ -311,16 +324,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     @Override
     public void onSelect(String url) {
 
-        if(url==null){
+        if (url == null) {
             navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
-            SharedPreference.removeFromSharedPreference(GiantBomb.NAV_HEADER_URL,this);
-        }
-
-        else{
+            SharedPreference.removeFromSharedPreference(GiantBomb.NAV_HEADER_URL, this);
+        } else {
             navHeaderLayout.setUrl(url);
             Picasso.with(this).load(url).into(navHeaderLayout);
         }
@@ -329,18 +339,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void startCharacterFragment(String apiUrl, String imageUrl) {
+    public void startCharacterActivity(String apiUrl, String imageUrl) {
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag("characterDetail");
+       /* Fragment fragment = getSupportFragmentManager().findFragmentByTag("characterDetail");
 
         if (fragment == null) {
-            fragment = CharacterDetailFragment.newInstance(apiUrl, imageUrl);
+            fragment = CharacterDetailFragmentDELETE.newInstance(apiUrl, imageUrl);
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "characterDetail");
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
+
+
+        Intent intent = new Intent(this, CharacterDetailActivity.class);
+        intent.putExtra(GiantBomb.API_URL, apiUrl);
+        intent.putExtra(GiantBomb.IMAGE_URL, imageUrl);
+        startActivity(intent);
+
 
 
     }
+
+
+    public void setDarkTheme(boolean setDarkTheme) {
+        if (setDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        Intent intent = getIntent();
+        finish();
+
+        startActivity(intent);
+
+
+    }
+
 }

@@ -24,7 +24,6 @@ public class GameDetailBottomSheet extends BottomSheetDialog {
     }
 
 
-
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
 
         @Override
@@ -39,13 +38,6 @@ public class GameDetailBottomSheet extends BottomSheetDialog {
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
         }
     };
-
-
-
-
-
-
-
 
 
 }

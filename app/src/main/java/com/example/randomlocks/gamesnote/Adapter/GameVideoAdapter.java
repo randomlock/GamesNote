@@ -1,6 +1,8 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,11 +16,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.Activity.PlayerActivity;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
+import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
 
@@ -100,8 +106,17 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
             StringBuilder date = new StringBuilder();
             if (hour > 0) {
                 minute = minute - hour * 60;
-                date.append(hour).append(":");
+
+                if (minute < 10) {
+                    date.append(hour).append(":0");
+                } else {
+                    date.append(hour).append(":");
+
+                }
+
             }
+
+
             if (seconds < 10) {
                 date.append(minute).append(":0").append(seconds);
             } else {
@@ -111,7 +126,6 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
 
             holder.length.setText(date.toString());
         }
-        Log.d("tag", isAllVideo + "");
         if (!isSimple && isAllVideo && modal.videoType != null) {
             holder.video_type.setVisibility(View.VISIBLE);
             holder.video_type.setText(modal.videoType);
@@ -136,7 +150,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
             holder.watchLater.setColorFilter(ContextCompat.getColor(context, R.color.white));
             holder.like.setColorFilter(ContextCompat.getColor(context, R.color.white));
 
-    }
+        }
 
 
     }
@@ -181,6 +195,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
             title = (TextView) itemView.findViewById(R.id.title);
             description = (TextView) itemView.findViewById(R.id.description);
 
+            itemView.setOnClickListener(this);
             like.setOnClickListener(this);
             share.setOnClickListener(this);
             watchLater.setOnClickListener(this);
@@ -194,10 +209,10 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
             ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
             scale.setDuration(500);
             scale.setInterpolator(new OvershootInterpolator());
-            v.startAnimation(scale);
             switch (v.getId()) {
 
                 case R.id.watch_later:
+                    v.startAnimation(scale);
                     modal.isWatchLater = !modal.isWatchLater;
                     if (modal.isWatchLater) {
                         ((ImageButton) v).setColorFilter(ContextCompat.getColor(context, R.color.linecolor));
@@ -209,6 +224,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
                     break;
 
                 case R.id.like:
+                    v.startAnimation(scale);
                     modal.isFavorite = !modal.isFavorite;
 
                     if (modal.isFavorite) {
@@ -221,6 +237,21 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
                     mOnClickInteraface.onLike(modalList.get(getLayoutPosition()), R.id.like);
                     break;
 
+                case R.id.root_view:
+                    GamesVideoModal videoModal = modalList.get(getLayoutPosition());
+                    String highUrl = videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+                    Intent intent = new Intent(context, PlayerActivity.class)
+                            .setData(Uri.parse(highUrl))
+                            .putExtra(PlayerActivity.CONTENT_ID_EXTRA, highUrl.toLowerCase(Locale.US).replaceAll("\\s", ""))
+                            .putExtra(PlayerActivity.CONTENT_TYPE_EXTRA, Util.TYPE_OTHER)
+                            .putExtra(GiantBomb.MODAL, videoModal)
+                            .putExtra(PlayerActivity.PROVIDER_EXTRA, "");
+
+                    context.startActivity(intent);
+
+
+                    break;
+
 
             }
         }
@@ -230,6 +261,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
     public void onViewDetachedFromWindow(MyViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         if (realm != null && realm.isInTransaction()) {
+            Log.d("tag", "yes bro");
             realm.cancelTransaction();
         }
     }

@@ -10,19 +10,19 @@ import android.view.inputmethod.InputMethodManager;
 public class InputMethodHelper {
 
 
-    public static void hideKeyBoard(View v,Context context){
+    public static void hideKeyBoard(View v, Context context) {
 
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(),0);
+        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
 
     }
 
-    public static void showKeybaord(View v,Context context){
+    public static void showKeybaord(View v, Context context) {
 
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInputFromInputMethod(v.getWindowToken(),0);
+        inputMethodManager.showSoftInputFromInputMethod(v.getWindowToken(), 0);
 
     }
 

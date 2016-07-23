@@ -36,46 +36,39 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
     Context context;
     int lastPosition;
 
-    public GameWikiAdapter(List<GameWikiModal> list,Context context,int lastPosition){
+    public GameWikiAdapter(List<GameWikiModal> list, Context context, int lastPosition) {
         this.list = list;
         this.context = context;
-        this.lastPosition=lastPosition;
+        this.lastPosition = lastPosition;
     }
 
-    public void swap(List<GameWikiModal> newList){
+    public void swap(List<GameWikiModal> newList) {
         list.clear();
         list.addAll(newList);
         notifyDataSetChanged();
     }
 
 
-
-
-
-
-
-
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View v = inflater.inflate(R.layout.custom_game_wiki_layout,parent,false);
+        View v = inflater.inflate(R.layout.custom_game_wiki_layout, parent, false);
 
         return new MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder( final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         final GameWikiModal modal = list.get(position);
         holder.title.setText(modal.name);
 
-        if(modal.deck!=null)
-        holder.description.setText(modal.deck);
+        if (modal.deck != null)
+            holder.description.setText(modal.deck);
         else
-        holder.description.setText(R.string.no_description);
+            holder.description.setText(R.string.no_description);
 
-     //   holder.view.setOnClickListener(new MyClickListener(holder.description,context,GameWikiModal modal));
+        //   holder.view.setOnClickListener(new MyClickListener(holder.description,context,GameWikiModal modal));
 
 
       /*  if(!modal.isClicked) {
@@ -109,54 +102,51 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         }); */
 
 
-
-
-       // Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
+        // Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
 
 
         if (modal.image != null && modal.image.smallUrl != null && modal.image.mediumUrl != null) {
-    holder.imageView.setTag(R.string.smallImageUrl,modal.image.smallUrl);
-    holder.imageView.setTag(R.string.mediumImageUrl,modal.image.mediumUrl);
+            holder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
+            holder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
             Picasso.with(context).load(modal.image.smallUrl).fit().centerCrop().into(holder.imageView);
-}
+        }
 
         String date_time = modal.originalReleaseDate;
         String date[];
-        if(date_time!=null){
+        if (date_time != null) {
             date = date_time.split(" ");
             holder.date.setText(date[0]);
         }
-
 
 
         /**************** SETTING PLATFORMS*************************/
         List<GameWikiPlatform> platform = modal.platforms;
 
 
-
-        if(platform!=null){
+        if (platform != null) {
             holder.platform1.setVisibility(View.VISIBLE);
             holder.platform2.setVisibility(View.VISIBLE);
             holder.platform3.setVisibility(View.VISIBLE);
 
 
-            switch (platform.size()){
-                case 0 :
+            switch (platform.size()) {
+                case 0:
                     holder.platform1.setVisibility(View.INVISIBLE);
                     holder.platform2.setVisibility(View.INVISIBLE);
                     holder.platform3.setVisibility(View.INVISIBLE);
 
                     break;
-                case 1 :  holder.platform1.setVisibility(View.INVISIBLE);
-                            holder.platform3.setVisibility(View.INVISIBLE);
-                          holder.platform2.setText(platform.get(0).abbreviation);
+                case 1:
+                    holder.platform1.setVisibility(View.INVISIBLE);
+                    holder.platform3.setVisibility(View.INVISIBLE);
+                    holder.platform2.setText(platform.get(0).abbreviation);
                     break;
-                case 2 :
+                case 2:
                     holder.platform2.setVisibility(View.INVISIBLE);
                     holder.platform1.setText(platform.get(0).abbreviation);
                     holder.platform3.setText(platform.get(1).abbreviation);
                     break;
-                case 3 :
+                case 3:
 
 
                     holder.platform1.setText(platform.get(0).abbreviation);
@@ -164,23 +154,19 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
                     holder.platform3.setText(platform.get(2).abbreviation);
                     break;
 
-                default: holder.platform1.setText(platform.get(0).abbreviation);
+                default:
+                    holder.platform1.setText(platform.get(0).abbreviation);
                     holder.platform2.setText(platform.get(1).abbreviation);
-                    holder.platform3.setText("+"+(platform.size()-2)+" more");
+                    holder.platform3.setText("+" + (platform.size() - 2) + " more");
 
             }
         }
 
 
-
-
-
 /****************** SET ON CLICK LISTENER *************************/
 
 
-
-       // holder.description.setText(modal.getDescription());
-
+        // holder.description.setText(modal.getDescription());
 
 
         /*********************ANIMATION*********************/
@@ -301,7 +287,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
 
             return true;
         }
-      }
+    }
 
     @Override
     public void onViewDetachedFromWindow(MyViewHolder holder) {

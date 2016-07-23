@@ -60,6 +60,7 @@ public class GiantBomb {
     public static final String IS_GAME_REVIEW = "isGameReview";
     public static final String POSITION = "position";
     public static final String VIDEO_TYPE = "video_type";
+    public static final String API_URL = "apiUrl";
     public static String REDUCE_VIEW = "reduce_view";
 
 

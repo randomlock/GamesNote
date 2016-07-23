@@ -19,8 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
+            app:title=""
             android:theme="@style/MyToolbar">
 
 
@@ -28,6 +28,7 @@
                 android:id="@+id/character_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxHeight="300dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/headerbackground"
                 app:layout_collapseMode="parallax"
@@ -77,8 +78,7 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="24dp"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    >
+                    android:layout_marginRight="24dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -158,9 +158,9 @@
 
                 <TextView
                     style="@style/cardview_textstyle"
-                    android:textColor="?android:attr/textColorPrimary"
                     android:text="Summary"
                     android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
                     android:padding="0dp"
                     android:layout_marginTop="12dp"
 
@@ -173,7 +173,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="deck info"
+                    android:lineSpacingMultiplier="1.25"
                     android:textColor="@color/primary_text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@color/accent" />
+
+
+                <TextView
+                    style="@style/cardview_textstyle"
+                    android:text="Images"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
+                    android:padding="0dp"
+                    android:layout_marginTop="12dp"
+
+                    />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/image_recycler_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="24dp"
+
+                    />
 
                 <View
                     android:layout_width="match_parent"
@@ -246,9 +274,9 @@
 
                 <TextView
                     style="@style/cardview_textstyle"
-                    android:textColor="?android:attr/textColorPrimary"
                     android:text="Detail Description"
                     android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
                     android:padding="0dp"
                     android:layout_marginTop="12dp"
 
@@ -261,6 +289,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="24dp"
                     android:text="No Additional info"
+                    android:lineSpacingMultiplier="1.25"
                     android:textColor="@color/primary_text" />
 
 

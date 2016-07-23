@@ -42,7 +42,8 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
 
     public boolean isFavorite = false;
     public boolean isWatchLater = false;
-
+    public boolean isWatched = false;
+    public int secondsWatched;
 
 
     @Override

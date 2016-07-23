@@ -112,7 +112,6 @@ public class UserReviewDetailActivity extends AppCompatActivity {
             webView.setBackgroundColor(ContextCompat.getColor(this, R.color.webviewbackground));
 
 
-
         }
 
 
