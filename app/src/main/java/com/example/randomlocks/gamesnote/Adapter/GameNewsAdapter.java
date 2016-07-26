@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.NewsDetailActivity;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
@@ -26,29 +27,49 @@ import java.util.List;
  */
 public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNewsHolder> {
 
+
+    private static final int SIMPLE_VIEW_TYPE = 0;
+    private static final int CARD_VIEW_TYPE = 1;
+
     List<NewsModal> modals;
     Context context;
+    boolean isSimple;
 
-    public GameNewsAdapter(List<NewsModal> modals, Context context) {
+    public GameNewsAdapter(List<NewsModal> modals, Context context, boolean isSimple) {
         this.modals = modals;
         this.context = context;
+        this.isSimple = isSimple;
     }
 
 
     @Override
     public MyNewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.custom_game_news, parent, false);
-        return new MyNewsHolder(v);
+        View view;
+        if (viewType == SIMPLE_VIEW_TYPE) {
+            view = inflater.inflate(R.layout.custom_game_news_layout2, parent, false);
+        } else {
+            view = inflater.inflate(R.layout.custom_game_news_layout1, parent, false);
+        }
+        return new MyNewsHolder(view);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return isSimple ? SIMPLE_VIEW_TYPE : CARD_VIEW_TYPE;
+    }
+
+    public void setSimple(boolean simple) {
+        isSimple = simple;
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onBindViewHolder(MyNewsHolder holder, int position) {
         NewsModal newsModal = modals.get(position);
         holder.heading.setText(newsModal.title);
         if (newsModal.content != null) {
-            Picasso.with(context).load(newsModal.content).fit().into(holder.image);
+            Picasso.with(context).load(newsModal.content).fit().centerCrop().into(holder.image);
         } else {
             Document document = Jsoup.parse(newsModal.description);
             Elements elements = document.getElementsByTag("img");
@@ -105,7 +126,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         public void onClick(View v) {
             NewsModal newsModal = modals.get(getLayoutPosition());
             Intent intent = new Intent(context, NewsDetailActivity.class);
-            intent.putExtra("DATA", newsModal);
+            intent.putExtra(GiantBomb.MODAL, newsModal);
             context.startActivity(intent);
 
         }

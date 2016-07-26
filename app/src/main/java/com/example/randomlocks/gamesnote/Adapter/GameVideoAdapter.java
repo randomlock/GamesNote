@@ -20,6 +20,7 @@ import com.example.randomlocks.gamesnote.Activity.PlayerActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.VideoListDatabase;
 import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
@@ -27,10 +28,10 @@ import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
+import io.realm.RealmAsyncTask;
+import io.realm.RealmResults;
 
-/**
- * Created by randomlocks on 7/19/2016.
- */
+//TODO FIX optimization on query ASAP effectively
 public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyViewHolder> {
 
     List<GamesVideoModal> modalList;
@@ -40,7 +41,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
     private static final int CARD_VIEW_TYPE = 1;
     OnClickInterface mOnClickInteraface;
     Realm realm;
-
+    RealmAsyncTask transaction;
     public void swapModal(List<GamesVideoModal> listModals, boolean isAllVideo) {
 
         if (listModals != null) {
@@ -132,28 +133,37 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
         } else if (holder.video_type != null) {
             holder.video_type.setVisibility(View.GONE);
         }
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                final GamesVideoModal realmModal = realm.where(GamesVideoModal.class).equalTo("id", modal.id).findFirst();
+                if (realmModal != null) {
+                    if (realmModal.isWatchLater) {
+                        modal.isWatchLater = true;
+                        holder.watchLater.setColorFilter(ContextCompat.getColor(context, R.color.linecolor));
+                    }
+                    if (realmModal.isFavorite) {
+                        modal.isFavorite = true;
+                        holder.like.setColorFilter(ContextCompat.getColor(context, R.color.linecolor));
+                    }
+                } else {
+                    holder.watchLater.setColorFilter(ContextCompat.getColor(context, R.color.white));
+                    holder.like.setColorFilter(ContextCompat.getColor(context, R.color.white));
 
-
-        final GamesVideoModal realmModal = realm.where(GamesVideoModal.class).equalTo("id", modal.id).findFirst();
-
-
-        if (realmModal != null) {
-            if (realmModal.isWatchLater) {
-                modal.isWatchLater = true;
-                holder.watchLater.setColorFilter(ContextCompat.getColor(context, R.color.linecolor));
+                }
             }
-            if (realmModal.isFavorite) {
-                modal.isFavorite = true;
-                holder.like.setColorFilter(ContextCompat.getColor(context, R.color.linecolor));
-            }
+        });
+
+        RealmResults<VideoListDatabase> realmModal = realm.where(VideoListDatabase.class).equalTo("id", modal.id).findAll();
+        if (realmModal.size() == 0) {
+            holder.status.setVisibility(View.GONE);
         } else {
-            holder.watchLater.setColorFilter(ContextCompat.getColor(context, R.color.white));
-            holder.like.setColorFilter(ContextCompat.getColor(context, R.color.white));
-
+            holder.status.setVisibility(View.VISIBLE);
         }
 
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -244,7 +254,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
                             .setData(Uri.parse(highUrl))
                             .putExtra(PlayerActivity.CONTENT_ID_EXTRA, highUrl.toLowerCase(Locale.US).replaceAll("\\s", ""))
                             .putExtra(PlayerActivity.CONTENT_TYPE_EXTRA, Util.TYPE_OTHER)
-                            .putExtra(GiantBomb.MODAL, videoModal)
+                            .putExtra(GiantBomb.KEY, videoModal.id)
                             .putExtra(PlayerActivity.PROVIDER_EXTRA, "");
 
                     context.startActivity(intent);
@@ -260,9 +270,9 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
     @Override
     public void onViewDetachedFromWindow(MyViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        if (realm != null && realm.isInTransaction()) {
-            Log.d("tag", "yes bro");
-            realm.cancelTransaction();
+        if (transaction != null && !transaction.isCancelled()) {
+            Log.d("tag", "cancel transaction");
+            transaction.cancel();
         }
     }
 }

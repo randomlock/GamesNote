@@ -48,8 +48,8 @@ import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.DemoPlayer;
 import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.EventLogger;
 import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.ExtractorRendererBuilder;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.VideoListDatabase;
 import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
@@ -80,6 +80,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
+import io.realm.RealmAsyncTask;
 
 /**
  * An activity that plays media using {@link DemoPlayer}.
@@ -136,7 +137,9 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     private AudioCapabilitiesReceiver audioCapabilitiesReceiver;
 
     Realm realm;
-    private GamesVideoModal modal;
+    int videoId;
+    boolean isReady = false;
+    RealmAsyncTask transaction;
 
 
     // Activity lifecycle
@@ -237,7 +240,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
                 inferContentType(contentUri, intent.getStringExtra(CONTENT_EXT_EXTRA)));
         contentId = intent.getStringExtra(CONTENT_ID_EXTRA);
         provider = intent.getStringExtra(PROVIDER_EXTRA);
-        modal = intent.getParcelableExtra(GiantBomb.MODAL);
+        videoId = intent.getIntExtra(GiantBomb.KEY, 0);
         configureSubtitleView();
         if (player == null) {
             if (!maybeRequestPermission()) {
@@ -254,21 +257,24 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
         Log.d("tag", "hello pause");
         if (Util.SDK_INT <= 23) {
             onHidden();
-        }
-        if (realm != null) {
-            modal.isWatched = true;
-      /*realm.executeTransactionAsync(new Realm.Transaction() {
-        @Override
-        public void execute(Realm realm) {
-          realm.copyToRealmOrUpdate(modal);
-        }
-      }, new Realm.Transaction.OnSuccess() {
-        @Override
-        public void onSuccess() {
+
+            if (realm != null && isReady) {
+                transaction = realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        VideoListDatabase videoListDatabase = new VideoListDatabase(videoId);
+                        realm.copyToRealm(videoListDatabase);
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("tag", "video is watched");
+                    }
+                });
+            }
 
         }
-      }); */
-        }
+
 
     }
 
@@ -277,6 +283,9 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
         super.onStop();
         if (Util.SDK_INT > 23) {
             onHidden();
+        }
+        if (transaction != null && !transaction.isCancelled()) {
+            transaction.cancel();
         }
     }
 
@@ -441,6 +450,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
                 text += "preparing";
                 break;
             case ExoPlayer.STATE_READY:
+                isReady = true;
                 text += "ready";
                 break;
             default:

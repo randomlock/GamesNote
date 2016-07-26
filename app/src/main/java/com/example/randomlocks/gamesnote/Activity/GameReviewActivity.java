@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoCoordinatorLayout;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
@@ -134,7 +135,7 @@ public class GameReviewActivity extends AppCompatActivity {
 
     }
 
-    private void fillData(GameReviewModal modals) {
+    private void fillData(final GameReviewModal modals) {
 
         if (modals.deck != null) {
             deck.setText(modals.deck);
@@ -165,13 +166,10 @@ public class GameReviewActivity extends AppCompatActivity {
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
-                    //  ((MainActivity)(getActivity())).loadWebView(url);
-                    String relativeUrl[] = url.split("///");
-                    if (relativeUrl.length >= 1) {
-                        runBrowser(relativeUrl[1]);
+                    if (modals.siteDetailUrl != null) {
+                        Toaster.make(GameReviewActivity.this, modals.siteDetailUrl);
+                        runBrowser(modals.siteDetailUrl);
                     }
-
 
                     return true;
                 }
@@ -216,7 +214,7 @@ public class GameReviewActivity extends AppCompatActivity {
     void runBrowser(String url) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
         CustomTabActivityHelper.openCustomTab(
-                this, customTabsIntent, Uri.parse("http://www.giantbomb.com/" + url), new WebViewFallback());
+                this, customTabsIntent, Uri.parse(url), new WebViewFallback());
     }
 
 

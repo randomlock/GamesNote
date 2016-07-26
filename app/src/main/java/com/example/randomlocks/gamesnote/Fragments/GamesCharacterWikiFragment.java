@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.MainActivity;
@@ -30,7 +29,6 @@ import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterf
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModalList;
 import com.example.randomlocks.gamesnote.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +55,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     Map<String, String> map;
     CharacterSearchAdapter adapter;
     Toolbar toolbar;
-    ImageView imageView;
+//    ImageView imageView;
 
 
     public GamesCharacterWikiFragment() {
@@ -90,10 +88,10 @@ public class GamesCharacterWikiFragment extends Fragment {
         recyclerView = (RecyclerView) coordinator.findViewById(R.id.recycler_view);
         pacman = (AVLoadingIndicatorView) coordinator.findViewById(R.id.progressBar);
         errorText = (TextView) coordinator.findViewById(R.id.errortext);
-        imageView = (ImageView) coordinator.findViewById(R.id.appbar_image);
+        //     imageView = (ImageView) coordinator.findViewById(R.id.appbar_image);
 
 
-        Picasso.with(getContext()).load("http://images.popmatters.com/blog_art/m/max_payne_old.jpg").placeholder(R.drawable.headerbackground).fit().centerInside().into(imageView);
+        //    Picasso.with(getContext()).load("http://images.popmatters.com/blog_art/m/max_payne_old.jpg").placeholder(R.drawable.headerbackground).fit().centerInside().into(imageView);
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -132,7 +130,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
 
-        if (modals != null) {
+        if (modals != null && adapter != null) {
             modals.clear();
             adapter.notifyDataSetChanged();
         }

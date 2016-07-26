@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.randomlocks.gamesnote.Fragments.CharacterDetailFragmentDELETE;
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.R;
@@ -64,7 +63,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
     public void startCharacterActivity(String apiUrl, String imageUrl) {
 
-        Fragment fragment = fragmentManager.findFragmentByTag("characterDetail");
+       /* Fragment fragment = fragmentManager.findFragmentByTag("characterDetail");
 
         if (fragment == null) {
             fragment = CharacterDetailFragmentDELETE.newInstance(apiUrl, imageUrl);
@@ -72,13 +71,13 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "characterDetail");
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
 
 
-       /* Intent intent = new Intent(this,CharacterDetailActivity.class);
+        Intent intent = new Intent(this, CharacterDetailActivity.class);
         intent.putExtra(GiantBomb.API_URL,apiUrl);
         intent.putExtra(GiantBomb.IMAGE_URL,imageUrl);
-        startActivity(intent);*/
+        startActivity(intent);
 
 
     }

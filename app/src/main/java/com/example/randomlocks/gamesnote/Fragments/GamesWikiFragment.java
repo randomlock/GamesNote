@@ -113,7 +113,13 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
 
 /***************************  SETTING THE VIEW PAGER ***********************/
-        viewPager.setAdapter(new GameDetailPagerAdapter(context, 4));
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("http://www.trbimg.com/img-568482b1/turbine/la-et-hc-1231-the-player-2016-20151231-002/650/650x366");
+        arrayList.add("http://images.medicaldaily.com/sites/medicaldaily.com/files/styles/headline/public/2016/03/08/video-games.jpg");
+        arrayList.add("http://i.investopedia.com/inv/articles/slideshow/5-top-video-game-characters/game-characters.jpg");
+        arrayList.add("http://img3.rnkr-static.com/list_img_v2/3654/283654/full/the-best-female-video-game-characters-u1.jpg");
+
+        viewPager.setAdapter(new GameDetailPagerAdapter(context, 0, arrayList));
         CircleIndicator indicator = (CircleIndicator) coordinatorLayout.findViewById(R.id.indicator);
         indicator.setViewPager(viewPager);
 
@@ -161,19 +167,21 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         }
 
 
-        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(manager) {
-            @Override
-            public void onLoadMore(int current_page) {
+        if (manager != null) {
+            recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(manager) {
+                @Override
+                public void onLoadMore(int current_page) {
 
-                int offset = Integer.parseInt(map.get(GiantBomb.OFFSET));
-                offset += Integer.parseInt(LIMIT);
-                map.put(GiantBomb.OFFSET, String.valueOf(offset));
+                    int offset = Integer.parseInt(map.get(GiantBomb.OFFSET));
+                    offset += Integer.parseInt(LIMIT);
+                    map.put(GiantBomb.OFFSET, String.valueOf(offset));
 
-                getGameWiki(gameWikiListInterface, map);
+                    getGameWiki(gameWikiListInterface, map);
 
 
-            }
-        });
+                }
+            });
+        }
 
 
         /************************ PROGRESS BAR ANIMATION ****************************/

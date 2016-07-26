@@ -13,8 +13,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,10 +31,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
+import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailOverviewAdapter;
 import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
-import com.example.randomlocks.gamesnote.Adapter.WikiPagerAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
@@ -44,16 +44,15 @@ import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.PagerDepthAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
+import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
-import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailImages;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
@@ -94,12 +93,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     Toolbar toolbar;
     String apiUrl, imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
-    ViewPager viewPager;
     Map<String, String> map;
     GameDetailModal gameDetailModal = null;
     CollapsingToolbarLayout toolbarLayout;
     AppBarLayout appBarLayout;
-    RecyclerView recyclerView, similarGameRecycleView, characterRecycleView;
+    RecyclerView recyclerView, similarGameRecycleView, characterRecycleView, imageRecycleView;
     PicassoNestedScrollView nestedScrollView;
     TextView description;
     GameDetailOverviewAdapter adapter;
@@ -217,7 +215,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         appbarImage = (ImageView) getActivity().findViewById(R.id.appbar_image);
         toolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
         toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
-        viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         relativeLayout = (RelativeLayout) coordinatorLayout.findViewById(R.id.cover_layout);
         coverImage = (ImageView) relativeLayout.findViewById(R.id.cover_image);
@@ -228,6 +225,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         description = (TextView) nestedScrollView.findViewById(R.id.description);
         overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
+        imageRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.image_recycler_view);
         review = (TextView) nestedScrollView.findViewById(R.id.review);
         userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
@@ -464,19 +462,19 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         }
 
 
-        final List<GameDetailImages> image = gameDetailModal.images;
-        ArrayList<String> images = new ArrayList<>(image.size());
+        final List<CharacterImage> image = gameDetailModal.images;
+      /*  ArrayList<String> images = new ArrayList<>(image.size());
         for (int i = 0, size = image.size(); i < size; i++) {
             images.add(image.get(i).mediumUrl);
-        }
+        }*/
 
             /*    if (images.size()>0) {
                     Picasso.with(getContext()).load(images.get(0)).fit().centerCrop().into(appbarImage);
                 } */
 
-        WikiPagerAdapter pagerAdapter = new WikiPagerAdapter(getContext(), images.size(), images);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setPageTransformer(true, new PagerDepthAnimation());
+        /************* SETTING GAME IMAGE ***********************************/
+        imageRecycleView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        imageRecycleView.setAdapter(new CharacterDetailImageAdapter(image, getContext()));
 
         toolbarLayout.setTitle(gameDetailModal.name);
 

@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,7 +54,7 @@ import retrofit2.Response;
 
 //TODO EDIT TEXT FIX for keyboard and cursor . Cancel the realmasynctask if query is not completed
 
-public class GameVideoPagerFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
+public class GameVideoPagerFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String MODAL = "list_modals";
     private static final String SCROLL_POSITION = "scroll_position";
@@ -77,6 +78,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     EditText searchVideos;
     TextView errorText;
     CoordinatorLayout coordinatorLayout;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     public GameVideoPagerFragment() {
@@ -115,10 +117,18 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         mNavigation = (NavigationView) getActivity().findViewById(R.id.navigation);
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.root_coordinator);
         searchVideos = (EditText) coordinatorLayout.findViewById(R.id.search_video);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeContainer);
+        recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recycler_view);
         errorText = (TextView) getView().findViewById(R.id.errortext);
+
         pacman = (AVLoadingIndicatorView) getView().findViewById(R.id.progressBar);
         pacman.setVisibility(View.VISIBLE);
+
+
+        /************* SWIPE TO REFRESH ************************/
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
 
 
         /********* SET NAVIGATION VIEW **********************/
@@ -477,7 +487,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                     isReduced = true;
                     item.setTitle(getString(R.string.reduce_view));
 
-                    ;
 
                 } else {
                     item.setTitle(getString(R.string.compact_view));
@@ -575,4 +584,12 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     }
 
 
+    @Override
+    public void onRefresh() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+        Toaster.make(getContext(), "hello");
+        swipeRefreshLayout.setRefreshing(false);
+    }
 }

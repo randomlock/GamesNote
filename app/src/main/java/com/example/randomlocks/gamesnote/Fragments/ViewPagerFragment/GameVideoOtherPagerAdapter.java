@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ public class GameVideoOtherPagerAdapter extends Fragment {
     GameVideoOtherAdapter adapter;
     RealmResults<GamesVideoModal> listModals;
     DrawerLayout mDrawer;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     public GameVideoOtherPagerAdapter() {
@@ -74,7 +76,18 @@ public class GameVideoOtherPagerAdapter extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeContainer);
+        recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recycler_view);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (adapter != null) {
+                    boolean isSimple = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_VIEW, false, getContext());
+                    adapter.setSimple(isSimple);
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         if (listModals != null) {
             fillRecyclerView(listModals);
         } else {

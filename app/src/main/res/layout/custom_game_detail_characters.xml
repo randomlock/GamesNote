@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello"
+        android:gravity="center"
         android:layout_marginTop="12dp"
         android:textColor="?android:attr/textColorPrimary"
         android:textStyle="bold"

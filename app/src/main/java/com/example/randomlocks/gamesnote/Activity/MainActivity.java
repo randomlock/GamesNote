@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onGlobalLayout() {
                     navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().error(R.drawable.headerbackground).into(navHeaderLayout);
+                    Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.headerbackground).error(R.drawable.headerbackground).into(navHeaderLayout);
                 }
             });
         } else

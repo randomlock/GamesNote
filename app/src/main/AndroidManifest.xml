@@ -32,7 +32,12 @@
             android:name=".Activity.GameDetailActivity"
             android:parentActivityName=".Activity.MainActivity" />
         <activity android:name=".Activity.ViewPagerActivity" />
-        <activity android:name=".Activity.NewsDetailActivity" />
+        <activity android:name=".Activity.NewsDetailActivity">
+            <intent-filter>
+                <action android:name="com.example.randomlocks.gamesnote.Activity.NewsDetailActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activity.GameReviewActivity"></activity>
         <activity android:name=".Activity.UserReviewActivity" />
         <activity android:name=".Activity.UserReviewDetailActivity" />

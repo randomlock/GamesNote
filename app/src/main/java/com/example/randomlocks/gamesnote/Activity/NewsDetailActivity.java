@@ -17,11 +17,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
+
+
+//TODO crash fix news containing videos
 
 public class NewsDetailActivity extends AppCompatActivity {
 
@@ -60,7 +64,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
         customTabActivityHelper = new CustomTabActivityHelper();
-        newsModal = getIntent().getParcelableExtra("DATA");
+        newsModal = getIntent().getParcelableExtra(GiantBomb.MODAL);
         description = newsModal.description;
 
 
@@ -133,7 +137,6 @@ public class NewsDetailActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-                //  ((MainActivity)(getActivity())).loadWebView(url);
 
                 runBrowser(url);
 

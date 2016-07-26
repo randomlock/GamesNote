@@ -9,21 +9,28 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.randomlocks.gamesnote.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
- * Created by randomlocks on 5/31/2016.
+ * Created by randomlocks on 4/24/2016.
  */
 public class GameDetailPagerAdapter extends PagerAdapter {
 
+
     Context context;
     int count;
-    private ImageView imageView;
+    ArrayList<String> images;
+    PhotoViewAttacher mPhotoView;
 
-
-    public GameDetailPagerAdapter(Context context, int count) {
+    public GameDetailPagerAdapter(Context context, int count, ArrayList<String> images) {
         this.context = context;
         this.count = count;
-
+        this.images = new ArrayList<>(images);
     }
 
 
@@ -47,13 +54,28 @@ public class GameDetailPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
+        String imageUrl = images.get(position);
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.viewpager_wiki_image, container, false);
-        imageView = (ImageView) view.findViewById(R.id.image);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.image);
+        Picasso.with(context).load(imageUrl).into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                mPhotoView = new PhotoViewAttacher(imageView);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
 
         container.addView(view);
 
 
         return view;
     }
+
+
 }

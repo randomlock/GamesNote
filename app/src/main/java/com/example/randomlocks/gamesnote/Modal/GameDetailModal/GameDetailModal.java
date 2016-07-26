@@ -1,5 +1,6 @@
 package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
+import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
 import com.google.gson.annotations.Expose;
 
 import io.realm.RealmList;
@@ -16,7 +17,9 @@ public class GameDetailModal extends RealmObject {
     @Expose
     public String name;
     @Expose
-    public RealmList<GameDetailImages> images;
+    public RealmList<CharacterImage> images;
+    @Expose
+    public RealmList<GameDetailVideo> videos;
     @Expose
     public RealmList<GameDetailCharacters> characters;
     @Expose

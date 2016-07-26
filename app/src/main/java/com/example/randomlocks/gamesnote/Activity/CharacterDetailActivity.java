@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -60,6 +61,7 @@ public class CharacterDetailActivity extends AppCompatActivity {
     AVLoadingIndicatorView pacman;
     CoordinatorLayout coordinatorLayout;
     AsyncTask asyncCharacterWikiImage = null;
+    AppBarLayout appBarLayout;
     CollapsingToolbarLayout collapsingToolbarLayout;
 
 
@@ -71,10 +73,11 @@ public class CharacterDetailActivity extends AppCompatActivity {
         apiUrl = str[str.length - 1];
         imageUrl = getIntent().getStringExtra(GiantBomb.IMAGE_URL);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_coordinator);
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
         collapsingToolbarLayout.setTitle("");
-        toolbar = (Toolbar) coordinatorLayout.findViewById(R.id.my_toolbar);
-        coverImage = (ImageView) coordinatorLayout.findViewById(R.id.character_image);
+        toolbar = (Toolbar) collapsingToolbarLayout.findViewById(R.id.my_toolbar);
+        coverImage = (ImageView) collapsingToolbarLayout.findViewById(R.id.character_image);
         scrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         pacman = (AVLoadingIndicatorView) scrollView.findViewById(R.id.progressBar);
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
@@ -91,13 +94,42 @@ public class CharacterDetailActivity extends AppCompatActivity {
 
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        /*coverImage.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                coverImage.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                DisplayMetrics displaymetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                int width = displaymetrics.widthPixels;
+                Picasso.with(CharacterDetailActivity.this)
+                        .load(imageUrl)
+                        .into(coverImage);
+            }
+        });*/
+        Picasso.with(this).load(imageUrl).into(coverImage);
 
-        if (imageUrl != null) {
-            Picasso.with(this).load(imageUrl).into(coverImage);
-        }
+       /* Picasso.with(this).load(imageUrl).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                expandToolbar(bitmap);
+                coverImage.setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });*/
+
+
 
         if (savedInstanceState != null) {
             Toaster.make(this, "hello save instance");
@@ -248,5 +280,6 @@ public class CharacterDetailActivity extends AppCompatActivity {
             asyncCharacterWikiImage.cancel(true);
         }
     }
+
 
 }

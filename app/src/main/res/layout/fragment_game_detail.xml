@@ -347,13 +347,11 @@
                     />
 
 
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewpager"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/image_recycler_view"
                     android:padding="3dp"
                     android:layout_width="match_parent"
-                    android:layout_height="192dp"
-                    app:layout_collapseMode="parallax"
+                    android:layout_height="wrap_content"
                     />
 
 

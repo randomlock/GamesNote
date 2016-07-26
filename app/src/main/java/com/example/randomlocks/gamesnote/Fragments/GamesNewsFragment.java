@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Adapter.GameNewsAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -60,11 +61,13 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     Toolbar toolbar;
     CoordinatorLayout coordinatorLayout;
     List<NewsModal> modals;
+    DividerItemDecoration itemDecoration;
     GameNewsAdapter gameNewsAdapter;
     LinearLayoutManager layoutManager;
     public String URL = "http://www.eurogamer.net/?format=rss";
     String mTitle;
     int mSelectedId;
+    boolean isReduced;
 
 
     public GamesNewsFragment() {
@@ -75,6 +78,9 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        itemDecoration = new DividerItemDecoration(getContext());
+        isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_NEWS_VIEW, false, getContext());
+
     }
 
     @Override
@@ -205,10 +211,24 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
-        gameNewsAdapter = new GameNewsAdapter(modals, getContext());
+        gameNewsAdapter = new GameNewsAdapter(modals, getContext(), isReduced);
+        if (isReduced) {
+            recyclerView.addItemDecoration(itemDecoration);
+        }
+
         recyclerView.setAdapter(gameNewsAdapter);
 
 
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (isReduced) {
+            menu.getItem(0).setTitle(getString(R.string.reduce_view));
+        } else {
+            menu.getItem(0).setTitle(getString(R.string.compact_view));
+        }
     }
 
 
@@ -225,6 +245,37 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
             case android.R.id.home:
                 getActivity().onBackPressed();
                 return true;
+
+
+            case R.id.view:
+
+
+                if (item.getTitle().equals(getString(R.string.compact_view))) {
+                    isReduced = true;
+                    item.setTitle(getString(R.string.reduce_view));
+
+
+                } else {
+                    item.setTitle(getString(R.string.compact_view));
+                    isReduced = false;
+                }
+
+
+                if (gameNewsAdapter != null) {
+                    gameNewsAdapter.setSimple(isReduced);
+                }
+
+                if (recyclerView != null) {
+                    if (isReduced) {
+                        recyclerView.addItemDecoration(itemDecoration);
+                    } else {
+                        recyclerView.removeItemDecoration(itemDecoration);
+                    }
+                }
+
+
+                return true;
+
 
             case R.id.drawer_right:
 
@@ -373,6 +424,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         super.onPause();
         Context context = getContext();
         if (context != null) {
+            SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_NEWS_VIEW, isReduced, context);
             SharedPreference.saveToSharedPreference(KEY, mSelectedId, context);
             SharedPreference.saveToSharedPreference(TITLE, mTitle, context);
         }

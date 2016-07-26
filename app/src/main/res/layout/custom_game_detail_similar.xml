@@ -5,6 +5,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/cardColor"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="6dp"
     >
 
 
@@ -15,7 +17,6 @@
     android:id="@+id/image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="3dp"
     android:src="@drawable/testimage"
     android:background="?android:selectableItemBackground" />
 

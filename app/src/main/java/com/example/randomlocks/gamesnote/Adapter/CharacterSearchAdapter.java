@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
@@ -12,8 +13,6 @@ import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by randomlocks on 7/11/2016.
@@ -50,7 +49,7 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
             holder.name.setText(modal.name);
         }
         if (modal.image != null && modal.image.thumbUrl != null && !modal.image.thumbUrl.isEmpty()) {
-            Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().into(holder.profileImage);
+            Picasso.with(context).load(modal.image.thumbUrl).into(holder.profileImage);
         } else {
             holder.profileImage.setImageResource(R.drawable.headerbackground);
         }
@@ -64,12 +63,12 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        CircleImageView profileImage;
+        ImageView profileImage;
         TextView name;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            profileImage = (CircleImageView) itemView.findViewById(R.id.profile_image);
+            profileImage = (ImageView) itemView.findViewById(R.id.profile_image);
             name = (TextView) itemView.findViewById(R.id.name);
             itemView.setOnClickListener(this);
         }
