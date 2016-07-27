@@ -24,6 +24,10 @@ public class CharacterModal implements Parcelable {
     @Expose
     public FirstAppearance firstAppearedInGame;
     @Expose
+    public List<GameAppearance> enemies;
+    @Expose
+    public List<GameAppearance> friends;
+    @Expose
     public List<GameAppearance> games;
     @Expose
     public int gender;
@@ -31,6 +35,10 @@ public class CharacterModal implements Parcelable {
     public CharacterImage image;
     @Expose
     public String name;
+
+
+    public CharacterModal() {
+    }
 
 
     @Override
@@ -45,13 +53,12 @@ public class CharacterModal implements Parcelable {
         dest.writeString(this.deck);
         dest.writeString(this.description);
         dest.writeParcelable(this.firstAppearedInGame, flags);
+        dest.writeTypedList(this.enemies);
+        dest.writeTypedList(this.friends);
         dest.writeTypedList(this.games);
         dest.writeInt(this.gender);
         dest.writeParcelable(this.image, flags);
         dest.writeString(this.name);
-    }
-
-    public CharacterModal() {
     }
 
     protected CharacterModal(Parcel in) {
@@ -60,6 +67,8 @@ public class CharacterModal implements Parcelable {
         this.deck = in.readString();
         this.description = in.readString();
         this.firstAppearedInGame = in.readParcelable(FirstAppearance.class.getClassLoader());
+        this.enemies = in.createTypedArrayList(GameAppearance.CREATOR);
+        this.friends = in.createTypedArrayList(GameAppearance.CREATOR);
         this.games = in.createTypedArrayList(GameAppearance.CREATOR);
         this.gender = in.readInt();
         this.image = in.readParcelable(CharacterImage.class.getClassLoader());

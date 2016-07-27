@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,13 +51,14 @@ public class CharacterDetailActivity extends AppCompatActivity {
     private static final String IMAGE_URL = "image_url";
     String apiUrl, imageUrl;
     ImageView coverImage;
-    TextView mSmallDescription, mBigDescription, mFirstAppearance, mAlias;
+    CircleImageView coverImage2;
+    TextView mSmallDescription, mBigDescription, mFirstAppearance, mAlias, mTitle;
     RecyclerView recyclerview, imageRecyclerView;
     LinearLayout parentLayout;
     GameCharacterInterface mGameCharacterInterface;
     Map<String, String> map;
     CharacterModal characterDetailModal;
-    TextView mGender, mBirthDay, mTotalGames;
+    TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
     AVLoadingIndicatorView pacman;
@@ -78,12 +81,16 @@ public class CharacterDetailActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle("");
         toolbar = (Toolbar) collapsingToolbarLayout.findViewById(R.id.my_toolbar);
         coverImage = (ImageView) collapsingToolbarLayout.findViewById(R.id.character_image);
+        coverImage2 = (CircleImageView) coordinatorLayout.findViewById(R.id.character_image2);
         scrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         pacman = (AVLoadingIndicatorView) scrollView.findViewById(R.id.progressBar);
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
+        mTitle = (TextView) parentLayout.findViewById(R.id.character_name);
+        mEnemies = (TextView) parentLayout.findViewById(R.id.enemies);
+        mFriends = (TextView) parentLayout.findViewById(R.id.friends);
+        mTotalGames = (TextView) parentLayout.findViewById(R.id.total_games);
         mGender = (TextView) parentLayout.findViewById(R.id.gender);
         mBirthDay = (TextView) parentLayout.findViewById(R.id.birthday);
-        mTotalGames = (TextView) parentLayout.findViewById(R.id.games);
         mSmallDescription = (TextView) parentLayout.findViewById(R.id.deck);
         imageRecyclerView = (RecyclerView) parentLayout.findViewById(R.id.image_recycler_view);
         mBigDescription = (TextView) parentLayout.findViewById(R.id.description);
@@ -109,7 +116,29 @@ public class CharacterDetailActivity extends AppCompatActivity {
                         .into(coverImage);
             }
         });*/
-        Picasso.with(this).load(imageUrl).into(coverImage);
+
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (collapsingToolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(collapsingToolbarLayout)) {
+                    if (coverImage2.getAlpha() == 1) {
+                        coverImage2.animate().setDuration(400).alpha(0);
+                    }
+                } else {
+                    if (coverImage2.getAlpha() == 0) {
+                        coverImage2.animate().setDuration(400).alpha(1);
+                    }
+                }
+            }
+
+        });
+
+
+        if (imageUrl != null && imageUrl.trim().length() > 0) {
+            Picasso.with(this).load(imageUrl).fit().centerCrop().into(coverImage);
+            Picasso.with(this).load(imageUrl).fit().centerCrop().into(coverImage2);
+        }
 
        /* Picasso.with(this).load(imageUrl).into(new Target() {
             @Override
@@ -151,6 +180,7 @@ public class CharacterDetailActivity extends AppCompatActivity {
                     @Override
                     public void processFinish(List<CharacterImage> imageUrls) {
                         if (imageUrls != null) {
+                            Picasso.with(CharacterDetailActivity.this).load(imageUrls.get(0).thumbUrl).fit().centerCrop().into(coverImage);
                             imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
                             imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this));
                         }
@@ -194,7 +224,10 @@ public class CharacterDetailActivity extends AppCompatActivity {
     private void fillData(CharacterModal characterDetailModal) {
         pacman.setVisibility(View.GONE);
         parentLayout.setVisibility(View.VISIBLE);
-        collapsingToolbarLayout.setTitle(characterDetailModal.name);
+        if (characterDetailModal.name != null) {
+            collapsingToolbarLayout.setTitle(characterDetailModal.name);
+            mTitle.setText(characterDetailModal.name);
+        }
 
         if (imageUrl == null && characterDetailModal.image != null && characterDetailModal.image.mediumUrl != null) {
             Picasso.with(this).load(characterDetailModal.image.mediumUrl).into(coverImage);
@@ -202,13 +235,31 @@ public class CharacterDetailActivity extends AppCompatActivity {
 
         mGender.setText(getGender(characterDetailModal.gender));
 
-        mTotalGames.setText(String.valueOf(characterDetailModal.games.size()));
+        if (characterDetailModal.enemies != null) {
+            mEnemies.setText(String.valueOf(characterDetailModal.enemies.size()));
+        }
+
+        if (characterDetailModal.friends != null) {
+
+            mFriends.setText(String.valueOf(characterDetailModal.friends.size()));
+        }
+
+        if (characterDetailModal.games != null) {
+
+            mTotalGames.setText(String.valueOf(characterDetailModal.games.size()));
+        }
         if (characterDetailModal.birthday != null) {
             mBirthDay.setText(characterDetailModal.birthday);
         }
-        String description = "\"" + characterDetailModal.deck + "\"";
-        mSmallDescription.setText(description);
-        mFirstAppearance.setText(characterDetailModal.firstAppearedInGame.name);
+        String description = null;
+        if (characterDetailModal.deck != null) {
+            description = "\"" + characterDetailModal.deck + "\"";
+            mSmallDescription.setText(description);
+
+        }
+        if (characterDetailModal.firstAppearedInGame != null) {
+            mFirstAppearance.setText(characterDetailModal.firstAppearedInGame.name);
+        }
         if (characterDetailModal.aliases != null) {
             mAlias.setText(characterDetailModal.aliases);
         }
@@ -277,6 +328,7 @@ public class CharacterDetailActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         if (asyncCharacterWikiImage != null) {
+            Toaster.make(this, "Cancel asynctask");
             asyncCharacterWikiImage.cancel(true);
         }
     }

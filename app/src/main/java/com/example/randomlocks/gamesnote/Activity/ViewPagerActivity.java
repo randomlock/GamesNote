@@ -27,7 +27,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         position = getIntent().getIntExtra(GiantBomb.POSITION, 0);
         imageUrls = getIntent().getStringArrayListExtra(GiantBomb.IMAGE_URL);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new GameDetailPagerAdapter(this, imageUrls.size(), imageUrls));
+        viewPager.setAdapter(new GameDetailPagerAdapter(this, imageUrls.size(), imageUrls, false));
         viewPager.setPageTransformer(false, new PagerDepthAnimation());
         viewPager.setCurrentItem(position);
 

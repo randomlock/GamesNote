@@ -7,8 +7,8 @@
     <color name="cardColor">#424242</color>
     <color name="black_semi_transparent">#B2FFFFFF</color>
     <color name="alpha_color">#c60b0b0b</color>
-    <color name="wikibackground">#303030</color>
-    <color name="webviewbackground">#303030</color>
+    <color name="wikibackground">@android:color/transparent</color>
+    <color name="webviewbackground">@android:color/transparent</color>
 
 
 </resources>

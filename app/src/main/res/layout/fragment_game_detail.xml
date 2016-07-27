@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
+            android:theme="@style/MyToolbar"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
             >
@@ -51,7 +52,6 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/MyToolbarLight"
                 app:layout_collapseMode="pin"
                 />
 
@@ -417,8 +417,11 @@
         app:fab_addButtonColorNormal="@color/accent"
         app:fab_addButtonColorPressed="@color/accent"
         app:layout_anchor="@id/scroll_view"
-        app:layout_anchorGravity="bottom|right|end"
-        >
+        app:layout_anchorGravity="bottom|right|end">
+        <!--
+                app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingPropertyHelper"
+        -->
+
 
         <com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton
             android:id="@+id/completed"

@@ -26,11 +26,13 @@ public class GameDetailPagerAdapter extends PagerAdapter {
     int count;
     ArrayList<String> images;
     PhotoViewAttacher mPhotoView;
+    boolean shouldFit = false;
 
-    public GameDetailPagerAdapter(Context context, int count, ArrayList<String> images) {
+    public GameDetailPagerAdapter(Context context, int count, ArrayList<String> images, boolean shouldFit) {
         this.context = context;
         this.count = count;
         this.images = new ArrayList<>(images);
+        this.shouldFit = shouldFit;
     }
 
 
@@ -59,17 +61,31 @@ public class GameDetailPagerAdapter extends PagerAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.viewpager_wiki_image, container, false);
         final ImageView imageView = (ImageView) view.findViewById(R.id.image);
-        Picasso.with(context).load(imageUrl).into(imageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                mPhotoView = new PhotoViewAttacher(imageView);
-            }
+        if (shouldFit) {
+            Picasso.with(context).load(imageUrl).fit().centerCrop().into(imageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    mPhotoView = new PhotoViewAttacher(imageView);
+                }
 
-            @Override
-            public void onError() {
+                @Override
+                public void onError() {
 
-            }
-        });
+                }
+            });
+        } else {
+            Picasso.with(context).load(imageUrl).into(imageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    mPhotoView = new PhotoViewAttacher(imageView);
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+        }
 
         container.addView(view);
 

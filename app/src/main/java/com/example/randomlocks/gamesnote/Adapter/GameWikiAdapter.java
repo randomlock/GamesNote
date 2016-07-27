@@ -105,10 +105,10 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         // Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
 
 
-        if (modal.image != null && modal.image.smallUrl != null && modal.image.mediumUrl != null) {
+        if (modal.image != null) {
             holder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
             holder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-            Picasso.with(context).load(modal.image.smallUrl).fit().centerCrop().into(holder.imageView);
+            Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().into(holder.imageView);
         }
 
         String date_time = modal.originalReleaseDate;

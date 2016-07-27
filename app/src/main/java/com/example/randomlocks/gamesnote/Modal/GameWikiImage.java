@@ -11,7 +11,7 @@ import com.google.gson.annotations.Expose;
 public class GameWikiImage implements Parcelable {
 
     @Expose
-    public String iconUrl;
+    public String thumbUrl;
     @Expose
     public String mediumUrl;
     @Expose
@@ -24,7 +24,7 @@ public class GameWikiImage implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.iconUrl);
+        dest.writeString(this.thumbUrl);
         dest.writeString(this.mediumUrl);
         dest.writeString(this.smallUrl);
     }
@@ -33,7 +33,7 @@ public class GameWikiImage implements Parcelable {
     }
 
     protected GameWikiImage(Parcel in) {
-        this.iconUrl = in.readString();
+        this.thumbUrl = in.readString();
         this.mediumUrl = in.readString();
         this.smallUrl = in.readString();
     }

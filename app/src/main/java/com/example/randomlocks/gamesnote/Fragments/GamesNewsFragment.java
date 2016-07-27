@@ -191,7 +191,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                         @Override
                         public void run() {
                             progressBar.setVisibility(View.GONE);
-                            Toaster.make(getContext(), "Unknown Error . Contact Lord kratos");
+                            Toaster.make(getContext(), "Unable to get the news feed");
                         }
                     });
 
@@ -378,6 +378,11 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
             case R.id.nav_giantbomb_release:
                 URL = "http://www.giantbomb.com/feeds/new_releases/";
+                break;
+
+
+            case R.id.nav_kotaku:
+                URL = "http://feeds.gawker.com/kotaku/full";
                 break;
 
 

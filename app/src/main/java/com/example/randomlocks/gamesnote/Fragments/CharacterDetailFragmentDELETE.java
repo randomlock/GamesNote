@@ -109,7 +109,7 @@ public class CharacterDetailFragmentDELETE extends Fragment {
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
         mGender = (TextView) parentLayout.findViewById(R.id.gender);
         mBirthDay = (TextView) parentLayout.findViewById(R.id.birthday);
-        mTotalGames = (TextView) parentLayout.findViewById(R.id.games);
+        mTotalGames = (TextView) parentLayout.findViewById(R.id.total_games);
         mSmallDescription = (TextView) parentLayout.findViewById(R.id.deck);
         imageRecyclerView = (RecyclerView) parentLayout.findViewById(R.id.image_recycler_view);
         mBigDescription = (TextView) parentLayout.findViewById(R.id.description);

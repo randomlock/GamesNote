@@ -4,8 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient">
+    android:layout_height="match_parent">
 
 
     <android.support.design.widget.AppBarLayout
@@ -18,22 +17,33 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@android:color/transparent"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
+            app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:title=""
             android:theme="@style/MyToolbar">
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
 
             <ImageView
                 android:id="@+id/character_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="300dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/headerbackground"
+                android:layout_height="192dp"
                 app:layout_collapseMode="parallax"
 
                 />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="192dp"
+                    android:background="@drawable/gradient" />
+
+
+            </FrameLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/my_toolbar"
@@ -69,7 +79,153 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
+                android:layout_marginTop="48dp"
                 android:animateLayoutChanges="true">
+
+
+                <TextView
+                    android:id="@+id/character_name"
+                    style="@style/cardview_textstyle"
+                    android:gravity="center"
+                    android:padding="0dp"
+                    android:layout_marginTop="12dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/deck"
+                    android:layout_margin="24dp"
+                    android:textStyle="italic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="deck info"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="1.25"
+                    android:textColor="@color/primary_text" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/primary_light" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="24dp">
+
+
+                    <TextView
+                        android:id="@+id/friends"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="5"
+                        android:linksClickable="true"
+                        android:textColor="@color/primary" />
+
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary_light" />
+
+
+                    <TextView
+                        android:id="@+id/enemies"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="@color/primary" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary_light" />
+
+
+                    <TextView
+                        android:id="@+id/total_games"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="12"
+                        android:textColor="@color/primary" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="24dp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="FRIENDS" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary_light" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="ENEMIES" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary_light" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="GAMES" />
+
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/primary_light" />
+
+
+                <TextView
+                    style="@style/cardview_textstyle"
+                    android:text="Overview"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp"
+                    android:padding="0dp"
+                    android:layout_marginTop="12dp"
+
+                    />
 
 
                 <LinearLayout
@@ -96,31 +252,31 @@
                         />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
+                <!--  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:layout_marginTop="24dp"
+                      android:layout_marginLeft="24dp"
+                      android:layout_marginRight="24dp"
 
-                    >
+                      >
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Total Games "
-                        android:layout_weight="1"
-                        android:textColor="@color/primary_text_light" />
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:text="Total Games "
+                          android:layout_weight="1"
+                          android:textColor="@color/primary_text_light" />
 
-                    <TextView
-                        android:id="@+id/games"
-                        android:layout_weight="1"
-                        android:text="-"
-                        style="@style/CharacterTextStyle"
+                      <TextView
+                          android:id="@+id/games"
+                          android:layout_weight="1"
+                          android:text="-"
+                          style="@style/CharacterTextStyle"
 
-                        />
-                </LinearLayout>
+                          />
+                  </LinearLayout>-->
 
 
                 <LinearLayout
@@ -148,74 +304,11 @@
                 </LinearLayout>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:background="@color/accent" />
-
-
-                <TextView
-                    style="@style/cardview_textstyle"
-                    android:text="Summary"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
-                    android:padding="0dp"
-                    android:layout_marginTop="12dp"
-
-                    />
-
-                <TextView
-                    android:id="@+id/deck"
-                    android:layout_margin="24dp"
-                    android:textStyle="italic"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="deck info"
-                    android:lineSpacingMultiplier="1.25"
-                    android:textColor="@color/primary_text" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:background="@color/accent" />
-
-
-                <TextView
-                    style="@style/cardview_textstyle"
-                    android:text="Images"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
-                    android:padding="0dp"
-                    android:layout_marginTop="12dp"
-
-                    />
-
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/image_recycler_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="24dp"
-
-                    />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:background="@color/accent" />
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="24dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
 
@@ -267,9 +360,36 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/accent"
+                    android:background="@color/primary_light"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp" />
+
+
+                <TextView
+                    style="@style/cardview_textstyle"
+                    android:text="Images"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp" />
+                    android:layout_marginStart="24dp"
+                    android:padding="0dp"
+                    android:layout_marginTop="12dp"
+
+                    />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/image_recycler_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="24dp"
+
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@color/primary_light" />
 
 
                 <TextView
@@ -308,12 +428,21 @@
                 android:layout_height="wrap_content"
                 app:indicator="Pacman"
                 app:indicator_color="@color/accent"
-                android:layout_gravity="top|center_horizontal" />
+                android:layout_gravity="center|top" />
 
 
         </FrameLayout>
 
 
     </com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/character_image2"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/headerbackground"
+        app:layout_anchor="@+id/character_image"
+        app:layout_anchorGravity="bottom|center" />
+
 
 </android.support.design.widget.CoordinatorLayout>

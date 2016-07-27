@@ -42,6 +42,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
@@ -119,9 +121,10 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         arrayList.add("http://i.investopedia.com/inv/articles/slideshow/5-top-video-game-characters/game-characters.jpg");
         arrayList.add("http://img3.rnkr-static.com/list_img_v2/3654/283654/full/the-best-female-video-game-characters-u1.jpg");
 
-        viewPager.setAdapter(new GameDetailPagerAdapter(context, 0, arrayList));
+        viewPager.setAdapter(new GameDetailPagerAdapter(context, 4, arrayList, true));
         CircleIndicator indicator = (CircleIndicator) coordinatorLayout.findViewById(R.id.indicator);
         indicator.setViewPager(viewPager);
+        // pageSwitcher(5);
 
 
         /***************************  SETTING THE TOOLBAR ***********************/
@@ -429,6 +432,48 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         }
 
     }
+
+
+    Timer timer;
+    int page = 0;
+
+    public void pageSwitcher(int seconds) {
+        timer = new Timer(); // At this line a new Thread will be created
+        timer.scheduleAtFixedRate(new RemindTask(), 0, seconds * 1000); // delay
+        // in
+        // milliseconds
+    }
+
+    // this is an inner class...
+    class RemindTask extends TimerTask {
+
+        @Override
+        public void run() {
+
+            // As the TimerTask run on a seprate thread from UI thread we have
+            // to call runOnUiThread to do work on UI thread.
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+
+                    if (page > 3) { // In my case the number of pages are 5
+                        timer.cancel();
+                        // Showing a toast for just testing purpose
+
+                    } else {
+                        viewPager.setCurrentItem(page++);
+                    }
+                }
+            });
+
+        }
+    }
+
+
+
+
+
+
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
