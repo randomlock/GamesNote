@@ -32,13 +32,7 @@
             android:name=".Activity.GameDetailActivity"
             android:parentActivityName=".Activity.MainActivity" />
         <activity android:name=".Activity.ViewPagerActivity" />
-        <activity android:name=".Activity.NewsDetailActivity">
-            <intent-filter>
-                <action android:name="com.example.randomlocks.gamesnote.Activity.NewsDetailActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".Activity.GameReviewActivity"></activity>
+        <activity android:name=".Activity.GameReviewActivity" />
         <activity android:name=".Activity.UserReviewActivity" />
         <activity android:name=".Activity.UserReviewDetailActivity" />
         <activity android:name=".Activity.ImprovedWebViewActivity" />
@@ -59,7 +53,9 @@
                 <data android:scheme="file" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.CharacterDetailActivity"></activity>
+        <activity android:name=".Activity.CharacterDetailActivity" />
+        <activity android:name=".Activity.CharacterFriendEnemyActivity" />
+        <activity android:name=".Activity.NewsDetailPagerActivity"></activity>
     </application>
 
 </manifest>

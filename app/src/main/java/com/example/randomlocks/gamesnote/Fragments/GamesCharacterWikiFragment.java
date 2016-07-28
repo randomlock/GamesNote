@@ -8,8 +8,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.Activity.MainActivity;
 import com.example.randomlocks.gamesnote.Adapter.CharacterSearchAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
-import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterface;
@@ -190,11 +189,14 @@ public class GamesCharacterWikiFragment extends Fragment {
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(null);
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+        //  recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
         adapter = new CharacterSearchAdapter(modals, getContext(), new CharacterSearchAdapter.OnClickInterface() {
             @Override
             public void onItemClick(String apiUrl, String imageUrl) {

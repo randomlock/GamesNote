@@ -80,7 +80,8 @@ public class GiantBomb {
                     .build();
 
         } else if (!request.url().toString().equals(url)) {
-            request = request.newBuilder().url(url).build();
+            // request = request.newBuilder().url(url).build();
+            request = new Request.Builder().url(url).build();
         }
 
         return request;

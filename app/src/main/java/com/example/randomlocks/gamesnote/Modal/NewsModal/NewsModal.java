@@ -23,6 +23,7 @@ public class NewsModal implements Parcelable {
     public String pubDate;
     public String content;
     public boolean isClicked;
+    public boolean isParsed = false;
 
     public NewsModal(String title, String link, String description, String pubDate, String content) {
         this.title = title;

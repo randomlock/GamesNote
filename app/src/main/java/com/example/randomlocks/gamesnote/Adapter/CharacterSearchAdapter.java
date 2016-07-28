@@ -5,11 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.HelperClass.DynamicHeightImageView;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
     List<CharacterSearchModal> modals;
     Context context;
     OnClickInterface mOnClickInterface;
+
 
 
     public interface OnClickInterface {
@@ -43,13 +45,25 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         CharacterSearchModal modal = modals.get(position);
         if (modal.name != null) {
             holder.name.setText(modal.name);
         }
         if (modal.image != null && modal.image.thumbUrl != null && !modal.image.thumbUrl.isEmpty()) {
-            Picasso.with(context).load(modal.image.thumbUrl).into(holder.profileImage);
+            Picasso.with(context).load(modal.image.mediumUrl).into(holder.profileImage, new Callback() {
+                @Override
+                public void onSuccess() {
+                    if (holder.profileImage.getWidth() != 0) {
+                        holder.profileImage.setHeightRatio(holder.profileImage.getHeight() / holder.profileImage.getWidth());
+                    }
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
         } else {
             holder.profileImage.setImageResource(R.drawable.headerbackground);
         }
@@ -63,12 +77,12 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView profileImage;
+        DynamicHeightImageView profileImage;
         TextView name;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            profileImage = (ImageView) itemView.findViewById(R.id.profile_image);
+            profileImage = (DynamicHeightImageView) itemView.findViewById(R.id.profile_image);
             name = (TextView) itemView.findViewById(R.id.name);
             itemView.setOnClickListener(this);
         }

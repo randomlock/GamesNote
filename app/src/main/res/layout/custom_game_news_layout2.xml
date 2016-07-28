@@ -50,6 +50,7 @@
             android:id="@+id/news_image"
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/ic_keyboard_arrow_left_white_24dp" />
 
 

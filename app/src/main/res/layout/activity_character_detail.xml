@@ -125,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="5"
+                        android:text="-"
                         android:linksClickable="true"
                         android:textColor="@color/primary" />
 
@@ -142,7 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="3"
+                        android:text="-"
                         android:textColor="@color/primary" />
 
                     <View
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="12"
+                        android:text="-"
                         android:textColor="@color/primary" />
 
 
@@ -173,6 +173,7 @@
 
 
                     <TextView
+                        android:id="@+id/friends_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -186,6 +187,7 @@
 
 
                     <TextView
+                        android:id="@+id/enemies_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -199,6 +201,7 @@
 
 
                     <TextView
+                        android:id="@+id/total_games_titles"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -428,7 +431,7 @@
                 android:layout_height="wrap_content"
                 app:indicator="Pacman"
                 app:indicator_color="@color/accent"
-                android:layout_gravity="center|top" />
+                android:layout_gravity="center" />
 
 
         </FrameLayout>

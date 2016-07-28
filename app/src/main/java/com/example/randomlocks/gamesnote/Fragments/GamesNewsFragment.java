@@ -34,6 +34,10 @@ import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -106,8 +110,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mSelectedId = SharedPreference.getFromSharedPreferences(KEY, R.id.nav_giantbomb, getContext());
-        mTitle = SharedPreference.getFromSharedPreferences(TITLE, getResources().getString(R.string.giantbomb), getContext());
+        mSelectedId = SharedPreference.getFromSharedPreferences(KEY, R.id.nav_kotaku, getContext());
+        mTitle = SharedPreference.getFromSharedPreferences(TITLE, getResources().getString(R.string.kotaku), getContext());
         mNavigation.setCheckedItem(mSelectedId);
         selectDrawer(mSelectedId, mTitle);
 
@@ -176,6 +180,34 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 NewsModal mod = new NewsModal();
                 try {
                     modals = mod.parse(str);
+                    for (int i = 0, size = modals.size(); i < size; i++) {
+                        if (modals.get(i).content == null) {
+
+                            Document document = Jsoup.parse(modals.get(i).description);
+                            Elements elements = document.getElementsByTag("img");
+                            String jsoupImageUrl = null;
+                            if (elements != null && elements.size() > 0) {
+                                Element element = elements.get(0);
+                                if (element.hasAttr("src")) {
+                                    jsoupImageUrl = element.attr("src");
+                                    element.removeAttr("src");
+                                }
+                            }
+
+
+                            if (jsoupImageUrl != null) {
+                                if (jsoupImageUrl.substring(0, 2).equals("//")) {
+                                    jsoupImageUrl = "http:" + jsoupImageUrl;
+                                }
+
+                                modals.get(i).content = jsoupImageUrl;
+                                modals.get(i).isParsed = true;
+
+                            }
+
+
+                        }
+                    }
 
                     mainHandler.post(new Runnable() {
                         @Override
@@ -419,6 +451,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         Toaster.make(getContext(), "coming here");
         if (modals != null) {
             outState.putParcelableArrayList(MODAL, new ArrayList<>(modals));
+        }
+        if (recyclerView != null && recyclerView.getLayoutManager() != null) {
             outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
         }
 

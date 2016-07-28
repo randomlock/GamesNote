@@ -83,7 +83,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         if (images != null) {
-            Picasso.with(context).load(images.get(position).imageUrl).fit().centerCrop().into(holder.imageView);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().into(holder.imageView);
         }
 
 

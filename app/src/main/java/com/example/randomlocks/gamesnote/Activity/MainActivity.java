@@ -4,6 +4,7 @@ package com.example.randomlocks.gamesnote.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,8 +30,12 @@ import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /*
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
 
-        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_news : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -377,4 +382,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void startNewsFragment(List<NewsModal> modalList, int position) {
+
+      /*  Fragment fragment = getSupportFragmentManager().findFragmentByTag("NewsDetail");
+        if(fragment==null){
+            Toaster.make(this," null fragment");
+            fragment = GameNewsDetailFragment.newInstance(newsModal);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_parent_layout,fragment,"NewsDetail").addToBackStack(null).commit();
+        }else {
+            Toaster.make(this,"Not null fragment");
+            fragment.getArguments().putParcelable(GiantBomb.MODAL,newsModal);
+            getSupportFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
+        }*/
+
+        Intent intent = new Intent(this, NewsDetailPagerActivity.class);
+        intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<Parcelable>(modalList));
+        intent.putExtra(GiantBomb.POSITION, position);
+        startActivity(intent);
+
+
+    }
 }

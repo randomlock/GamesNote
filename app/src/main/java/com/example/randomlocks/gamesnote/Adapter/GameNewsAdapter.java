@@ -1,7 +1,6 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.Activity.NewsDetailActivity;
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.Activity.MainActivity;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.List;
 
@@ -69,27 +62,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         NewsModal newsModal = modals.get(position);
         holder.heading.setText(newsModal.title);
         if (newsModal.content != null) {
-            Picasso.with(context).load(newsModal.content).fit().centerCrop().into(holder.image);
-        } else {
-            Document document = Jsoup.parse(newsModal.description);
-            Elements elements = document.getElementsByTag("img");
-            String jsoupImageUrl = null;
-            if (elements.size() > 0) {
-                Element element = elements.get(0);
-                if (element.hasAttr("src")) {
-                    jsoupImageUrl = element.attr("src");
-                }
-            }
-
-
-            if (jsoupImageUrl != null) {
-                if (jsoupImageUrl.substring(0, 2).equals("//")) {
-                    jsoupImageUrl = "http:" + jsoupImageUrl;
-                }
-                Picasso.with(context).load(jsoupImageUrl).fit().into(holder.image);
-                newsModal.content = jsoupImageUrl;
-            }
-
+            Picasso.with(context).load(newsModal.content).fit().into(holder.image);
         }
         String dateArray[] = newsModal.pubDate.split(" ");
         if (dateArray.length >= 3) {
@@ -124,11 +97,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
         @Override
         public void onClick(View v) {
-            NewsModal newsModal = modals.get(getLayoutPosition());
-            Intent intent = new Intent(context, NewsDetailActivity.class);
-            intent.putExtra(GiantBomb.MODAL, newsModal);
-            context.startActivity(intent);
-
+            ((MainActivity) context).startNewsFragment(modals, getLayoutPosition());
         }
     }
 }

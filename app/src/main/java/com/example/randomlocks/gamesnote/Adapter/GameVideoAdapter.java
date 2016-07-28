@@ -92,7 +92,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final GamesVideoModal modal = modalList.get(position);
         if (modal.image.mediumUrl != null) {
-            Picasso.with(context).load(modal.image.mediumUrl).fit().centerCrop().into(holder.videoThumb);
+            Picasso.with(context).load(modal.image.mediumUrl).fit().into(holder.videoThumb);
         }
         if (modal.name != null) {
             holder.title.setText(modal.name);

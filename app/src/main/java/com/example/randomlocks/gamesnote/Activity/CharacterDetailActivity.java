@@ -1,5 +1,6 @@
 package com.example.randomlocks.gamesnote.Activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -35,6 +36,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CharacterDetailActivity extends AppCompatActivity {
+public class CharacterDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final String API_URL = "api_url";
@@ -58,7 +60,7 @@ public class CharacterDetailActivity extends AppCompatActivity {
     GameCharacterInterface mGameCharacterInterface;
     Map<String, String> map;
     CharacterModal characterDetailModal;
-    TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies;
+    TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
     AVLoadingIndicatorView pacman;
@@ -87,8 +89,11 @@ public class CharacterDetailActivity extends AppCompatActivity {
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
         mTitle = (TextView) parentLayout.findViewById(R.id.character_name);
         mEnemies = (TextView) parentLayout.findViewById(R.id.enemies);
+        mEnemiesTitle = (TextView) parentLayout.findViewById(R.id.enemies_title);
         mFriends = (TextView) parentLayout.findViewById(R.id.friends);
+        mFriendsTitle = (TextView) parentLayout.findViewById(R.id.friends_title);
         mTotalGames = (TextView) parentLayout.findViewById(R.id.total_games);
+        mTotalGamesTitle = (TextView) parentLayout.findViewById(R.id.total_games_titles);
         mGender = (TextView) parentLayout.findViewById(R.id.gender);
         mBirthDay = (TextView) parentLayout.findViewById(R.id.birthday);
         mSmallDescription = (TextView) parentLayout.findViewById(R.id.deck);
@@ -180,7 +185,6 @@ public class CharacterDetailActivity extends AppCompatActivity {
                     @Override
                     public void processFinish(List<CharacterImage> imageUrls) {
                         if (imageUrls != null) {
-                            Picasso.with(CharacterDetailActivity.this).load(imageUrls.get(0).thumbUrl).fit().centerCrop().into(coverImage);
                             imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
                             imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this));
                         }
@@ -229,24 +233,34 @@ public class CharacterDetailActivity extends AppCompatActivity {
             mTitle.setText(characterDetailModal.name);
         }
 
-        if (imageUrl == null && characterDetailModal.image != null && characterDetailModal.image.mediumUrl != null) {
-            Picasso.with(this).load(characterDetailModal.image.mediumUrl).into(coverImage);
+        if (imageUrl == null && characterDetailModal.image != null) {
+            Picasso.with(this).load(characterDetailModal.image.mediumUrl).fit().centerCrop().into(coverImage);
+            Picasso.with(this).load(characterDetailModal.image.thumbUrl).fit().centerCrop().into(coverImage2);
         }
 
         mGender.setText(getGender(characterDetailModal.gender));
 
         if (characterDetailModal.enemies != null) {
             mEnemies.setText(String.valueOf(characterDetailModal.enemies.size()));
+            mEnemies.setOnClickListener(this);
+            mEnemiesTitle.setOnClickListener(this);
+
         }
 
         if (characterDetailModal.friends != null) {
 
             mFriends.setText(String.valueOf(characterDetailModal.friends.size()));
+            mFriends.setOnClickListener(this);
+            mFriendsTitle.setOnClickListener(this);
+
         }
 
         if (characterDetailModal.games != null) {
 
             mTotalGames.setText(String.valueOf(characterDetailModal.games.size()));
+            mTotalGames.setOnClickListener(this);
+            mTotalGamesTitle.setOnClickListener(this);
+
         }
         if (characterDetailModal.birthday != null) {
             mBirthDay.setText(characterDetailModal.birthday);
@@ -328,10 +342,52 @@ public class CharacterDetailActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         if (asyncCharacterWikiImage != null) {
-            Toaster.make(this, "Cancel asynctask");
             asyncCharacterWikiImage.cancel(true);
         }
     }
 
 
+    @Override
+    public void onClick(View v) {
+
+        TextView textView = (TextView) v;
+
+
+        Intent intent = new Intent(this, CharacterFriendEnemyActivity.class);
+        switch (v.getId()) {
+
+            case R.id.enemies:
+            case R.id.enemies_title:
+                if (characterDetailModal.enemies != null && characterDetailModal.enemies.size() > 0) {
+                    intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.enemies));
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(coordinatorLayout, "No enemies :)", Snackbar.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.friends:
+            case R.id.friends_title:
+                if (characterDetailModal.friends != null && characterDetailModal.friends.size() > 0) {
+                    intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.friends));
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(coordinatorLayout, "No friends :(", Snackbar.LENGTH_SHORT).show();
+                }
+
+                break;
+            case R.id.total_games:
+            case R.id.total_games_titles:
+                if (characterDetailModal.games != null && characterDetailModal.games.size() > 0) {
+                    intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.games));
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(coordinatorLayout, "No known games :(", Snackbar.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
+
+
+    }
 }
