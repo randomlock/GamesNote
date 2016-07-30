@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.HelperClass.DynamicHeightImageView;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.R;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,19 +50,25 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
             holder.name.setText(modal.name);
         }
         if (modal.image != null && modal.image.thumbUrl != null && !modal.image.thumbUrl.isEmpty()) {
-            Picasso.with(context).load(modal.image.mediumUrl).into(holder.profileImage, new Callback() {
+            /*Picasso.with(context).load(modal.image.mediumUrl).into(holder.profileImage, new Callback() {
                 @Override
                 public void onSuccess() {
-                    if (holder.profileImage.getWidth() != 0) {
-                        holder.profileImage.setHeightRatio(holder.profileImage.getHeight() / holder.profileImage.getWidth());
-                    }
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.profileImage.getLayoutParams();
+                        params.height = holder.profileImage.getHeight();
+                        holder.profileImage.setLayoutParams(params);
+
                 }
 
                 @Override
                 public void onError() {
 
                 }
-            });
+            });*/
+
+            Picasso.with(context).load(modal.image.mediumUrl).into(holder.profileImage);
+
+
+
         } else {
             holder.profileImage.setImageResource(R.drawable.headerbackground);
         }

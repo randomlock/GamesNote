@@ -69,6 +69,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     GameNewsAdapter gameNewsAdapter;
     LinearLayoutManager layoutManager;
     public String URL = "http://www.eurogamer.net/?format=rss";
+    public String BASE_URL;
     String mTitle;
     int mSelectedId;
     boolean isReduced;
@@ -83,7 +84,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         itemDecoration = new DividerItemDecoration(getContext());
-        isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_NEWS_VIEW, false, getContext());
+        isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_NEWS_VIEW, true, getContext());
 
     }
 
@@ -180,33 +181,59 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 NewsModal mod = new NewsModal();
                 try {
                     modals = mod.parse(str);
+                    Log.d("tag", str);
                     for (int i = 0, size = modals.size(); i < size; i++) {
+                        Document document = Jsoup.parse(modals.get(i).description);
                         if (modals.get(i).content == null) {
-
-                            Document document = Jsoup.parse(modals.get(i).description);
+                            Element element = null;
                             Elements elements = document.getElementsByTag("img");
                             String jsoupImageUrl = null;
                             if (elements != null && elements.size() > 0) {
-                                Element element = elements.get(0);
+                                element = elements.get(0);
                                 if (element.hasAttr("src")) {
                                     jsoupImageUrl = element.attr("src");
-                                    element.removeAttr("src");
+                                    element.remove();
+                                    modals.get(i).description = document.toString();
                                 }
                             }
 
 
                             if (jsoupImageUrl != null) {
+                                //for eurogamer relative img
                                 if (jsoupImageUrl.substring(0, 2).equals("//")) {
                                     jsoupImageUrl = "http:" + jsoupImageUrl;
                                 }
 
                                 modals.get(i).content = jsoupImageUrl;
-                                modals.get(i).isParsed = true;
 
                             }
-
-
                         }
+
+                        Elements iframeElements = document.getElementsByTag("iframe");
+
+                        if (iframeElements != null && iframeElements.size() > 0) {
+                            for (Element iframeElement : iframeElements) {
+
+                                if (iframeElement.hasAttr("src")) {
+                                    String iframeSrc = iframeElement.attr("src");
+                                    if (!iframeSrc.contains("http")) {
+                                        iframeSrc = BASE_URL + iframeSrc;
+                                        iframeElement.attr("src", iframeSrc);
+                                        modals.get(i).description = document.toString();
+                                        modals.get(i).description = document.toString();
+                                    }
+
+                                }
+                            }
+                        }
+
+                        Element smallDescptions = document.getElementsByTag("p").first();
+
+                        if (smallDescptions != null) {
+                            modals.get(i).smallDescription = smallDescptions.text();
+                        }
+
+
                     }
 
                     mainHandler.post(new Runnable() {
@@ -335,86 +362,118 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
         switch (mselectedId) {
 
-            case R.id.nav_giantbomb:
-                URL = "http://www.giantbomb.com/feeds/news/";
-                break;
 
             case R.id.nav_gamespot:
                 URL = "http://www.gamespot.com/feeds/news/";
+                BASE_URL = "http://www.gamespot.com";
                 break;
 
             case R.id.nav_eurogamer:
                 URL = "http://www.eurogamer.net/?format=rss&type=news";
+                BASE_URL = "http://www.eurogamer.net";
                 break;
 
             case R.id.nav_g4tv:
                 URL = "http://feeds.g4tv.com/g4tv/thefeed?format=xml";
+                BASE_URL = "http://g4tv.com";
+
                 break;
 
             case R.id.nav_gameinformer:
                 URL = "https://www.gameinformer.com/b/mainfeed.aspx?Tags=news";
+                BASE_URL = "https://www.gameinformer.com";
+
                 break;
 
             case R.id.nav_videogamer:
                 URL = "http://feeds.videogamer.com/rss/news.xml";
+                BASE_URL = "http://www.videogamer.com";
+
                 break;
 
             case R.id.nav_pcworld:
                 URL = "http://www.pcworld.com/index.rss";
+                BASE_URL = "http://www.pcworld.com";
+
                 break;
 
             case R.id.nav_venturebeat:
+                BASE_URL = "http://venturebeat.com";
                 URL = "http://venturebeat.com/category/games/feed/";
+
                 break;
 
             case R.id.toms_harware:
                 URL = "http://www.tomshardware.com/feeds/rss2/all.xml";
+                BASE_URL = "http://www.tomshardware.com";
+
                 break;
 
             case R.id.ign:
-                // URL = "http://feeds.ign.com/ign/games-all?format=xml";
-                URL = "http://feeds.ign.com/ign/all?format=xml";
+                URL = "http://feeds.ign.com/ign/games-all?format=xml";
+                //  URL = "http://feeds.ign.com/ign/all?format=xml";
+                BASE_URL = "http://www.ign.com";
+
                 break;
 
             case R.id.nav_playstation4:
                 URL = "http://cdn.us.playstation.com/pscomauth/groups/public/documents/webasset/rss/playstation/Games_PS4.rss";
+                BASE_URL = "";
+
                 break;
 
             case R.id.nav_purexbox:
                 URL = "http://www.purexbox.com/feeds/news";
+                BASE_URL = "http://www.purexbox.com";
+
                 break;
 
             case R.id.nav_news_gamespot:
                 URL = "http://www.gamespot.com/feeds/reviews/";
+                BASE_URL = "http://www.gamespot.com";
+
                 break;
 
-            case R.id.nav_news_giantbomb:
-                URL = "http://www.giantbomb.com/feeds/reviews/";
-                break;
 
             case R.id.nav_news_ign:
                 URL = "http://feeds.ign.com/ign/reviews?format=xml";
+                BASE_URL = "http://www.ign.com";
+
                 break;
 
             case R.id.nav_news_gameinformer:
                 URL = "https://www.gameinformer.com/b/mainfeed.aspx?Tags=review";
+                BASE_URL = "https://www.gameinformer.com";
+
                 break;
 
             case R.id.nav_news_pcworld:
                 URL = "http://www.pcworld.com/reviews/index.rss";
+                BASE_URL = "http://www.pcworld.com";
+
                 break;
 
             case R.id.nav_news_metaleater:
                 URL = "http://metaleater.com/rss-feeds/game-reviews";
-                break;
+                BASE_URL = "http://metaleater.com";
 
-            case R.id.nav_giantbomb_release:
-                URL = "http://www.giantbomb.com/feeds/new_releases/";
                 break;
 
 
             case R.id.nav_kotaku:
-                URL = "http://feeds.gawker.com/kotaku/full";
+                URL = "http://feeds.gawker.com/kotaku/vip";
+                BASE_URL = "http://kotaku.com";
+
+                break;
+
+            case R.id.nac_pc_gamer:
+                URL = "http://www.pcgamer.com/rss/?feed=rss";
+                BASE_URL = "http://www.pcgamer.com";
+                break;
+
+            case R.id.nav_dsogaming:
+                URL = "http://www.dsogaming.com/feed/";
+                BASE_URL = "http://dsogaming.com";
                 break;
 
 
@@ -448,7 +507,6 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Toaster.make(getContext(), "coming here");
         if (modals != null) {
             outState.putParcelableArrayList(MODAL, new ArrayList<>(modals));
         }

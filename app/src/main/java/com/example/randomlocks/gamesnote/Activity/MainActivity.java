@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String KEY = "NAViGATION_SELECTED_ID"; //FOR SAVING MENU ITEM
     public static final String TITLE = "NAVIGATION_SELECTED_TITLE"; //FOR MENU TOOLBAR TITLE
     public static final String DEFAULT_TITLE = "Game Wiki";
+    public List<NewsModal> newsModals;
     PicassoFrameLayout navHeaderLayout;
     public String mtitle;
     int mselectedId;
@@ -384,22 +385,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void startNewsFragment(List<NewsModal> modalList, int position) {
 
-      /*  Fragment fragment = getSupportFragmentManager().findFragmentByTag("NewsDetail");
-        if(fragment==null){
-            Toaster.make(this," null fragment");
-            fragment = GameNewsDetailFragment.newInstance(newsModal);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_parent_layout,fragment,"NewsDetail").addToBackStack(null).commit();
-        }else {
-            Toaster.make(this,"Not null fragment");
-            fragment.getArguments().putParcelable(GiantBomb.MODAL,newsModal);
-            getSupportFragmentManager().beginTransaction().detach(fragment).attach(fragment).commit();
-        }*/
-
         Intent intent = new Intent(this, NewsDetailPagerActivity.class);
-        intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<Parcelable>(modalList));
-        intent.putExtra(GiantBomb.POSITION, position);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(GiantBomb.MODAL, (ArrayList<? extends Parcelable>) modalList);
+        bundle.putInt(GiantBomb.POSITION, position);
+        intent.putExtras(bundle);
         startActivity(intent);
-
-
     }
 }

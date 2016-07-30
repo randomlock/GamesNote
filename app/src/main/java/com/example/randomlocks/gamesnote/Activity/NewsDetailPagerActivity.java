@@ -1,8 +1,6 @@
 package com.example.randomlocks.gamesnote.Activity;
 
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
@@ -13,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -32,6 +32,7 @@ import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActi
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -48,8 +49,10 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
-        position = getIntent().getIntExtra(GiantBomb.POSITION, 0);
-        modalList = getIntent().getParcelableArrayListExtra(GiantBomb.MODAL);
+
+        position = getIntent().getExtras().getInt(GiantBomb.POSITION);
+        modalList = getIntent().getExtras().getParcelableArrayList(GiantBomb.MODAL);
+
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -104,6 +107,7 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
         LinearLayout parentLayout;
         ImageView titleImage;
         NewsModal newsModal;
+        CardView cardView;
         CustomTabActivityHelper customTabActivityHelper;
 
 
@@ -145,12 +149,21 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
             }
             parentLayout = (LinearLayout) getView().findViewById(R.id.parent_layout);
             title = (TextView) parentLayout.findViewById(R.id.news_heading);
-            titleImage = (ImageView) parentLayout.findViewById(R.id.appbar_image);
+            cardView = (CardView) parentLayout.findViewById(R.id.image_card);
+            titleImage = (ImageView) cardView.findViewById(R.id.appbar_image);
             webView = (WebView) parentLayout.findViewById(R.id.web_view);
 
+            if (newsModal.content != null) {
+                Picasso.with(getContext()).load(newsModal.content).error(R.drawable.headerbackground).into(titleImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
 
-            if (newsModal.content != null && newsModal.isParsed) {
-                Picasso.with(getContext()).load(newsModal.content).error(R.drawable.headerbackground).fit().into(titleImage);
+                    @Override
+                    public void onError() {
+                        cardView.setVisibility(View.GONE);
+                    }
+                });
             }
 
             if (newsModal.title != null) {
@@ -168,7 +181,7 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
                 } else
                     color = "black";
 
-                builder.append("<HTML><HEAD><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\"max-width: 100%;>");
+                builder.append("<HTML><HEAD><script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\"max-width: 100%;>");
                 builder.append(description);
                 builder.append("</body></HTML>");
             }
@@ -202,12 +215,18 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
             }
         } */
             webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setDomStorageEnabled(true);
+            webView.getSettings().setAllowFileAccess(true);
+            webView.setWebChromeClient(new WebChromeClient());
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
 
-//                    runBrowser(url);
+                    try {
+                        runBrowser(url);
+                    } catch (Exception e) {
+                    }
 
 
                     return true;
@@ -219,9 +238,9 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
             }
             webView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.webviewbackground));
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                 webView.setBackgroundColor(Color.argb(1, 0, 0, 0));
-            }
+            }*/
     /*    if (Build.VERSION.SDK_INT >= 19) {
             // chromium, enable hardware acceleration
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);

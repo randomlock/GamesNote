@@ -20,19 +20,15 @@
             android:id="@+id/profile_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:src="@drawable/headerbackground"
-        />
+            android:adjustViewBounds="true" />
 
 
         <TextView
-        android:id="@+id/name"
-        style="@style/cardview_textstyle"
+            android:id="@+id/name"
+            style="@style/cardview_textstyle"
             android:text="Jill Valentine"
             android:gravity="center_horizontal"
             android:textStyle="bold"
-            android:fontFamily="serif-monospace"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
 

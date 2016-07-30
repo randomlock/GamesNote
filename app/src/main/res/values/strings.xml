@@ -198,6 +198,12 @@
     <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
 
     <string name="storage_permission_denied">Permission to access storage was denied</string>
+    <string name="share">Share</string>
+    <string name="font">Font</string>
+    <string name="list_view">list view</string>
+    <string name="grid_view">Grid view</string>
+    <string name="pcgamer">PC Gamer</string>
+    <string name="dsogaming">DSOGaming</string>
 
 
 </resources>

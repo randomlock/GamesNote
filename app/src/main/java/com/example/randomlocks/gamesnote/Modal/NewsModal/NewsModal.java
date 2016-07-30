@@ -12,10 +12,12 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmObject;
+
 /**
  * Created by randomlocks on 6/30/2016.
  */
-public class NewsModal implements Parcelable {
+public class NewsModal extends RealmObject implements Parcelable {
 
     public String title;
     public String link;
@@ -23,7 +25,7 @@ public class NewsModal implements Parcelable {
     public String pubDate;
     public String content;
     public boolean isClicked;
-    public boolean isParsed = false;
+    public String smallDescription;
 
     public NewsModal(String title, String link, String description, String pubDate, String content) {
         this.title = title;
@@ -31,7 +33,6 @@ public class NewsModal implements Parcelable {
         this.description = description;
         this.pubDate = pubDate;
         this.content = content;
-        isClicked = false;
     }
 
 
@@ -123,6 +124,10 @@ public class NewsModal implements Parcelable {
                     content = readMediaContent(parser);
                     break;
 
+                case "enclosure":
+                    content = readEnclosureContent(parser);
+                    break;
+
                 case "content:encoded":
                     description += readEncodedContent(parser);
                     break;
@@ -201,6 +206,15 @@ public class NewsModal implements Parcelable {
         return summary;
     }
 
+    private String readEnclosureContent(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, null, "enclosure");
+        String summary = parser.getAttributeValue(null, "url");
+        parser.nextTag();
+        return summary;
+    }
+
+
+
     // For the tags title and summary, extracts their text values.
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
         String result = "";
@@ -225,6 +239,7 @@ public class NewsModal implements Parcelable {
         dest.writeString(this.pubDate);
         dest.writeString(this.content);
         dest.writeByte(this.isClicked ? (byte) 1 : (byte) 0);
+        dest.writeString(this.smallDescription);
     }
 
     protected NewsModal(Parcel in) {
@@ -234,6 +249,7 @@ public class NewsModal implements Parcelable {
         this.pubDate = in.readString();
         this.content = in.readString();
         this.isClicked = in.readByte() != 0;
+        this.smallDescription = in.readString();
     }
 
     public static final Parcelable.Creator<NewsModal> CREATOR = new Parcelable.Creator<NewsModal>() {

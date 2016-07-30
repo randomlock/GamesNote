@@ -42,7 +42,6 @@ import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.ListDialogFragment;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionsMenu;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -57,6 +56,8 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListMod
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.R;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -113,12 +114,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     ImageView appbarImage, coverImage;
     TextView gameTitle, review, userReview;
     RelativeLayout relativeLayout;
-    FloatingActionsMenu floatingActionsMenu;
-    com.example.randomlocks.gamesnote.HelperClass.FloatingActionButton.FloatingActionButton replaying, planning, dropped, playing, completed;
+    FloatingActionMenu floatingActionsMenu;
+    FloatingActionButton replaying, planning, dropped, playing, completed;
     String title;
     AVLoadingIndicatorView pacman;
     LinearLayout parentLayout;
-
+    View mDimmerView;
     public GameDetailFragment() {
         // Required empty public constructor
 
@@ -127,7 +128,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onClick(View v) {
 
-        floatingActionsMenu.collapse();
+        floatingActionsMenu.close(true);
 
         switch (v.getId()) {
 
@@ -197,6 +198,23 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
 
+
+    private void setBackgroundDimming(boolean dimmed) {
+        final float targetAlpha = dimmed ? 1f : 0;
+        final int endVisibility = dimmed ? View.VISIBLE : View.GONE;
+        mDimmerView.setVisibility(View.VISIBLE);
+        mDimmerView.animate()
+                .alpha(targetAlpha)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDimmerView.setVisibility(endVisibility);
+                    }
+                })
+                .start();
+    }
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -205,7 +223,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         /************************************** FindViewById *********************************/
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
-        floatingActionsMenu = (FloatingActionsMenu) coordinatorLayout.findViewById(R.id.floating_menu);
+        mDimmerView = coordinatorLayout.findViewById(R.id.dimmer_view);
+        floatingActionsMenu = (FloatingActionMenu) coordinatorLayout.findViewById(R.id.floating_menu);
         coordinatorLayout.findViewById(R.id.replaying).setOnClickListener(this);
         coordinatorLayout.findViewById(R.id.planning).setOnClickListener(this);
         coordinatorLayout.findViewById(R.id.dropped).setOnClickListener(this);
@@ -235,6 +254,21 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         recyclerView.setNestedScrollingEnabled(false);
         characterRecycleView.setNestedScrollingEnabled(false);
         similarGameRecycleView.setNestedScrollingEnabled(false);
+
+        floatingActionsMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                setBackgroundDimming(opened);
+
+            }
+        });
+
+        mDimmerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingActionsMenu.close(true);
+            }
+        });
 
 
         /************************** APPBARLATOUT ********************************/

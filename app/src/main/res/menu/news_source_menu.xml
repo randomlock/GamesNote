@@ -8,6 +8,13 @@
                 >
 
                 <item
+                    android:id="@+id/nav_dsogaming"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/dsogaming">
+
+                </item>
+
+                <item
                     android:id="@+id/nav_eurogamer"
                     android:icon="@mipmap/ic_launcher"
                     android:title="@string/eurogamer">
@@ -27,20 +34,6 @@
                     android:icon="@mipmap/ic_launcher"
                     android:title="@string/gamespot">
 
-
-                </item>
-
-                <item
-                    android:id="@+id/nav_giantbomb"
-                    android:title="@string/giantbomb"
-                    android:icon="@mipmap/ic_launcher">
-
-                </item>
-
-                <item
-                    android:id="@+id/nav_giantbomb_release"
-                    android:title="@string/giantbombRelease"
-                    android:icon="@mipmap/ic_launcher">
 
                 </item>
 
@@ -66,6 +59,13 @@
                     android:title="@string/kotaku"
                     android:icon="@mipmap/ic_launcher" />
 
+                <item
+                    android:id="@+id/nac_pc_gamer"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/pcgamer">
+
+                </item>
+
 
                 <item
                     android:id="@+id/nav_pcworld"
@@ -77,7 +77,7 @@
                 <item
                     android:id="@+id/nav_playstation4"
                     android:icon="@mipmap/ic_launcher"
-                    android:title="@string/playstaion"></item>
+                    android:title="@string/playstaion" />
 
                 <item
                     android:id="@+id/nav_purexbox"

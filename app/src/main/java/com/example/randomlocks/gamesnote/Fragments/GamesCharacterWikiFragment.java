@@ -8,11 +8,15 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -24,6 +28,7 @@ import com.example.randomlocks.gamesnote.Adapter.CharacterSearchAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
+import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterface;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModalList;
@@ -43,6 +48,7 @@ import retrofit2.Response;
  */
 public class GamesCharacterWikiFragment extends Fragment {
 
+    private static final String RECYCLER_STYLE = "character_recycler_style";
     private static final String SCROLL_POSITION = "scroll_position";
     CoordinatorLayout coordinator;
     EditText searchCharacter;
@@ -54,6 +60,9 @@ public class GamesCharacterWikiFragment extends Fragment {
     Map<String, String> map;
     CharacterSearchAdapter adapter;
     Toolbar toolbar;
+    private boolean isSimple;
+    LinearLayoutManager manager;
+    int scrollToPosition = 0;
 //    ImageView imageView;
 
 
@@ -69,6 +78,7 @@ public class GamesCharacterWikiFragment extends Fragment {
         map.put(GiantBomb.KEY, GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");
         map.put(GiantBomb.FIELD_LIST, "image,name,api_detail_url");
+        isSimple = SharedPreference.getFromSharedPreferences(RECYCLER_STYLE, false, getContext());
     }
 
     @Override
@@ -181,6 +191,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     }
 
+
     private void loadRecycler(List<CharacterSearchModal> modals, Parcelable parcelable) {
         if (pacman.getVisibility() == View.VISIBLE) {
             pacman.setVisibility(View.GONE);
@@ -189,10 +200,14 @@ public class GamesCharacterWikiFragment extends Fragment {
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(null);
+
+        if (isSimple) {
+            manager = new LinearLayoutManager(getContext());
+        } else {
+            manager = new GridLayoutManager(getContext(), 2);
+        }
+
+        recyclerView.setLayoutManager(manager);
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
@@ -204,6 +219,61 @@ public class GamesCharacterWikiFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (isSimple) {
+            menu.getItem(0).setTitle(getString(R.string.grid_view));
+        } else {
+            menu.getItem(0).setTitle(getString(R.string.list_view));
+        }
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.game_character_wiki_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        if (item.getItemId() == R.id.view) {
+
+            if (recyclerView != null && recyclerView.getLayoutManager() != null) {
+
+                scrollToPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                        .findFirstCompletelyVisibleItemPosition();
+            }
+
+            if (item.getTitle().equals(getString(R.string.grid_view))) {
+                isSimple = false;
+                manager = new GridLayoutManager(getContext(), 2);
+                item.setTitle(getString(R.string.list_view));
+
+
+            } else {
+                item.setTitle(getString(R.string.grid_view));
+                manager = new LinearLayoutManager(getContext());
+                isSimple = true;
+            }
+
+
+            if (recyclerView != null) {
+                recyclerView.setLayoutManager(manager);
+                recyclerView.scrollToPosition(scrollToPosition);
+            }
+            SharedPreference.saveToSharedPreference(RECYCLER_STYLE, isSimple, getContext());
+
+            return true;
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

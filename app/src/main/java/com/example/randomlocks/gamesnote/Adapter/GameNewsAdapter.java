@@ -63,6 +63,8 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         holder.heading.setText(newsModal.title);
         if (newsModal.content != null) {
             Picasso.with(context).load(newsModal.content).fit().into(holder.image);
+        } else {
+            holder.image.setVisibility(View.GONE);
         }
         String dateArray[] = newsModal.pubDate.split(" ");
         if (dateArray.length >= 3) {
@@ -71,6 +73,15 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         } else if (newsModal.pubDate.length() >= 10) {
 
             holder.date.setText(newsModal.pubDate.substring(0, 10));
+        }
+
+        if (isSimple) {
+            if (newsModal.smallDescription != null && newsModal.smallDescription.trim().length() > 0) {
+                holder.description.setText(newsModal.smallDescription);
+            } else if (newsModal.description != null) {
+                //   holder.description.setText(newsModal.description);
+            }
+
         }
 
     }
@@ -82,7 +93,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
     class MyNewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView heading, date;
+        TextView heading, date, description;
         ImageView image;
 
 
@@ -91,6 +102,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
             heading = (TextView) itemView.findViewById(R.id.news_heading);
             image = (ImageView) itemView.findViewById(R.id.news_image);
             date = (TextView) itemView.findViewById(R.id.news_date);
+            description = (TextView) itemView.findViewById(R.id.news_description);
             itemView.setOnClickListener(this);
 
         }
