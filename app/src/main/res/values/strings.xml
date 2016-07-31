@@ -204,6 +204,8 @@
     <string name="grid_view">Grid view</string>
     <string name="pcgamer">PC Gamer</string>
     <string name="dsogaming">DSOGaming</string>
+    <string name="view_in_browser">View in browser</string>
+    <string name="loading_video">loading video</string>
 
 
 </resources>

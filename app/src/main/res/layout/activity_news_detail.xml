@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_layout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical">
@@ -11,11 +15,22 @@
         android:background="@android:color/transparent" />
 
 
-    <android.support.v4.view.ViewPager android:id="@+id/viewpager"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionName="@string/transition_viewpager"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
+        android:transitionName="@string/transition_viewpager" />
 
 
 </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/videoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>

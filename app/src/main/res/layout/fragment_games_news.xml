@@ -8,47 +8,52 @@
 
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-        android:background="@color/wikibackground"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment">
-
-    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:background="@color/wikibackground"
+        tools:context="com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:theme="@style/MyToolbarLight"
-            />
-
-
-        <com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView
-            android:id="@+id/indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:indicator="Pacman"
-
-            app:indicator_color="@color/accent"
-            android:visibility="gone"
-            android:layout_gravity="center_horizontal" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/news_recycler_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:orientation="vertical">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                android:theme="@style/MyToolbarLight" />
 
 
-  </LinearLayout>
+            <com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView
+                android:id="@+id/indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicator="Pacman"
+
+                app:indicator_color="@color/accent"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal" />
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/news_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+
+                    />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

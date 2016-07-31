@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -27,6 +29,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     List<NewsModal> modals;
     Context context;
     boolean isSimple;
+    Calendar calendar = Calendar.getInstance();
 
     public GameNewsAdapter(List<NewsModal> modals, Context context, boolean isSimple) {
         this.modals = modals;
@@ -60,13 +63,19 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     @Override
     public void onBindViewHolder(MyNewsHolder holder, int position) {
         NewsModal newsModal = modals.get(position);
-        holder.heading.setText(newsModal.title);
+        if (newsModal.title != null) {
+            holder.heading.setText(newsModal.title);
+        }
         if (newsModal.content != null) {
+            holder.cardView.setVisibility(View.VISIBLE);
             Picasso.with(context).load(newsModal.content).fit().into(holder.image);
         } else {
-            holder.image.setVisibility(View.GONE);
+            if (isSimple) {
+                holder.cardView.setVisibility(View.GONE);
+            }
         }
         String dateArray[] = newsModal.pubDate.split(" ");
+
         if (dateArray.length >= 3) {
             String date = dateArray[0] + " " + dateArray[1] + " " + dateArray[2];
             holder.date.setText(date);
@@ -77,9 +86,11 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
         if (isSimple) {
             if (newsModal.smallDescription != null && newsModal.smallDescription.trim().length() > 0) {
-                holder.description.setText(newsModal.smallDescription);
-            } else if (newsModal.description != null) {
-                //   holder.description.setText(newsModal.description);
+                if (newsModal.smallDescription.length() > 50) {
+                    holder.description.setText(newsModal.smallDescription.substring(0, 50));
+                } else {
+                    holder.description.setText(newsModal.smallDescription);
+                }
             }
 
         }
@@ -94,13 +105,21 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     class MyNewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView heading, date, description;
+        CardView cardView;
         ImageView image;
 
 
         public MyNewsHolder(View itemView) {
             super(itemView);
             heading = (TextView) itemView.findViewById(R.id.news_heading);
-            image = (ImageView) itemView.findViewById(R.id.news_image);
+            if (isSimple) {
+                cardView = (CardView) itemView.findViewById(R.id.cardView);
+                image = (ImageView) cardView.findViewById(R.id.news_image);
+
+            } else {
+                image = (ImageView) itemView.findViewById(R.id.news_image);
+
+            }
             date = (TextView) itemView.findViewById(R.id.news_date);
             description = (TextView) itemView.findViewById(R.id.news_description);
             itemView.setOnClickListener(this);

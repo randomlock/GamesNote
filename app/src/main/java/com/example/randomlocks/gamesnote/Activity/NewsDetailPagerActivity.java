@@ -19,9 +19,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PagerZoomOutSlideAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.VideoEnabledWebChromeClient;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.VideoEnabledWebView;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
@@ -52,7 +55,6 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
 
         position = getIntent().getExtras().getInt(GiantBomb.POSITION);
         modalList = getIntent().getExtras().getParcelableArrayList(GiantBomb.MODAL);
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -103,12 +105,16 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
 
         String description;
         TextView title;
-        WebView webView;
+        VideoEnabledWebView webView;
+        VideoEnabledWebChromeClient webChromeClient;
         LinearLayout parentLayout;
         ImageView titleImage;
         NewsModal newsModal;
         CardView cardView;
+        Button button;
         CustomTabActivityHelper customTabActivityHelper;
+        ViewGroup videoLayout;
+        View loadingView;
 
 
         public GameNewsDetailFragment() {
@@ -148,13 +154,53 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
                 description = newsModal.description;
             }
             parentLayout = (LinearLayout) getView().findViewById(R.id.parent_layout);
+            videoLayout = (ViewGroup) getActivity().findViewById(R.id.videoLayout); // Your own view, read class comments
+            loadingView = getActivity().getLayoutInflater().inflate(R.layout.view_loading_video, null); // Your own view, read class comments
+            webChromeClient = new VideoEnabledWebChromeClient(parentLayout, videoLayout, loadingView, webView);
             title = (TextView) parentLayout.findViewById(R.id.news_heading);
             cardView = (CardView) parentLayout.findViewById(R.id.image_card);
             titleImage = (ImageView) cardView.findViewById(R.id.appbar_image);
-            webView = (WebView) parentLayout.findViewById(R.id.web_view);
+            webView = (VideoEnabledWebView) parentLayout.findViewById(R.id.web_view);
+            button = (Button) parentLayout.findViewById(R.id.view_in_browser1);
+
+
+            webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
+                @Override
+                public void toggledFullscreen(boolean fullscreen) {
+                    // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
+                    if (fullscreen) {
+                        WindowManager.LayoutParams attrs = getActivity().getWindow().getAttributes();
+                        attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                        attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                        getActivity().getWindow().setAttributes(attrs);
+                        if (android.os.Build.VERSION.SDK_INT >= 14) {
+                            //noinspection all
+                            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+                        }
+                    } else {
+                        WindowManager.LayoutParams attrs = getActivity().getWindow().getAttributes();
+                        attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                        attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                        getActivity().getWindow().setAttributes(attrs);
+                        if (android.os.Build.VERSION.SDK_INT >= 14) {
+                            //noinspection all
+                            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                        }
+                    }
+
+                }
+            });
+
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    runBrowser(newsModal.link);
+                }
+            });
 
             if (newsModal.content != null) {
-                Picasso.with(getContext()).load(newsModal.content).error(R.drawable.headerbackground).into(titleImage, new Callback() {
+                Picasso.with(getContext()).load(newsModal.content).into(titleImage, new Callback() {
                     @Override
                     public void onSuccess() {
                     }
@@ -164,6 +210,8 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
                         cardView.setVisibility(View.GONE);
                     }
                 });
+            } else {
+                cardView.setVisibility(View.GONE);
             }
 
             if (newsModal.title != null) {
@@ -181,7 +229,7 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
                 } else
                     color = "black";
 
-                builder.append("<HTML><HEAD><script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\"max-width: 100%;>");
+                builder.append("<HTML><HEAD><meta name=viewport content=target-densitydpi=medium-dpi, width=device-width/><script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\"max-width: 100%;>");
                 builder.append(description);
                 builder.append("</body></HTML>");
             }
@@ -217,7 +265,7 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setDomStorageEnabled(true);
             webView.getSettings().setAllowFileAccess(true);
-            webView.setWebChromeClient(new WebChromeClient());
+            webView.setWebChromeClient(webChromeClient);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -282,6 +330,18 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
                     getActivity(), customTabsIntent, Uri.parse(url), new WebViewFallback());
         }
 
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            webView.onPause();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            webView.onResume();
+        }
 
     }
 

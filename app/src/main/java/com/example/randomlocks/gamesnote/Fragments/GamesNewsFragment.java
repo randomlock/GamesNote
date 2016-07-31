@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,6 +74,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     String mTitle;
     int mSelectedId;
     boolean isReduced;
+    SwipeRefreshLayout refreshLayout;
 
 
     public GamesNewsFragment() {
@@ -101,7 +103,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         mDrawer = (DrawerLayout) getView().findViewById(R.id.drawer);
         mNavigation = (NavigationView) mDrawer.findViewById(R.id.navigation);
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.coordinator);
-        recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.news_recycler_view);
+        refreshLayout = (SwipeRefreshLayout) coordinatorLayout.findViewById(R.id.swipeContainer);
+        recyclerView = (RecyclerView) refreshLayout.findViewById(R.id.news_recycler_view);
         toolbar = (Toolbar) coordinatorLayout.findViewById(R.id.my_toolbar);
         progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.indicator);
         layoutManager = new LinearLayoutManager(getContext());
@@ -115,6 +118,17 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         mTitle = SharedPreference.getFromSharedPreferences(TITLE, getResources().getString(R.string.kotaku), getContext());
         mNavigation.setCheckedItem(mSelectedId);
         selectDrawer(mSelectedId, mTitle);
+        refreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.accent, R.color.primary_character);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    runOkHttp();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
         if (savedInstanceState != null) {
@@ -156,6 +170,9 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (refreshLayout.isRefreshing()) {
+                            refreshLayout.setRefreshing(false);
+                        }
                         progressBar.setVisibility(View.GONE);
                         Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
                                 .setAction("RETRY", new View.OnClickListener() {
@@ -181,9 +198,9 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 NewsModal mod = new NewsModal();
                 try {
                     modals = mod.parse(str);
-                    Log.d("tag", str);
                     for (int i = 0, size = modals.size(); i < size; i++) {
                         Document document = Jsoup.parse(modals.get(i).description);
+                        modals.get(i).smallDescription = document.text();
                         if (modals.get(i).content == null) {
                             Element element = null;
                             Elements elements = document.getElementsByTag("img");
@@ -227,11 +244,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                             }
                         }
 
-                        Element smallDescptions = document.getElementsByTag("p").first();
 
-                        if (smallDescptions != null) {
-                            modals.get(i).smallDescription = smallDescptions.text();
-                        }
 
 
                     }
@@ -239,6 +252,9 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (refreshLayout.isRefreshing()) {
+                                refreshLayout.setRefreshing(false);
+                            }
                             loadRecycler(modals, null);
                         }
                     });
