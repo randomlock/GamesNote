@@ -24,6 +24,7 @@ import com.example.randomlocks.gamesnote.RealmDatabase.VideoListDatabase;
 import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,6 +43,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
     OnClickInterface mOnClickInteraface;
     Realm realm;
     RealmAsyncTask transaction;
+    HashMap<Integer, GamesVideoModal> hashResults;
     public void swapModal(List<GamesVideoModal> listModals, boolean isAllVideo) {
 
         if (listModals != null) {
@@ -62,13 +64,14 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
     }
 
 
-    public GameVideoAdapter(List<GamesVideoModal> modalList, Context context, boolean isSimple, OnClickInterface mOnClickInterface, Realm realm, boolean isAllVideo) {
+    public GameVideoAdapter(List<GamesVideoModal> modalList, Context context, boolean isSimple, OnClickInterface mOnClickInterface, Realm realm, boolean isAllVideo, HashMap<Integer, GamesVideoModal> realmResults) {
         this.modalList = modalList;
         this.isSimple = isSimple;
         this.context = context;
         this.mOnClickInteraface = mOnClickInterface;
         this.realm = realm;
         this.isAllVideo = isAllVideo;
+        this.hashResults = realmResults;
 
     }
 
@@ -136,7 +139,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                final GamesVideoModal realmModal = realm.where(GamesVideoModal.class).equalTo("id", modal.id).findFirst();
+                final GamesVideoModal realmModal = hashResults.get(modal.id);
                 if (realmModal != null) {
                     if (realmModal.isWatchLater) {
                         modal.isWatchLater = true;
@@ -153,6 +156,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
                 }
             }
         });
+
 
         RealmResults<VideoListDatabase> realmModal = realm.where(VideoListDatabase.class).equalTo("id", modal.id).findAll();
         if (realmModal.size() == 0) {

@@ -67,11 +67,17 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
             holder.heading.setText(newsModal.title);
         }
         if (newsModal.content != null) {
-            holder.cardView.setVisibility(View.VISIBLE);
+            if (isSimple) {
+                holder.cardView.setVisibility(View.VISIBLE);
+            } else {
+                holder.image.setVisibility(View.VISIBLE);
+            }
             Picasso.with(context).load(newsModal.content).fit().into(holder.image);
         } else {
             if (isSimple) {
                 holder.cardView.setVisibility(View.GONE);
+            } else {
+                holder.image.setVisibility(View.GONE);
             }
         }
         String dateArray[] = newsModal.pubDate.split(" ");

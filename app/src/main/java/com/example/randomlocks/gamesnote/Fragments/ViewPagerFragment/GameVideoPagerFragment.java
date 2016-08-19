@@ -44,6 +44,7 @@ import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -335,11 +336,24 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
     private void fillRecyclerView(List<GamesVideoModal> listModals, Parcelable parcelable) {
 
+        final HashMap<Integer, GamesVideoModal> realmMap = new HashMap<>();
+        ;
         pacman.setVisibility(View.GONE);
         if (listModals.size() == 0) {
             errorText.setVisibility(View.VISIBLE);
         }
         if (adapter == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<GamesVideoModal> realmResults = realm.where(GamesVideoModal.class).findAll();
+                    for (GamesVideoModal modal : realmResults) {
+                        realmMap.put(modal.id, modal);
+
+                    }
+
+                }
+            });
             adapter = new GameVideoAdapter(listModals, getContext(), isReduced, new GameVideoAdapter.OnClickInterface() {
                 @Override
                 public void onWatchLater(GamesVideoModal modal, int viewId) {
@@ -363,7 +377,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 public void onShare() {
 
                 }
-            }, realm, isAllVideo);
+            }, realm, isAllVideo, realmMap);
         }
 
         if (recyclerView.getLayoutManager() == null) {

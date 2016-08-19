@@ -109,7 +109,9 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         if (savedInstanceState != null) {
             modals = savedInstanceState.getParcelableArrayList(GiantBomb.MODAL);
-            loadRecycler(modals, savedInstanceState.getParcelable(SCROLL_POSITION));
+            if (modals != null) {
+                loadRecycler(modals, savedInstanceState.getParcelable(SCROLL_POSITION));
+            }
         } else {
 
             if (modals != null) {

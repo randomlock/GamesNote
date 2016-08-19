@@ -206,6 +206,12 @@
     <string name="dsogaming">DSOGaming</string>
     <string name="view_in_browser">View in browser</string>
     <string name="loading_video">loading video</string>
+    <string name="quick_add">Quick Add</string>
+    <string name="score">Score</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="platform">Platform</string>
+    <string name="add_to_list">Add to list</string>
 
 
 </resources>

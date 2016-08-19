@@ -23,7 +23,7 @@
 
 
 </LinearLayout>
-
+    <!--For full screen video of youtube in webview-->
     <RelativeLayout
         android:id="@+id/videoLayout"
         android:layout_width="match_parent"

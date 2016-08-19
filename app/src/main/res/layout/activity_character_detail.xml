@@ -431,7 +431,7 @@
                 android:layout_height="wrap_content"
                 app:indicator="Pacman"
                 app:indicator_color="@color/accent"
-                android:layout_gravity="center" />
+                android:layout_gravity="bottom|center" />
 
 
         </FrameLayout>

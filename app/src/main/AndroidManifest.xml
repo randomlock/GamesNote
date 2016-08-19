@@ -51,7 +51,9 @@
                 <data android:scheme="file" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.CharacterDetailActivity" />
+        <activity
+            android:name=".Activity.CharacterDetailActivity"
+            android:configChanges="keyboard|keyboardHidden" />
         <activity android:name=".Activity.CharacterFriendEnemyActivity" />
         <activity
             android:name=".Activity.NewsDetailPagerActivity"

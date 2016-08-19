@@ -59,7 +59,6 @@
                         android:paddingEnd="8dp"
                         android:drawablePadding="16dp"
                         android:hint="Search characters..."
-                        android:cursorVisible="false"
                         android:singleLine="true"
                         android:drawableRight="@drawable/ic_clear_black_18dp"
                         android:drawableEnd="@drawable/ic_clear_black_18dp"

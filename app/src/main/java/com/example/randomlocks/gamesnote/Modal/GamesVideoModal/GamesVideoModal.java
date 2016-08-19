@@ -13,6 +13,8 @@ import io.realm.annotations.PrimaryKey;
  * Created by randomlocks on 7/18/2016.
  */
 public class GamesVideoModal extends RealmObject implements Parcelable {
+
+
     @Expose
     public String deck;
     @Expose
@@ -94,4 +96,29 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
             return new GamesVideoModal[size];
         }
     };
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GamesVideoModal modal = (GamesVideoModal) o;
+
+        return id == modal.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+
+
+
+
+
+
+
 }

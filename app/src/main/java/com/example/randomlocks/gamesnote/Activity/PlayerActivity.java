@@ -263,7 +263,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
                     @Override
                     public void execute(Realm realm) {
                         VideoListDatabase videoListDatabase = new VideoListDatabase(videoId);
-                        realm.copyToRealm(videoListDatabase);
+                        realm.copyToRealmOrUpdate(videoListDatabase);
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override

@@ -41,7 +41,7 @@ public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterD
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        String imageUrl = imageUrls.get(position).thumbUrl;
+        String imageUrl = imageUrls.get(position).mediumUrl;
         if (imageUrl != null && imageUrl.trim().length() > 0) {
             Picasso.with(context).load(imageUrl).fit().centerCrop().into(holder.imageView);
         }

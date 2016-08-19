@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -18,14 +19,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +38,7 @@ import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailCharacterAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameDetailOverviewAdapter;
+import com.example.randomlocks.gamesnote.Adapter.GameDetailVideoCharacter;
 import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
@@ -42,6 +47,8 @@ import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.ListDialogFragment;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
+import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.DemoPlayer;
+import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.ExtractorRendererBuilder;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -55,9 +62,12 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharact
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.R;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.exoplayer.AspectRatioFrameLayout;
+import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -98,7 +108,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     GameDetailModal gameDetailModal = null;
     CollapsingToolbarLayout toolbarLayout;
     AppBarLayout appBarLayout;
-    RecyclerView recyclerView, similarGameRecycleView, characterRecycleView, imageRecycleView;
+    RecyclerView recyclerView, similarGameRecycleView, characterRecycleView, imageRecycleView, videoRecyclerView;
     PicassoNestedScrollView nestedScrollView;
     TextView description;
     GameDetailOverviewAdapter adapter;
@@ -120,6 +130,17 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     AVLoadingIndicatorView pacman;
     LinearLayout parentLayout;
     View mDimmerView;
+    private View shutterView;
+    private AspectRatioFrameLayout videoFrame;
+    private SurfaceView surfaceView;
+    private DemoPlayer player;
+
+
+    private long playerPosition;
+    private boolean playerNeedsPrepare;
+    private MediaController mediaController;
+
+
     public GameDetailFragment() {
         // Required empty public constructor
 
@@ -146,7 +167,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         }
 
-        AddToBottomFragment addToBottomFragment = AddToBottomFragment.newInstance();
+        BottomSheetDialogFragment addToBottomFragment = new AddToBottomFragment();
         addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
 
     }
@@ -174,7 +195,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d("tag", "onattach created");
         mCommunicationInterface = (CommunicationInterface) getActivity();
     }
 
@@ -182,7 +202,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d("tag", "oncreate");
         String fullUrl = getArguments().getString(API_URL);
         String str[] = fullUrl.split("/");
         apiUrl = str[str.length - 1];
@@ -193,7 +212,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("tag", "oncreateview");
 
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
@@ -218,7 +236,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("tag", "onactivity created");
 
 
         /************************************** FindViewById *********************************/
@@ -231,9 +248,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         coordinatorLayout.findViewById(R.id.playing).setOnClickListener(this);
         coordinatorLayout.findViewById(R.id.completed).setOnClickListener(this);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
-        appbarImage = (ImageView) getActivity().findViewById(R.id.appbar_image);
         toolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
+        appbarImage = (ImageView) toolbarLayout.findViewById(R.id.appbar_image);
         toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
+        videoFrame = (AspectRatioFrameLayout) toolbarLayout.findViewById(R.id.video_frame);
+        shutterView = videoFrame.findViewById(R.id.shutter);
+        surfaceView = (SurfaceView) videoFrame.findViewById(R.id.surface_view);
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         relativeLayout = (RelativeLayout) coordinatorLayout.findViewById(R.id.cover_layout);
         coverImage = (ImageView) relativeLayout.findViewById(R.id.cover_image);
@@ -245,6 +265,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
         imageRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.image_recycler_view);
+        videoRecyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.video_recycler_view);
         review = (TextView) nestedScrollView.findViewById(R.id.review);
         userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
@@ -255,6 +276,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         characterRecycleView.setNestedScrollingEnabled(false);
         similarGameRecycleView.setNestedScrollingEnabled(false);
 
+
         floatingActionsMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
@@ -262,6 +284,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
             }
         });
+
 
         mDimmerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,6 +301,16 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             Picasso.with(getContext()).load(imageUrl).fit().into(coverImage);
         }
         gameTitle.setText(title);
+
+        appbarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaController = new KeyCompatibleMediaController(getContext());
+                appbarImage.setVisibility(View.INVISIBLE);
+                shutterView.setVisibility(View.INVISIBLE);
+                onShown();
+            }
+        });
 
         /***************************** TYPEFACE ************************************/
 
@@ -323,7 +356,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             map = new HashMap<>();
             map.put(GiantBomb.KEY, GiantBomb.API_KEY);
             map.put(GiantBomb.FORMAT, "JSON");
-            String field_list = "description,name,images,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
+            String field_list = "description,name,images,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
             map.put(GiantBomb.FIELD_LIST, field_list);
             getGameDetail(gameWikiDetailInterface, map);
 
@@ -496,7 +529,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         }
 
 
-        final List<CharacterImage> image = gameDetailModal.images;
+        List<CharacterImage> image = gameDetailModal.images;
+        List<GameDetailVideo> videos = gameDetailModal.videos;
+
+
+
       /*  ArrayList<String> images = new ArrayList<>(image.size());
         for (int i = 0, size = image.size(); i < size; i++) {
             images.add(image.get(i).mediumUrl);
@@ -509,6 +546,13 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         /************* SETTING GAME IMAGE ***********************************/
         imageRecycleView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         imageRecycleView.setAdapter(new CharacterDetailImageAdapter(image, getContext()));
+
+
+        /************* SETTING GAME VIDEOS *************************************/
+        if (videos != null) {
+            videoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            videoRecyclerView.setAdapter(new GameDetailVideoCharacter(image, videos, getContext()));
+        }
 
         toolbarLayout.setTitle(gameDetailModal.name);
 
@@ -859,6 +903,86 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         super.onPause();
     }
+
+    private void onShown() {
+
+        if (player == null) {
+            preparePlayer(true);
+        } else {
+            player.setBackgrounded(false);
+        }
+    }
+
+    private DemoPlayer.RendererBuilder getRendererBuilder() {
+        String userAgent = Util.getUserAgent(getContext(), "ExoPlayerDemo");
+        return new ExtractorRendererBuilder(getContext(), userAgent, Uri.parse("http://v.giantbomb.com/2016/07/28/vf_giantbomb_bestof_103_1800.mp4?api_key=b3" +
+                "18d66445bfc79e6d74a65fe52744b45b345948&format=JSON"));
+
+    }
+
+
+    private void preparePlayer(boolean playWhenReady) {
+        if (player == null) {
+            player = new DemoPlayer(getRendererBuilder());
+            playerNeedsPrepare = true;
+            mediaController.setMediaPlayer(player.getPlayerControl());
+            mediaController.setEnabled(true);
+        }
+        if (playerNeedsPrepare) {
+            player.prepare();
+            playerNeedsPrepare = false;
+        }
+        player.setSurface(surfaceView.getHolder().getSurface());
+        player.setPlayWhenReady(playWhenReady);
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            playerPosition = player.getCurrentPosition();
+            player.release();
+            player = null;
+
+        }
+    }
+
+
+    private static final class KeyCompatibleMediaController extends MediaController {
+
+        private MediaPlayerControl playerControl;
+
+        public KeyCompatibleMediaController(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void setMediaPlayer(MediaPlayerControl playerControl) {
+            super.setMediaPlayer(playerControl);
+            this.playerControl = playerControl;
+        }
+
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent event) {
+            int keyCode = event.getKeyCode();
+            if (playerControl.canSeekForward() && (keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD
+                    || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT)) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    playerControl.seekTo(playerControl.getCurrentPosition() + 15000); // milliseconds
+                    show();
+                }
+                return true;
+            } else if (playerControl.canSeekBackward() && (keyCode == KeyEvent.KEYCODE_MEDIA_REWIND
+                    || keyCode == KeyEvent.KEYCODE_DPAD_LEFT)) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    playerControl.seekTo(playerControl.getCurrentPosition() - 5000); // milliseconds
+                    show();
+                }
+                return true;
+            }
+            return super.dispatchKeyEvent(event);
+        }
+    }
+
+
 
 
 }

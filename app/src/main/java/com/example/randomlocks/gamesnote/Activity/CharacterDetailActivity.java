@@ -61,7 +61,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     LinearLayout parentLayout;
     GameCharacterInterface mGameCharacterInterface;
     Map<String, String> map;
-    CharacterModal characterDetailModal;
+    CharacterModal characterDetailModal = null;
     TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
@@ -172,8 +172,8 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             Toaster.make(this, "hello save instance");
             characterDetailModal = savedInstanceState.getParcelable(GiantBomb.MODAL);
             fillData(characterDetailModal);
-        } else {
 
+        } else {
             if (characterDetailModal != null) {
                 fillData(characterDetailModal);
             } else {
@@ -229,7 +229,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     }
 
     private void fillData(CharacterModal characterDetailModal) {
-        pacman.setVisibility(View.GONE);
         parentLayout.setVisibility(View.VISIBLE);
         if (characterDetailModal.name != null) {
             collapsingToolbarLayout.setTitle(characterDetailModal.name);
@@ -295,6 +294,9 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
             }
         }
+
+        pacman.setVisibility(View.GONE);
+
     }
 
     @Override
