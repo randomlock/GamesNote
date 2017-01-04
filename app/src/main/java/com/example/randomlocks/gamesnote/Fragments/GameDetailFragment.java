@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -63,6 +64,7 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListMod
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
+import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -81,6 +83,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,12 +98,13 @@ import retrofit2.Response;
  ************/
 
 
-public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ListDialogFragment.CommunicationInterface {
+public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ListDialogFragment.CommunicationInterface ,AddToBottomFragment.AddToBottomInterface {
 
 
     public static final String API_URL = "apiUrl";
     public static final String IMAGE_URL = "imageUrl";
     public static final String NAME = "name";
+    Realm realm;
     Toolbar toolbar;
     String apiUrl, imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
@@ -114,6 +118,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     GameDetailOverviewAdapter adapter;
     int style;
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
+    List<GameWikiPlatform> platforms = null;
     ProgressBar overviewProgress;
     CoordinatorLayout coordinatorLayout;
     SimilarGameAdapter similarGameAdapter;
@@ -167,9 +172,19 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         }
 
-        BottomSheetDialogFragment addToBottomFragment = new AddToBottomFragment();
-        addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
+        if (platforms!=null) {
+            BottomSheetDialogFragment addToBottomFragment = AddToBottomFragment.newInstance(platforms);
+            addToBottomFragment.setTargetFragment(this, 0);
+            addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
+        }else {
+            Toaster.makeSnackbar(coordinatorLayout,"waiting to load data");
+        }
 
+    }
+
+    @Override
+    public void onAdd(int score, String startDate, String endDate, String platform) {
+        Toaster.make(getContext(),startDate+platform+score);
     }
 
 
@@ -216,6 +231,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        realm = Realm.getDefaultInstance();
+    }
 
     private void setBackgroundDimming(boolean dimmed) {
         final float targetAlpha = dimmed ? 1f : 0;
@@ -356,7 +376,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             map = new HashMap<>();
             map.put(GiantBomb.KEY, GiantBomb.API_KEY);
             map.put(GiantBomb.FORMAT, "JSON");
-            String field_list = "description,name,images,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
+            String field_list = "description,name,platforms,images,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
             map.put(GiantBomb.FIELD_LIST, field_list);
             getGameDetail(gameWikiDetailInterface, map);
 
@@ -528,7 +548,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             Picasso.with(getContext()).load(gameDetailModal.images.first().mediumUrl).fit().into(coverImage);
         }
 
-
+        platforms = gameDetailModal.platforms;
+        //Toaster.make(getContext(),platforms.size()+"5");
         List<CharacterImage> image = gameDetailModal.images;
         List<GameDetailVideo> videos = gameDetailModal.videos;
 
@@ -889,6 +910,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         }
         gameWikiDetailInterface = null;
+        realm.close();
 
     }
 

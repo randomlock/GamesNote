@@ -5,44 +5,17 @@
     android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/quick_add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/quick_add"
-        android:background="@drawable/touch_feedback" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_margin="12dp"
+        android:padding="12dp"
         >
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/status"
-            style="@style/AddtoListStyle" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button"
-            style="?android:attr/spinnerStyle" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             android:text="@string/score"
             style="@style/AddtoListStyle"
 
@@ -50,32 +23,33 @@
 
         <Spinner
             android:id="@+id/score_spinner"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_gravity="center_horizontal"
+            android:background="@null"
+            style="@style/AddtoListStyle"
+
+            />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="12dp"
+        android:padding="12dp"
+        >
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:id="@+id/start_date"
             android:text="@string/start_date"
             style="@style/AddtoListStyle"
 
             />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:layout_height="wrap_content"
+            android:id="@+id/end_date"
             android:text="@string/end_date"
+            android:gravity="end"
             style="@style/AddtoListStyle"
 
             />
@@ -86,12 +60,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="12dp"
+        android:padding="12dp"
+        >
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             android:text="@string/platform"
             style="@style/AddtoListStyle"
 
@@ -99,19 +73,40 @@
 
         <Spinner
             android:id="@+id/platform_spinner"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:background="@null"
+            style="@style/AddtoListStyle"
+
+            />
 
     </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <Button
+        android:id="@+id/quick_add"
+        android:text="@string/quick_add"
+        android:layout_margin="12dp"
+        android:background="@drawable/touch_feedback"
+        style="@style/AddtoListStyle"
+        />
 
 
     <Button
         android:id="@+id/add_to_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/add_to_list"
-        android:background="@drawable/touch_feedback" />
+        android:layout_margin="12dp"
+        android:background="@drawable/touch_feedback"
+        style="@style/AddtoListStyle"
+        />
+
+
+
+</LinearLayout>
+
 
 
 </LinearLayout>

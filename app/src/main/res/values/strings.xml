@@ -149,17 +149,17 @@
 
     <string-array name="score">
 
-        <item>1</item>
-        <item>2</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
+        <item>1 </item>
+        <item>2 </item>
+
+        <item>3 </item>
+        <item>4 </item>
+        <item>5 </item>
+        <item>6 </item>
+        <item>7 </item>
+        <item>8 </item>
+        <item>9 </item>
+        <item>10 </item>
 
 
     </string-array>
@@ -207,9 +207,9 @@
     <string name="view_in_browser">View in browser</string>
     <string name="loading_video">loading video</string>
     <string name="quick_add">Quick Add</string>
-    <string name="score">Score</string>
-    <string name="start_date">Start date</string>
-    <string name="end_date">End date</string>
+    <string name="score">Your Score</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
     <string name="platform">Platform</string>
     <string name="add_to_list">Add to list</string>
 

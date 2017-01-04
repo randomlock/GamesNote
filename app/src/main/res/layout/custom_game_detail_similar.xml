@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView android:layout_width="200dp"
-    android:layout_height="250dp"
+<android.support.v7.widget.CardView android:layout_width="105dp"
+    android:layout_height="157dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/cardColor"
     app:cardElevation="4dp"
-    app:cardCornerRadius="6dp"
+    android:layout_margin="6dp"
     >
 
 
@@ -19,6 +19,17 @@
     android:layout_height="match_parent"
     android:src="@drawable/testimage"
     android:background="?android:selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/video_title"
+        android:gravity="center"
+        android:layout_width="105dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:textColor="@color/white"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:background="@drawable/gradient" />
 
 
     </android.support.v7.widget.CardView>

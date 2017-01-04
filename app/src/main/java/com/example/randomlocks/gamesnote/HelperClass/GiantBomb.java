@@ -62,6 +62,7 @@ public class GiantBomb {
     public static final String VIDEO_TYPE = "video_type";
     public static final String API_URL = "apiUrl";
     public static final String REDUCE_NEWS_VIEW = "reduce_news_view";
+    public static final String PLATFORM = "platform";
     public static String REDUCE_VIEW = "reduce_view";
 
 

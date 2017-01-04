@@ -5,10 +5,12 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 
+import io.realm.RealmObject;
+
 /**
  * Created by randomlocks on 4/25/2016.
  */
-public class GameWikiPlatform implements Parcelable {
+public class GameWikiPlatform extends RealmObject implements Parcelable {
 
     @Expose
     public String name;

@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
@@ -83,7 +85,8 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         if (images != null) {
-            Picasso.with(context).load(images.get(position).imageUrl).fit().into(holder.imageView);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().centerCrop().into(holder.imageView);
+            holder.textView.setText(stringList.get(position).name);
         }
 
 
@@ -92,12 +95,13 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         ImageView imageView;
+        TextView textView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             imageView = (ImageView) itemView.findViewById(R.id.image);
-
+            textView = (TextView) itemView.findViewById(R.id.video_title);
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
