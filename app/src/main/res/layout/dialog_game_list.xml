@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    >
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        >
+
+
+        <TextView
+            android:id="@+id/from"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            android:text="FROM" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/primary_light" />
+
+
+        <TextView
+            android:id="@+id/to"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            android:text="TO" />
+
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/primary_light" />
+
+
+        <TextView
+            android:id="@+id/hours"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            android:text="HOURS" />
+
+
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:paddingBottom="12dp"
+        >
+
+
+        <TextView
+            android:id="@+id/start_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="-"
+            android:linksClickable="true"
+            android:textColor="@color/primary" />
+
+
+
+
+
+        <TextView
+            android:id="@+id/end_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="-"
+            android:textColor="@color/primary" />
+
+
+
+
+        <Spinner
+            android:id="@+id/gameplay_hours"
+            android:background="@null"
+            style="@style/AddtoListStyle"
+            android:gravity="right"
+
+            />
+
+
+
+
+    </LinearLayout>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@color/primary_light" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="12dp"
+        >
+
+
+        <TextView
+            android:id="@+id/friends_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            android:text="PLATFORM" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/primary_light" />
+
+
+        <TextView
+            android:id="@+id/enemies_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            android:text="MEDIUM" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/primary_light" />
+
+
+        <TextView
+            android:id="@+id/total_games_titles"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp"
+            android:text="Price($)"
+
+            />
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+
+
+        <Spinner
+            android:id="@+id/platform_spinner"
+            android:background="@null"
+            style="@style/AddtoListStyle"
+            android:gravity="right"
+
+            />
+
+
+
+
+
+        <Spinner
+            android:id="@+id/medium_spinner"
+            android:background="@null"
+            style="@style/AddtoListStyle"
+            android:gravity="right"
+
+            />
+
+
+
+        <Spinner
+            android:id="@+id/price"
+            android:background="@null"
+            style="@style/AddtoListStyle"
+            android:gravity="right"
+
+            />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@color/primary_light" />
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+
+        >
+
+
+        <TextView
+            android:id="@+id/youtube"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:drawableTop="@drawable/youtube"
+            android:linksClickable="true"
+            android:textColor="@color/primary" />
+
+
+
+
+
+        <TextView
+            android:id="@+id/google"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:drawableTop="@drawable/google_48"
+            android:textColor="@color/primary" />
+
+
+
+
+        <TextView
+            android:id="@+id/wiki"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:drawableTop="@drawable/wikipedia_48"
+            android:textColor="@color/primary" />
+
+
+
+
+        <TextView
+            android:id="@+id/htlb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:drawableTop="@drawable/header_48"
+            android:textColor="@color/primary" />
+
+
+    </LinearLayout>
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:background="@color/accent"
+        />
+
+
+<Button
+    android:id="@+id/update"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    android:text="Update"
+    android:background="@color/accent"
+    />
+
+
+
+
+</LinearLayout>
+
+
+
+</LinearLayout>
+
+

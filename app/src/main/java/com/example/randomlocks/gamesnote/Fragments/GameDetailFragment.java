@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -66,6 +65,8 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilar
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
+import com.example.randomlocks.gamesnote.RealmDatabase.RealmString;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.exoplayer.AspectRatioFrameLayout;
@@ -84,6 +85,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,13 +100,14 @@ import retrofit2.Response;
  ************/
 
 
-public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ListDialogFragment.CommunicationInterface ,AddToBottomFragment.AddToBottomInterface {
+public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ListDialogFragment.CommunicationInterface, AddToBottomFragment.AddToBottomInterface {
 
 
     public static final String API_URL = "apiUrl";
     public static final String IMAGE_URL = "imageUrl";
     public static final String NAME = "name";
     Realm realm;
+    int list_category;
     Toolbar toolbar;
     String apiUrl, imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
@@ -159,32 +162,70 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         switch (v.getId()) {
 
             case R.id.replaying:
+                list_category = GiantBomb.REPLAYING;
                 break;
             case R.id.planning:
+                list_category = GiantBomb.PLANNING;
                 break;
             case R.id.dropped:
+                list_category = GiantBomb.DROPPED;
                 break;
             case R.id.playing:
+                list_category = GiantBomb.PLAYING;
                 break;
             case R.id.completed:
+                list_category = GiantBomb.COMPLETED;
                 break;
 
 
         }
 
-        if (platforms!=null) {
+        if (platforms != null) {
             BottomSheetDialogFragment addToBottomFragment = AddToBottomFragment.newInstance(platforms);
             addToBottomFragment.setTargetFragment(this, 0);
             addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
-        }else {
-            Toaster.makeSnackbar(coordinatorLayout,"waiting to load data");
+        } else {
+            Toaster.makeSnackbar(coordinatorLayout, "waiting to load data");
         }
 
     }
 
+    //When adding game to the list
     @Override
     public void onAdd(int score, String startDate, String endDate, String platform) {
-        Toaster.make(getContext(),startDate+platform+score);
+
+        final GameListDatabase gameListDatabase = new GameListDatabase();
+        gameListDatabase.setApiDetailUrl(apiUrl);
+        gameListDatabase.setName(gameTitle.getText().toString());
+        gameListDatabase.setImageUrl(imageUrl);
+        gameListDatabase.setStatus(list_category);
+        gameListDatabase.setGameplay_hours(" ");
+        gameListDatabase.setMedium(" ");
+        gameListDatabase.setPrice(" ");
+        gameListDatabase.setScore(score);
+        gameListDatabase.setStartDate(startDate);
+        gameListDatabase.setEndDate(endDate);
+        gameListDatabase.setPlatform(platform);
+
+        RealmList<RealmString> platformList = new RealmList<>();
+        for(GameWikiPlatform platform1 : platforms)
+        platformList.add(new RealmString(platform1.name,platform1.abbreviation));
+        gameListDatabase.setPlatform_list(platformList);
+
+
+
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(gameListDatabase);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toaster.makeSnackbar(coordinatorLayout, "Game added");
+            }
+        });
     }
 
 
@@ -1003,8 +1044,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             return super.dispatchKeyEvent(event);
         }
     }
-
-
 
 
 }

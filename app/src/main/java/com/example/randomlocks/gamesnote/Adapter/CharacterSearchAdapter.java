@@ -24,7 +24,6 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
     OnClickInterface mOnClickInterface;
 
 
-
     public interface OnClickInterface {
         void onItemClick(String apiUrl, String image);
     }
@@ -66,7 +65,6 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<CharacterSearch
             });*/
 
             Picasso.with(context).load(modal.image.mediumUrl).into(holder.profileImage);
-
 
 
         } else {

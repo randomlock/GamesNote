@@ -214,7 +214,6 @@ public class NewsModal extends RealmObject implements Parcelable {
     }
 
 
-
     // For the tags title and summary, extracts their text values.
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
         String result = "";

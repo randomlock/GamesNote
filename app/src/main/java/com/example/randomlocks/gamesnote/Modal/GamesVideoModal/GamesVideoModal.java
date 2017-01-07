@@ -115,10 +115,4 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     }
 
 
-
-
-
-
-
-
 }

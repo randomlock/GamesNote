@@ -469,12 +469,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     }
 
 
-
-
-
-
-
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

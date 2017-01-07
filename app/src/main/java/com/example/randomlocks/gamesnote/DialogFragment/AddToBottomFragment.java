@@ -35,14 +35,14 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
 
     private BottomSheetBehavior mBehavior;
     TextView startDate, endDate;
-    Spinner scoreSpinner,platformSpinner;
-    Button quickAdd ,addToList;
+    Spinner scoreSpinner, platformSpinner;
+    Button quickAdd, addToList;
     int view_id;
     List<GameWikiPlatform> platforms;
 
     public interface AddToBottomInterface {
 
-        void onAdd(int score , String startDate , String endDate , String platform);
+        void onAdd(int score, String startDate, String endDate, String platform);
     }
 
     AddToBottomInterface mAddToBottomInterface;
@@ -50,7 +50,7 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
     public static AddToBottomFragment newInstance(List<GameWikiPlatform> platform) {
 
         Bundle args = new Bundle();
-        args.putParcelableArrayList(GiantBomb.PLATFORM,new ArrayList<>(platform));
+        args.putParcelableArrayList(GiantBomb.PLATFORM, new ArrayList<>(platform));
         AddToBottomFragment fragment = new AddToBottomFragment();
         fragment.setArguments(args);
         return fragment;
@@ -83,8 +83,8 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         addToList = (Button) view.findViewById(R.id.add_to_list);
         quickAdd.setOnClickListener(this);
         addToList.setOnClickListener(this);
-        setSpinner(scoreSpinner,"score");
-        setCustomSpinner(platformSpinner,"platform");
+        setSpinner(scoreSpinner, "score");
+        setCustomSpinner(platformSpinner, "platform");
         startDate.setOnClickListener(this);
         endDate.setOnClickListener(this);
         dialog.setContentView(view);
@@ -106,32 +106,34 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
 
             case R.id.start_date:
             case R.id.end_date:
-               view_id = v.getId();
+                view_id = v.getId();
                 DialogFragment newFragment = new DatePickerFragment();
                 newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
                 break;
-            case R.id.quick_add :
-                mAddToBottomInterface.onAdd(0,"","","");
+            case R.id.quick_add:
+                mAddToBottomInterface.onAdd(0, "-", "-", "-");
+                mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
 
-            case R.id.add_to_list :
-                if(startDate.getText().equals(getResources().getString(R.string.start_date))){
-                    Toaster.make(getContext(),"start date not set");
-                }else if(endDate.getText().equals(getResources().getString(R.string.end_date))) {
-                    Toaster.make(getContext(),"end date not set");
+            case R.id.add_to_list:
+                if (startDate.getText().equals(getResources().getString(R.string.start_date))) {
+                    Toaster.make(getContext(), "start date not set");
+                } else if (endDate.getText().equals(getResources().getString(R.string.end_date))) {
+                    Toaster.make(getContext(), "end date not set");
                 } else {
-                    mAddToBottomInterface.onAdd(Integer.parseInt(scoreSpinner.getSelectedItem().toString()),startDate.getText().toString(),endDate.getText().toString(),platformSpinner.getSelectedItem().toString());
+                    mAddToBottomInterface.onAdd(Integer.parseInt(scoreSpinner.getSelectedItem().toString()), startDate.getText().toString(), endDate.getText().toString(), platformSpinner.getSelectedItem().toString());
+                    mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
                 }
 
                 break;
-
 
 
         }
     }
 
 
-    void setSpinner(Spinner spinner,String str){
+    void setSpinner(Spinner spinner, String str) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.score, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
@@ -155,9 +157,9 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
 
     }
 
-    public void setCustomSpinner(Spinner spinner,String str) {
+    public void setCustomSpinner(Spinner spinner, String str) {
 
-        CustomAdapter adapter = new CustomAdapter(getContext(),android.R.layout.simple_spinner_dropdown_item);
+        CustomAdapter adapter = new CustomAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
@@ -166,7 +168,7 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END|Gravity.BOTTOM);
+                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END | Gravity.BOTTOM);
             }
 
             @Override
@@ -179,15 +181,18 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
     }
 
 
-    class CustomAdapter extends ArrayAdapter<CharSequence>{
+    class CustomAdapter extends ArrayAdapter<CharSequence> {
 
 
         CustomAdapter(Context context, int resource) {
-            super(context,resource);
+            super(context, resource);
         }
 
         @Override
         public CharSequence getItem(int position) {
+
+
+
             return platforms.get(position).abbreviation;
         }
 
@@ -198,15 +203,8 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
     }
 
 
-
-
-
-
     class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
-
-
-
 
 
         @NonNull
@@ -221,19 +219,19 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
             int day = c.get(Calendar.DAY_OF_MONTH);
 
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(),this, year, month, day);
+            return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
 
-            if(view_id==R.id.start_date)
-                startDate.setText(month+1+"/"+day+"/"+year);
+            if (view_id == R.id.start_date)
+                startDate.setText(month + 1 + "/" + day + "/" + year);
             else
-                endDate.setText(month+1+"/"+day+"/"+year);
+                endDate.setText(month + 1 + "/" + day + "/" + year);
         }
 
 
-     }
+    }
 
 }

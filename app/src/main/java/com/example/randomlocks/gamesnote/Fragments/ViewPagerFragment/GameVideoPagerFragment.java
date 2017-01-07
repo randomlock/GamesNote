@@ -130,8 +130,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         swipeRefreshLayout.setOnRefreshListener(this);
 
 
-
-
         /********* SET NAVIGATION VIEW **********************/
 
         mSelectedId = SharedPreference.getFromSharedPreferences(VIDEO_KEY, R.id.nav_all_videos, getContext());

@@ -23,7 +23,7 @@ import io.realm.RealmResults;
 /**
  * Created by randomlocks on 7/19/2016.
  */
-public class GameVideoOtherPagerAdapter extends Fragment {
+public class GameVideoOtherPagerFragment extends Fragment {
 
     private static final String MODAL = "list_modals";
     private static final String SCROLL_POSITION = "scroll_position";
@@ -37,14 +37,14 @@ public class GameVideoOtherPagerAdapter extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
 
 
-    public GameVideoOtherPagerAdapter() {
+    public GameVideoOtherPagerFragment() {
     }
 
-    public static GameVideoOtherPagerAdapter newInstance(int position) {
+    public static GameVideoOtherPagerFragment newInstance(int position) {
 
         Bundle args = new Bundle();
         args.putInt(GiantBomb.POSITION, position);
-        GameVideoOtherPagerAdapter fragment = new GameVideoOtherPagerAdapter();
+        GameVideoOtherPagerFragment fragment = new GameVideoOtherPagerFragment();
         fragment.setArguments(args);
         return fragment;
     }

@@ -75,8 +75,8 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
 
         Intent intent = new Intent(this, CharacterDetailActivity.class);
-        intent.putExtra(GiantBomb.API_URL,apiUrl);
-        intent.putExtra(GiantBomb.IMAGE_URL,imageUrl);
+        intent.putExtra(GiantBomb.API_URL, apiUrl);
+        intent.putExtra(GiantBomb.IMAGE_URL, imageUrl);
         startActivity(intent);
 
 

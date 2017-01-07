@@ -44,6 +44,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
     Realm realm;
     RealmAsyncTask transaction;
     HashMap<Integer, GamesVideoModal> hashResults;
+
     public void swapModal(List<GamesVideoModal> listModals, boolean isAllVideo) {
 
         if (listModals != null) {

@@ -245,8 +245,6 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                         }
 
 
-
-
                     }
 
                     mainHandler.post(new Runnable() {

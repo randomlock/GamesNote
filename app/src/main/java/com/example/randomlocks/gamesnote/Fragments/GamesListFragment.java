@@ -27,6 +27,7 @@ public class GamesListFragment extends Fragment {
     ViewPager viewPager;
     FragmentActivity fragmentActivity;
     CollapsingToolbarLayout mCollapsingToolbarLayout;
+    GameListPagerAdapter adapter;
 
     public GamesListFragment() {
         // Required empty public constructor
@@ -72,15 +73,16 @@ public class GamesListFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.GameListFragment));
 
-
-        viewPager.setAdapter(new GameListPagerAdapter(getChildFragmentManager(), getContext()));
+        adapter = new GameListPagerAdapter(getChildFragmentManager(), getContext());
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(5);
+        tabLayout.setupWithViewPager(viewPager);
 
 
         //  if (savedInstanceState!=null) {
         //     viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
         // }
-
-        tabLayout.setupWithViewPager(viewPager);
+        //tabLayout.setupWithViewPager(viewPager);
 
 
     }

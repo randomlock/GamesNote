@@ -1,7 +1,6 @@
 package com.example.randomlocks.gamesnote.Activity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -167,7 +166,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
             }
         });*/
-
 
 
         if (savedInstanceState != null) {

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             app:expandedTitleGravity="right|bottom"
             app:contentScrim="?attr/colorPrimary"
-            android:theme="@style/MyToolbarLight"
+            android:theme="@style/MyToolbar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
@@ -58,7 +58,7 @@
             android:background="@color/primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             app:tabTextColor="@color/tab_text"
             app:tabSelectedTextColor="@color/tab_selected_text"
             app:tabGravity="fill"

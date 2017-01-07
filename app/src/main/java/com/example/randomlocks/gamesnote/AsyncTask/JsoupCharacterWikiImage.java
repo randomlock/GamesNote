@@ -48,7 +48,6 @@ public class JsoupCharacterWikiImage extends AsyncTask<String, Integer, List<Cha
             }
 
 
-
         } catch (Exception e) {
             imageUrl = null;
         }
