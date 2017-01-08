@@ -93,7 +93,7 @@
 
                 <TextView
                     android:id="@+id/deck"
-                    android:layout_margin="24dp"
+                    android:layout_margin="12dp"
                     android:textStyle="italic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -178,7 +178,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="FRIENDS" />
+                        android:text="FRIENDS"
+                        android:textColor="?android:attr/textColorPrimary"
+                        />
 
                     <View
                         android:layout_width="1dp"
@@ -192,7 +194,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="ENEMIES" />
+                        android:text="ENEMIES"
+                        android:textColor="?android:attr/textColorPrimary" />
 
                     <View
                         android:layout_width="1dp"
@@ -206,7 +209,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="GAMES" />
+                        android:text="GAMES"
+                        android:textColor="?android:attr/textColorPrimary" />
 
 
                 </LinearLayout>
@@ -242,7 +246,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Gender"
+                        android:text="GENDER"
                         android:layout_weight="1"
                         android:textColor="@color/primary_text_light" />
 
@@ -293,7 +297,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Birthday "
+                        android:text="BIRTHDAY "
                         android:layout_weight="1"
                         android:textColor="@color/primary_text_light" />
 
@@ -322,7 +326,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="First Appearance"
+                        android:text="FIRSR APPEARANCE"
                         android:textColor="@color/primary_text_light" />
 
 
@@ -347,7 +351,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Alias"
+                        android:text="ALIAS"
                         android:textColor="@color/primary_text_light" />
 
 
