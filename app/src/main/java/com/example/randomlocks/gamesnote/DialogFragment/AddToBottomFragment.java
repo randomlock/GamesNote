@@ -10,6 +10,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -116,11 +117,17 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
                 break;
 
             case R.id.add_to_list:
-                if (startDate.getText().equals(getResources().getString(R.string.start_date))) {
+                if(scoreSpinner.getSelectedItemPosition()==0){
+                    Toaster.make(getContext(),"score is not set");
+                }else if (startDate.getText().equals(getResources().getString(R.string.start_date))) {
                     Toaster.make(getContext(), "start date not set");
                 } else if (endDate.getText().equals(getResources().getString(R.string.end_date))) {
                     Toaster.make(getContext(), "end date not set");
-                } else {
+                } else if(platformSpinner.getSelectedItemPosition()==0){
+                    Toaster.make(getContext(),"platform is not set");
+                }
+                    else
+                 {
                     mAddToBottomInterface.onAdd(Integer.parseInt(scoreSpinner.getSelectedItem().toString()), startDate.getText().toString(), endDate.getText().toString(), platformSpinner.getSelectedItem().toString());
                     mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
@@ -146,6 +153,8 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+
             }
 
             @Override
@@ -169,6 +178,8 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END | Gravity.BOTTOM);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+
             }
 
             @Override
@@ -191,14 +202,15 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         @Override
         public CharSequence getItem(int position) {
 
+            if(position==0)
+                return "-";
 
-
-            return platforms.get(position).abbreviation;
+            return platforms.get(position-1).abbreviation;
         }
 
         @Override
         public int getCount() {
-            return platforms.size();
+            return platforms.size()+1;
         }
     }
 
@@ -225,10 +237,14 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
 
-            if (view_id == R.id.start_date)
+            if (view_id == R.id.start_date){
                 startDate.setText(month + 1 + "/" + day + "/" + year);
-            else
+                startDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+            } else {
                 endDate.setText(month + 1 + "/" + day + "/" + year);
+                endDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+            }
+
         }
 
 

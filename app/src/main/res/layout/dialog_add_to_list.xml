@@ -18,8 +18,7 @@
         <TextView
             android:text="@string/score"
             style="@style/AddtoListStyle"
-
-            />
+            android:textColor="?android:attr/textColorPrimary" />
 
         <Spinner
             android:id="@+id/score_spinner"
@@ -43,15 +42,14 @@
             android:id="@+id/start_date"
             android:text="@string/start_date"
             style="@style/AddtoListStyle"
-
-            />
+            android:textColor="?android:attr/textColorPrimary" />
 
         <TextView
             android:id="@+id/end_date"
             android:text="@string/end_date"
             android:gravity="end"
             style="@style/AddtoListStyle"
-
+            android:textColor="?android:attr/textColorPrimary"
             />
 
     </LinearLayout>
@@ -68,7 +66,7 @@
         <TextView
             android:text="@string/platform"
             style="@style/AddtoListStyle"
-
+            android:textColor="?android:attr/textColorPrimary"
             />
 
         <Spinner

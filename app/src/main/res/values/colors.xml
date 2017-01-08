@@ -36,10 +36,10 @@
     <color name="very_good">#0097A7</color>
     <color name="awesome">#00796B</color>
     <color name="GOTY">#E64A19</color>
-
+    <color name="no_score">#9E9E9E</color>
 
     <array name="score_color">
-
+        <item>@color/no_score</item>
         <item>@color/worst</item>
         <item>@color/very_poor</item>
         <item>@color/poor</item>

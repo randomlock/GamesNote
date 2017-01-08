@@ -7,8 +7,8 @@ import io.realm.RealmObject;
  */
 
 public class RealmString extends RealmObject {
-    public String name;
-    public String abbreviation;
+    private String name;
+    private String abbreviation;
 
     public RealmString(){
 
@@ -17,6 +17,22 @@ public class RealmString extends RealmObject {
 
     public RealmString(String name, String abbreviation) {
         this.name = name;
+        this.abbreviation = abbreviation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
     }
 }

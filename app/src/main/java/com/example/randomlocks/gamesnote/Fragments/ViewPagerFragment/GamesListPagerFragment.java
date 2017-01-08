@@ -3,11 +3,9 @@ package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +13,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -25,20 +24,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameListAdapter;
-import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
+import com.example.randomlocks.gamesnote.RealmDatabase.RealmString;
 
 import java.util.Calendar;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -99,6 +100,48 @@ public class GamesListPagerFragment extends Fragment {
                     dialog.setCancelable(false);
                     dialog.show(getActivity().getSupportFragmentManager(),"gamelist");
                 }
+
+                @Override
+                public void onScoreClick(final String primaryKey, final int oldScore, int position) {
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                            R.array.score, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    final Spinner sp = new Spinner(getActivity());
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(50,50,0,0);
+                    sp.setLayoutParams(params);
+                    sp.setAdapter(adapter);
+                    sp.setSelection(oldScore/10);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setCancelable(false).setTitle("SelectScore")
+                    .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialogInterface, int i) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    if(sp.getSelectedItemPosition()*10==oldScore){
+                                        dialogInterface.dismiss();
+                                    } else {
+                                        GameListDatabase newListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",primaryKey).findFirst();
+                                        newListDatabase.setScore(sp.getSelectedItemPosition()*10);
+                                        Toaster.make(getContext(),"updated");
+                                        dialogInterface.dismiss();
+                                    }
+
+                                }
+                            });
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    })
+                    .setView(sp,60,60,60,60); //make it not static
+                    builder.create().show();
+                }
             });
             recyclerView.setAdapter(adapter);
         }
@@ -134,9 +177,9 @@ public class GamesListPagerFragment extends Fragment {
 
             View v = inflater.inflate(R.layout.dialog_game_list,container,false);
             startDate = (TextView) v.findViewById(R.id.start_date);
-            startDate.setText(gameListDatabase.startDate);
+            startDate.setText(gameListDatabase.getStartDate());
             endDate = (TextView) v.findViewById(R.id.end_date);
-            endDate.setText(gameListDatabase.endDate);
+            endDate.setText(gameListDatabase.getEndDate());
             youtube = (TextView) v.findViewById(R.id.youtube);
             youtube.setOnClickListener(this);
             google = (TextView) v.findViewById(R.id.google);
@@ -151,14 +194,14 @@ public class GamesListPagerFragment extends Fragment {
             close.setOnClickListener(this);
             platform = (Spinner) v.findViewById(R.id.platform_spinner);
             medium = (Spinner) v.findViewById(R.id.medium_spinner);
-            hours = (Spinner) v.findViewById(R.id.gameplay_hours);
-            price = (Spinner) v.findViewById(R.id.price);
+            hours = (Spinner) v.findViewById(R.id.gameplay_hours_spinner);
+            price = (Spinner) v.findViewById(R.id.price_spinner);
             startDate.setOnClickListener(this);
             endDate.setOnClickListener(this);
-            setSpinner(medium,gameListDatabase.medium,R.array.medium);
-            setSpinner(hours,gameListDatabase.gameplay_hours,R.array.price);
-            setSpinner(price,gameListDatabase.price,R.array.price);
-            setCustomSpinner(platform,gameListDatabase.platform);
+            setSpinner(medium,gameListDatabase.getMedium(),R.array.medium);
+            setSpinner(hours,gameListDatabase.getGameplay_hours(),R.array.price);
+            setSpinner(price,gameListDatabase.getPrice(),R.array.price);
+            setCustomSpinner(platform,gameListDatabase.getPlatform());
 
             return v;
         }
@@ -176,7 +219,7 @@ public class GamesListPagerFragment extends Fragment {
 
                 case R.id.youtube :
                     StringBuilder builder = new StringBuilder();
-                    String str[] = gameListDatabase.name.split(" ");
+                    String str[] = gameListDatabase.getName().split(" ");
                     for(String s : str){
                         builder.append(s).append("+");
                     }
@@ -185,7 +228,7 @@ public class GamesListPagerFragment extends Fragment {
                     break;
                 case R.id.google :
                      builder = new StringBuilder();
-                     str = gameListDatabase.name.split(" ");
+                     str = gameListDatabase.getName().split(" ");
                     for(String s : str){
                         builder.append(s).append("+");
                     }
@@ -194,7 +237,7 @@ public class GamesListPagerFragment extends Fragment {
                     break;
                 case R.id.wiki :
                     builder = new StringBuilder();
-                    str = gameListDatabase.name.split(" ");
+                    str = gameListDatabase.getName().split(" ");
                     for(String s : str){
                         builder.append(s).append("_");
                     }
@@ -209,13 +252,23 @@ public class GamesListPagerFragment extends Fragment {
                     break;
 
                 case R.id.update :
-
-
-                    updateDatabase(startDate.getText().toString(),endDate.getText().toString(),hours.getSelectedItem().toString(),platform.getSelectedItem().toString(), medium.getSelectedItem().toString(),price.getSelectedItem().toString());
+            //TODO run in async mode
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            GameListDatabase newGameListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl", gameListDatabase.getApiDetailUrl()).findFirst();
+                            Toaster.make(getContext(), newGameListDatabase.getApiDetailUrl());
+                            newGameListDatabase.setStartDate(startDate.getText().toString());
+                            newGameListDatabase.setEndDate(endDate.getText().toString());
+                            newGameListDatabase.setPlatform(platform.getSelectedItem().toString());
+                            newGameListDatabase.setGameplay_hours(hours.getSelectedItem().toString());
+                            newGameListDatabase.setMedium(medium.getSelectedItem().toString());
+                            newGameListDatabase.setPrice(price.getSelectedItem().toString());
+                        }
+                    });
+                    Toaster.make(getContext(),"updated");
+                    getDialog().cancel();
                     break;
-
-
-
 
             }
         }
@@ -256,7 +309,7 @@ public class GamesListPagerFragment extends Fragment {
 
         }
 
-        public void setCustomSpinner(final Spinner spinner, String str) {
+        public void setCustomSpinner(final Spinner spinner, final String str) {
 
             GameListDialog.CustomAdapter adapter = new GameListDialog.CustomAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item);
 // Specify the layout to use when the list of choices appears
@@ -269,15 +322,6 @@ public class GamesListPagerFragment extends Fragment {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
                     ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
-
-                   /* if(spinner.getId()==R.id.gameplay_hours){
-                        gameListDatabase.setGameplay_hours(spinner.getItemAtPosition(i).toString());
-                    }else if(spinner.getId()==R.id.medium_spinner){
-                        gameListDatabase.setMedium(spinner.getItemAtPosition(i).toString());
-                    }else {
-                     gameListDatabase.setPrice(spinner.getItemAtPosition(i).toString());
-                    }*/
-
 
                 }
 
@@ -300,13 +344,14 @@ public class GamesListPagerFragment extends Fragment {
 
             @Override
             public CharSequence getItem(int position) {
-
-                return gameListDatabase.platform_list.get(position).abbreviation;
+                if(position==0)
+                    return "-";
+                return gameListDatabase.getPlatform_list().get(position-1).getAbbreviation();
             }
 
             @Override
             public int getCount() {
-                return gameListDatabase.platform_list.size();
+                return gameListDatabase.getPlatform_list().size()+1;
             }
         }
 
@@ -334,12 +379,10 @@ public class GamesListPagerFragment extends Fragment {
                 // Do something with the date chosen by the user
                 if (view_id == R.id.start_date){
                     startDate.setText(month + 1 + "/" + day + "/" + year);
-                  //  gameListDatabase.setStartDate(startDate.getText().toString());
                 }
 
                 else{
                     endDate.setText(month + 1 + "/" + day + "/" + year);
-                  //  gameListDatabase.setEndDate(endDate.getText().toString());
                 }
             }
 
@@ -374,7 +417,7 @@ public class GamesListPagerFragment extends Fragment {
 
 
 
-    void updateDatabase(final String startDate , final String endDate , final String hours , final String platform , final String medium , final String price ){
+   /* void updateDatabase(final String startDate , final String endDate , final String hours , final String platform , final String medium , final String price ){
 
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -395,7 +438,7 @@ public class GamesListPagerFragment extends Fragment {
             }
         });
 
-    }
+    }*/
 
 
 

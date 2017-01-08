@@ -14,18 +14,18 @@ import io.realm.annotations.PrimaryKey;
 public class GameListDatabase extends RealmObject {
 
     @PrimaryKey
-    public String apiDetailUrl; //required
-    public String name; //required
-    public String imageUrl;
-    public int status;
-    public int score;
-    public String startDate;
-    public String endDate;
-    public String platform;
-    public String gameplay_hours;
-    public String medium;
-    public String price;
-    public RealmList<RealmString> platform_list;
+    private String apiDetailUrl; //required
+    private String name; //required
+    private String imageUrl;
+    private int status;
+    private int score;
+    private String startDate;
+    private String endDate;
+    private String platform;
+    private String gameplay_hours;
+    private String medium;
+    private String price;
+    private RealmList<RealmString> platform_list;
 
 
    /* public static class Builder{
@@ -91,4 +91,52 @@ public class GameListDatabase extends RealmObject {
     public void setPlatform_list(RealmList<RealmString> platform_list) {
         this.platform_list = platform_list;
     }
+
+    public RealmList<RealmString> getPlatform_list() {
+        return platform_list;
+    }
+
+    public String getApiDetailUrl() {
+        return apiDetailUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public String getPlatform() { return platform; }
+
+    public String getGameplay_hours() {
+        return gameplay_hours;
+    }
+
+    public String getMedium() {
+        return medium;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+
 }

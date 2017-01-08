@@ -10,8 +10,8 @@
 
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/imageView"
-        android:layout_width="105dp"
-        android:layout_height="157dp"
+        android:layout_width="157dp"
+        android:layout_height="105dp"
         android:transitionName="@string/transition_viewpager" />
 
 
@@ -25,7 +25,7 @@
     <TextView
         android:id="@+id/video_title"
         android:gravity="center"
-        android:layout_width="105dp"
+        android:layout_width="157dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:textColor="@color/white"

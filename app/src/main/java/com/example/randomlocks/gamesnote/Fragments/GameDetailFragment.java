@@ -129,8 +129,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     CommunicationInterface mCommunicationInterface;
     JsoupCharacters asyncCharacters;
     JsoupGames asyncGames;
-    ImageView appbarImage, coverImage;
-    TextView gameTitle, review, userReview;
+    ImageView appbarImage;
+    TextView  review, userReview;
     RelativeLayout relativeLayout;
     FloatingActionMenu floatingActionsMenu;
     FloatingActionButton replaying, planning, dropped, playing, completed;
@@ -196,7 +196,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         final GameListDatabase gameListDatabase = new GameListDatabase();
         gameListDatabase.setApiDetailUrl(apiUrl);
-        gameListDatabase.setName(gameTitle.getText().toString());
+        gameListDatabase.setName(title);
         gameListDatabase.setImageUrl(imageUrl);
         gameListDatabase.setStatus(list_category);
         gameListDatabase.setGameplay_hours(" ");
@@ -206,7 +206,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         gameListDatabase.setStartDate(startDate);
         gameListDatabase.setEndDate(endDate);
         gameListDatabase.setPlatform(platform);
-
         RealmList<RealmString> platformList = new RealmList<>();
         for(GameWikiPlatform platform1 : platforms)
         platformList.add(new RealmString(platform1.name,platform1.abbreviation));
@@ -218,7 +217,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(gameListDatabase);
+                realm.insertOrUpdate(gameListDatabase);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -316,9 +315,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         shutterView = videoFrame.findViewById(R.id.shutter);
         surfaceView = (SurfaceView) videoFrame.findViewById(R.id.surface_view);
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
-        relativeLayout = (RelativeLayout) coordinatorLayout.findViewById(R.id.cover_layout);
-        coverImage = (ImageView) relativeLayout.findViewById(R.id.cover_image);
-        gameTitle = (TextView) relativeLayout.findViewById(R.id.game_title);
         parentLayout = (LinearLayout) nestedScrollView.findViewById(R.id.parent_layout);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
@@ -359,9 +355,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         if (imageUrl != null) {
             Picasso.with(getContext()).load(imageUrl).fit().centerCrop().into(appbarImage);
-            Picasso.with(getContext()).load(imageUrl).fit().into(coverImage);
         }
-        gameTitle.setText(title);
 
         appbarImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -586,7 +580,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         if (imageUrl == null && gameDetailModal.images.size() > 0) {
             Picasso.with(getContext()).load(gameDetailModal.images.first().mediumUrl).fit().centerCrop().into(appbarImage);
-            Picasso.with(getContext()).load(gameDetailModal.images.first().mediumUrl).fit().into(coverImage);
         }
 
         platforms = gameDetailModal.platforms;

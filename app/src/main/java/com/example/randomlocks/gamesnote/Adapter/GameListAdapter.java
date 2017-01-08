@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.squareup.picasso.Picasso;
@@ -31,6 +32,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
 
    public interface OnClickInterface{
        void onClick(GameListDatabase gameListDatabase);
+       void onScoreClick(String primaryKey,int oldScore , int position);
     }
 
 
@@ -51,20 +53,16 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         GameListDatabase listDatabase = getData().get(position);
-        if (listDatabase.imageUrl != null) {
-            Picasso.with(context).load(listDatabase.imageUrl).centerCrop().fit().into(holder.image);
+        if (listDatabase.getImageUrl() != null) {
+            Picasso.with(context).load(listDatabase.getImageUrl()).centerCrop().fit().into(holder.image);
         } else {
             holder.image.setImageResource(R.drawable.testimage);
         }
+        holder.title.setText(listDatabase.getName());
 
-        holder.title.setText(listDatabase.name);
+        holder.scoreView.setValue(listDatabase.getScore());
+        holder.scoreView.setBarColor(rainbow[listDatabase.getScore()/10]);
 
-        if (listDatabase.score != 0) {
-            holder.scoreView.setValue(listDatabase.score);
-            holder.scoreView.setBarColor(rainbow[listDatabase.score - 1]);
-        } else {
-            holder.scoreView.setText("NA");
-        }
 
     }
 
@@ -85,12 +83,18 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
             image = (ImageView) itemView.findViewById(R.id.image);
             scoreView = (CircleProgressView) itemView.findViewById(R.id.score_view);
             itemView.setOnClickListener(this);
+            scoreView.setOnClickListener(this);
 
         }
 
         @Override
         public void onClick(View view) {
-            mOnClickInterface.onClick(getData().get(getAdapterPosition()));
+
+            if(view.getId()==R.id.score_view){
+                mOnClickInterface.onScoreClick(getData().get(getAdapterPosition()).getApiDetailUrl(),getData().get(getAdapterPosition()).getScore(),getAdapterPosition());
+            }else {
+                mOnClickInterface.onClick(getData().get(getAdapterPosition()));
+            }
         }
     }
 

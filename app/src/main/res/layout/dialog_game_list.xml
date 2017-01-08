@@ -104,7 +104,7 @@
 
 
         <Spinner
-            android:id="@+id/gameplay_hours"
+            android:id="@+id/gameplay_hours_spinner"
             android:background="@null"
             style="@style/AddtoListStyle"
             android:gravity="right"
@@ -215,7 +215,7 @@
 
 
         <Spinner
-            android:id="@+id/price"
+            android:id="@+id/price_spinner"
             android:background="@null"
             style="@style/AddtoListStyle"
             android:gravity="right"
@@ -314,8 +314,9 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Close"
-        android:background="@color/accent"
+        android:background="#F44336"
         />
+
 
 
 <Button
@@ -324,7 +325,7 @@
     android:layout_weight="1"
     android:layout_height="wrap_content"
     android:text="Update"
-    android:background="@color/accent"
+    android:background="#4CAF50"
     />
 
 
