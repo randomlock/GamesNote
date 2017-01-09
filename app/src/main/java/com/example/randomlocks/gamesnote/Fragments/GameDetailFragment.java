@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +52,7 @@ import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManag
 import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.DemoPlayer;
 import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.ExtractorRendererBuilder;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -85,10 +88,14 @@ import java.util.List;
 import java.util.Map;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.R.attr.angle;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -131,22 +138,27 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     JsoupGames asyncGames;
     ImageView appbarImage;
     TextView  review, userReview;
+    TextView status , score , platform , hours;
     RelativeLayout relativeLayout;
     FloatingActionMenu floatingActionsMenu;
     FloatingActionButton replaying, planning, dropped, playing, completed;
     String title;
     AVLoadingIndicatorView pacman;
     LinearLayout parentLayout;
+    CardView statsCardView;
+    LinearLayout statsDetailView;
+    GameListDatabase statsDatabase;
+    ImageView toggleArrow;
     View mDimmerView;
     private View shutterView;
     private AspectRatioFrameLayout videoFrame;
     private SurfaceView surfaceView;
     private DemoPlayer player;
-
-
     private long playerPosition;
     private boolean playerNeedsPrepare;
     private MediaController mediaController;
+    Matrix matrix=new Matrix();
+
 
 
     public GameDetailFragment() {
@@ -176,6 +188,21 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             case R.id.completed:
                 list_category = GiantBomb.COMPLETED;
                 break;
+
+            case R.id.stats_cardview :
+                if(statsDetailView.getVisibility()==View.VISIBLE){
+                    MyAnimation.collapse(statsDetailView,getContext());
+                    matrix.postRotate((float) 180, toggleArrow.getWidth()/2, toggleArrow.getHeight()/2);
+                    toggleArrow.setImageMatrix(matrix);
+                }
+                else{
+                    MyAnimation.expand(statsDetailView,getContext());
+                    matrix.postRotate((float) 180, toggleArrow.getWidth()/2, toggleArrow.getHeight()/2);
+                    toggleArrow.setImageMatrix(matrix);
+                }
+
+
+                return;
 
 
         }
@@ -253,6 +280,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         mCommunicationInterface = (CommunicationInterface) getActivity();
     }
 
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -275,7 +305,37 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     public void onStart() {
         super.onStart();
         realm = Realm.getDefaultInstance();
+        statsDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",apiUrl).findFirstAsync();
+        statsDatabase.addChangeListener(statsCallback);
     }
+
+    private RealmChangeListener statsCallback = new RealmChangeListener() {
+        @Override
+        public void onChange(Object element) {
+            if(statsDatabase.isLoaded()){
+                if(statsDatabase.isValid()){
+                    statsCardView.setVisibility(View.VISIBLE);
+                    floatingActionsMenu.hideMenu(true);
+
+                    //inflate views and update stats
+
+                        status = (TextView) statsDetailView.findViewById(R.id.status_value);
+                        score = (TextView) statsDetailView.findViewById(R.id.score_value);
+                        platform = (TextView) statsDetailView.findViewById(R.id.platfom_value);
+                        hours = (TextView) statsDetailView.findViewById(R.id.hours_value);
+
+                        status.setText(getResources().getStringArray(R.array.status)[statsDatabase.getStatus()-1]);
+                        score.setText(String.valueOf(statsDatabase.getScore()));
+                        platform.setText(statsDatabase.getPlatform());
+                        hours.setText(statsDatabase.getGameplay_hours());
+
+
+                }
+
+            }
+        }
+
+    };
 
     private void setBackgroundDimming(boolean dimmed) {
         final float targetAlpha = dimmed ? 1f : 0;
@@ -316,6 +376,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         surfaceView = (SurfaceView) videoFrame.findViewById(R.id.surface_view);
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         parentLayout = (LinearLayout) nestedScrollView.findViewById(R.id.parent_layout);
+        statsCardView = (CardView) parentLayout.findViewById(R.id.stats_cardview);
+        statsDetailView = (LinearLayout) statsCardView.findViewById(R.id.hide_parent_layout);
+        toggleArrow = (ImageView) statsCardView.findViewById(R.id.stats_toggle);
+        statsCardView.setOnClickListener(this);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
@@ -536,6 +600,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
     }
+
+
+
+
+
 
     private void getGameDetail(final GameWikiDetailInterface gameWikiDetailInterface, final Map<String, String> map) {
 
@@ -937,7 +1006,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onStop() {
         super.onStop();
-
+        statsDatabase.removeChangeListener(statsCallback);
         if (appBarLayout != null) {
             appBarLayout.addOnOffsetChangedListener(null);
             appBarLayout = null;

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
@@ -29,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameListAdapter;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
@@ -39,6 +41,7 @@ import com.example.randomlocks.gamesnote.RealmDatabase.RealmString;
 import java.util.Calendar;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
@@ -67,16 +70,22 @@ public class GamesListPagerFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         status = getArguments().getInt(STATUS);
         realm = Realm.getDefaultInstance();
+
+
+    }
+
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
     }
 
@@ -158,15 +167,22 @@ public class GamesListPagerFragment extends Fragment {
 
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!realm.isClosed()) {
+            realm.close();
+        }
+    }
 
     class GameListDialog extends DialogFragment implements View.OnClickListener {
 
         TextView startDate , endDate;
-        Spinner platform , medium , hours , price;
+        Spinner status,platform , medium , hours , price ;
         int view_id;
         Button update,close;
         TextView youtube , google , wiki , htlb;
+        GameListDatabase newGameListDatabase;
 
 
 
@@ -192,6 +208,7 @@ public class GamesListPagerFragment extends Fragment {
             update.setOnClickListener(this);
             close = (Button) v.findViewById(R.id.close);
             close.setOnClickListener(this);
+            status = (Spinner) v.findViewById(R.id.status_spinner);
             platform = (Spinner) v.findViewById(R.id.platform_spinner);
             medium = (Spinner) v.findViewById(R.id.medium_spinner);
             hours = (Spinner) v.findViewById(R.id.gameplay_hours_spinner);
@@ -201,6 +218,7 @@ public class GamesListPagerFragment extends Fragment {
             setSpinner(medium,gameListDatabase.getMedium(),R.array.medium);
             setSpinner(hours,gameListDatabase.getGameplay_hours(),R.array.price);
             setSpinner(price,gameListDatabase.getPrice(),R.array.price);
+            setSpinner(status,getResources().getStringArray(R.array.status)[gameListDatabase.getStatus()-1],R.array.status);
             setCustomSpinner(platform,gameListDatabase.getPlatform());
 
             return v;
@@ -252,18 +270,20 @@ public class GamesListPagerFragment extends Fragment {
                     break;
 
                 case R.id.update :
-            //TODO run in async mode
+
+                    final GameListDatabase newGameListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl", gameListDatabase.getApiDetailUrl()).findFirst();
+                    //TODO run in async mode
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            GameListDatabase newGameListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl", gameListDatabase.getApiDetailUrl()).findFirst();
-                            Toaster.make(getContext(), newGameListDatabase.getApiDetailUrl());
+                            newGameListDatabase.setStatus(status.getSelectedItemPosition()+1);
                             newGameListDatabase.setStartDate(startDate.getText().toString());
                             newGameListDatabase.setEndDate(endDate.getText().toString());
                             newGameListDatabase.setPlatform(platform.getSelectedItem().toString());
                             newGameListDatabase.setGameplay_hours(hours.getSelectedItem().toString());
                             newGameListDatabase.setMedium(medium.getSelectedItem().toString());
                             newGameListDatabase.setPrice(price.getSelectedItem().toString());
+
                         }
                     });
                     Toaster.make(getContext(),"updated");
@@ -273,6 +293,8 @@ public class GamesListPagerFragment extends Fragment {
             }
         }
 
+
+
        private void runBrowser(String str){
             CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
 
@@ -281,7 +303,7 @@ public class GamesListPagerFragment extends Fragment {
         }
 
 
-        void setSpinner(final Spinner spinner, String str , @ArrayRes int array_id) {
+        void setSpinner(final Spinner spinner, String str , @ArrayRes final int array_id) {
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                     array_id, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
@@ -297,6 +319,11 @@ public class GamesListPagerFragment extends Fragment {
                     ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
                     ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
                    // gameListDatabase.setPlatform(spinner.getItemAtPosition(i).toString());
+
+                    if(array_id==R.array.status){
+                        ((TextView) adapterView.getChildAt(0)).setTypeface(Typeface.DEFAULT_BOLD);
+
+                    }
 
                 }
 

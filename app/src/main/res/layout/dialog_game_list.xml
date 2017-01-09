@@ -2,11 +2,26 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
 
+    <Spinner
+        android:id="@+id/status_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        />
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@color/primary_light" />
 
 
     <LinearLayout
@@ -109,7 +124,7 @@
             style="@style/AddtoListStyle"
             android:gravity="right"
 
-            />
+            android:layout_height="wrap_content" />
 
 
 

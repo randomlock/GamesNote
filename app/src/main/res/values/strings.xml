@@ -71,54 +71,7 @@
     <string name="reduce_view">Card view</string>
     <string name="view">VIEW</string>
 
-    <string-array name="hello">
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
-        <item>"SDFsdf"</item>
 
-
-    </string-array>
 
     <string-array name="search_filter">
 
@@ -184,7 +137,13 @@
         <item>>120</item>
     </string-array>
 
-
+<string-array name="status">
+    <item>Replaying</item>
+    <item>Planning</item>
+    <item>Dropped</item>
+    <item>Playing</item>
+    <item>Completed</item>
+</string-array>
 
 
     <string name="enable_background_audio">Play in background</string>

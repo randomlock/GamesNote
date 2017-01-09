@@ -123,6 +123,10 @@
             >
 
 
+            <include
+                android:id="@+id/stats_cardview"
+                layout="@layout/delete"/>
+
 
 
 
@@ -212,7 +216,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         style="@style/cardview_textstyle"
-                        android:text="User Review"
+                        android:text="User review"
                         android:background="?android:attr/selectableItemBackground" />
 
 

@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigation.setNavigationItemSelectedListener(this);
 
 
-        mselectedId = savedInstanceState == null ? R.id.nav_home : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {

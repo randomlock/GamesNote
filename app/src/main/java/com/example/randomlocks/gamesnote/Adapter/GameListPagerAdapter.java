@@ -47,10 +47,10 @@ public class GameListPagerAdapter extends FragmentStatePagerAdapter {
         return pageTitle[position];
     }
 
-  /*  @Override
+    @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
-    }*/
+    }
 
     /*@Override
     public void destroyItem(ViewGroup container, int position, Object object) {
