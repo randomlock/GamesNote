@@ -69,7 +69,6 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
-import com.example.randomlocks.gamesnote.RealmDatabase.RealmString;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.exoplayer.AspectRatioFrameLayout;
@@ -129,6 +128,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     int style;
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
     List<GameWikiPlatform> platforms = null;
+    RealmList<GameWikiPlatform> platformRealmList;
+
     ProgressBar overviewProgress;
     CoordinatorLayout coordinatorLayout;
     SimilarGameAdapter similarGameAdapter;
@@ -210,6 +211,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         if (platforms != null) {
             BottomSheetDialogFragment addToBottomFragment = AddToBottomFragment.newInstance(platforms);
             addToBottomFragment.setTargetFragment(this, 0);
+            Toaster.make(getContext(),"hello");
             addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
         } else {
             Toaster.makeSnackbar(coordinatorLayout, "waiting to load data");
@@ -221,22 +223,24 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onAdd(int score, String startDate, String endDate, String platform) {
 
-        final GameListDatabase gameListDatabase = new GameListDatabase();
-        gameListDatabase.setApiDetailUrl(apiUrl);
+        final GameListDatabase gameListDatabase = new GameListDatabase(apiUrl,title,imageUrl,list_category,score,startDate,endDate,platform,platformRealmList);
+        /*gameListDatabase.setApiDetailUrl(apiUrl);
         gameListDatabase.setName(title);
         gameListDatabase.setImageUrl(imageUrl);
-        gameListDatabase.setStatus(list_category);
-        gameListDatabase.setGameplay_hours(" ");
+        gameListDatabase.setStatus(list_category);*/
+        /*gameListDatabase.setGameplay_hours(" ");
         gameListDatabase.setMedium(" ");
         gameListDatabase.setPrice(" ");
         gameListDatabase.setScore(score);
         gameListDatabase.setStartDate(startDate);
         gameListDatabase.setEndDate(endDate);
-        gameListDatabase.setPlatform(platform);
-        RealmList<RealmString> platformList = new RealmList<>();
+        gameListDatabase.setPlatform(platform);*/
+      /*  RealmList<RealmString> platformList = new RealmList<>();
         for(GameWikiPlatform platform1 : platforms)
-        platformList.add(new RealmString(platform1.name,platform1.abbreviation));
-        gameListDatabase.setPlatform_list(platformList);
+        platformList.add(new RealmString(platform1.name,platform1.abbreviation));*/
+/*
+        gameListDatabase.setPlatform_list(platformRealmList);
+*/
 
 
 
@@ -652,6 +656,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         }
 
         platforms = gameDetailModal.platforms;
+        platformRealmList = gameDetailModal.platforms;
         //Toaster.make(getContext(),platforms.size()+"5");
         List<CharacterImage> image = gameDetailModal.images;
         List<GameDetailVideo> videos = gameDetailModal.videos;

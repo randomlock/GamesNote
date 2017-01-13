@@ -42,11 +42,21 @@
             android:ellipsize="end"
             android:gravity="center_horizontal"
             style="@style/sectionHeader"
-            android:layout_alignParentTop="true"
             android:layout_alignLeft="@+id/view"
             android:layout_alignStart="@+id/view"
+            android:layout_toLeftOf="@+id/popup"
+            android:layout_toStartOf="@+id/popup" />
+
+        <ImageButton
+            android:id="@+id/popup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_navigation_more_vert"
+            android:background="@null"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
 
         <TextView
             android:id="@+id/date"
@@ -146,6 +156,8 @@
             android:textColor="?android:attr/textColorPrimary"
             android:fontFamily="sans-serif-light"
             android:layout_below="@+id/imageView" />
+
+
 
     </RelativeLayout>
 

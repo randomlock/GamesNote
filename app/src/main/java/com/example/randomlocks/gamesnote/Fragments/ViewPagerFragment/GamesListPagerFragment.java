@@ -36,7 +36,6 @@ import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActi
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
-import com.example.randomlocks.gamesnote.RealmDatabase.RealmString;
 
 import java.util.Calendar;
 
@@ -373,7 +372,7 @@ public class GamesListPagerFragment extends Fragment {
             public CharSequence getItem(int position) {
                 if(position==0)
                     return "-";
-                return gameListDatabase.getPlatform_list().get(position-1).getAbbreviation();
+                return gameListDatabase.getPlatform_list().get(position-1).abbreviation;
             }
 
             @Override

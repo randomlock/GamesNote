@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/replaying"
+        android:title="add to replaying"/>
+
+    <item android:id="@+id/planning"
+        android:title="add to planning "/>
+
+    <item android:id="@+id/dropped"
+        android:title="add to dropped"/>
+
+    <item android:id="@+id/playing"
+        android:title="add to playing"/>
+
+    <item android:id="@+id/completed"
+        android:title="add to completed"/>
+
+
+</menu>

@@ -1,5 +1,7 @@
 package com.example.randomlocks.gamesnote.RealmDatabase;
 
+import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
+
 import java.util.ArrayList;
 
 import io.realm.RealmList;
@@ -25,7 +27,7 @@ public class GameListDatabase extends RealmObject {
     private String gameplay_hours;
     private String medium;
     private String price;
-    private RealmList<RealmString> platform_list;
+    private RealmList<GameWikiPlatform> platform_list;
 
 
    /* public static class Builder{
@@ -48,6 +50,48 @@ public class GameListDatabase extends RealmObject {
         }
 
     }*/
+
+    public GameListDatabase(){
+
+    }
+
+    public GameListDatabase(String apiDetailUrl, String name, String imageUrl, int status, RealmList<GameWikiPlatform> platform_list) {
+        this.apiDetailUrl = apiDetailUrl;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.platform_list = platform_list;
+
+    }
+
+    public GameListDatabase(String apiDetailUrl, String name, String imageUrl, RealmList<GameWikiPlatform> platform_list) {
+        this.apiDetailUrl = apiDetailUrl;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.platform_list = platform_list;
+        score = 0;
+        startDate = "-";
+        endDate = "-";
+        platform = "-";
+        gameplay_hours = "-";
+        medium = "-";
+        price = "-";
+    }
+
+    public GameListDatabase(String apiDetailUrl, String name, String imageUrl, int status, int score, String startDate, String endDate, String platform, RealmList<GameWikiPlatform> platform_list) {
+        this.apiDetailUrl = apiDetailUrl;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.platform_list = platform_list;
+        this.status = status;
+        this.score = score;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.platform = platform;
+        gameplay_hours = "-";
+        medium = "-";
+        price = "-";
+    }
 
 
     public void setApiDetailUrl(String apiDetailUrl) {
@@ -88,11 +132,11 @@ public class GameListDatabase extends RealmObject {
 
     public void setPrice(String difficulty) {this.price = difficulty;}
 
-    public void setPlatform_list(RealmList<RealmString> platform_list) {
+    public void setPlatform_list(RealmList<GameWikiPlatform> platform_list) {
         this.platform_list = platform_list;
     }
 
-    public RealmList<RealmString> getPlatform_list() {
+    public RealmList<GameWikiPlatform> getPlatform_list() {
         return platform_list;
     }
 

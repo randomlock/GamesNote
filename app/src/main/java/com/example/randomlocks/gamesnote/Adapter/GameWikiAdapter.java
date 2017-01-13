@@ -3,49 +3,69 @@ package com.example.randomlocks.gamesnote.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+
+import static android.support.v7.app.AppCompatDelegate.getDefaultNightMode;
+
 /**
  * Created by randomlocks on 4/25/2016.
  */
+
+//TODO fix popup speed database
 public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyViewHolder> {
 
     private List<GameWikiModal> list;
     Context context;
-    int lastPosition;
+    private int lastPosition;
+    Realm realm;
+    GameListDatabase database;
 
     public GameWikiAdapter(List<GameWikiModal> list, Context context, int lastPosition) {
         this.list = list;
         this.context = context;
         this.lastPosition = lastPosition;
+        realm = Realm.getDefaultInstance();
     }
 
     public void swap(List<GameWikiModal> newList) {
         list.clear();
         list.addAll(newList);
         notifyDataSetChanged();
+
     }
 
 
@@ -185,14 +205,17 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         return list.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
 
 
         public TextView title, description, date;
-        public Button platform1, platform2, platform3;
+        Button platform1, platform2, platform3;
         public ImageView imageView;
         public View view;
-        public CardView cardView;
+        CardView cardView;
+        ImageButton popup;
+
+        String str[];
 
 
         public MyViewHolder(View itemView) {
@@ -205,6 +228,13 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             platform2 = (Button) itemView.findViewById(R.id.platform2);
             platform3 = (Button) itemView.findViewById(R.id.platform3);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            popup = (ImageButton) itemView.findViewById(R.id.popup);
+            int mode = AppCompatDelegate.getDefaultNightMode();
+            if(mode==AppCompatDelegate.MODE_NIGHT_YES)
+            popup.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+
+
+            popup.setOnClickListener(this);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
             imageView.setOnClickListener(this);
@@ -264,10 +294,93 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
                     }
                     break;
 
+                case R.id.popup :
+                    final PopupMenu popup = new PopupMenu(context, view);
+                    popup.setOnMenuItemClickListener(this);
+                    final MenuInflater inflater = popup.getMenuInflater();
+                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
+                    database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
+                    if(database==null){
+                        inflater.inflate(R.menu.popup_add,popup.getMenu());
+                    }else {
+
+                        inflater.inflate(R.menu.popup_remove,popup.getMenu());
+                    }
+
+                    popup.show();
+                    break;
+
+
+
             }
 
 
         }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+
+
+
+            int id = item.getItemId();
+
+            if(id==R.id.remove){
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(GameListDatabase.class).equalTo("apiDetailUrl", str[str.length - 1]).findFirst().deleteFromRealm();
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Toaster.make(context,"deleted");
+                    }
+                });
+                return true;
+            }else {
+                GameWikiModal newModal = list.get(getAdapterPosition());
+                RealmList<GameWikiPlatform> platforms = new RealmList<>();
+                if (newModal.platforms!=null) {
+                    platforms.addAll(newModal.platforms);
+                }
+
+                final GameListDatabase newListDatabase = new GameListDatabase(str[str.length-1],newModal.name,newModal.image.mediumUrl,platforms);
+
+                if(id==R.id.replaying)
+                    newListDatabase.setStatus(GiantBomb.REPLAYING);
+                else if(id==R.id.planning)
+                    newListDatabase.setStatus(GiantBomb.PLANNING);
+                else if(id==R.id.dropped)
+                    newListDatabase.setStatus(GiantBomb.DROPPED);
+                else if(id==R.id.playing)
+                    newListDatabase.setStatus(GiantBomb.PLAYING);
+                else
+                    newListDatabase.setStatus(GiantBomb.COMPLETED);
+
+
+
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.insert(newListDatabase);
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Toaster.make(context,"added");
+                    }
+                });
+
+                return true;
+
+            }
+
+
+        }
+
+
 
 
         @Override
@@ -286,6 +399,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
 
             return true;
         }
+
+
     }
 
     @Override
@@ -294,6 +409,11 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         holder.itemView.clearAnimation();
 
     }
+
+
+
+
+
 
 
 /*    private class MyClickListener implements View.OnClickListener {

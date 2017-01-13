@@ -19,6 +19,9 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="MyDialogTheme2" parent="@android:style/Theme.Holo.Light.Dialog">
+    </style>
+
     <style name="TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
 
         <item name="android:fontFamily">sans-serif</item>

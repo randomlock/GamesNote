@@ -6,12 +6,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -69,12 +71,19 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+     //   setStyle(DialogFragment.STYLE_NO_TITLE,R.style.MyDialogTheme2);
+
+    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         platforms = getArguments().getParcelableArrayList(GiantBomb.PLATFORM);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = View.inflate(getContext(), R.layout.dialog_add_to_list, null);
         scoreSpinner = (Spinner) view.findViewById(R.id.score_spinner);
         platformSpinner = (Spinner) view.findViewById(R.id.platform_spinner);
