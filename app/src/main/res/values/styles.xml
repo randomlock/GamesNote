@@ -58,25 +58,21 @@
 
     </style>
 
-   <style name="TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title" >
+    <style name="TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
 
-       <item name="android:fontFamily">sans-serif</item>
-       <item name="android:textColor">#cd000000</item>
-       <item name="android:textSize">16sp</item>
-
-
-
-   </style>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">#cd000000</item>
+        <item name="android:textSize">16sp</item>
 
 
+    </style>
 
 
     <style name="searchStyle" parent="Widget.AppCompat.SearchView.ActionBar">
         <item name="queryHint">@string/search</item>
         <item name="searchIcon">@null</item>
-        <item name="android:textColorHint">@color/white</item>
-        <item name="colorControlNormal">@color/black</item>
-
+        <item name="colorControlActivated">@color/accent</item>
+        <item name="colorControlNormal">@color/accent</item>
 
 
     </style>
@@ -99,24 +95,18 @@
     </style>
 
 
-
-
-
-
     <style name="CollapsingToolbarLayoutExpandedTextStyle" parent="AppTheme">
         <item name="android:textColor">@android:color/transparent</item>
         <item name="android:textSize">0.1sp</item>
     </style>
 
 
-
-
     <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog">
-    <!--item RadioButton or CheckBox color-->
-    <item name="colorControlNormal">@android:color/white</item>
-    <item name="colorControlActivated">@color/accent</item>
-    <!--item text color-->
-    <item name="textColorAlertDialogListItem">@color/white</item>
+        <!--item RadioButton or CheckBox color-->
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@color/accent</item>
+        <!--item text color-->
+        <item name="textColorAlertDialogListItem">@color/white</item>
         <!--buttons color-->
         <item name="colorAccent">@color/accent</item>
         <!--title and message color-->
@@ -127,8 +117,7 @@
     </style>
 
 
-    <style name="MyDialogTheme2" parent="@android:style/Theme.Dialog">
-    </style>
+    <style name="MyDialogTheme2" parent="@android:style/Theme.Dialog"></style>
 
 
     <style name="MyCheckBox" parent="Theme.AppCompat">
@@ -199,7 +188,7 @@
 
 
     <style name="cardview_textstyle">
-        <item name="android:layout_width">match_parent </item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">6dp</item>
         <item name="android:textColor">@color/primary</item>
@@ -243,5 +232,9 @@
     <style name="webviewSubtitle">
         <item name="android:textSize">11sp</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

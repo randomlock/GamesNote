@@ -57,9 +57,11 @@
         <activity android:name=".Activity.CharacterFriendEnemyActivity" />
         <activity
             android:name=".Activity.NewsDetailPagerActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode">
-
-        </activity>
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"></activity>
+        <activity
+            android:name=".Activity.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

@@ -55,6 +55,7 @@ dependencies {
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.3'
 
 
+
 }
 
 
@@ -63,7 +64,5 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }
-dependencies {
-    compile 'com.android.support:support-v4:23.+'
-}
+
 

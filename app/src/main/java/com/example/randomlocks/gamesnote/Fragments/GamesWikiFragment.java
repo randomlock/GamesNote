@@ -4,12 +4,17 @@ package com.example.randomlocks.gamesnote.Fragments;
 import android.animation.ObjectAnimator;
 import android.app.SearchManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -129,9 +134,14 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
         /***************************  SETTING THE TOOLBAR ***********************/
 
-
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        AppCompatActivity actionBar = (AppCompatActivity) getActivity();
+        actionBar.setSupportActionBar(toolbar);
+        actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        DrawerLayout drawer = (DrawerLayout) actionBar.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
 
         /*************** SAVE INSTANCE *************************/
@@ -252,13 +262,13 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default
 
         MenuItem searchMenuItem = menu.findItem(R.id.search);
-     /*   MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+       /* MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
 
 
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 if (toolbar != null) {
-                    toolbar.setBackgroundColor(ContextCompat.getColor(context, R.color.accent));
+                    toolbar.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                 }
                 return true;
             }
@@ -270,7 +280,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                 }
                 return true;
             }
-        }); */
+        });*/
 
         searchView.setOnQueryTextListener(this);
 

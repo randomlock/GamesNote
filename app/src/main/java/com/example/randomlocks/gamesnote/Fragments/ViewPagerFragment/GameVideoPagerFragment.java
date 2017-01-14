@@ -313,7 +313,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             @Override
             public void onResponse(Call<GamesVideoModalList> call, Response<GamesVideoModalList> response) {
                 listModals = response.body().results;
-                Toaster.make(getContext(), listModals.size() + "");
                 fillRecyclerView(listModals, null);
             }
 

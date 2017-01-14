@@ -72,7 +72,6 @@
     <string name="view">VIEW</string>
 
 
-
     <string-array name="search_filter">
 
         <item>Original release date</item>
@@ -137,13 +136,13 @@
         <item>>120</item>
     </string-array>
 
-<string-array name="status">
-    <item>Replaying</item>
-    <item>Planning</item>
-    <item>Dropped</item>
-    <item>Playing</item>
-    <item>Completed</item>
-</string-array>
+    <string-array name="status">
+        <item>Replaying</item>
+        <item>Planning</item>
+        <item>Dropped</item>
+        <item>Playing</item>
+        <item>Completed</item>
+    </string-array>
 
 
     <string name="enable_background_audio">Play in background</string>
@@ -193,6 +192,12 @@
     <string name="end_date">End Date</string>
     <string name="platform">Platform</string>
     <string name="add_to_list">Add to list</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 
 
 </resources>

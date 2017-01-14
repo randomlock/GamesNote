@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int mselectedId;
     private DrawerLayout mDrawer;
     private NavigationView mNavigation;
-    private ActionBarDrawerToggle mDrawableToggle;
+    public ActionBarDrawerToggle mDrawableToggle;
     Fragment fragment;
 
   /*  static {
@@ -138,6 +138,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mDrawableToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+
+
         switch (item.getItemId()) {
             case android.R.id.home:
 
@@ -184,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mtitle = (String) item.getTitle();
         fragment = null;
         selectDrawerItem(mselectedId, (String) item.getTitle());
+        mDrawableToggle.setDrawerIndicatorEnabled(true);
         return true;
 
 
