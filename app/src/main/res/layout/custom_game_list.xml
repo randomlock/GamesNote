@@ -43,6 +43,17 @@
             android:layout_toLeftOf="@+id/score_view"
             android:layout_toStartOf="@+id/score_view" />
 
+        <ImageButton
+            android:id="@+id/popup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_navigation_more_vert"
+            android:background="@null"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
         <at.grabner.circleprogress.CircleProgressView
             android:id="@+id/score_view"
             android:layout_width="50dp"
@@ -52,11 +63,9 @@
             app:cpv_barWidth="3dp"
             app:cpv_textSize="20sp"
             app:cpv_textColor="?android:attr/textColorPrimary"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp" />
+            android:layout_below="@+id/popup"
+            android:layout_toLeftOf="@+id/popup"
+            android:layout_toStartOf="@+id/popup" />
 
 
     </RelativeLayout>

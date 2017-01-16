@@ -39,6 +39,7 @@
     <color name="no_score">#9E9E9E</color>
     <color name="score_rim">#E0E0E0</color>
     <color name="pacman">#000000</color>
+    <color name="black_white">#000</color>
 
     <array name="score_color">
         <item>@color/no_score</item>

@@ -86,7 +86,7 @@
         app:menu_openDirection="up"
         app:menu_labels_colorPressed="@color/accent"
         app:menu_labels_colorNormal="@color/primary"
-        app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingMenuHelper"
+        app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingActionMenuBehavior"
         app:layout_anchor="@id/scroll_view"
         app:layout_anchorGravity="bottom|right|end">
 

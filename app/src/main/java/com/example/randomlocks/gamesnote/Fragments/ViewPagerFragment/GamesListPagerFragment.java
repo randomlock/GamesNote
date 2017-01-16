@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
@@ -14,11 +15,17 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,7 +37,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameListAdapter;
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
@@ -40,17 +46,16 @@ import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import java.util.Calendar;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
  * Created by randomlocks on 3/17/2016.
  */
-public class GamesListPagerFragment extends Fragment {
+public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private static final String STATUS = "total page";
     RecyclerView recyclerView;
+    GameListAdapter adapter;
     int status;
     RealmResults<GameListDatabase> realmResult;
     Realm realm;
@@ -74,11 +79,9 @@ public class GamesListPagerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         status = getArguments().getInt(STATUS);
-        realm = Realm.getDefaultInstance();
-
+        setHasOptionsMenu(true);
 
     }
-
 
 
 
@@ -92,6 +95,7 @@ public class GamesListPagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pager_games_list, container, false);
+        realm = Realm.getDefaultInstance();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         textView = (TextView) view.findViewById(R.id.errortext);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -100,57 +104,66 @@ public class GamesListPagerFragment extends Fragment {
         if (realmResult.isEmpty()) {
             textView.setVisibility(View.VISIBLE);
         } else {
-            GameListAdapter adapter = new GameListAdapter(getContext(), realmResult, true, new GameListAdapter.OnClickInterface() {
-                @Override
-                public void onClick(GameListDatabase gameListDatabase) {
-                    GamesListPagerFragment.this.gameListDatabase = gameListDatabase;
+             adapter = new GameListAdapter(getContext(),realm, realmResult, true, status,new GameListAdapter.OnClickInterface() {
+                 @Override
+                 public void onClick(GameListDatabase gameListDatabase) {
+                     GamesListPagerFragment.this.gameListDatabase = gameListDatabase;
                      dialog = new GameListDialog();
-                    dialog.setCancelable(false);
-                    dialog.show(getActivity().getSupportFragmentManager(),"gamelist");
-                }
+                     dialog.setCancelable(false);
+                     dialog.show(getActivity().getSupportFragmentManager(),"gamelist");
+                 }
 
-                @Override
-                public void onScoreClick(final String primaryKey, final int oldScore, int position) {
-                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                            R.array.score, android.R.layout.simple_spinner_item);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    final Spinner sp = new Spinner(getActivity());
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(50,50,0,0);
-                    sp.setLayoutParams(params);
-                    sp.setAdapter(adapter);
-                    sp.setSelection(oldScore/10);
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setCancelable(false).setTitle("SelectScore")
-                    .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialogInterface, int i) {
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    if(sp.getSelectedItemPosition()*10==oldScore){
-                                        dialogInterface.dismiss();
-                                    } else {
-                                        GameListDatabase newListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",primaryKey).findFirst();
-                                        newListDatabase.setScore(sp.getSelectedItemPosition()*10);
-                                        Toaster.make(getContext(),"updated");
-                                        dialogInterface.dismiss();
-                                    }
+                 @Override
+                 public void onScoreClick(final String primaryKey, final int oldScore, int position) {
+                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                             R.array.score, android.R.layout.simple_spinner_item);
+                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                     final Spinner sp = new Spinner(getActivity());
+                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                     params.setMargins(50,50,0,0);
+                     sp.setLayoutParams(params);
+                     sp.setAdapter(adapter);
+                     sp.setSelection(oldScore/10);
+                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setCancelable(false).setTitle("SelectScore")
+                             .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(final DialogInterface dialogInterface, int i) {
+                                     realm.executeTransaction(new Realm.Transaction() {
+                                         @Override
+                                         public void execute(Realm realm) {
+                                             if(sp.getSelectedItemPosition()*10==oldScore){
+                                                 dialogInterface.dismiss();
+                                             } else {
+                                                 GameListDatabase newListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",primaryKey).findFirst();
+                                                 newListDatabase.setScore(sp.getSelectedItemPosition()*10);
+                                                 Toaster.make(getContext(),"updated");
+                                                 dialogInterface.dismiss();
+                                             }
 
-                                }
-                            });
+                                         }
+                                     });
 
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    })
-                    .setView(sp,60,60,60,60); //make it not static
-                    builder.create().show();
-                }
-            });
+                                 }
+                             })
+                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                     dialogInterface.cancel();
+                                 }
+                             })
+                             .setView(sp,60,60,60,60); //make it not static
+                    final AlertDialog dialog =  builder.create();
+                     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                         @Override
+                         public void onShow(DialogInterface dialogInterface) {
+                             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.black_white));
+                             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+
+                         }
+                     });
+                     dialog.show();
+                 }
+             });
             recyclerView.setAdapter(adapter);
         }
 
@@ -166,13 +179,65 @@ public class GamesListPagerFragment extends Fragment {
 
     }
 
+
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.game_list_menu,menu);
+        getSearchManager(getContext(),menu,false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id==R.id.search){
+            return true;
+        }else if(id==R.id.filter){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void getSearchManager(final Context context, Menu menu, boolean isDefaultIconified) {
+
+        SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity) context).getComponentName()));
+        searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default
+        searchView.setOnQueryTextListener(this);
+
+
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
         if (!realm.isClosed()) {
             realm.close();
         }
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Toaster.make(getContext(),query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        query = query.toLowerCase();
+        if(adapter!=null){
+            adapter.getFilter().filter(query);
+            return true;
+        }
+
+
+        return false;
+    }
+
 
     class GameListDialog extends DialogFragment implements View.OnClickListener {
 
@@ -182,6 +247,8 @@ public class GamesListPagerFragment extends Fragment {
         Button update,close;
         TextView youtube , google , wiki , htlb;
         GameListDatabase newGameListDatabase;
+        ViewPager pager;
+
 
 
 
@@ -191,6 +258,7 @@ public class GamesListPagerFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
             View v = inflater.inflate(R.layout.dialog_game_list,container,false);
+            pager = (ViewPager) getActivity().findViewById(R.id.my_pager);
             startDate = (TextView) v.findViewById(R.id.start_date);
             startDate.setText(gameListDatabase.getStartDate());
             endDate = (TextView) v.findViewById(R.id.end_date);
@@ -271,6 +339,7 @@ public class GamesListPagerFragment extends Fragment {
                 case R.id.update :
 
                     final GameListDatabase newGameListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl", gameListDatabase.getApiDetailUrl()).findFirst();
+                    final int old_status = newGameListDatabase.getStatus();
                     //TODO run in async mode
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -282,6 +351,10 @@ public class GamesListPagerFragment extends Fragment {
                             newGameListDatabase.setGameplay_hours(hours.getSelectedItem().toString());
                             newGameListDatabase.setMedium(medium.getSelectedItem().toString());
                             newGameListDatabase.setPrice(price.getSelectedItem().toString());
+
+                            if(old_status!=status.getSelectedItemPosition()+1){
+                                pager.getAdapter().notifyDataSetChanged();
+                            }
 
                         }
                     });
@@ -465,6 +538,8 @@ public class GamesListPagerFragment extends Fragment {
         });
 
     }*/
+
+
 
 
 

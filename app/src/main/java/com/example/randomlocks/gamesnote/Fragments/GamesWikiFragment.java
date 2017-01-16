@@ -69,7 +69,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     ConsistentLinearLayoutManager manager;
     List<GameWikiModal> listModals = null;
     GameWikiAdapter adapter;
-    ObjectAnimator animation;
     Map<String, String> map;
     GameWikiListInterface gameWikiListInterface;
     TextView errorText;
@@ -235,7 +234,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
             case R.id.filter:
 
-                SearchFilterFragment filterFragment = SearchFilterFragment.newInstance();
+                SearchFilterFragment filterFragment = SearchFilterFragment.newInstance(R.array.search_filter);
                 filterFragment.setTargetFragment(this, 0);
                 filterFragment.show(getActivity().getSupportFragmentManager(), "seach filter");
                 return true;

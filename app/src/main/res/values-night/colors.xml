@@ -13,6 +13,7 @@
     <color name="webviewbackground">@android:color/transparent</color>
     <color name="score_rim">#FFFFFF</color>
     <color name="pacman">#000000</color>
+    <color name="black_white">#FFF</color>
 
 
 </resources>

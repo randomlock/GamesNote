@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GamesListPagerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 
 import java.util.ArrayList;
 
@@ -29,10 +31,12 @@ public class GameListPagerAdapter extends FragmentStatePagerAdapter {
         fragments.add(GamesListPagerFragment.newInstance(GiantBomb.DROPPED));
         fragments.add(GamesListPagerFragment.newInstance(GiantBomb.PLAYING));
         fragments.add(GamesListPagerFragment.newInstance(GiantBomb.COMPLETED));
+
     }
 
     @Override
     public Fragment getItem(int position) {
+        Log.d("viewpager",position+"");
         return fragments.get(position);
     }
 

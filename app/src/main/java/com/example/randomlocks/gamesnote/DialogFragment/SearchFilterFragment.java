@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
@@ -25,6 +28,7 @@ public class SearchFilterFragment extends DialogFragment {
     View view;
     SearchFilterInterface searchFilterInterface = null;
     int which_one;
+    int array_id;
 
 
     public interface SearchFilterInterface {
@@ -33,10 +37,10 @@ public class SearchFilterFragment extends DialogFragment {
     }
 
 
-    public static SearchFilterFragment newInstance() {
+    public static SearchFilterFragment newInstance(@ArrayRes int array_id) {
 
         Bundle args = new Bundle();
-
+        args.putInt(GiantBomb.ARRAY,array_id);
         SearchFilterFragment fragment = new SearchFilterFragment();
         fragment.setArguments(args);
         return fragment;
@@ -58,7 +62,7 @@ public class SearchFilterFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        array_id = getArguments().getInt(GiantBomb.ARRAY);
         which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 4, getContext());
         isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING, true, getContext());
     }
@@ -70,25 +74,39 @@ public class SearchFilterFragment extends DialogFragment {
 
         view = getActivity().getLayoutInflater().inflate(R.layout.search_option_layout, null);
 
-        return new AlertDialog.Builder(getContext(), R.style.MyDialogTheme)
+        final AlertDialog dialog =  new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
                 .setCancelable(true)
                 .setTitle("Sort Result")
 
-                .setSingleChoiceItems(getResources().getStringArray(R.array.search_filter), which_one, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(getResources().getStringArray(array_id), which_one, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == which_one)
-                            dismiss();
-
-                        SharedPreference.saveToSharedPreference(GiantBomb.WHICH, which, getContext());
-                        SharedPreference.saveToSharedPreference(GiantBomb.ASCENDING, !checkbox.isChecked(), getContext());
-                        searchFilterInterface.onSelect(which, !checkbox.isChecked());
-                        dismiss();
+                        which_one = which;
                     }
                 })
                 .setView(view)
-                .create();
-
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dismiss();
+                    }
+                })
+                .setPositiveButton("Sort", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPreference.saveToSharedPreference(GiantBomb.WHICH, which_one, getContext());
+                        SharedPreference.saveToSharedPreference(GiantBomb.ASCENDING, !checkbox.isChecked(), getContext());
+                        searchFilterInterface.onSelect(which_one, !checkbox.isChecked());
+                        dismiss();
+                    }
+                }).create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                    }
+                });
+                return dialog;
     }
 
     @Override

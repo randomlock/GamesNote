@@ -286,7 +286,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -296,6 +295,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         apiUrl = str[str.length - 1];
         title = getArguments().getString(NAME);
         imageUrl = getArguments().getString(IMAGE_URL);
+        realm = Realm.getDefaultInstance();
+        statsDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",apiUrl).findFirstAsync();
+        statsDatabase.addChangeListener(statsCallback);
     }
 
     @Override
@@ -308,9 +310,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onStart() {
         super.onStart();
-        realm = Realm.getDefaultInstance();
-        statsDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",apiUrl).findFirstAsync();
-        statsDatabase.addChangeListener(statsCallback);
+
     }
 
     private RealmChangeListener statsCallback = new RealmChangeListener() {
@@ -1018,8 +1018,15 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         }
         gameWikiDetailInterface = null;
-        realm.close();
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (!realm.isClosed()) {
+            realm.close();
+        }
     }
 
     @Override

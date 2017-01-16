@@ -12,11 +12,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Adapter.GameListPagerAdapter;
 import com.example.randomlocks.gamesnote.R;
+
+//TODO improve speed of viewpager
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +65,8 @@ public class GamesListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_games_list, container, false);
     }
 
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -90,7 +97,7 @@ public class GamesListFragment extends Fragment {
         //  if (savedInstanceState!=null) {
         //     viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
         // }
-        //tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
 
     }
