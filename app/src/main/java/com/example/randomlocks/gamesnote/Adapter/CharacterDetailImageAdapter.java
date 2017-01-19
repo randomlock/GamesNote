@@ -22,13 +22,15 @@ import java.util.List;
  */
 public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterDetailImageAdapter.MyViewHolder> {
 
-    List<CharacterImage> imageUrls;
+    private List<CharacterImage> imageUrls;
+    private String title;
     Context context;
 
 
-    public CharacterDetailImageAdapter(List<CharacterImage> imageUrls, Context context) {
+    public CharacterDetailImageAdapter(List<CharacterImage> imageUrls, Context context,String title) {
         this.imageUrls = imageUrls;
         this.context = context;
+        this.title = title;
     }
 
 
@@ -72,6 +74,7 @@ public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterD
             }
 
             intent.putStringArrayListExtra(GiantBomb.IMAGE_URL, images);
+            intent.putExtra(GiantBomb.TITLE,title);
             /*ActivityOptionsCompat options = ActivityOptionsCompat.
                     makeSceneTransitionAnimation((Activity) context,imageView,context.getResources().getString(R.string.transition_viewpager));*/
             context.startActivity(intent);

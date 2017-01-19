@@ -7,20 +7,23 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<android.support.v7.widget.Toolbar
-    android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/background_toolbar_translucent"
-    android:theme="@style/MyToolbar"
-    />
 
 
-    <com.example.randomlocks.gamesnote.HelperClass.PhotoViewPager android:id="@+id/viewpager"
+
+    <com.example.randomlocks.gamesnote.HelperClass.CustomView.PhotoViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:transitionName="@string/transition_viewpager"
         xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_toolbar_translucent"
+        android:theme="@style/MyToolbar"
+        />
 
 
 </FrameLayout>

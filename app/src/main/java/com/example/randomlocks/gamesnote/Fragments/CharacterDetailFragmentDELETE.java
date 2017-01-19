@@ -20,9 +20,9 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacterWikiImage;
-import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
@@ -152,7 +152,7 @@ public class CharacterDetailFragmentDELETE extends Fragment {
                             Toaster.make(getContext(), imageUrls.size() + "");
 
                             imageRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-                            imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, getContext()));
+                            imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, getContext(),null));
                         }
                     }
                 }).execute("http://www.giantbomb.com/character/" + apiUrl);

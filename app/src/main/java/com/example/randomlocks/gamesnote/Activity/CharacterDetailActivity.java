@@ -7,7 +7,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,9 +20,9 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacterWikiImage;
-import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
@@ -185,9 +184,9 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                 asyncCharacterWikiImage = new JsoupCharacterWikiImage(new JsoupCharacterWikiImage.AsyncResponse() {
                     @Override
                     public void processFinish(List<CharacterImage> imageUrls) {
-                        if (imageUrls != null) {
+                        if (imageUrls != null && characterDetailModal!=null) {
                             imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                            imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this));
+                            imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,characterDetailModal.name));
                         }
                     }
                 }).execute("http://www.giantbomb.com/character/" + apiUrl);

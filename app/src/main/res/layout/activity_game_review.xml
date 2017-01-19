@@ -1,4 +1,4 @@
-<com.example.randomlocks.gamesnote.HelperClass.PicassoCoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
@@ -34,7 +34,7 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView
+    <com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -190,7 +190,7 @@
 
         </LinearLayout>
 
-    </com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView>
+    </com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView>
 
 
-</com.example.randomlocks.gamesnote.HelperClass.PicassoCoordinatorLayout>
+</com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout>

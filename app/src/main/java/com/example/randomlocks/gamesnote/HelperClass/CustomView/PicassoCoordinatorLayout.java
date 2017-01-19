@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.HelperClass;
+package com.example.randomlocks.gamesnote.HelperClass.CustomView;
 
 import android.content.Context;
 import android.graphics.Bitmap;

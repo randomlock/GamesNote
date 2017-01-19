@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.Adapter;
+package com.example.randomlocks.gamesnote.Adapter.PagerAdapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

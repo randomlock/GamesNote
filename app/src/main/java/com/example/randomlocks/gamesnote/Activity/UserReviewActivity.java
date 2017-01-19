@@ -13,21 +13,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.UserReviewAdapter;
-import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Interface.UserReviewInterface;
 import com.example.randomlocks.gamesnote.Modal.UserReviewModal.UserReviewModal;
 import com.example.randomlocks.gamesnote.Modal.UserReviewModal.UserReviewModalList;
 import com.example.randomlocks.gamesnote.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

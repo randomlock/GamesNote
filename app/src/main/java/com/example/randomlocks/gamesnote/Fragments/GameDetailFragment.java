@@ -47,13 +47,13 @@ import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.ListDialogFragment;
-import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
-import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.DemoPlayer;
 import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.ExtractorRendererBuilder;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
-import com.example.randomlocks.gamesnote.HelperClass.PicassoNestedScrollView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
@@ -89,12 +89,9 @@ import java.util.Map;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
-import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.attr.angle;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -672,7 +669,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         /************* SETTING GAME IMAGE ***********************************/
         imageRecycleView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        imageRecycleView.setAdapter(new CharacterDetailImageAdapter(image, getContext()));
+        imageRecycleView.setAdapter(new CharacterDetailImageAdapter(image, getContext(),title));
 
 
         /************* SETTING GAME VIDEOS *************************************/

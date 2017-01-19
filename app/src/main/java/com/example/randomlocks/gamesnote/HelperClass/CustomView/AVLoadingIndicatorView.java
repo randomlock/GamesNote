@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.HelperClass;
+package com.example.randomlocks.gamesnote.HelperClass.CustomView;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.example.randomlocks.gamesnote.HelperClass.BaseIndicatorController;
+import com.example.randomlocks.gamesnote.HelperClass.PacmanLoadingIndicator;
 import com.example.randomlocks.gamesnote.R;
 
 /**

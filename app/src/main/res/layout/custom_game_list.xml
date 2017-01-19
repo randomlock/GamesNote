@@ -11,6 +11,7 @@
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
     app:cardBackgroundColor="@color/cardColor"
+    app:cardPreventCornerOverlap="false"
     android:foreground="?android:attr/selectableItemBackground"
     >
 

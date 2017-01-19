@@ -15,7 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.randomlocks.gamesnote.Adapter.GameVideoPagerAdapter;
+import com.example.randomlocks.gamesnote.Adapter.PagerAdapter.GameVideoPagerAdapter;
 import com.example.randomlocks.gamesnote.R;
 
 /**

@@ -6,12 +6,22 @@
 <item
     android:title="@string/share"
     android:id="@+id/share"
-    android:icon="@drawable/ic_info_outline_white_24dp"
-    app:showAsAction="ifRoom"/>
+    app:showAsAction="collapseActionView"/>
     <item
-        android:title="save"
+        android:title="@string/save"
         android:id="@+id/save"
-        android:icon="@drawable/ic_info_outline_white_24dp"
         app:showAsAction="collapseActionView"/>
+
+    <item
+        android:title="view in gallery"
+        android:id="@+id/gallery"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:title="set as my profile photo"
+        android:id="@+id/profile_image"
+        app:showAsAction="collapseActionView"
+        />
+
 
 </menu>

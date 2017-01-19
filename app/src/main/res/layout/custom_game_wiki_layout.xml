@@ -12,8 +12,9 @@
     android:layout_marginRight="@dimen/leftmargin"
     android:layout_marginTop="@dimen/leftmargin"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="3dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="false"
     app:cardBackgroundColor="@color/cardColor"
     >
 

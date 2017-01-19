@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.MainActivity;
 import com.example.randomlocks.gamesnote.Adapter.CharacterSearchAdapter;
-import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;

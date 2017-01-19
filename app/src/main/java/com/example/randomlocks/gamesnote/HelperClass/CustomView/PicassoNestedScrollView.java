@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.HelperClass;
+package com.example.randomlocks.gamesnote.HelperClass.CustomView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

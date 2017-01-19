@@ -29,7 +29,7 @@
                 android:theme="@style/MyToolbarLight" />
 
 
-            <com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView
+            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
                 android:id="@+id/indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

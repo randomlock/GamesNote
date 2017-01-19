@@ -24,11 +24,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.Adapter.ImageViewerPagerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
-import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
-import com.example.randomlocks.gamesnote.HelperClass.ConsistentLinearLayoutManager;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.EndlessRecyclerOnScrollListener;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
