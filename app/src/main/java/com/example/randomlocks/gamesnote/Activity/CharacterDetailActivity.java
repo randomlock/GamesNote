@@ -30,7 +30,6 @@ import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterListModal;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterModal;
 import com.example.randomlocks.gamesnote.R;
-import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -76,7 +75,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_detail);
-        StatusBarUtil.setColor(this, ContextCompat.getColor(this, R.color.primary_character));
         String str[] = getIntent().getStringExtra(GiantBomb.API_URL).split("/");
         apiUrl = str[str.length - 1];
         imageUrl = getIntent().getStringExtra(GiantBomb.IMAGE_URL);

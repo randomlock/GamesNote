@@ -54,6 +54,7 @@
         android:textAppearance="@style/SubTitleText"
         android:text="Date"
         android:layout_below="@+id/user_name"
+        android:layout_marginTop="12dp"
         android:layout_alignLeft="@+id/user_name"
         android:layout_alignStart="@+id/user_name"
         android:transitionName="date" />
@@ -63,9 +64,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="small description"
-        android:layout_below="@+id/profile_image"
+        android:layout_below="@+id/date"
         android:layout_marginTop="12dp"
-        android:textStyle="italic"
         style="@style/TitleText"
         android:transitionName="deck" />
 
@@ -75,6 +75,7 @@
         android:layout_height="wrap_content"
         android:text="Large description"
         android:textColor="?android:attr/textColorPrimary"
+        style="@style/SubTitleText"
         android:maxLines="5"
         android:ellipsize="end"
         android:layout_below="@+id/deck"

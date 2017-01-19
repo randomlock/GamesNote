@@ -29,7 +29,6 @@ import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
 import com.example.randomlocks.gamesnote.Modal.GameReviewModal.GameReviewModal;
 import com.example.randomlocks.gamesnote.Modal.GameReviewModal.GameReviewModalList;
 import com.example.randomlocks.gamesnote.R;
-import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -60,7 +59,6 @@ public class GameReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_review);
         int color = ContextCompat.getColor(this, R.color.alpha_color);
         int alpha = Color.alpha(color);
-        StatusBarUtil.setColor(this, color, 50);
 
         coodinatorLayout = (PicassoCoordinatorLayout) findViewById(R.id.root_coordinator);
         toolbar = (Toolbar) coodinatorLayout.findViewById(R.id.my_toolbar);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -74,9 +76,16 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   setStyle(DialogFragment.STYLE_NO_TITLE,R.style.MyDialogTheme2);
 
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+
 
     @NonNull
     @Override
@@ -84,7 +93,7 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         platforms = getArguments().getParcelableArrayList(GiantBomb.PLATFORM);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = View.inflate(getContext(), R.layout.dialog_add_to_list, null);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_add_to_list, null);
         scoreSpinner = (Spinner) view.findViewById(R.id.score_spinner);
         platformSpinner = (Spinner) view.findViewById(R.id.platform_spinner);
         startDate = (TextView) view.findViewById(R.id.start_date);
@@ -135,8 +144,8 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
                 } else if(platformSpinner.getSelectedItemPosition()==0){
                     Toaster.make(getContext(),"platform is not set");
                 }
-                    else
-                 {
+                else
+                {
                     mAddToBottomInterface.onAdd(Integer.parseInt(scoreSpinner.getSelectedItem().toString()), startDate.getText().toString(), endDate.getText().toString(), platformSpinner.getSelectedItem().toString());
                     mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 

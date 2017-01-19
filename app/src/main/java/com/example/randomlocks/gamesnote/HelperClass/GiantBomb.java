@@ -64,6 +64,8 @@ public class GiantBomb {
     public static final String REDUCE_NEWS_VIEW = "reduce_news_view";
     public static final String PLATFORM = "platform";
     public static final String ARRAY = "res_array";
+    public static final String SORT_WHICH = "sort_which" ;
+    public static final String SORT_ASCENDING = "sort_ascending" ;
     public static String REDUCE_VIEW = "reduce_view";
     public static final int REPLAYING = 1;
     public static final int PLANNING = 2;

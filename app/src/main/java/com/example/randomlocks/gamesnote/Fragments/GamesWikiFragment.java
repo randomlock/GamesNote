@@ -1,17 +1,13 @@
 package com.example.randomlocks.gamesnote.Fragments;
 
 
-import android.animation.ObjectAnimator;
 import android.app.SearchManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.Adapter.GameDetailPagerAdapter;
+import com.example.randomlocks.gamesnote.Adapter.ImageViewerPagerAdapter;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.AVLoadingIndicatorView;
@@ -125,7 +122,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         arrayList.add("http://i.investopedia.com/inv/articles/slideshow/5-top-video-game-characters/game-characters.jpg");
         arrayList.add("http://img3.rnkr-static.com/list_img_v2/3654/283654/full/the-best-female-video-game-characters-u1.jpg");
 
-        viewPager.setAdapter(new GameDetailPagerAdapter(context, 4, arrayList, true));
+    //    viewPager.setAdapter(new ImageViewerPagerAdapter(context, 4, arrayList, true));
         CircleIndicator indicator = (CircleIndicator) coordinatorLayout.findViewById(R.id.indicator);
         indicator.setViewPager(viewPager);
         // pageSwitcher(5);
@@ -256,6 +253,8 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
         SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setQueryHint(Html.fromHtml("<font color = #ffffff>" + getResources().getString(R.string.search) + "</font>"));
+
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity) context).getComponentName()));
         searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default

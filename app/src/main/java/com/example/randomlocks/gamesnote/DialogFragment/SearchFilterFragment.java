@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -63,8 +64,13 @@ public class SearchFilterFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         array_id = getArguments().getInt(GiantBomb.ARRAY);
-        which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 4, getContext());
-        isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING, true, getContext());
+        if (array_id==R.array.search_filter) {
+            which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 4, getContext());
+            isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING, true, getContext());
+        }else {
+            which_one = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_WHICH,1,getContext());
+            isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_ASCENDING,true,getContext());
+        }
     }
 
 
@@ -94,8 +100,13 @@ public class SearchFilterFragment extends DialogFragment {
                 .setPositiveButton("Sort", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        SharedPreference.saveToSharedPreference(GiantBomb.WHICH, which_one, getContext());
-                        SharedPreference.saveToSharedPreference(GiantBomb.ASCENDING, !checkbox.isChecked(), getContext());
+                        if (array_id == R.array.search_filter) {
+                            SharedPreference.saveToSharedPreference(GiantBomb.WHICH, which_one, getContext());
+                            SharedPreference.saveToSharedPreference(GiantBomb.ASCENDING, !checkbox.isChecked(), getContext());
+                        }else {
+                            SharedPreference.saveToSharedPreference(GiantBomb.SORT_WHICH, which_one, getContext());
+                            SharedPreference.saveToSharedPreference(GiantBomb.SORT_ASCENDING, !checkbox.isChecked(), getContext());
+                        }
                         searchFilterInterface.onSelect(which_one, !checkbox.isChecked());
                         dismiss();
                     }
@@ -114,7 +125,11 @@ public class SearchFilterFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
 
         checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+        final int check_color = ContextCompat.getColor(getContext(),R.color.accent);
+        final int uncheck_color = ContextCompat.getColor(getContext(),R.color.black_white);
         checkbox.setChecked(!isAscending);
+        if (!checkbox.isChecked()) { checkbox.setTextColor(uncheck_color) ;}
+
 
 
     }

@@ -29,7 +29,7 @@
         <activity
             android:name=".Activity.GameDetailActivity"
             android:parentActivityName=".Activity.MainActivity" />
-        <activity android:name=".Activity.ViewPagerActivity" />
+        <activity android:name=".Activity.ImageViewPagerActivity" />
         <activity android:name=".Activity.GameReviewActivity" />
         <activity android:name=".Activity.UserReviewActivity" />
         <activity android:name=".Activity.UserReviewDetailActivity" />

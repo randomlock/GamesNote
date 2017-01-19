@@ -1,85 +1,66 @@
 package com.example.randomlocks.gamesnote.Activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
-import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.Adapter.ImageViewerPagerAdapter;
+import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.ImagePagerFragment;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Modal.BottomSheetImage;
 import com.example.randomlocks.gamesnote.R;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import uk.co.senab.photoview.PhotoViewAttacher;
+public class ImageViewPagerActivity extends AppCompatActivity {
 
-public class HdImageViewerActivity extends AppCompatActivity implements PhotoViewAttacher.OnViewTapListener {
-
-    ImageView imageView;
-    ProgressBar progressBar;
-    String imageUrl;
-    PhotoViewAttacher mAttacher;
+    ViewPager viewPager;
     Toolbar toolbar;
-    boolean isLoaded = false;
+    int position;
+    ArrayList<String> imageUrls;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hd_image_viewer);
+        setContentView(R.layout.activity_view_pager);
 
-        imageView = (ImageView) findViewById(R.id.hdimage);
+        position = getIntent().getIntExtra(GiantBomb.POSITION, 0);
+        imageUrls = getIntent().getStringArrayListExtra(GiantBomb.IMAGE_URL);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        progressBar = (ProgressBar) findViewById(R.id.progress);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        imageUrl = getIntent().getStringExtra(ImageViewerFragment.MEDIUM_IMAGE_URL);
 
-
-        if (imageUrl != null) {
-            Picasso.with(this).load(imageUrl).into(imageView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    progressBar.setVisibility(View.GONE);
-                    isLoaded = true;
-                    mAttacher = new PhotoViewAttacher(imageView);
-                    mAttacher.setOnViewTapListener(HdImageViewerActivity.this);
-
-                }
-
-                @Override
-                public void onError() {
-                    progressBar.setVisibility(View.GONE);
-                    Toaster.make(HdImageViewerActivity.this, "cannot load image");
-                }
-            });
-        }
+        viewPager.setAdapter(new ImageViewerPagerAdapter(this, imageUrls.size(), imageUrls, false));
+        //viewPager.setAdapter(new ImagePagerAdapter(getSupportFragmentManager()));
+        viewPager.setOffscreenPageLimit(1);
+       // viewPager.setPageTransformer(false, new PagerDepthAnimation());
+        viewPager.setCurrentItem(position);
 
 
 
 
 
+               /* if (isLoaded) {
 
-                 /*   switch (i) {
+                    Toaster.make(ImageViewPagerActivity.this, i + "");
+                    switch (i) {
 
                         //share
                         case 0:
@@ -95,34 +76,23 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
                             break;
 
                         case 1:
-                            Toaster.make(HdImageViewerActivity.this, "todo");
+                            Toaster.make(ImageViewPagerActivity.this, "todo");
                             break;
 
                         case 3:
-                            Toaster.make(HdImageViewerActivity.this, "todo");
+                            Toaster.make(ImageViewPagerActivity.this, "todo");
                             break;
 
 
-                    }*/
+                    }
+                }*/
 
 
 
 
 
-    }
 
 
-    @Override
-    public void onViewTap(View view, float v, float v1) {
-
-
-        float alpha = toolbar.getAlpha();
-        if (alpha == 1) {
-            toolbar.animate().alpha(0).setDuration(200);
-        } else {
-            toolbar.animate().alpha(1).setDuration(200);
-
-        }
     }
 
     @Override
@@ -131,6 +101,7 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
 
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -153,4 +124,8 @@ public class HdImageViewerActivity extends AppCompatActivity implements PhotoVie
 
         return true;
     }
+
+
+
+
 }

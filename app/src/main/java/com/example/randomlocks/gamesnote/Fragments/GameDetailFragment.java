@@ -295,23 +295,21 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         apiUrl = str[str.length - 1];
         title = getArguments().getString(NAME);
         imageUrl = getArguments().getString(IMAGE_URL);
-        realm = Realm.getDefaultInstance();
-        statsDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",apiUrl).findFirstAsync();
-        statsDatabase.addChangeListener(statsCallback);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        realm = Realm.getDefaultInstance();
+        statsDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",apiUrl).findFirstAsync();
+        statsDatabase.addChangeListener(statsCallback);
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-    }
+
+
 
     private RealmChangeListener statsCallback = new RealmChangeListener() {
         @Override
@@ -1011,7 +1009,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onStop() {
         super.onStop();
-        statsDatabase.removeChangeListener(statsCallback);
         if (appBarLayout != null) {
             appBarLayout.addOnOffsetChangedListener(null);
             appBarLayout = null;
@@ -1024,6 +1021,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        statsDatabase.removeChangeListener(statsCallback);
         if (!realm.isClosed()) {
             realm.close();
         }

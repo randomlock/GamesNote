@@ -10,7 +10,9 @@
     android:layout_marginTop="@dimen/leftmargin"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
-    app:cardBackgroundColor="@color/cardColor">
+    app:cardBackgroundColor="@color/cardColor"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
 
 
     <RelativeLayout
@@ -30,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bioshock Infinite"
+            android:textStyle="bold"
             style="@style/TitleText"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"

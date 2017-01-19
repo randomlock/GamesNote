@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#FF9800</color>
-    <color name="primary_dark">#F57C00</color>
-    <color name="primary_light">#FFE0B2</color>
+    <color name="primary">#4CAF50</color>
+    <color name="primary_dark">#388E3C</color>
+    <color name="primary_light">#C8E6C9</color>
     <color name="primary_text">#ddffffff</color>
     <color name="primary_text_light">#8aFFFFFF</color>
     <color name="secondary_text">#89ffffff</color>
@@ -14,6 +14,8 @@
     <color name="score_rim">#FFFFFF</color>
     <color name="pacman">#000000</color>
     <color name="black_white">#FFF</color>
+    <color name="white_black">#000</color>
+
 
 
 </resources>

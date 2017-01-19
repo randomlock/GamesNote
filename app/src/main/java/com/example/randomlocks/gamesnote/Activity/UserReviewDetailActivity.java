@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RatingBar;
@@ -112,6 +113,8 @@ public class UserReviewDetailActivity extends AppCompatActivity {
             webView.setBackgroundColor(ContextCompat.getColor(this, R.color.webviewbackground));
 
 
+
+
         }
 
 
@@ -134,6 +137,9 @@ public class UserReviewDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //    supportFinishAfterTransition();
+                if (item.getItemId() == android.R.id.home) {
+                    onBackPressed();
+                }
                 return true;
 
             case R.id.internet:

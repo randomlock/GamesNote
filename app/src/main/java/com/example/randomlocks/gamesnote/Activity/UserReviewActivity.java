@@ -37,37 +37,30 @@ public class UserReviewActivity extends AppCompatActivity {
 
     private static final String SCROLL_POSITION = "scroll_position";
     List<UserReviewModal> modalList = null;
-    CoordinatorLayout coordinator;
     Toolbar toolbar;
     RecyclerView recyclerView;
     UserReviewAdapter adapter = null;
     AVLoadingIndicatorView pacman;
+    CoordinatorLayout coordinatorLayout;
     TextView errorText;
     UserReviewInterface userReviewInterface = null;
     Map<String, String> map;
-    CircleImageView circleImageView;
     String release_id = "object:3050-";
-    TextView title;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_review);
-        coordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_coordinator);
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         pacman = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         errorText = (TextView) findViewById(R.id.errortext);
-        circleImageView = (CircleImageView) findViewById(R.id.profile_image);
-        title = (TextView) findViewById(R.id.game_title);
-        recyclerView.setNestedScrollingEnabled(false);
-        Picasso.with(this).load(getIntent().getStringExtra(GiantBomb.IMAGE_URL)).fit().centerCrop().into(circleImageView);
-
-        title.setText(getIntent().getStringExtra(GiantBomb.TITLE));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("User Review");
         //not working
         //  getSupportActionBar().setTitle("xcvxcvxcv");
 
@@ -130,7 +123,7 @@ public class UserReviewActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<UserReviewModalList> call, Throwable t) {
                 pacman.setVisibility(View.GONE);
-                Snackbar.make(coordinator, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
                         .setAction("RETRY", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -149,6 +142,7 @@ public class UserReviewActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
+
 
         return super.onOptionsItemSelected(item);
     }

@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,6 +38,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameListAdapter;
+import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
@@ -44,14 +48,17 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by randomlocks on 3/17/2016.
  */
-public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface {
 
     private static final String STATUS = "total page";
     RecyclerView recyclerView;
@@ -62,6 +69,8 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     TextView textView;
     GameListDatabase gameListDatabase;
     GameListDialog dialog;
+    String sort_option;
+    boolean isAscending ;
 
     public GamesListPagerFragment() {
     }
@@ -80,7 +89,9 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         super.onCreate(savedInstanceState);
         status = getArguments().getInt(STATUS);
         setHasOptionsMenu(true);
-
+       int index = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_WHICH,1,getContext());
+        sort_option = getField(index);
+        isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_ASCENDING,true,getContext());
     }
 
 
@@ -91,6 +102,8 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,77 +112,101 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         textView = (TextView) view.findViewById(R.id.errortext);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(true);
-        realmResult = realm.where(GameListDatabase.class).equalTo("status", status).findAll();
-        if (realmResult.isEmpty()) {
-            textView.setVisibility(View.VISIBLE);
-        } else {
-             adapter = new GameListAdapter(getContext(),realm, realmResult, true, status,new GameListAdapter.OnClickInterface() {
-                 @Override
-                 public void onClick(GameListDatabase gameListDatabase) {
-                     GamesListPagerFragment.this.gameListDatabase = gameListDatabase;
-                     dialog = new GameListDialog();
-                     dialog.setCancelable(false);
-                     dialog.show(getActivity().getSupportFragmentManager(),"gamelist");
-                 }
 
-                 @Override
-                 public void onScoreClick(final String primaryKey, final int oldScore, int position) {
-                     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                             R.array.score, android.R.layout.simple_spinner_item);
-                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                     final Spinner sp = new Spinner(getActivity());
-                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                     params.setMargins(50,50,0,0);
-                     sp.setLayoutParams(params);
-                     sp.setAdapter(adapter);
-                     sp.setSelection(oldScore/10);
-                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setCancelable(false).setTitle("SelectScore")
-                             .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                                 @Override
-                                 public void onClick(final DialogInterface dialogInterface, int i) {
-                                     realm.executeTransaction(new Realm.Transaction() {
-                                         @Override
-                                         public void execute(Realm realm) {
-                                             if(sp.getSelectedItemPosition()*10==oldScore){
-                                                 dialogInterface.dismiss();
-                                             } else {
-                                                 GameListDatabase newListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",primaryKey).findFirst();
-                                                 newListDatabase.setScore(sp.getSelectedItemPosition()*10);
-                                                 Toaster.make(getContext(),"updated");
-                                                 dialogInterface.dismiss();
-                                             }
-
-                                         }
-                                     });
-
-                                 }
-                             })
-                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                 @Override
-                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                     dialogInterface.cancel();
-                                 }
-                             })
-                             .setView(sp,60,60,60,60); //make it not static
-                    final AlertDialog dialog =  builder.create();
-                     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                         @Override
-                         public void onShow(DialogInterface dialogInterface) {
-                             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.black_white));
-                             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
-
-                         }
-                     });
-                     dialog.show();
-                 }
-             });
-            recyclerView.setAdapter(adapter);
+        if (!realm.isInTransaction()) {
+            if (isAscending) {
+                realmResult = realm.where(GameListDatabase.class).equalTo("status", status).findAllSortedAsync(sort_option,Sort.ASCENDING);
+            }else {
+                realmResult = realm.where(GameListDatabase.class).equalTo("status",status).findAllSortedAsync(sort_option,Sort.DESCENDING);
+            }
         }
 
 
+        realmResult.addChangeListener(callback);
+
         return view;
     }
+
+    private RealmChangeListener<RealmResults<GameListDatabase>> callback = new RealmChangeListener<RealmResults<GameListDatabase>>() {
+        @Override
+        public void onChange(RealmResults<GameListDatabase> element) {
+
+            if(element.isLoaded() && element.isValid() ){
+                if (realmResult.isEmpty()) {
+                    textView.setVisibility(View.VISIBLE);
+                } else {
+                    adapter = new GameListAdapter(getContext(),realm, realmResult, true, status,new GameListAdapter.OnClickInterface() {
+                        @Override
+                        public void onClick(GameListDatabase gameListDatabase) {
+                            GamesListPagerFragment.this.gameListDatabase = gameListDatabase;
+                            dialog = new GameListDialog();
+                            dialog.setCancelable(false);
+                            dialog.show(getActivity().getSupportFragmentManager(),"gamelist");
+                        }
+
+                        @Override
+                        public void onScoreClick(final String primaryKey, final int oldScore, int position) {
+                            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                                    R.array.score, android.R.layout.simple_spinner_item);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            final Spinner sp = new Spinner(getActivity());
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(50,50,0,0);
+                            sp.setLayoutParams(params);
+                            sp.setAdapter(adapter);
+                            sp.setSelection(oldScore/10);
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setCancelable(false).setTitle("SelectScore")
+                                    .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(final DialogInterface dialogInterface, int i) {
+                                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    if (sp.getSelectedItemPosition() * 10 == oldScore) {
+                                                        dialogInterface.dismiss();
+                                                    } else {
+                                                        GameListDatabase newListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl", primaryKey).findFirst();
+                                                        newListDatabase.setScore(sp.getSelectedItemPosition() * 10);
+                                                        newListDatabase.setLast_updated(new Date());
+                                                        dialogInterface.dismiss();
+                                                    }
+
+                                                }
+                                            }, new Realm.Transaction.OnSuccess() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    Toaster.make(getContext(),"updated");
+                                                }
+                                            });
+
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+                                        }
+                                    })
+                                    .setView(sp,60,60,60,60); //make it not static
+                            final AlertDialog dialog =  builder.create();
+                            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.black_white));
+                                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+
+                                }
+                            });
+                            dialog.show();
+                        }
+                    });
+                    recyclerView.setAdapter(adapter);
+                }
+
+            }
+    }
+    };
+
 
 
     @Override
@@ -194,6 +231,9 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         if(id==R.id.search){
             return true;
         }else if(id==R.id.filter){
+            SearchFilterFragment filterFragment = SearchFilterFragment.newInstance(R.array.sort_filter);
+            filterFragment.setTargetFragment(this, 0);
+            filterFragment.show(getActivity().getSupportFragmentManager(), "seach filter");
             return true;
         }
 
@@ -204,6 +244,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
         SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setQueryHint(Html.fromHtml("<font color = #ffffff>" + getResources().getString(R.string.search) + "</font>"));
         searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity) context).getComponentName()));
         searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default
         searchView.setOnQueryTextListener(this);
@@ -215,8 +256,11 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        realmResult.removeChangeListener(callback);
+        realmResult.removeChangeListeners();
         if (!realm.isClosed()) {
             realm.close();
+            realm = null;
         }
     }
 
@@ -238,6 +282,55 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         return false;
     }
 
+    @Override
+    public void onSelect(int which, boolean asc) {
+
+        if (asc) {
+            realmResult = realmResult.sort(getField(which),Sort.ASCENDING);
+        }else {
+            realmResult = realmResult.sort(getField(which), Sort.DESCENDING);
+        }
+        if(adapter!=null){
+            adapter.updateData(realmResult);
+        }
+
+    }
+
+    String getField(int index){
+
+        String str = null;
+        switch (index){
+            case 0 :
+                str = "name";
+                break;
+            case 1 :
+                str = "date_added";
+                break;
+            case 2 :
+                str = "last_updated";
+                break;
+            case 3 :
+                str = "score";
+                break;
+            case 4 :
+                str = "startDate";
+                break;
+            case 5 :
+                str = "endDate";
+                break;
+            case 6 :
+                str = "gameplay_hours";
+                break;
+            case 7 :
+                str = "price";
+                break;
+
+        }
+
+        return  str;
+
+    }
+
 
     class GameListDialog extends DialogFragment implements View.OnClickListener {
 
@@ -246,7 +339,6 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         int view_id;
         Button update,close;
         TextView youtube , google , wiki , htlb;
-        GameListDatabase newGameListDatabase;
         ViewPager pager;
 
 
@@ -298,7 +390,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                 case R.id.start_date :
                 case R.id.end_date :
                     view_id = view.getId();
-                    DialogFragment newFragment = new DatePickerFragment();
+                    final DialogFragment newFragment = new DatePickerFragment();
                     newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
                     break;
 
@@ -338,20 +430,19 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
                 case R.id.update :
 
-                    final GameListDatabase newGameListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl", gameListDatabase.getApiDetailUrl()).findFirst();
-                    final int old_status = newGameListDatabase.getStatus();
+                    final int old_status = gameListDatabase.getStatus();
                     //TODO run in async mode
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            newGameListDatabase.setStatus(status.getSelectedItemPosition()+1);
-                            newGameListDatabase.setStartDate(startDate.getText().toString());
-                            newGameListDatabase.setEndDate(endDate.getText().toString());
-                            newGameListDatabase.setPlatform(platform.getSelectedItem().toString());
-                            newGameListDatabase.setGameplay_hours(hours.getSelectedItem().toString());
-                            newGameListDatabase.setMedium(medium.getSelectedItem().toString());
-                            newGameListDatabase.setPrice(price.getSelectedItem().toString());
-
+                            gameListDatabase.setStatus(status.getSelectedItemPosition()+1);
+                            gameListDatabase.setLast_updated(new Date());
+                            gameListDatabase.setStartDate(startDate.getText().toString());
+                            gameListDatabase.setEndDate(endDate.getText().toString());
+                            gameListDatabase.setPlatform(platform.getSelectedItem().toString());
+                            gameListDatabase.setGameplay_hours(hours.getSelectedItem().toString());
+                            gameListDatabase.setMedium(medium.getSelectedItem().toString());
+                            gameListDatabase.setPrice(price.getSelectedItem().toString());
                             if(old_status!=status.getSelectedItemPosition()+1){
                                 pager.getAdapter().notifyDataSetChanged();
                             }

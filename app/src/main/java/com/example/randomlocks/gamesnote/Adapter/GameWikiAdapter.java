@@ -240,7 +240,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
             imageView.setOnClickListener(this);
             platform1.setOnClickListener(this);
             platform2.setOnClickListener(this);
-
+            platform3.setOnClickListener(this);
 
         }
 
@@ -291,6 +291,26 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
                             Toaster.make(context, list.get(getLayoutPosition()).platforms.get(0).name);
                         else
                             Toaster.make(context, list.get(getLayoutPosition()).platforms.get(1).name);
+                    }
+                    break;
+
+                case R.id.platform3:
+                    if(list.get(getLayoutPosition()).platforms!=null){
+                        if(list.get(getLayoutPosition()).platforms.size()==2){
+                            Toaster.make(context,list.get(getLayoutPosition()).platforms.get(1).name);
+                        } else if(list.get(getLayoutPosition()).platforms.size()==3){
+                            Toaster.make(context,list.get(getLayoutPosition()).platforms.get(2).name);
+                        }else if(list.get(getLayoutPosition()).platforms.size()>3) {
+                            Toaster.make(context,"third");
+
+                            PopupMenu popup = new PopupMenu(context, view);
+                            GameWikiModal platformModal = list.get(getLayoutPosition());
+                            for(int i=2, len = platformModal.platforms.size();i<len;i++){
+                                popup.getMenu().add(platformModal.platforms.get(i).name);
+                            }
+                            popup.show();
+                        }
+
                     }
                     break;
 
@@ -407,6 +427,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
     public void onViewDetachedFromWindow(MyViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.itemView.clearAnimation();
+
 
     }
 

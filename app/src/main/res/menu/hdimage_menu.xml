@@ -4,8 +4,14 @@
 
 
 <item
-    android:title="@string/info"
-    android:id="@+id/info"
+    android:title="@string/share"
+    android:id="@+id/share"
     android:icon="@drawable/ic_info_outline_white_24dp"
-    app:showAsAction="always"/>
+    app:showAsAction="ifRoom"/>
+    <item
+        android:title="save"
+        android:id="@+id/save"
+        android:icon="@drawable/ic_info_outline_white_24dp"
+        app:showAsAction="collapseActionView"/>
+
 </menu>

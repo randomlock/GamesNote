@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.randomlocks.gamesnote.Activity.ViewPagerActivity;
+import com.example.randomlocks.gamesnote.Activity.ImageViewPagerActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
 import com.example.randomlocks.gamesnote.R;
@@ -64,7 +64,7 @@ public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterD
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(context, ViewPagerActivity.class);
+            Intent intent = new Intent(context, ImageViewPagerActivity.class);
             intent.putExtra(GiantBomb.POSITION, getLayoutPosition());
             ArrayList<String> images = new ArrayList<>();
             for (CharacterImage image : imageUrls) {

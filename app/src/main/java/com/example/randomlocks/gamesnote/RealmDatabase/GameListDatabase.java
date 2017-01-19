@@ -3,9 +3,11 @@ package com.example.randomlocks.gamesnote.RealmDatabase;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
 
@@ -19,6 +21,7 @@ public class GameListDatabase extends RealmObject {
     private String apiDetailUrl; //required
     private String name; //required
     private String imageUrl;
+    @Index
     private int status;
     private int score;
     private String startDate;
@@ -28,6 +31,8 @@ public class GameListDatabase extends RealmObject {
     private String medium;
     private String price;
     private RealmList<GameWikiPlatform> platform_list;
+    private Date date_added;
+    private Date last_updated;
 
 
    /* public static class Builder{
@@ -61,6 +66,8 @@ public class GameListDatabase extends RealmObject {
         this.imageUrl = imageUrl;
         this.status = status;
         this.platform_list = platform_list;
+        date_added = new Date();
+        last_updated = new Date();
 
     }
 
@@ -76,6 +83,8 @@ public class GameListDatabase extends RealmObject {
         gameplay_hours = "-";
         medium = "-";
         price = "-";
+        date_added = new Date();
+        last_updated = new Date();
     }
 
     public GameListDatabase(String apiDetailUrl, String name, String imageUrl, int status, int score, String startDate, String endDate, String platform, RealmList<GameWikiPlatform> platform_list) {
@@ -91,6 +100,8 @@ public class GameListDatabase extends RealmObject {
         gameplay_hours = "-";
         medium = "-";
         price = "-";
+        date_added = new Date();
+        last_updated = new Date();
     }
 
 
@@ -183,4 +194,15 @@ public class GameListDatabase extends RealmObject {
     }
 
 
+    public Date getDate_added() {
+        return date_added;
+    }
+
+    public Date getLast_updated() {
+        return last_updated;
+    }
+
+    public void setLast_updated(Date last_updated) {
+        this.last_updated = last_updated;
+    }
 }

@@ -44,7 +44,7 @@ public class ImageViewerFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.MyDialogTheme);
         smallImageUrl = getArguments().getString(SMAll_IMAGE_URL);
         mediumImageUrl = getArguments().getString(MEDIUM_IMAGE_URL);
     }
