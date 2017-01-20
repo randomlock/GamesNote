@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by randomlocks on 4/28/2016.
  */
-public class ImageViewerFragment extends DialogFragment {
+public class CoverImageViewerFragment extends DialogFragment {
 
     ImageView imageView;
     ProgressBar progressBar;
@@ -35,13 +35,13 @@ public class ImageViewerFragment extends DialogFragment {
     public static final String SMAll_IMAGE_URL = "smallURL";
     public static final String MEDIUM_IMAGE_URL = "mediumURL";
 
-    public static final ImageViewerFragment newInstance(String smallImageUrl, String MediumImageUrl,String title) {
+    public static final CoverImageViewerFragment newInstance(String smallImageUrl, String MediumImageUrl, String title) {
 
         Bundle args = new Bundle();
         args.putString(SMAll_IMAGE_URL, smallImageUrl);
         args.putString(MEDIUM_IMAGE_URL, MediumImageUrl);
         args.putString(GiantBomb.TITLE,title);
-        ImageViewerFragment fragment = new ImageViewerFragment();
+        CoverImageViewerFragment fragment = new CoverImageViewerFragment();
         fragment.setArguments(args);
         return fragment;
     }

@@ -331,26 +331,26 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
             case R.id.view:
 
 
-                if (item.getTitle().equals(getString(R.string.compact_view))) {
-                    isReduced = true;
-                    item.setTitle(getString(R.string.reduce_view));
+                if (gameNewsAdapter!=null) {
+                    if (item.getTitle().equals(getString(R.string.compact_view))) {
+                        isReduced = true;
+                        item.setTitle(getString(R.string.reduce_view));
 
 
-                } else {
-                    item.setTitle(getString(R.string.compact_view));
-                    isReduced = false;
-                }
-
-
-                if (gameNewsAdapter != null) {
-                    gameNewsAdapter.setSimple(isReduced);
-                }
-
-                if (recyclerView != null) {
-                    if (isReduced) {
-                        recyclerView.addItemDecoration(itemDecoration);
                     } else {
-                        recyclerView.removeItemDecoration(itemDecoration);
+                        item.setTitle(getString(R.string.compact_view));
+                        isReduced = false;
+                    }
+
+                    gameNewsAdapter.setSimple(isReduced);
+
+
+                    if (recyclerView != null) {
+                        if (isReduced) {
+                            recyclerView.addItemDecoration(itemDecoration);
+                        } else {
+                            recyclerView.removeItemDecoration(itemDecoration);
+                        }
                     }
                 }
 

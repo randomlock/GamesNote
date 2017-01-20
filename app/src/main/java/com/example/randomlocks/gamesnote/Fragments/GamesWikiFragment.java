@@ -4,6 +4,7 @@ package com.example.randomlocks.gamesnote.Fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -34,6 +35,7 @@ import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
+import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.GameWikiListModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
@@ -71,7 +73,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     CoordinatorLayout coordinatorLayout;
     Context context;
 
-    public static final String LIMIT = "30";
+    private static final String LIMIT = "30";
 
 
     public GamesWikiFragment() {
@@ -175,7 +177,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         }
 
 
-        if (manager != null) {
+       /* if (manager != null) {
             recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(manager) {
                 @Override
                 public void onLoadMore(int current_page) {
@@ -190,6 +192,10 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                 }
             });
         }
+*/
+
+
+
 
 
         /************************ PROGRESS BAR ANIMATION ****************************/
@@ -202,7 +208,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
     private void fillRecycler(List<GameWikiModal> listModals, Parcelable parcelable) {
         recyclerView.setLayoutManager(new ConsistentLinearLayoutManager(context));
-        recyclerView.setAdapter(new GameWikiAdapter(listModals, context, recyclerView.getChildCount()));
+        recyclerView.setAdapter(new GameWikiAdapter(listModals, context, recyclerView.getChildCount(),recyclerView));
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
@@ -292,25 +298,32 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
     public void getGameWiki(final GameWikiListInterface gameWikiListInterface, final Map<String, String> map) {
 
-        progressBar.setVisibility(View.VISIBLE);
+        if ((listModals.isEmpty() && recyclerView.getAdapter()!=null)||listModals.isEmpty()) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         gameWikiListInterface.getResult(map).enqueue(new Callback<GameWikiListModal>() {
             @Override
             public void onResponse(Call<GameWikiListModal> call, Response<GameWikiListModal> response) {
 
-                progressBar.setVisibility(View.GONE);
+                if (progressBar.getVisibility()==View.VISIBLE) {
+                    progressBar.setVisibility(View.GONE);
+                }
 
-                if (listModals.isEmpty() && recyclerView.getAdapter() != null) {
+                if (listModals.isEmpty() && recyclerView.getAdapter() != null) { //searching for a game
                     listModals = response.body().results;
                     adapter.swap(listModals);
-                } else if (listModals.isEmpty()) {
+                } else if (listModals.isEmpty()) {          //loading initial games at start
                     listModals = response.body().results;
-                    adapter = new GameWikiAdapter(listModals, context, recyclerView.getChildCount());
+                    adapter = new GameWikiAdapter(listModals, context, recyclerView.getChildCount(),recyclerView);
                     recyclerView.setAdapter(adapter);
-                } else {
+                } else {            // loading more games
+                    listModals.remove(listModals.size() - 1);
+                    adapter.notifyItemRemoved(listModals.size());
                     int size = adapter.getItemCount();
                     listModals.addAll(response.body().results);
                     adapter.notifyItemRangeInserted(size, listModals.size());
+                    adapter.setLoaded();
                 }
 
                 if (listModals.isEmpty()) {
@@ -347,6 +360,42 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                 }*/
 
 
+                if(adapter!=null){
+                    adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+                            listModals.add(null);
+                            adapter.notifyItemInserted(listModals.size()-1);
+
+
+
+
+
+
+                            //removing bottom view & Load data
+                            int offset = Integer.parseInt(map.get(GiantBomb.OFFSET));
+                            offset += Integer.parseInt(LIMIT);
+                            map.put(GiantBomb.OFFSET, String.valueOf(offset));
+                            getGameWiki(gameWikiListInterface, map);
+
+
+
+
+
+                        }
+                    });
+
+
+
+
+                }
+
+
+
+
+
+
+
             }
 
             @Override
@@ -370,14 +419,18 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), context);
 
         String field = "name:" + query;
-        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), context);
 
         map.put(GiantBomb.FIELD, field);
         map.put(GiantBomb.OFFSET, "0");
 
-        listModals.clear();
+        if (!listModals.isEmpty()) {
+            listModals.clear();
+        }
+
+
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
@@ -407,7 +460,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         map.put(GiantBomb.SORT, sort);
         map.put(GiantBomb.OFFSET, "0");
         listModals.clear();
-        Toaster.make(context, map.toString());
 
         getGameWiki(gameWikiListInterface, map);
 

@@ -67,10 +67,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:animateLayoutChanges="true">
+
 
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -94,10 +91,10 @@
                 <TextView
                     android:id="@+id/deck"
                     android:layout_margin="12dp"
-                    android:textStyle="italic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="deck info"
+                    style="@style/SubTitleText"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:lineSpacingMultiplier="1.25"
@@ -116,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="24dp">
+                    android:layout_marginTop="12dp">
 
 
                     <TextView
@@ -169,7 +166,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_marginBottom="24dp">
+                    android:layout_marginBottom="12dp">
 
 
                     <TextView
@@ -227,8 +224,8 @@
                 <TextView
                     style="@style/cardview_textstyle"
                     android:text="Overview"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
                     android:padding="0dp"
                     android:layout_marginTop="12dp"
 
@@ -239,9 +236,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp">
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -290,7 +287,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_margin="24dp"
+                    android:layout_margin="12dp"
 
                     >
 
@@ -316,8 +313,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
 
 
                     >
@@ -344,7 +341,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="24dp"
+                    android:layout_margin="12dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -375,8 +372,8 @@
                 <TextView
                     style="@style/cardview_textstyle"
                     android:text="Images"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
                     android:padding="0dp"
                     android:layout_marginTop="12dp"
 
@@ -387,7 +384,7 @@
                     android:id="@+id/image_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="24dp"
+                    android:layout_margin="12dp"
 
                     />
 
@@ -402,8 +399,8 @@
                 <TextView
                     style="@style/cardview_textstyle"
                     android:text="Detail Description"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
                     android:padding="0dp"
                     android:layout_marginTop="12dp"
 
@@ -414,7 +411,7 @@
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="24dp"
+                    android:layout_margin="12dp"
                     android:text="No Additional info"
                     android:lineSpacingMultiplier="1.25"
                     android:textColor="@color/primary_text" />
@@ -422,23 +419,15 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view"
-                    android:layout_margin="24dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
 
             </LinearLayout>
 
-            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:indicator="Pacman"
-                app:indicator_color="@color/accent"
-                android:layout_gravity="bottom|center" />
 
 
-        </FrameLayout>
+
 
 
     </com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView>

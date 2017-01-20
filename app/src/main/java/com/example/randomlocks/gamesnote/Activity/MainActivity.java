@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void startCharacterActivity(String apiUrl, String imageUrl) {
+    public void startCharacterActivity(String apiUrl, String imageUrl,String title) {
 
        /* Fragment fragment = getSupportFragmentManager().findFragmentByTag("characterDetail");
 
@@ -369,6 +369,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(this, CharacterDetailActivity.class);
         intent.putExtra(GiantBomb.API_URL, apiUrl);
         intent.putExtra(GiantBomb.IMAGE_URL, imageUrl);
+        intent.putExtra(GiantBomb.TITLE,title);
         startActivity(intent);
 
 

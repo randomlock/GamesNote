@@ -125,7 +125,7 @@
 
             <include
                 android:id="@+id/stats_cardview"
-                layout="@layout/delete"/>
+                layout="@layout/custom_game_detail_stats"/>
 
 
 

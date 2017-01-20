@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,13 +22,17 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
-import com.example.randomlocks.gamesnote.DialogFragment.ImageViewerFragment;
+import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
@@ -36,17 +42,14 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmList;
-
-import static android.support.v7.app.AppCompatDelegate.getDefaultNightMode;
 
 /**
  * Created by randomlocks on 4/25/2016.
  */
 
 //TODO fix popup speed database
-public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyViewHolder> {
+public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<GameWikiModal> list;
     Context context;
@@ -54,41 +57,94 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
     Realm realm;
     GameListDatabase database;
 
-    public GameWikiAdapter(List<GameWikiModal> list, Context context, int lastPosition) {
+
+    //variable for endless scroll
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
+
+    private OnLoadMoreListener mOnLoadMoreListener;
+
+    private boolean isLoading;
+    private int visibleThreshold = 5;
+    private int lastVisibleItem, totalItemCount;
+
+
+    public GameWikiAdapter(List<GameWikiModal> list, Context context, int lastPosition,RecyclerView recyclerView) {
         this.list = list;
         this.context = context;
         this.lastPosition = lastPosition;
         realm = Realm.getDefaultInstance();
+
+
+        //setting scroll event
+        final ConsistentLinearLayoutManager linearLayoutManager = (ConsistentLinearLayoutManager) recyclerView.getLayoutManager();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                totalItemCount = linearLayoutManager.getItemCount();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (mOnLoadMoreListener != null) {
+                        mOnLoadMoreListener.onLoadMore();
+                    }
+                    isLoading = true;
+                }
+            }
+        });
+
+
+
+
     }
 
     public void swap(List<GameWikiModal> newList) {
         list.clear();
         list.addAll(newList);
-        notifyDataSetChanged();
+            notifyItemRangeInserted(0,getItemCount());
 
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.mOnLoadMoreListener = mOnLoadMoreListener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return list.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View v = inflater.inflate(R.layout.custom_game_wiki_layout, parent, false);
-
-        return new MyViewHolder(v);
+        if (viewType == VIEW_TYPE_ITEM) {
+            View view = inflater.inflate(R.layout.custom_game_wiki_layout, parent, false);
+            return new MyViewHolder(view);
+        } else if (viewType == VIEW_TYPE_LOADING) {
+            View view = inflater.inflate(R.layout.recycler_bottom_progress, parent, false);
+            return new LoadingViewHolder(view);
+        }
+        return null;
     }
 
+
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-        final GameWikiModal modal = list.get(position);
-        holder.title.setText(modal.name);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof GameWikiAdapter.MyViewHolder) {
+            final GameWikiModal modal = list.get(position);
+            MyViewHolder viewHolder = (MyViewHolder) holder;
+            viewHolder.title.setText(modal.name);
 
-        if (modal.deck != null)
-            holder.description.setText(modal.deck);
-        else
-            holder.description.setText(R.string.no_description);
+            if (modal.deck != null)
+                viewHolder.description.setText(modal.deck);
+            else
+                viewHolder.description.setText(R.string.no_description);
 
-        //   holder.view.setOnClickListener(new MyClickListener(holder.description,context,GameWikiModal modal));
+            //   holder.view.setOnClickListener(new MyClickListener(holder.description,context,GameWikiModal modal));
 
 
       /*  if(!modal.isClicked) {
@@ -122,95 +178,119 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
         }); */
 
 
-        // Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
+            // Picasso.with(context).load(modal.image.iconUrl).fit().into(holder.imageView);
 
 
-        if (modal.image != null) {
-            holder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
-            holder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-            Picasso.with(context).load(modal.image.smallUrl).fit().into(holder.imageView);
-        }
-
-        String date_time = modal.originalReleaseDate;
-        String date[];
-        if (date_time != null) {
-            date = date_time.split(" ");
-            holder.date.setText(date[0]);
-        }
-
-
-        /**************** SETTING PLATFORMS*************************/
-        List<GameWikiPlatform> platform = modal.platforms;
-
-
-        if (platform != null) {
-            holder.platform1.setVisibility(View.VISIBLE);
-            holder.platform2.setVisibility(View.VISIBLE);
-            holder.platform3.setVisibility(View.VISIBLE);
-
-
-            switch (platform.size()) {
-                case 0:
-                    holder.platform1.setVisibility(View.INVISIBLE);
-                    holder.platform2.setVisibility(View.INVISIBLE);
-                    holder.platform3.setVisibility(View.INVISIBLE);
-
-                    break;
-                case 1:
-                    holder.platform1.setVisibility(View.INVISIBLE);
-                    holder.platform3.setVisibility(View.INVISIBLE);
-                    holder.platform2.setText(platform.get(0).abbreviation);
-                    break;
-                case 2:
-                    holder.platform2.setVisibility(View.INVISIBLE);
-                    holder.platform1.setText(platform.get(0).abbreviation);
-                    holder.platform3.setText(platform.get(1).abbreviation);
-                    break;
-                case 3:
-
-
-                    holder.platform1.setText(platform.get(0).abbreviation);
-                    holder.platform2.setText(platform.get(1).abbreviation);
-                    holder.platform3.setText(platform.get(2).abbreviation);
-                    break;
-
-                default:
-                    holder.platform1.setText(platform.get(0).abbreviation);
-                    holder.platform2.setText(platform.get(1).abbreviation);
-                    holder.platform3.setText("+" + (platform.size() - 2) + " more");
-
+            if (modal.image != null) {
+                viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
+                viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
+                Picasso.with(context).load(modal.image.smallUrl).fit().into(viewHolder.imageView);
+            }else {
+                Picasso.with(context).cancelRequest(viewHolder.imageView);
             }
-        }
+
+            String date_time = modal.originalReleaseDate;
+            String date[];
+            if (date_time != null) {
+                date = date_time.split(" ");
+                viewHolder.date.setText(date[0]);
+            }
+
+
+            /**************** SETTING PLATFORMS*************************/
+            List<GameWikiPlatform> platform = modal.platforms;
+
+
+            if (platform != null) {
+                viewHolder.platform1.setVisibility(View.VISIBLE);
+                viewHolder.platform2.setVisibility(View.VISIBLE);
+                viewHolder.platform3.setVisibility(View.VISIBLE);
+
+
+                switch (platform.size()) {
+                    case 0:
+                        viewHolder.platform1.setVisibility(View.INVISIBLE);
+                        viewHolder.platform2.setVisibility(View.INVISIBLE);
+                        viewHolder.platform3.setVisibility(View.INVISIBLE);
+
+                        break;
+                    case 1:
+                        viewHolder.platform1.setVisibility(View.INVISIBLE);
+                        viewHolder.platform3.setVisibility(View.INVISIBLE);
+                        viewHolder.platform2.setText(platform.get(0).abbreviation);
+                        break;
+                    case 2:
+                        viewHolder.platform2.setVisibility(View.INVISIBLE);
+                        viewHolder.platform1.setText(platform.get(0).abbreviation);
+                        viewHolder.platform3.setText(platform.get(1).abbreviation);
+                        break;
+                    case 3:
+
+
+                        viewHolder.platform1.setText(platform.get(0).abbreviation);
+                        viewHolder.platform2.setText(platform.get(1).abbreviation);
+                        viewHolder.platform3.setText(platform.get(2).abbreviation);
+                        break;
+
+                    default:
+                        viewHolder.platform1.setText(platform.get(0).abbreviation);
+                        viewHolder.platform2.setText(platform.get(1).abbreviation);
+                        viewHolder.platform3.setText("+" + (platform.size() - 2) + " more");
+
+                }
+            }
 
 
 /****************** SET ON CLICK LISTENER *************************/
 
 
-        // holder.description.setText(modal.getDescription());
+            // holder.description.setText(modal.getDescription());
 
 
-        /*********************ANIMATION*********************/
+            /*********************ANIMATION*********************/
 
-        Animation animation = AnimationUtils.loadAnimation(context,
-                (position > lastPosition) ? R.anim.up_from_bottom
-                        : R.anim.down_from_top);
-        holder.itemView.startAnimation(animation);
-        lastPosition = position;
+            Animation animation = AnimationUtils.loadAnimation(context,
+                    (position > lastPosition) ? R.anim.up_from_bottom
+                            : R.anim.down_from_top);
+            holder.itemView.startAnimation(animation);
+            lastPosition = position;
+        }else if (holder instanceof LoadingViewHolder) {
+            LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
+            loadingViewHolder.progressBar.setVisibility(View.VISIBLE);
+        }
 
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list==null?0:list.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
+    public void setLoaded() {
+        isLoading = false;
+    }
 
 
-        public TextView title, description, date;
+
+
+     private class LoadingViewHolder extends RecyclerView.ViewHolder {
+         AVLoadingIndicatorView progressBar;
+
+        LoadingViewHolder(View itemView) {
+            super(itemView);
+            progressBar = (AVLoadingIndicatorView) itemView.findViewById(R.id.progressBar);
+        }
+    }
+
+
+
+     private class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
+
+
+        TextView title, description, date;
         Button platform1, platform2, platform3;
-        public ImageView imageView;
+        ImageView imageView;
         public View view;
         CardView cardView;
         ImageButton popup;
@@ -274,7 +354,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
                     if(medium_url==null)
                         Toaster.make(context,"no image found");
                     else {
-                        ImageViewerFragment dialog = ImageViewerFragment.newInstance(small_url,medium_url,list.get(getAdapterPosition()).name);
+                        CoverImageViewerFragment dialog = CoverImageViewerFragment.newInstance(small_url,medium_url,list.get(getAdapterPosition()).name);
                         dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");
                     }
 
@@ -427,9 +507,13 @@ public class GameWikiAdapter extends RecyclerView.Adapter<GameWikiAdapter.MyView
     }
 
     @Override
-    public void onViewDetachedFromWindow(MyViewHolder holder) {
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        holder.itemView.clearAnimation();
+
+
+        if (holder instanceof MyViewHolder) {
+            holder.itemView.clearAnimation();
+        }
 
 
     }

@@ -1,5 +1,6 @@
 package com.example.randomlocks.gamesnote.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,9 +21,8 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacterWikiImage;
-import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
@@ -51,7 +51,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
     private static final String API_URL = "api_url";
     private static final String IMAGE_URL = "image_url";
-    String apiUrl, imageUrl;
+    String apiUrl, imageUrl,title;
     ImageView coverImage;
     CircleImageView coverImage2;
     TextView mSmallDescription, mBigDescription, mFirstAppearance, mAlias, mTitle;
@@ -63,11 +63,11 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
-    AVLoadingIndicatorView pacman;
     CoordinatorLayout coordinatorLayout;
     AsyncTask asyncCharacterWikiImage = null;
     AppBarLayout appBarLayout;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    ProgressDialog dialog;
 
 
     @Override
@@ -77,6 +77,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         String str[] = getIntent().getStringExtra(GiantBomb.API_URL).split("/");
         apiUrl = str[str.length - 1];
         imageUrl = getIntent().getStringExtra(GiantBomb.IMAGE_URL);
+        title = getIntent().getStringExtra(GiantBomb.TITLE);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_coordinator);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         collapsingToolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
@@ -85,7 +86,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         coverImage = (ImageView) collapsingToolbarLayout.findViewById(R.id.character_image);
         coverImage2 = (CircleImageView) coordinatorLayout.findViewById(R.id.character_image2);
         scrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
-        pacman = (AVLoadingIndicatorView) scrollView.findViewById(R.id.progressBar);
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
         mTitle = (TextView) parentLayout.findViewById(R.id.character_name);
         mEnemies = (TextView) parentLayout.findViewById(R.id.enemies);
@@ -108,6 +108,10 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dialog = ProgressDialog.show(this, "",
+                "Loading. Please wait...", true);
+        dialog.show();
 
 
         /*coverImage.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -146,7 +150,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             Picasso.with(this).load(imageUrl).fit().centerCrop().into(coverImage2);
         }
 
-       /* Picasso.with(this).load(imageUrl).into(new Target() {
+        /* Picasso.with(this).load(imageUrl).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 expandToolbar(bitmap);
@@ -184,12 +188,13 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                 asyncCharacterWikiImage = new JsoupCharacterWikiImage(new JsoupCharacterWikiImage.AsyncResponse() {
                     @Override
                     public void processFinish(List<CharacterImage> imageUrls) {
-                        if (imageUrls != null && characterDetailModal!=null) {
+                        if (imageUrls != null) {
+                            Toaster.make(CharacterDetailActivity.this,"image loaded");
                             imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                            imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,characterDetailModal.name));
+                            imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,title));
                         }
                     }
-                }).execute("http://www.giantbomb.com/character/" + apiUrl);
+                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/character/" + apiUrl);
 
 
             }
@@ -210,7 +215,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onFailure(Call<CharacterListModal> call, Throwable t) {
-                pacman.setVisibility(View.GONE);
+                dialog.dismiss();
                 parentLayout.setVisibility(View.VISIBLE);
 
                 Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
@@ -292,7 +297,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             }
         }
 
-        pacman.setVisibility(View.GONE);
+        dialog.dismiss();
 
     }
 
@@ -362,6 +367,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             case R.id.enemies_title:
                 if (characterDetailModal.enemies != null && characterDetailModal.enemies.size() > 0) {
                     intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.enemies));
+                    intent.putExtra(GiantBomb.IS_GAME_DETAIL,false);
                     startActivity(intent);
                 } else {
                     Snackbar.make(coordinatorLayout, "No enemies :)", Snackbar.LENGTH_SHORT).show();
@@ -372,6 +378,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             case R.id.friends_title:
                 if (characterDetailModal.friends != null && characterDetailModal.friends.size() > 0) {
                     intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.friends));
+                    intent.putExtra(GiantBomb.IS_GAME_DETAIL,false);
                     startActivity(intent);
                 } else {
                     Snackbar.make(coordinatorLayout, "No friends :(", Snackbar.LENGTH_SHORT).show();
@@ -382,6 +389,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             case R.id.total_games_titles:
                 if (characterDetailModal.games != null && characterDetailModal.games.size() > 0) {
                     intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.games));
+                    intent.putExtra(GiantBomb.IS_GAME_DETAIL,true);
                     startActivity(intent);
                 } else {
                     Snackbar.make(coordinatorLayout, "No known games :(", Snackbar.LENGTH_SHORT).show();

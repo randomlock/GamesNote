@@ -46,7 +46,7 @@ import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
-import com.example.randomlocks.gamesnote.DialogFragment.ListDialogFragment;
+import com.example.randomlocks.gamesnote.DialogFragment.ReviewListDialogFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.DemoPlayer;
@@ -103,7 +103,7 @@ import retrofit2.Response;
  ************/
 
 
-public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ListDialogFragment.CommunicationInterface, AddToBottomFragment.AddToBottomInterface {
+public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ReviewListDialogFragment.CommunicationInterface, AddToBottomFragment.AddToBottomInterface {
 
 
     public static final String API_URL = "apiUrl";
@@ -795,7 +795,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, style, getContext(), new GameDetailCharacterAdapter.OnClickInterface() {
                 @Override
                 public void onItemClick(String apiUrl, String imageUrl) {
-                    ((GameDetailActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl);
+                    ((GameDetailActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl,title);
                 }
             });
             characterRecycleView.setAdapter(characterAdapter);
@@ -842,7 +842,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                         }
 
 
-                        ListDialogFragment dialogFragment = ListDialogFragment.newInstance(item, true);
+                        ReviewListDialogFragment dialogFragment = ReviewListDialogFragment.newInstance(item, true);
                         dialogFragment.setTargetFragment(GameDetailFragment.this, 0);
                         dialogFragment.show(getActivity().getSupportFragmentManager(), "List_Dialog");
 
@@ -869,7 +869,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                         }
 
 
-                        ListDialogFragment dialogFragment = ListDialogFragment.newInstance(item, false);
+                        ReviewListDialogFragment dialogFragment = ReviewListDialogFragment.newInstance(item, false);
                         dialogFragment.setTargetFragment(GameDetailFragment.this, 0);
                         dialogFragment.show(getActivity().getSupportFragmentManager(), "List_Dialog");
                     }

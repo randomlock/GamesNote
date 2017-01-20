@@ -1,14 +1,10 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -24,11 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
-import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
-import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
-import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.squareup.picasso.Picasso;
@@ -37,9 +29,7 @@ import at.grabner.circleprogress.CircleProgressView;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
 
 /**
  * Created by randomlocks on 3/19/2016.
@@ -53,11 +43,22 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     private Realm realm;
     private OrderedRealmCollection<GameListDatabase> model;
     private int status;
+    private boolean isSimple;
+
+    private static final int SIMPLE_VIEW_TYPE = 0;
+    private static final int CARD_VIEW_TYPE = 1;
 
     @Override
     public Filter getFilter() {
         return new GameListFilter(this);
     }
+
+    public void setSimple(boolean isSimple) {
+        this.isSimple = isSimple;
+        notifyItemRangeChanged(0,getItemCount());
+
+    }
+
 
     private class GameListFilter
             extends Filter {
@@ -95,12 +96,12 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
 
 
     public interface OnClickInterface{
-       void onClick(GameListDatabase gameListDatabase);
-       void onScoreClick(String primaryKey,int oldScore , int position);
+        void onClick(GameListDatabase gameListDatabase);
+        void onScoreClick(String primaryKey,int oldScore , int position);
     }
 
 
-    public GameListAdapter(@NonNull Context context, Realm realm, @Nullable OrderedRealmCollection<GameListDatabase> data, boolean autoUpdate, int status, OnClickInterface mOnClickInterface) {
+    public GameListAdapter(@NonNull Context context, Realm realm, @Nullable OrderedRealmCollection<GameListDatabase> data, boolean autoUpdate, int status, boolean isSimple, OnClickInterface mOnClickInterface) {
         super(context, data, autoUpdate);
         this.context = context;
         this.mOnClickInterface = mOnClickInterface;
@@ -108,12 +109,18 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         this.realm = realm;
         model = data;
         this.status = status;
+        this.isSimple = isSimple;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.custom_game_list, parent, false);
+        View view;
+        if (viewType == SIMPLE_VIEW_TYPE) {
+            view = inflater.inflate(R.layout.custom_game_list1, parent, false);
+        } else {
+            view = inflater.inflate(R.layout.custom_game_list2, parent, false);
+        }
         return new MyViewHolder(view);
     }
 
@@ -140,11 +147,10 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     }
 
 
-
-
-
-
-
+    @Override
+    public int getItemViewType(int position) {
+        return isSimple ? SIMPLE_VIEW_TYPE : CARD_VIEW_TYPE;
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 

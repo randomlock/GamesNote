@@ -52,6 +52,9 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     private static final String RECYCLER_STYLE = "character_recycler_style";
     private static final String SCROLL_POSITION = "scroll_position";
+    private static final String LIMIT = "30";
+
+
     CoordinatorLayout coordinator;
     EditText searchCharacter;
     RecyclerView recyclerView;
@@ -68,6 +71,12 @@ public class GamesCharacterWikiFragment extends Fragment {
 //    ImageView imageView;
 
 
+
+
+
+
+
+
     public GamesCharacterWikiFragment() {
         // Required empty public constructor
     }
@@ -79,7 +88,9 @@ public class GamesCharacterWikiFragment extends Fragment {
         map = new HashMap<>();
         map.put(GiantBomb.KEY, GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");
-        map.put(GiantBomb.FIELD_LIST, "image,name,api_detail_url");
+        map.put(GiantBomb.LIMIT, LIMIT);
+        map.put(GiantBomb.OFFSET, "0");
+        map.put(GiantBomb.FIELD_LIST, "image,name,api_detail_url,deck");
         isSimple = SharedPreference.getFromSharedPreferences(RECYCLER_STYLE, false, getContext());
     }
 
@@ -151,7 +162,6 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         if (modals != null && adapter != null) {
             modals.clear();
-            adapter.notifyDataSetChanged();
         }
 
         if (errorText.getVisibility() == View.VISIBLE) {
@@ -159,6 +169,8 @@ public class GamesCharacterWikiFragment extends Fragment {
         }
         String filter = "name:" + text;
         map.put(GiantBomb.FILTER, filter);
+        map.put(GiantBomb.OFFSET, "0");
+
         gameCharacterSearchWikiInterface = GiantBomb.createGameCharacterSearchService();
         getCharacterWiki(gameCharacterSearchWikiInterface, map);
 
@@ -182,6 +194,10 @@ public class GamesCharacterWikiFragment extends Fragment {
 
 
                 } else {
+
+
+
+
                     loadRecycler(modals, null);
                 }
             }
@@ -222,10 +238,10 @@ public class GamesCharacterWikiFragment extends Fragment {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
         //  recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
-        adapter = new CharacterSearchAdapter(modals, getContext(), new CharacterSearchAdapter.OnClickInterface() {
+        adapter = new CharacterSearchAdapter(modals, getContext(),recyclerView, new CharacterSearchAdapter.OnClickInterface() {
             @Override
-            public void onItemClick(String apiUrl, String imageUrl) {
-                ((MainActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl);
+            public void onItemClick(String apiUrl, String imageUrl, String name) {
+                ((MainActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl,name);
             }
         });
         recyclerView.setAdapter(adapter);

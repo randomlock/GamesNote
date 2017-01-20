@@ -14,7 +14,7 @@ import com.example.randomlocks.gamesnote.R;
 /**
  * Created by randomlocks on 7/10/2016.
  */
-public class ListDialogFragment extends DialogFragment {
+public class ReviewListDialogFragment extends DialogFragment {
 
     CharSequence[] list;
     CommunicationInterface mCommunicationInterface = null;
@@ -24,12 +24,12 @@ public class ListDialogFragment extends DialogFragment {
         void onItemSelected(int position, boolean isGameReview);
     }
 
-    public static ListDialogFragment newInstance(CharSequence[] list, boolean isGameReview) {
+    public static ReviewListDialogFragment newInstance(CharSequence[] list, boolean isGameReview) {
 
         Bundle args = new Bundle();
         args.putCharSequenceArray(GiantBomb.MODAL, list);
         args.putBoolean(GiantBomb.IS_GAME_REVIEW, isGameReview);
-        ListDialogFragment fragment = new ListDialogFragment();
+        ReviewListDialogFragment fragment = new ReviewListDialogFragment();
         fragment.setArguments(args);
         return fragment;
     }

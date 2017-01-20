@@ -17,33 +17,26 @@ public class CharacterSearchModal implements Parcelable {
     public String name;
     @Expose
     public CharacterImage image;
+    @Expose
+    public String deck;
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.apiDetailUrl);
-        dest.writeString(this.name);
-        dest.writeParcelable(this.image, flags);
-    }
 
     public CharacterSearchModal() {
     }
 
+
     protected CharacterSearchModal(Parcel in) {
-        this.apiDetailUrl = in.readString();
-        this.name = in.readString();
-        this.image = in.readParcelable(CharacterImage.class.getClassLoader());
+        apiDetailUrl = in.readString();
+        name = in.readString();
+        image = in.readParcelable(CharacterImage.class.getClassLoader());
+        deck = in.readString();
     }
 
-    public static final Parcelable.Creator<CharacterSearchModal> CREATOR = new Parcelable.Creator<CharacterSearchModal>() {
+    public static final Creator<CharacterSearchModal> CREATOR = new Creator<CharacterSearchModal>() {
         @Override
-        public CharacterSearchModal createFromParcel(Parcel source) {
-            return new CharacterSearchModal(source);
+        public CharacterSearchModal createFromParcel(Parcel in) {
+            return new CharacterSearchModal(in);
         }
 
         @Override
@@ -51,4 +44,17 @@ public class CharacterSearchModal implements Parcelable {
             return new CharacterSearchModal[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(apiDetailUrl);
+        parcel.writeString(name);
+        parcel.writeParcelable(image, i);
+        parcel.writeString(deck);
+    }
 }

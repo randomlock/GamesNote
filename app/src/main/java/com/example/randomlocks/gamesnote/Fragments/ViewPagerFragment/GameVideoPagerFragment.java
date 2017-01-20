@@ -393,7 +393,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
     private void deleteFromRealm(final GamesVideoModal modal) {
 
-        // if its in favourite or watch later then dont delete , just update
+        // if its in favourite or watch later then dont custom_game_detail_stats , just update
         if (modal.isFavorite || modal.isWatchLater) {
             realmAsyncTask = realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
@@ -406,7 +406,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                     Toaster.make(getContext(), "Deleted");
                 }
             });
-        } else {  // if not in fav and watch later then delete
+        } else {  // if not in fav and watch later then custom_game_detail_stats
             realmAsyncTask = realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {

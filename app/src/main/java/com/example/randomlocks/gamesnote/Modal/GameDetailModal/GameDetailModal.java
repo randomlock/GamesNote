@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.Modal.GameWikiImage;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.google.gson.annotations.Expose;
 

@@ -15,4 +15,10 @@
         android:title="Filter Result"
         android:icon="@drawable/ic_sort_white_24dp"
         yourapp:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/view"
+        android:title="@string/reduce_list_view"
+        yourapp:showAsAction="never"/>
+
 </menu>

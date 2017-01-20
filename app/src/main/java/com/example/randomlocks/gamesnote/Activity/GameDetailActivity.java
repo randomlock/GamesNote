@@ -61,7 +61,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         super.finish();
     }
 
-    public void startCharacterActivity(String apiUrl, String imageUrl) {
+    public void startCharacterActivity(String apiUrl, String imageUrl,String title) {
 
        /* Fragment fragment = fragmentManager.findFragmentByTag("characterDetail");
 
@@ -77,6 +77,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         Intent intent = new Intent(this, CharacterDetailActivity.class);
         intent.putExtra(GiantBomb.API_URL, apiUrl);
         intent.putExtra(GiantBomb.IMAGE_URL, imageUrl);
+        intent.putExtra(GiantBomb.TITLE,title);
         startActivity(intent);
 
 

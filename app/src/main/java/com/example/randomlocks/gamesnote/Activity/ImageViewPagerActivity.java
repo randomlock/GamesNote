@@ -57,6 +57,9 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         position = getIntent().getIntExtra(GiantBomb.POSITION, 0);
         imageUrls = getIntent().getStringArrayListExtra(GiantBomb.IMAGE_URL);
         gameTitle = getIntent().getStringExtra(GiantBomb.TITLE);
+        if(gameTitle==null)
+            gameTitle = "";
+
         viewPager = (PhotoViewPager) findViewById(R.id.viewpager);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar_title = "/"+imageUrls.size()+"  "+gameTitle;

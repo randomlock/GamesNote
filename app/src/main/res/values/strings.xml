@@ -246,6 +246,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="save">save</string>
+    <string name="card">card_view</string>
+    <string name="reduce_list_view">reduce_list_view</string>
+    <string name="compact_list_view">compact_list_view</string>
 
 
 </resources>

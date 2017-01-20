@@ -77,7 +77,7 @@
 
     <style name="SubTitleText" parent="TextAppearance.AppCompat.Caption">
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
 
         <item name="android:textAppearance">?attr/textAppearanceLargePopupMenu</item>
 
