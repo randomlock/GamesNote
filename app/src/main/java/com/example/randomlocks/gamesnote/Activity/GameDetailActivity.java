@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
+import com.example.randomlocks.gamesnote.Fragments.VideoPlayerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.R;
 
@@ -15,6 +16,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
     FragmentTransaction fragmentTransaction;
     FragmentManager fragmentManager;
+   public int seek_position=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         if (fragment != null) {
             fragment.getArguments().putString(GameDetailFragment.API_URL, apiUrl);
             fragment.getArguments().putString(GameDetailFragment.IMAGE_URL, imageUrl);
-            fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "GameDetail").commit();
+            fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "GameDetail").addToBackStack(null).commit();
 
         }
 
@@ -114,5 +116,38 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         intent.putExtra(GiantBomb.TITLE, gameTitle);
         intent.putExtra(GiantBomb.IMAGE_URL, imageUrl);
         startActivity(intent);
+    }
+
+    @Override
+    public void onVideoClick(String url, boolean needRequest,int seek_position) {
+/*
+        FragmentManager fm = getSupportFragmentManager();
+        video_fragment = (VideoPlayerFragment) fm.findFragmentByTag("video_fragment");
+
+        // create the fragment and data the first time
+        if (video_fragment == null) {
+            // add the fragment
+            video_fragment = VideoPlayerFragment.newInstance(url);
+            fm.beginTransaction().replace(R.id.fragment_parent_layout,video_fragment,"video_fragment").commit();
+            // load the data from the web
+
+        }*/
+
+        Intent intent = new Intent(this, VideoPlayerActivity.class);
+        intent.putExtra(GiantBomb.API_URL, url);
+        intent.putExtra(GiantBomb.SEEK_POSITION,seek_position);
+
+        startActivityForResult(intent,1);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                seek_position =data.getIntExtra(GiantBomb.SEEK_POSITION,0);
+            }
+        }
     }
 }

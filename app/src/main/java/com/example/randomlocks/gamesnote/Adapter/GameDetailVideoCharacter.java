@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.Interface.GameDetailVideoInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.R;
@@ -20,16 +21,23 @@ import java.util.List;
  */
 public class GameDetailVideoCharacter extends RecyclerView.Adapter<GameDetailVideoCharacter.MyViewHolder> {
 
-    Context context;
-    List<CharacterImage> image;
-    List<GameDetailVideo> videos;
-    int totalImageSize = 0;
+    private Context context;
+    private List<CharacterImage> image;
+    private List<GameDetailVideo> videos;
+    private int totalImageSize = 0;
 
-    public GameDetailVideoCharacter(List<CharacterImage> image, List<GameDetailVideo> videos, Context context) {
+    private GameDetailVideoInterface gameDetailVideoInterface;
+
+    public GameDetailVideoCharacter(List<CharacterImage> image, List<GameDetailVideo> videos, Context context,GameDetailVideoInterface gameDetailVideoInterface) {
         this.context = context;
         this.image = image;
         this.videos = videos;
         totalImageSize = image.size();
+        this.gameDetailVideoInterface = gameDetailVideoInterface;
+    }
+
+    public static interface GameDetailVideoInterface{
+        void onClickVideo(GameDetailVideo video,int next_video_pos);
     }
 
 
@@ -48,14 +56,14 @@ public class GameDetailVideoCharacter extends RecyclerView.Adapter<GameDetailVid
             Picasso.with(context).load(image.get(totalImageSize - 1 - position).mediumUrl).fit().centerCrop().into(holder.imageView);
         }
 
-        holder.textView.setText(videos.get(position).name);
+        holder.textView.setText(videos.get(position+1).name);
 
 
     }
 
     @Override
     public int getItemCount() {
-        return videos.size();
+        return videos.size()-1;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,16 +71,16 @@ public class GameDetailVideoCharacter extends RecyclerView.Adapter<GameDetailVid
         ImageView imageView;
         TextView textView;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             textView = (TextView) itemView.findViewById(R.id.video_title);
-            imageView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            gameDetailVideoInterface.onClickVideo(videos.get(getAdapterPosition()),getAdapterPosition());
         }
     }
 }

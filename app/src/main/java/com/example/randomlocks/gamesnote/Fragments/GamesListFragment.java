@@ -128,7 +128,6 @@ public class GamesListFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            Log.d("viewpager",position+"");
             return fragments.get(position);
         }
 

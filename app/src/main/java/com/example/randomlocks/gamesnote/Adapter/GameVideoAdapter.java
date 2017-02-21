@@ -16,12 +16,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.Activity.PlayerActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.VideoListDatabase;
-import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -253,7 +251,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
                     break;
 
                 case R.id.root_view:
-                    GamesVideoModal videoModal = modalList.get(getLayoutPosition());
+                  /*  GamesVideoModal videoModal = modalList.get(getLayoutPosition());
                     String highUrl = videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
                     Intent intent = new Intent(context, PlayerActivity.class)
                             .setData(Uri.parse(highUrl))
@@ -262,7 +260,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
                             .putExtra(GiantBomb.KEY, videoModal.id)
                             .putExtra(PlayerActivity.PROVIDER_EXTRA, "");
 
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
 
 
                     break;

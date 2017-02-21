@@ -448,7 +448,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     platforms.addAll(newModal.platforms);
                 }
 
-                final GameListDatabase newListDatabase = new GameListDatabase(str[str.length-1],newModal.name,newModal.image.mediumUrl,platforms);
+                final GameListDatabase newListDatabase = new GameListDatabase(str[str.length-1],newModal.name,newModal.image!=null ? newModal.image.mediumUrl:null,platforms);
 
                 if(id==R.id.replaying)
                     newListDatabase.setStatus(GiantBomb.REPLAYING);

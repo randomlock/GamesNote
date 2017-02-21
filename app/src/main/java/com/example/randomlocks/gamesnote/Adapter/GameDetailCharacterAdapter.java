@@ -49,6 +49,7 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
     public void setImages(List<CharacterGamesImage> images) {
         this.images = images;
+        notifyItemRangeChanged(0,getItemCount());
     }
 
     @Override

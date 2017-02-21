@@ -41,6 +41,7 @@
     <color name="pacman">#000000</color>
     <color name="black_white">#000</color>
     <color name="white_black">#FFF</color>
+    <color name="default_bg">#aa000000</color>
 
     <array name="score_color">
         <item>@color/no_score</item>

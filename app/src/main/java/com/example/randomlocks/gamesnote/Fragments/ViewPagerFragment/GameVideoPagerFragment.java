@@ -32,7 +32,7 @@ import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
-import com.example.randomlocks.gamesnote.Interface.GamesVideoInterface;
+import com.example.randomlocks.gamesnote.Interface.GamesVideosInterface;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModalList;
 import com.example.randomlocks.gamesnote.R;
@@ -63,7 +63,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     public static final String VIDEO_TITLE = "navigation_video_title"; //FOR MENU TOOLBAR TITLE
 
 
-    GamesVideoInterface gamesVideoInterface = null;
+    GamesVideosInterface gamesVideoInterface = null;
     RecyclerView recyclerView;
     List<GamesVideoModal> listModals;
     GameVideoAdapter adapter;
@@ -307,7 +307,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
     }
 
-    private void getGameVideos(final GamesVideoInterface gamesVideoInterface, final Map<String, String> map) {
+    private void getGameVideos(final GamesVideosInterface gamesVideoInterface, final Map<String, String> map) {
         pacman.setVisibility(View.VISIBLE);
         gamesVideoInterface.getResult(map).enqueue(new Callback<GamesVideoModalList>() {
             @Override

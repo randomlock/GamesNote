@@ -12,22 +12,22 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.DynamicHeightImageView;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by randomlocks on 7/11/2016.
  */
-public class CharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<CharacterSearchModal> modals;
-    Context context;
+    private Context context;
     private OnClickInterface mOnClickInterface;
 
 
@@ -41,22 +41,47 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
 
+    public void swap(List<CharacterSearchModal> newModals) {
+        modals.clear();
+        modals.addAll(newModals);
+        notifyItemRangeInserted(0,getItemCount());
+    }
+
+    public void removeAll() {
+        modals.clear();
+        notifyItemRangeRemoved(0,getItemCount());
+    }
+
+    public void updateModal(List<CharacterSearchModal> modals){
+        this.modals.remove(this.modals.size() - 1);
+        notifyItemRemoved(this.modals.size());
+        int size = this.modals.size();
+        this.modals.addAll(modals);
+        notifyItemRangeChanged(size,this.modals.size());
+        setLoaded();
+
+    }
+
+    public void addNull() {
+        modals.add(null);
+        notifyItemInserted(modals.size()-1);
+    }
 
 
     public interface OnClickInterface {
         void onItemClick(String apiUrl, String image, String name);
     }
 
-    public CharacterSearchAdapter(List<CharacterSearchModal> modals, Context context,RecyclerView recyclerView,OnClickInterface mOnClickInterface) {
+    public GameCharacterSearchAdapter(final List<CharacterSearchModal> modals, final Context context, RecyclerView recyclerView, OnClickInterface mOnClickInterface) {
         this.modals = modals;
         this.context = context;
         this.mOnClickInterface = mOnClickInterface;
 
 
-        final LinearLayoutManager linearLayoutManager;
+        final ConsistentLinearLayoutManager linearLayoutManager;
         final GridLayoutManager gridLayoutManager;
-        if(recyclerView.getLayoutManager() instanceof LinearLayoutManager){
-            linearLayoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
+        if(recyclerView.getLayoutManager() instanceof ConsistentLinearLayoutManager){
+            linearLayoutManager = (ConsistentLinearLayoutManager) recyclerView.getLayoutManager();
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -65,7 +90,7 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     totalItemCount = linearLayoutManager.getItemCount();
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
-                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)&& modals.size()>=50 && modals.size() % 50 ==0) {
                         if (mOnLoadMoreListener != null) {
                             mOnLoadMoreListener.onLoadMore();
                         }
@@ -84,7 +109,7 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     totalItemCount = gridLayoutManager.getItemCount();
                     lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition();
 
-                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold )&& modals.size()>=50 && modals.size() % 50 ==0) {
                         if (mOnLoadMoreListener != null) {
                             mOnLoadMoreListener.onLoadMore();
                         }
@@ -126,7 +151,7 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof  CharacterSearchAdapter.MyViewHolder) {
+        if (holder instanceof  GameCharacterSearchAdapter.MyViewHolder) {
             CharacterSearchModal modal = modals.get(position);
             MyViewHolder viewHolder = (MyViewHolder) holder;
 
@@ -159,8 +184,8 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             if(modal.deck!=null){
                 viewHolder.deck.setText(modal.deck);
             }
-        }else if (holder instanceof CharacterSearchAdapter.LoadingViewHolder) {
-            CharacterSearchAdapter.LoadingViewHolder loadingViewHolder = (CharacterSearchAdapter.LoadingViewHolder) holder;
+        }else if (holder instanceof GameCharacterSearchAdapter.LoadingViewHolder) {
+            GameCharacterSearchAdapter.LoadingViewHolder loadingViewHolder = (GameCharacterSearchAdapter.LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setVisibility(View.VISIBLE);
         };
 
@@ -171,9 +196,11 @@ public class CharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return modals==null?0:modals.size();
     }
 
-    public void setLoaded() {
+    private void setLoaded() {
         isLoading = false;
     }
+
+//    public boolean getLoaded(){ return isLoading;}
 
 
     private class LoadingViewHolder extends RecyclerView.ViewHolder {

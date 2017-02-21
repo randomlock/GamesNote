@@ -26,14 +26,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Activity.MainActivity;
-import com.example.randomlocks.gamesnote.Adapter.CharacterSearchAdapter;
+import com.example.randomlocks.gamesnote.Adapter.GameCharacterSearchAdapter;
+import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterface;
+import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModalList;
+import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
 
 import java.util.ArrayList;
@@ -52,7 +57,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     private static final String RECYCLER_STYLE = "character_recycler_style";
     private static final String SCROLL_POSITION = "scroll_position";
-    private static final String LIMIT = "30";
+    private static final String LIMIT = "50";
 
 
     CoordinatorLayout coordinator;
@@ -63,11 +68,11 @@ public class GamesCharacterWikiFragment extends Fragment {
     GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
     List<CharacterSearchModal> modals;
     Map<String, String> map;
-    CharacterSearchAdapter adapter;
+    GameCharacterSearchAdapter adapter;
     Toolbar toolbar;
-    private boolean isSimple;
     LinearLayoutManager manager;
     int scrollToPosition = 0;
+    boolean isLoadingMore = false;
 //    ImageView imageView;
 
 
@@ -91,7 +96,6 @@ public class GamesCharacterWikiFragment extends Fragment {
         map.put(GiantBomb.LIMIT, LIMIT);
         map.put(GiantBomb.OFFSET, "0");
         map.put(GiantBomb.FIELD_LIST, "image,name,api_detail_url,deck");
-        isSimple = SharedPreference.getFromSharedPreferences(RECYCLER_STYLE, false, getContext());
     }
 
     @Override
@@ -104,7 +108,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        coordinator = (CoordinatorLayout) getView().findViewById(R.id.root_coordinator);
+        coordinator = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
         toolbar = (Toolbar) coordinator.findViewById(R.id.my_toolbar);
         searchCharacter = (EditText) coordinator.findViewById(R.id.search_character);
         recyclerView = (RecyclerView) coordinator.findViewById(R.id.recycler_view);
@@ -124,6 +128,16 @@ public class GamesCharacterWikiFragment extends Fragment {
                 getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+
+
+
+        manager = new ConsistentLinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(manager);
+
+
+
+
 
 
         if (savedInstanceState != null) {
@@ -160,46 +174,102 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
 
-        if (modals != null && adapter != null) {
+        if (modals!=null && !modals.isEmpty()) {
             modals.clear();
+            if(adapter!=null){
+                Toaster.make(getContext(),"clear modal");
+                adapter.removeAll();
+
+            }
+
         }
 
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
+        pacman.setVisibility(View.VISIBLE);
+
         String filter = "name:" + text;
         map.put(GiantBomb.FILTER, filter);
         map.put(GiantBomb.OFFSET, "0");
 
         gameCharacterSearchWikiInterface = GiantBomb.createGameCharacterSearchService();
+        isLoadingMore = false;
         getCharacterWiki(gameCharacterSearchWikiInterface, map);
 
     }
 
     private void getCharacterWiki(final GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface, final Map<String, String> map) {
-        pacman.setVisibility(View.VISIBLE);
+
         gameCharacterSearchWikiInterface.getResult(map).enqueue(new Callback<CharacterSearchModalList>() {
             @Override
             public void onResponse(Call<CharacterSearchModalList> call, Response<CharacterSearchModalList> response) {
-                modals = response.body().results;
-                if (modals.size() == 0) {
-                    if (pacman.getVisibility() == View.VISIBLE) {
-                        pacman.setVisibility(View.GONE);
-                    }
-                    errorText.setVisibility(View.VISIBLE);
 
-                    if (recyclerView.getAdapter() != null && recyclerView.getAdapter().getItemCount() != 0) {
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    }
-
-
-                } else {
-
-
-
-
-                    loadRecycler(modals, null);
+                if (pacman.getVisibility() == View.VISIBLE) {
+                    pacman.setVisibility(View.GONE);
                 }
+                // coming to load more data
+                if(isLoadingMore){
+
+                    adapter.updateModal(response.body().results);
+
+                }else {
+
+                    if (response.body().results.isEmpty()) {
+                        Toaster.make(getContext(),"empty response");
+                        errorText.setVisibility(View.VISIBLE);
+
+
+                        //result is not empty
+                    } else {
+                        //searching the data for first time
+                        if(adapter==null){
+                            Toaster.make(getContext(),"adapter is null");
+
+                            modals = response.body().results;
+                            adapter = new GameCharacterSearchAdapter(modals, getContext(),recyclerView, new GameCharacterSearchAdapter.OnClickInterface() {
+                                @Override
+                                public void onItemClick(String apiUrl, String imageUrl, String name) {
+                                    ((MainActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl,name);
+                                }
+                            });
+                            recyclerView.setAdapter(adapter);
+
+                        }else {  //searching the data after first time
+                            modals = response.body().results;
+                            adapter.swap(modals);
+                            Toaster.make(getContext(),"coming to swap"+modals.size());
+
+                        }
+
+
+                    }
+
+                }  //outer else
+
+                if (adapter!=null) {
+                    adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+
+
+                                Toaster.make(getContext(),"on load more");
+                               // modals.add(null);
+                                adapter.addNull();
+                             //   adapter.notifyItemInserted(modals.size()-1);
+
+                                //removing bottom view & Load data
+                                int offset = Integer.parseInt(map.get(GiantBomb.OFFSET));
+                                offset += Integer.parseInt(LIMIT);
+                                map.put(GiantBomb.OFFSET, String.valueOf(offset));
+                                isLoadingMore = true;
+                                getCharacterWiki(gameCharacterSearchWikiInterface, map);
+
+                        }
+                    });
+                }
+
+
             }
 
             @Override
@@ -217,45 +287,27 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     }
 
+    private void loadRecycler(List<CharacterSearchModal> listModals, Parcelable parcelable) {
 
-    private void loadRecycler(List<CharacterSearchModal> modals, Parcelable parcelable) {
-        if (pacman.getVisibility() == View.VISIBLE) {
-            pacman.setVisibility(View.GONE);
+        if(adapter==null){
+            adapter = new GameCharacterSearchAdapter(listModals, getContext(),recyclerView, new GameCharacterSearchAdapter.OnClickInterface() {
+                @Override
+                public void onItemClick(String apiUrl, String imageUrl, String name) {
+                    ((MainActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl,name);
+                }
+            });
+            recyclerView.setAdapter(adapter);
         }
 
-        if (errorText.getVisibility() == View.VISIBLE) {
-            errorText.setVisibility(View.GONE);
-        }
-
-        if (isSimple) {
-            manager = new LinearLayoutManager(getContext());
-        } else {
-            manager = new GridLayoutManager(getContext(), 2);
-        }
-
-        recyclerView.setLayoutManager(manager);
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
-        //  recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
-        adapter = new CharacterSearchAdapter(modals, getContext(),recyclerView, new CharacterSearchAdapter.OnClickInterface() {
-            @Override
-            public void onItemClick(String apiUrl, String imageUrl, String name) {
-                ((MainActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl,name);
-            }
-        });
-        recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (isSimple) {
-            menu.getItem(0).setTitle(getString(R.string.grid_view));
-        } else {
-            menu.getItem(0).setTitle(getString(R.string.list_view));
-        }
-    }
+
+
+
+
 
 
     @Override
@@ -266,7 +318,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-
+/*
         if (item.getItemId() == R.id.view) {
 
             if (recyclerView != null && recyclerView.getLayoutManager() != null) {
@@ -296,7 +348,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
             return true;
 
-        }
+        }*/
 
 
         return super.onOptionsItemSelected(item);

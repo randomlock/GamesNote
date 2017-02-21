@@ -2,7 +2,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     >
 
@@ -10,7 +9,8 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
 
 
@@ -27,47 +27,52 @@
             >
 
 
-            <com.google.android.exoplayer.AspectRatioFrameLayout
-                android:id="@+id/video_frame"
+
+
+
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content"
+                android:background="@color/default_bg">
 
-                <SurfaceView
-                    android:id="@+id/surface_view"
+                <com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomVideoView
+                    android:id="@+id/play_video_texture"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center" />
+                    android:layout_height="wrap_content"
+                    android:keepScreenOn="true"
+                    />
 
-                <View
-                    android:id="@+id/shutter"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/black" />
 
-                <com.google.android.exoplayer.text.SubtitleLayout
-                    android:id="@+id/subtitles"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
 
-            </com.google.android.exoplayer.AspectRatioFrameLayout>
 
+
+            </RelativeLayout>
+
+            <ProgressBar
+                android:id="@+id/video_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateOnly="true"
+                android:visibility="gone"
+                />
 
             <ImageView
                 android:id="@+id/appbar_image"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="wrap_content"
                 android:transitionName="image"
                 app:layout_collapseMode="parallax"
                 />
 
 
             <View
+                android:id="@+id/play"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="@drawable/ic_play_circle_outline_white_48dp"
                 android:layout_gravity="center" />
-
 
 
             <android.support.v7.widget.Toolbar
@@ -76,9 +81,6 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 />
-
-
-
 
 
 
@@ -156,14 +158,7 @@
                         android:text="Overview"
                         />
 
-                    <ProgressBar
-                        android:id="@+id/overview_progress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:indeterminate="true"
-                        android:theme="@style/LinearProgress"
-                        android:layout_marginTop="12dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
 
 
 
@@ -392,7 +387,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 app:indicator="Pacman"
+                android:visibility="gone"
                 app:indicator_color="@color/accent" />
+
+            <View
+                android:id="@+id/video_dimmer_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#e0000000"
+                android:alpha="0"
+               />
+
+
 
 
         </FrameLayout>
@@ -406,7 +412,8 @@
         android:layout_height="match_parent"
         android:background="#e0ffffff"
         android:alpha="0"
-        android:visibility="gone" />
+        android:visibility="gone"
+         />
 
 
     <com.github.clans.fab.FloatingActionMenu

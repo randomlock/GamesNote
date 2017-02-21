@@ -4,14 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
         android:name=".ExampleApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.codepath.fileprovider"
@@ -21,7 +20,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
         </provider>
-
 
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
@@ -38,6 +36,7 @@
         </activity>
         <activity
             android:name=".Activity.GameDetailActivity"
+            android:configChanges="orientation|screenSize"
             android:parentActivityName=".Activity.MainActivity" />
         <activity android:name=".Activity.ImageViewPagerActivity" />
         <activity android:name=".Activity.GameReviewActivity" />
@@ -45,30 +44,15 @@
         <activity android:name=".Activity.UserReviewDetailActivity" />
         <activity android:name=".Activity.ImprovedWebViewActivity" />
         <activity
-            android:name=".Activity.PlayerActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:launchMode="singleTop"
-            android:theme="@style/PlayerTheme">
-            <intent-filter>
-                <action android:name="com.google.android.exoplayer.demo.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:scheme="content" />
-                <data android:scheme="asset" />
-                <data android:scheme="file" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".Activity.CharacterDetailActivity"
             android:configChanges="keyboard|keyboardHidden" />
         <activity android:name=".Activity.CharacterFriendEnemyActivity" />
-        <activity
-            android:name=".Activity.NewsDetailPagerActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"/>
-       
+        <activity android:name=".Activity.NewsDetailPagerActivity" />
+        <activity android:name=".Activity.VideoPlayerActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            />
     </application>
 
 </manifest>

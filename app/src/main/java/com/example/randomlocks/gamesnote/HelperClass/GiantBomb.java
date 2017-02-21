@@ -5,10 +5,11 @@ import android.util.Log;
 import com.example.randomlocks.gamesnote.ExampleApplication;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterface;
+import com.example.randomlocks.gamesnote.Interface.GameDetailVideoInterface;
 import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
-import com.example.randomlocks.gamesnote.Interface.GamesVideoInterface;
+import com.example.randomlocks.gamesnote.Interface.GamesVideosInterface;
 import com.example.randomlocks.gamesnote.Interface.UserReviewInterface;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -68,6 +69,7 @@ public class GiantBomb {
     public static final String SORT_ASCENDING = "sort_ascending" ;
     public static final String IS_GAME_DETAIL = "is_game_detail";
     public static final String REDUCE_LIST_VIEW = "reduce_list_view";
+    public static final  String SEEK_POSITION = "seek_position";
     public static String REDUCE_VIEW = "reduce_view";
     public static final int REPLAYING = 1;
     public static final int PLANNING = 2;
@@ -248,7 +250,8 @@ public class GiantBomb {
     private static GameReviewInterface gameReviewInterface = null;
     private static UserReviewInterface userReviewInterface = null;
     private static GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
-    private static GamesVideoInterface gamesVideoInterface = null;
+    private static GamesVideosInterface gamesVideoInterface = null;
+    private static  GameDetailVideoInterface gameDetailVideoInterface = null;
 
 
     public static GameWikiListInterface createGameWikiService() {
@@ -295,11 +298,18 @@ public class GiantBomb {
         return gameCharacterSearchWikiInterface;
     }
 
-    public static GamesVideoInterface createGameVideoService() {
+    public static GamesVideosInterface createGameVideoService() {
         if (gamesVideoInterface == null) {
-            gamesVideoInterface = getRetrofit().create(GamesVideoInterface.class);
+            gamesVideoInterface = getRetrofit().create(GamesVideosInterface.class);
         }
         return gamesVideoInterface;
+    }
+
+    public static GameDetailVideoInterface createGameDetailVideoService() {
+        if (gameDetailVideoInterface == null) {
+            gameDetailVideoInterface = getRetrofit().create(GameDetailVideoInterface.class);
+        }
+        return gameDetailVideoInterface;
     }
 
 

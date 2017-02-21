@@ -2,7 +2,10 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Matrix;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,21 +23,23 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
@@ -49,15 +54,16 @@ import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
 import com.example.randomlocks.gamesnote.DialogFragment.ReviewListDialogFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.DemoPlayer;
-import com.example.randomlocks.gamesnote.HelperClass.ExoPlayerHelper.ExtractorRendererBuilder;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomMediaController;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomVideoView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
-import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
+import com.example.randomlocks.gamesnote.Interface.GameDetailVideoInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
@@ -67,12 +73,12 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
+import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GameVideoMinimal;
+import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GameVideoModalMinimal;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.exoplayer.AspectRatioFrameLayout;
-import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -92,6 +98,8 @@ import io.realm.RealmList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.example.randomlocks.gamesnote.HelperClass.GiantBomb.MODAL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -114,7 +122,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     Toolbar toolbar;
     String apiUrl, imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
-    Map<String, String> map;
+    Map<String, String> map = null;
+    Map<String,String> videoMap;
     GameDetailModal gameDetailModal = null;
     CollapsingToolbarLayout toolbarLayout;
     AppBarLayout appBarLayout;
@@ -125,9 +134,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     int style;
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
     List<GameWikiPlatform> platforms = null;
-    RealmList<GameWikiPlatform> platformRealmList;
 
-    ProgressBar overviewProgress;
     CoordinatorLayout coordinatorLayout;
     SimilarGameAdapter similarGameAdapter;
     GameDetailCharacterAdapter characterAdapter;
@@ -148,21 +155,182 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     GameListDatabase statsDatabase;
     ImageView toggleArrow;
     View mDimmerView;
-    private View shutterView;
-    private AspectRatioFrameLayout videoFrame;
-    private SurfaceView surfaceView;
-    private DemoPlayer player;
-    private long playerPosition;
-    private boolean playerNeedsPrepare;
-    private MediaController mediaController;
     Matrix matrix=new Matrix();
 
+    GameDetailVideoInterface videoInterface;
+    CustomVideoView videoView;
+    CustomMediaController media_Controller;
+    View playViewButton;
+    ProgressBar videoProgress;
+    private int stopPosition;
+    private DisplayMetrics metrics;
+    private String video_url;
+    int current_video_pos=0;
 
 
     public GameDetailFragment() {
         // Required empty public constructor
 
     }
+
+
+    public void getInit(final GameDetailVideo gameDetailVideo) {
+        videoProgress = (ProgressBar) toolbarLayout.findViewById(R.id.video_progress);
+        videoProgress.setVisibility(View.VISIBLE);
+        //geting video url from the api
+        if (videoMap==null) {
+            videoMap = new HashMap<>();
+            videoMap.put(GiantBomb.KEY, GiantBomb.API_KEY);
+            String field_list = "high_url,low_url";
+            videoMap.put(GiantBomb.FIELD_LIST, field_list);
+            videoMap.put(GiantBomb.FORMAT, "JSON");
+        }
+
+        String path = gameDetailVideo.apiDetailUrl;
+        String str[] = path.split("/");
+        final String videoUrl = str[str.length - 1];
+        videoInterface = GiantBomb.createGameDetailVideoService();
+        videoInterface.getResult(videoUrl,videoMap).enqueue(new Callback<GameVideoMinimal>() {
+            @Override
+            public void onResponse(Call<GameVideoMinimal> call, Response<GameVideoMinimal> response) {
+                GameVideoModalMinimal videoModal = response.body().results;
+                video_url = videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+
+                if(getResources().getConfiguration().orientation==Configuration.ORIENTATION_LANDSCAPE){
+                    mCommunicationInterface.onVideoClick(video_url,false,0);
+                    return;
+                }
+/*
+                if (videoView==null) {
+*/
+                    videoView = (CustomVideoView) toolbarLayout.findViewById(R.id.play_video_texture);
+                    final View videoDim =  nestedScrollView.findViewById(R.id.video_dimmer_view);
+                    media_Controller = new CustomMediaController(getContext(),false);
+
+
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) videoView.getLayoutParams();
+                    params.width =  metrics.widthPixels;
+                    params.height = metrics.heightPixels / 3;
+                    params.leftMargin = 0;
+                    params.rightMargin = 0;
+                    videoView.setLayoutParams(params);
+
+                    media_Controller.setAnchorView(videoView);
+                    media_Controller.setPrevNextListeners(new View.OnClickListener() {
+                        //for next video
+                        @Override
+                        public void onClick(View view) {
+                            if (current_video_pos+1 < gameDetailModal.videos.size()) {
+                                getInit(gameDetailModal.videos.get(++current_video_pos));
+                            }else {
+                                Toaster.make(getContext(),"no next video");
+                            }
+                        }
+                    }, //for prev video
+                            new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(current_video_pos>0){
+                                getInit(gameDetailModal.videos.get(--current_video_pos));
+                            }else {
+                                Toaster.make(getContext(),"no previous video");
+                            }
+                        }
+                    });
+                    videoView.setMediaController(media_Controller);
+                    videoView.setVideoPath(video_url);
+                    videoView.requestFocus();
+                    videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        // Close the progress bar and play the video
+                        public void onPrepared(MediaPlayer mp) {
+                            videoProgress.setVisibility(View.GONE);
+                            videoView.start();
+                        }
+                    });
+
+                    videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mediaPlayer) {
+                            animateToolbar();
+                        }
+                    });
+
+                    videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
+                        @Override
+                        public void onPlay() {
+                            animateToolbar();
+                        }
+
+                        @Override
+                        public void onPause() {
+                            animateToolbar();
+                        }
+                    });
+
+
+                    media_Controller.setListener(new CustomMediaController.OnMediaControllerInteractionListener() {
+                        @Override
+                        public void onRequestFullScreen() {
+                            int seek_position = videoView.getCurrentPosition();
+                           mCommunicationInterface.onVideoClick(video_url,false,seek_position);
+                        }
+
+                        @Override
+                        public void onRequestDimmerView() {
+                            if (videoDim.getAlpha()==0) {
+                                videoDim.animate().alpha(1).withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        floatingActionsMenu.hideMenuButton(true);
+
+                                    }
+                                });
+                                //setBackgroundDimming(videoDim,true);
+                            }else {
+                                videoDim.animate().alpha(0).withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        floatingActionsMenu.showMenuButton(true);
+
+                                    }
+                                });
+                                //setBackgroundDimming(videoDim,false);
+                            }
+                        }
+                    });
+               /* }else {
+                    videoView.stopPlayback();
+                    videoView.setVideoPath(videoUrl);
+                    videoView.start();
+                    videoProgress.setVisibility(View.GONE);
+
+                }*/
+
+
+            }
+
+            @Override
+            public void onFailure(Call<GameVideoMinimal> call, Throwable t) {
+                Toaster.makeSnackbar(coordinatorLayout,"error cannot play");
+            }
+        });
+
+    }
+
+    public void animateToolbar(){
+        float alpha = toolbar.getAlpha();
+        if (alpha == 1) {
+            toolbar.animate().alpha(0).setDuration(200);
+        } else {
+            toolbar.animate().alpha(1).setDuration(200);
+
+        }
+    }
+
+
+
+
+
 
     @Override
     public void onClick(View v) {
@@ -203,9 +371,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 return;
 
 
+
         }
 
-        if (platforms != null) {
+        if (gameDetailModal != null) {
             BottomSheetDialogFragment addToBottomFragment = AddToBottomFragment.newInstance(platforms);
             addToBottomFragment.setTargetFragment(this, 0);
             Toaster.make(getContext(),"hello");
@@ -220,7 +389,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     @Override
     public void onAdd(int score, String startDate, String endDate, String platform) {
 
-        final GameListDatabase gameListDatabase = new GameListDatabase(apiUrl,title,imageUrl,list_category,score,startDate,endDate,platform,platformRealmList);
+        RealmList<GameWikiPlatform> realmPlatformList = new RealmList<>();
+        for(GameWikiPlatform p : platforms)
+            realmPlatformList.add(p);
+        final GameListDatabase gameListDatabase = new GameListDatabase(apiUrl,title,imageUrl,list_category,score,startDate,endDate,platform,realmPlatformList);
         /*gameListDatabase.setApiDetailUrl(apiUrl);
         gameListDatabase.setName(title);
         gameListDatabase.setImageUrl(imageUrl);
@@ -256,10 +428,15 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
     }
 
 
+
+
     public interface CommunicationInterface {
         void onReviewClick(String apiUrl, String gameTitle, String imageUrl);
 
         void onUserReviewClick(String apiUrl, String gameTitle, String imageUrl);
+
+        void onVideoClick(String url,boolean needRequest,int seek_position);
+
     }
 
 
@@ -301,12 +478,21 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         realm = Realm.getDefaultInstance();
         statsDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",apiUrl).findFirstAsync();
         statsDatabase.addChangeListener(statsCallback);
+
         return inflater.inflate(R.layout.fragment_game_detail, container, false);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(videoView!=null && videoView.isPlaying()){
+            if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+                mCommunicationInterface.onVideoClick(video_url,false,videoView.getCurrentPosition());
+            }
+        }
 
 
-
+    }
 
     private RealmChangeListener statsCallback = new RealmChangeListener() {
         @Override
@@ -336,20 +522,22 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
     };
 
-    private void setBackgroundDimming(boolean dimmed) {
+    private void setBackgroundDimming(final View view, boolean dimmed) {
         final float targetAlpha = dimmed ? 1f : 0;
         final int endVisibility = dimmed ? View.VISIBLE : View.GONE;
-        mDimmerView.setVisibility(View.VISIBLE);
-        mDimmerView.animate()
+        view.setVisibility(View.VISIBLE);
+        view.animate()
                 .alpha(targetAlpha)
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        mDimmerView.setVisibility(endVisibility);
+                        view.setVisibility(endVisibility);
                     }
                 })
                 .start();
     }
+
+
 
 
     @Override
@@ -368,11 +556,38 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         coordinatorLayout.findViewById(R.id.completed).setOnClickListener(this);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         toolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
+
         appbarImage = (ImageView) toolbarLayout.findViewById(R.id.appbar_image);
+         metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        appbarImage.getLayoutParams().height = metrics.heightPixels / 3 ;
+
+
+
+        playViewButton = toolbarLayout.findViewById(R.id.play);
+        playViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(gameDetailModal==null){
+                    Toaster.makeSnackbar(coordinatorLayout,"waiting to load data");
+                }else if(gameDetailModal.videos.size()==0){
+                    Toaster.makeSnackbar(coordinatorLayout,"no video found");
+                    playViewButton.setVisibility(View.GONE);
+                } else {
+                    appbarImage.setVisibility(View.INVISIBLE);
+                    playViewButton.setVisibility(View.GONE);
+                    getInit(gameDetailModal.videos.get(0));
+
+
+
+                }
+
+
+
+            }
+        });
         toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
-        videoFrame = (AspectRatioFrameLayout) toolbarLayout.findViewById(R.id.video_frame);
-        shutterView = videoFrame.findViewById(R.id.shutter);
-        surfaceView = (SurfaceView) videoFrame.findViewById(R.id.surface_view);
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         parentLayout = (LinearLayout) nestedScrollView.findViewById(R.id.parent_layout);
         statsCardView = (CardView) parentLayout.findViewById(R.id.stats_cardview);
@@ -382,7 +597,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
-        overviewProgress = (ProgressBar) nestedScrollView.findViewById(R.id.overview_progress);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
         imageRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.image_recycler_view);
         videoRecyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.video_recycler_view);
@@ -400,11 +614,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         floatingActionsMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
-                setBackgroundDimming(opened);
+                setBackgroundDimming(mDimmerView,opened);
 
             }
         });
-
 
         mDimmerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -423,10 +636,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         appbarImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaController = new KeyCompatibleMediaController(getContext());
-                appbarImage.setVisibility(View.INVISIBLE);
-                shutterView.setVisibility(View.INVISIBLE);
-                onShown();
+
             }
         });
 
@@ -444,8 +654,15 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if(media_Controller!=null && media_Controller.isShowing())
+                    media_Controller.hide();
+
                 if (toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
 
+                    if(videoView!=null && videoView.isPlaying()){
+                        videoView.pause();
+                    }
                 }
             }
 
@@ -463,12 +680,14 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         /**************** RETROFIT ************************/
 
-        //   if(savedInstanceState!=null){
-        //       Toaster.make(getContext(), "hello save instance");
-        //     }
-
-        //    else  {
-        if (gameDetailModal == null) {
+        if (savedInstanceState != null) {
+            Toaster.make(getContext(),"hell osave instance");
+            gameDetailModal = savedInstanceState.getParcelable(MODAL);
+            fillData(gameDetailModal);
+        } else {
+            if (gameDetailModal != null) {
+                fillData(gameDetailModal);
+            }else {
             Log.d("tag", "its null");
             gameWikiDetailInterface = GiantBomb.createGameDetailService();
             map = new HashMap<>();
@@ -486,7 +705,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                     if (characters != null) {
                         if (characterRecycleView.getAdapter() != null) {
                             characterAdapter.setImages(characters);
-                            characterAdapter.notifyDataSetChanged();
                             characterImage = characters;
                         } else {
                             characterImage = characters;
@@ -504,7 +722,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                     if (similarGame != null) {
                         if (similarGameRecycleView.getAdapter() != null) {
                             similarGameAdapter.setImages(similarGame);
-                            similarGameAdapter.notifyDataSetChanged();
                             similarGameImage = similarGame;
                         } else {
                             similarGameImage = similarGame;
@@ -513,11 +730,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
                 }
             });
             asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "http://www.giantbomb.com/game/" + apiUrl + "/similar-games/");
-        } else {
-            Log.d("tag", "non null");
-            fillData(gameDetailModal);
         }
-        //    }
+            }
 
 
 
@@ -597,18 +811,19 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/" + apiUrl + "/"); */
 
-
     }
 
 
-
-
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(GiantBomb.MODAL,gameDetailModal);
+    }
 
     private void getGameDetail(final GameWikiDetailInterface gameWikiDetailInterface, final Map<String, String> map) {
 
 
-        overviewProgress.setVisibility(View.VISIBLE);
+        pacman.setVisibility(View.VISIBLE);
 
         gameWikiDetailInterface.getResult(apiUrl, map).enqueue(new Callback<GameDetailListModal>() {
             @Override
@@ -622,8 +837,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
             public void onFailure(Call<GameDetailListModal> call, Throwable t) {
 
 
-                overviewProgress.setVisibility(View.GONE);
-                pacman.setVisibility(View.INVISIBLE);
+                pacman.setVisibility(View.GONE);
 
                 Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
                         .setAction("RETRY", new View.OnClickListener() {
@@ -641,17 +855,17 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
 
     void fillData(final GameDetailModal gameDetailModal) {
-        overviewProgress.setVisibility(View.GONE);
-        pacman.setVisibility(View.INVISIBLE);
+        pacman.setVisibility(View.GONE);
         parentLayout.setVisibility(View.VISIBLE);
 
 
         if (imageUrl == null && gameDetailModal.images.size() > 0) {
-            Picasso.with(getContext()).load(gameDetailModal.images.first().mediumUrl).fit().centerCrop().into(appbarImage);
+            Picasso.with(getContext()).load(gameDetailModal.images.get(0).mediumUrl).fit().centerCrop().into(appbarImage);
         }
 
         platforms = gameDetailModal.platforms;
-        platformRealmList = gameDetailModal.platforms;
+        if(platforms==null)
+            platforms = new ArrayList<>();
         //Toaster.make(getContext(),platforms.size()+"5");
         List<CharacterImage> image = gameDetailModal.images;
         List<GameDetailVideo> videos = gameDetailModal.videos;
@@ -675,7 +889,23 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
         /************* SETTING GAME VIDEOS *************************************/
         if (videos != null) {
             videoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            videoRecyclerView.setAdapter(new GameDetailVideoCharacter(image, videos, getContext()));
+            videoRecyclerView.setAdapter(new GameDetailVideoCharacter(image, videos, getContext(), new GameDetailVideoCharacter.GameDetailVideoInterface() {
+                @Override
+                public void onClickVideo(final GameDetailVideo video, final int next_video_pos) {
+                    appbarImage.setVisibility(View.INVISIBLE);
+                    playViewButton.setVisibility(View.GONE);
+                    coordinatorLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            appBarLayout.setExpanded(true);
+                            coordinatorLayout.scrollTo(0,0);
+                            nestedScrollView.scrollTo(0,0);
+                            GameDetailFragment.this.current_video_pos = next_video_pos;
+                            getInit(video);
+                        }
+                    });
+                }
+            }));
         }
 
         toolbarLayout.setTitle(gameDetailModal.name);
@@ -1026,93 +1256,46 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
     @Override
     public void onPause() {
-
+        super.onPause();
         if (asyncCharacters != null)
             asyncCharacters.cancel(true);
         if (asyncGames != null)
             asyncGames.cancel(true);
 
-
-        super.onPause();
-    }
-
-    private void onShown() {
-
-        if (player == null) {
-            preparePlayer(true);
-        } else {
-            player.setBackgrounded(false);
+        if (videoView != null) {
+            ((GameDetailActivity)getActivity()).seek_position = videoView.getCurrentPosition(); //stopPosition is an int
+            videoView.pause();
         }
+
+
+       
     }
 
-    private DemoPlayer.RendererBuilder getRendererBuilder() {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (videoView!=null) {
+            videoView.seekTo(((GameDetailActivity)getActivity()).seek_position);
+            videoView.resume(); //Or use resume() if it doesn't work. I'm not sure
+        }
+
+
+
+    }
+
+    /*private DemoPlayer.RendererBuilder getRendererBuilder() {
         String userAgent = Util.getUserAgent(getContext(), "ExoPlayerDemo");
         return new ExtractorRendererBuilder(getContext(), userAgent, Uri.parse("http://v.giantbomb.com/2016/07/28/vf_giantbomb_bestof_103_1800.mp4?api_key=b3" +
                 "18d66445bfc79e6d74a65fe52744b45b345948&format=JSON"));
 
-    }
+    }*/
 
 
-    private void preparePlayer(boolean playWhenReady) {
-        if (player == null) {
-            player = new DemoPlayer(getRendererBuilder());
-            playerNeedsPrepare = true;
-            mediaController.setMediaPlayer(player.getPlayerControl());
-            mediaController.setEnabled(true);
-        }
-        if (playerNeedsPrepare) {
-            player.prepare();
-            playerNeedsPrepare = false;
-        }
-        player.setSurface(surfaceView.getHolder().getSurface());
-        player.setPlayWhenReady(playWhenReady);
-    }
-
-    private void releasePlayer() {
-        if (player != null) {
-            playerPosition = player.getCurrentPosition();
-            player.release();
-            player = null;
-
-        }
-    }
 
 
-    private static final class KeyCompatibleMediaController extends MediaController {
 
-        private MediaPlayerControl playerControl;
 
-        public KeyCompatibleMediaController(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void setMediaPlayer(MediaPlayerControl playerControl) {
-            super.setMediaPlayer(playerControl);
-            this.playerControl = playerControl;
-        }
-
-        @Override
-        public boolean dispatchKeyEvent(KeyEvent event) {
-            int keyCode = event.getKeyCode();
-            if (playerControl.canSeekForward() && (keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD
-                    || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT)) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    playerControl.seekTo(playerControl.getCurrentPosition() + 15000); // milliseconds
-                    show();
-                }
-                return true;
-            } else if (playerControl.canSeekBackward() && (keyCode == KeyEvent.KEYCODE_MEDIA_REWIND
-                    || keyCode == KeyEvent.KEYCODE_DPAD_LEFT)) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    playerControl.seekTo(playerControl.getCurrentPosition() - 5000); // milliseconds
-                    show();
-                }
-                return true;
-            }
-            return super.dispatchKeyEvent(event);
-        }
-    }
 
 
 }

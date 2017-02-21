@@ -395,8 +395,11 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         ViewPager pager;
 
 
-
-
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setStyle(STYLE_NO_TITLE,R.style.MyDialogTheme);
+        }
 
         @Nullable
         @Override

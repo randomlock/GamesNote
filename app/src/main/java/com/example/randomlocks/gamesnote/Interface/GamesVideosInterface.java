@@ -11,7 +11,7 @@ import retrofit2.http.QueryMap;
 /**
  * Created by randomlocks on 7/18/2016.
  */
-public interface GamesVideoInterface {
+public interface GamesVideosInterface {
 
 
     @GET("videos")

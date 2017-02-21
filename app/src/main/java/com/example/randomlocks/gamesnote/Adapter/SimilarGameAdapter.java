@@ -63,6 +63,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     public void setImages(List<CharacterGamesImage> images) {
         this.images = images;
+        notifyItemRangeChanged(0,getItemCount());
     }
 
     @Override

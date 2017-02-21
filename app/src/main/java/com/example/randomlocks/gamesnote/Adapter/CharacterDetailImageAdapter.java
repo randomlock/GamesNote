@@ -24,7 +24,8 @@ public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterD
 
     private List<CharacterImage> imageUrls;
     private String title;
-    Context context;
+    private Context context;
+    private ArrayList<String> images=null;
 
 
     public CharacterDetailImageAdapter(List<CharacterImage> imageUrls, Context context,String title) {
@@ -51,14 +52,14 @@ public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterD
 
     @Override
     public int getItemCount() {
-        return imageUrls.size();
+        return imageUrls==null ? 0:imageUrls.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imageView;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             imageView.setOnClickListener(this);
@@ -68,10 +69,13 @@ public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterD
         public void onClick(View v) {
             Intent intent = new Intent(context, ImageViewPagerActivity.class);
             intent.putExtra(GiantBomb.POSITION, getLayoutPosition());
-            ArrayList<String> images = new ArrayList<>();
-            for (CharacterImage image : imageUrls) {
-                images.add(image.mediumUrl);
+            if(images==null){
+                images = new ArrayList<>();
+                for (CharacterImage image : imageUrls) {
+                    images.add(image.mediumUrl);
+                }
             }
+
 
             intent.putStringArrayListExtra(GiantBomb.IMAGE_URL, images);
             intent.putExtra(GiantBomb.TITLE,title);

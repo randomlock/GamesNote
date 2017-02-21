@@ -73,7 +73,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     CoordinatorLayout coordinatorLayout;
     Context context;
 
-    private static final String LIMIT = "30";
+    private static final String LIMIT = "50";
 
 
     public GamesWikiFragment() {
@@ -290,6 +290,31 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), context);
+
+        String field = "name:" + query;
+
+        map.put(GiantBomb.FIELD, field);
+        map.put(GiantBomb.OFFSET, "0");
+
+        if (!listModals.isEmpty()) {
+            listModals.clear();
+        }
+
+
+        if (errorText.getVisibility() == View.VISIBLE) {
+            errorText.setVisibility(View.GONE);
+        }
+
+        getGameWiki(gameWikiListInterface, map);
+
+
+        return true;
+    }
+
+
 
     /*****************************
      * ACTUAL ASYNCHRONOUS API CALL
@@ -367,11 +392,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                             listModals.add(null);
                             adapter.notifyItemInserted(listModals.size()-1);
 
-
-
-
-
-
                             //removing bottom view & Load data
                             int offset = Integer.parseInt(map.get(GiantBomb.OFFSET));
                             offset += Integer.parseInt(LIMIT);
@@ -417,29 +437,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     }
 
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), context);
 
-        String field = "name:" + query;
-
-        map.put(GiantBomb.FIELD, field);
-        map.put(GiantBomb.OFFSET, "0");
-
-        if (!listModals.isEmpty()) {
-            listModals.clear();
-        }
-
-
-        if (errorText.getVisibility() == View.VISIBLE) {
-            errorText.setVisibility(View.GONE);
-        }
-
-        getGameWiki(gameWikiListInterface, map);
-
-
-        return true;
-    }
 
     @Override
     public boolean onQueryTextChange(String newText) {

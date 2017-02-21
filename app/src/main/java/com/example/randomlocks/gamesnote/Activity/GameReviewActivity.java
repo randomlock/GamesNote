@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -47,11 +48,11 @@ public class GameReviewActivity extends AppCompatActivity {
     RatingBar ratingBar;
     TextView deck, reviewer, publishDate, gameTitle;
     WebView webView;
-    ImageView imageView;
     GameReviewInterface gameReviewInterface = null;
     GameReviewModal modals = null;
     Map<String, String> map;
     String review_id;
+    AVLoadingIndicatorView progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class GameReviewActivity extends AppCompatActivity {
 
         coodinatorLayout = (PicassoCoordinatorLayout) findViewById(R.id.root_coordinator);
         toolbar = (Toolbar) coodinatorLayout.findViewById(R.id.my_toolbar);
-        imageView = (ImageView) findViewById(R.id.appbar_image);
+        progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);
         ratingBar = (RatingBar) parentLinearLayout.findViewById(R.id.myRatingBar);
         webView = (WebView) parentLinearLayout.findViewById(R.id.webView);
@@ -171,9 +172,16 @@ public class GameReviewActivity extends AppCompatActivity {
 
                     return true;
                 }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    parentLinearLayout.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }
             });
             webView.loadDataWithBaseURL("file:///android_asset/", builder.toString(), "text/html", "UTF-8", null);
             webView.setBackgroundColor(Color.TRANSPARENT);
+
 
             // need to set harware layer for api>=21
 

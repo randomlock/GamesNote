@@ -12,12 +12,7 @@
         android:background="@color/alpha_color">
 
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
-            app:layout_scrollFlags="exitUntilCollapsed|scroll">
+
 
 
             <android.support.v7.widget.Toolbar
@@ -28,27 +23,31 @@
                 app:layout_collapseMode="pin" />
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
 
 
     </android.support.design.widget.AppBarLayout>
 
 
-    <com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-        >
 
         <LinearLayout
             android:id="@+id/parent_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@color/alpha_color">
+            android:visibility="gone"
+            android:background="@color/alpha_color"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -103,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textStyle="bold|italic"
+                android:textStyle="italic"
                 android:layout_marginLeft="6dp"
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
@@ -123,7 +122,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp">
+                android:layout_margin="12dp"
+                android:animateLayoutChanges="true"
+                >
 
 
                 <TextView
@@ -131,8 +132,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reviewer :  "
-                    android:textColor="@color/primary_text_light"
-                    android:textSize="16sp" />
+                    style="@style/SubTitleText"
+                    />
 
                 <TextView
                     android:id="@+id/reviewer"
@@ -144,17 +145,17 @@
                     android:layout_toRightOf="@+id/reviewer_field"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:textSize="16sp" />
+                     />
 
                 <TextView
                     android:id="@+id/date_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Publish Date :  "
-                    android:textColor="@color/primary_text_light"
+                    style="@style/SubTitleText"
                     android:layout_marginTop="12dp"
                     android:layout_below="@+id/reviewer_field"
-                    android:textSize="16sp" />
+                   />
 
                 <TextView
                     android:id="@+id/date"
@@ -162,13 +163,11 @@
                     android:layout_height="wrap_content"
                     android:text="-"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:layout_marginTop="12dp"
                     android:layout_toEndOf="@+id/date_field"
-                    android:layout_below="@+id/reviewer"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/reviewer"
                     android:layout_toRightOf="@+id/date_field"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="10dp"
+                    />
 
 
             </RelativeLayout>
@@ -181,16 +180,34 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp" />
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="500dp"
+                >
+
             <WebView
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="12dp" />
-
+                android:layout_margin="12dp"
+                />
+            </FrameLayout>
 
         </LinearLayout>
 
-    </com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView>
+            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:indicator="Pacman"
+                android:layout_gravity="center_horizontal"
+                app:indicator_color="@color/accent" />
 
+
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout>

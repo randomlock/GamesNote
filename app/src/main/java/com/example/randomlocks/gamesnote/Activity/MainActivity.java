@@ -94,6 +94,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawableToggle = setupDrawerToggle(mDrawer);
         mDrawer.addDrawerListener(mDrawableToggle);
         mNavigation.setNavigationItemSelectedListener(this);
+        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                InputMethodHelper.hideKeyBoard(getWindow().getCurrentFocus(),MainActivity.this);
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
 
 
         mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
