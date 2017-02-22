@@ -249,6 +249,7 @@
     <string name="card">card_view</string>
     <string name="reduce_list_view">reduce_list_view</string>
     <string name="compact_list_view">compact_list_view</string>
+    <string name="change_view">change view</string>
 
 
 </resources>

@@ -3,6 +3,7 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -12,9 +13,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -28,6 +32,7 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentGridLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.EndlessRecyclerOnScrollListener;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -64,14 +69,17 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     Toolbar toolbar;
     RecyclerView recyclerView;
     AVLoadingIndicatorView progressBar;
-    ConsistentLinearLayoutManager manager;
     List<GameWikiModal> listModals = null;
     GameWikiAdapter adapter;
+    ConsistentGridLayoutManager manager;
     Map<String, String> map;
     GameWikiListInterface gameWikiListInterface;
     TextView errorText;
     CoordinatorLayout coordinatorLayout;
     Context context;
+
+    int viewType;
+    int spanCount;
 
     private static final String LIMIT = "50";
 
@@ -86,6 +94,8 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         setHasOptionsMenu(true);
         listModals = new ArrayList<>();
         context = getContext();
+        viewType = SharedPreference.getFromSharedPreferences(GiantBomb.VIEW_TYPE,0,context);
+        spanCount = viewType==2 ? 3 : 1;
         map = new HashMap<>(7);
         map.put(GiantBomb.KEY, GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");
@@ -167,8 +177,10 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                 map.put(GiantBomb.SORT, sort);
 
 
-                manager = new ConsistentLinearLayoutManager(context);
+                manager = new ConsistentGridLayoutManager(getContext(),spanCount);
                 recyclerView.setLayoutManager(manager);
+                //Disable the animation
+                ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 getGameWiki(gameWikiListInterface, map);
 
             }
@@ -207,8 +219,18 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     }
 
     private void fillRecycler(List<GameWikiModal> listModals, Parcelable parcelable) {
-        recyclerView.setLayoutManager(new ConsistentLinearLayoutManager(context));
-        recyclerView.setAdapter(new GameWikiAdapter(listModals, context, recyclerView.getChildCount(),recyclerView));
+
+
+        if (manager==null) {
+            manager = new ConsistentGridLayoutManager(getContext(),spanCount);
+        }
+        recyclerView.setLayoutManager(manager);
+
+        if(adapter==null)
+            adapter = new GameWikiAdapter(listModals,viewType, context, recyclerView.getChildCount(),recyclerView);
+
+
+        recyclerView.setAdapter(adapter);
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
@@ -240,6 +262,40 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                 filterFragment.setTargetFragment(this, 0);
                 filterFragment.show(getActivity().getSupportFragmentManager(), "seach filter");
                 return true;
+
+
+            case R.id.view :
+                final CharSequence[] items = {"Card+Platforms", "Card+Desc", "Image+Title"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Make your selection");
+                builder.setSingleChoiceItems(items, viewType, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(adapter!=null && adapter.getItemCount()>0){
+                            viewType = i;
+
+                            if(viewType==2){
+                                manager.setSpanCount(3);
+                            }else{
+                                manager.setSpanCount(1);
+                            }
+
+                            adapter.changeView(i);
+
+                        }else {
+                            Toaster.make(getContext(),"game not loaded");
+                        }
+                        dialogInterface.dismiss();
+                    }
+
+                });
+                AlertDialog alert = builder.create();
+                alert.setCancelable(true);
+                alert.show();
+
+                return true;
+
+
 
             default:
                 super.onOptionsItemSelected(item);
@@ -314,7 +370,14 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         return true;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (context != null) {
+            SharedPreference.saveToSharedPreference(GiantBomb.VIEW_TYPE,viewType,context);
 
+        }
+    }
 
     /*****************************
      * ACTUAL ASYNCHRONOUS API CALL
@@ -331,6 +394,8 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
             @Override
             public void onResponse(Call<GameWikiListModal> call, Response<GameWikiListModal> response) {
 
+
+                    Toaster.make(getContext(),response.body().results.size()+"");
                 if (progressBar.getVisibility()==View.VISIBLE) {
                     progressBar.setVisibility(View.GONE);
                 }
@@ -340,7 +405,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                     adapter.swap(listModals);
                 } else if (listModals.isEmpty()) {          //loading initial games at start
                     listModals = response.body().results;
-                    adapter = new GameWikiAdapter(listModals, context, recyclerView.getChildCount(),recyclerView);
+                    adapter = new GameWikiAdapter(listModals,viewType, context, recyclerView.getChildCount(),recyclerView);
                     recyclerView.setAdapter(adapter);
                 } else {            // loading more games
                     listModals.remove(listModals.size() - 1);
@@ -391,7 +456,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
                         public void onLoadMore() {
                             listModals.add(null);
                             adapter.notifyItemInserted(listModals.size()-1);
-
+                            Toaster.make(getContext(),"coming here");
                             //removing bottom view & Load data
                             int offset = Integer.parseInt(map.get(GiantBomb.OFFSET));
                             offset += Integer.parseInt(LIMIT);
@@ -538,9 +603,9 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     }
 
 
-    @Override
+  /*  @Override
     public void onDetach() {
         super.onDetach();
         context = null;
-    }
+    }*/
 }

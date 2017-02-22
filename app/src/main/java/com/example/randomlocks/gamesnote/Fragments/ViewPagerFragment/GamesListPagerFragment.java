@@ -62,18 +62,18 @@ import io.realm.Sort;
 public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface {
 
     private static final String STATUS = "total page";
-    RecyclerView recyclerView;
-    GameListAdapter adapter = null;
-    int status;
-    RealmResults<GameListDatabase> realmResult;
-    Realm realm;
-    TextView textView;
-    GameListDatabase gameListDatabase;
-    GameListDialog dialog;
-    String sort_option;
-    boolean isAscending ;
-    boolean isSimple;
-    DividerItemDecoration itemDecoration;
+    private RecyclerView recyclerView;
+    private GameListAdapter adapter = null;
+    private int status;
+    private RealmResults<GameListDatabase> realmResult;
+    private Realm realm;
+    private TextView textView;
+    private GameListDatabase gameListDatabase;
+    private GameListDialog dialog;
+    private String sort_option;
+    private boolean isAscending ;
+    private boolean isSimple;
+    private DividerItemDecoration itemDecoration;
 
     public GamesListPagerFragment() {
     }

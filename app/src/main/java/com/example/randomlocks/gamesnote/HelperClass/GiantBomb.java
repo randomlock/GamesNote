@@ -70,6 +70,7 @@ public class GiantBomb {
     public static final String IS_GAME_DETAIL = "is_game_detail";
     public static final String REDUCE_LIST_VIEW = "reduce_list_view";
     public static final  String SEEK_POSITION = "seek_position";
+    public static final String VIEW_TYPE = "view_type" ;
     public static String REDUCE_VIEW = "reduce_view";
     public static final int REPLAYING = 1;
     public static final int PLANNING = 2;

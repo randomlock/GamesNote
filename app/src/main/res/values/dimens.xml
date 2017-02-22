@@ -5,7 +5,7 @@
 
     <dimen name="leftmargin">8dp</dimen>
     <dimen name="bottommargin">8dp</dimen>
-    <dimen name="line">1dp</dimen>
+    <dimen name="line">0.5dp</dimen>
 
 
     <dimen name="bottomsheet_list_item_height">48dp</dimen>

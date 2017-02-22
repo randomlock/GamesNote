@@ -2,7 +2,6 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
 import android.media.MediaPlayer;
@@ -29,17 +28,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
@@ -50,7 +45,7 @@ import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
-import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragment;
+import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragmentDELETE;
 import com.example.randomlocks.gamesnote.DialogFragment.ReviewListDialogFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
@@ -111,7 +106,7 @@ import static com.example.randomlocks.gamesnote.HelperClass.GiantBomb.MODAL;
  ************/
 
 
-public class GameDetailFragment extends Fragment implements FontOptionFragment.FontOptionInterface, View.OnClickListener, ReviewListDialogFragment.CommunicationInterface, AddToBottomFragment.AddToBottomInterface {
+public class GameDetailFragment extends Fragment implements FontOptionFragmentDELETE.FontOptionInterface, View.OnClickListener, ReviewListDialogFragment.CommunicationInterface, AddToBottomFragment.AddToBottomInterface {
 
 
     public static final String API_URL = "apiUrl";
@@ -1136,14 +1131,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragment.F
 
         switch (item.getItemId()) {
 
-            case R.id.fontSelect:
 
-                FontOptionFragment fontOptionFragment = FontOptionFragment.newInstance();
-                fontOptionFragment.setTargetFragment(this, 0);
-                fontOptionFragment.show(getActivity().getSupportFragmentManager(), "fontoption");
-
-
-                break;
 
 
             case android.R.id.home:

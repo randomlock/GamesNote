@@ -25,10 +25,10 @@
 
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="105dp"
             android:layout_height="157dp"
             android:src="@drawable/testimage"
-            android:id="@+id/imageView"
             android:transitionName="image" />
 
 
@@ -147,19 +147,7 @@
             android:layout_toStartOf="@+id/platform3" />
 
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:visibility="gone"
-            android:textStyle="italic"
-            android:background="@color/linecolor"
-            android:gravity="center_horizontal"
-            android:text="@string/desc"
-            android:textColor="@color/awesome"
-            android:fontFamily="sans-serif-light"
-            android:layout_below="@+id/imageView" />
+
 
 
 

@@ -16,7 +16,7 @@ import com.example.randomlocks.gamesnote.R;
 /**
  * Created by randomlocks on 6/9/2016.
  */
-public class FontOptionFragment extends DialogFragment {
+public class FontOptionFragmentDELETE extends DialogFragment {
 
 
     public interface FontOptionInterface {
@@ -28,11 +28,11 @@ public class FontOptionFragment extends DialogFragment {
     int which_one;
 
 
-    public static FontOptionFragment newInstance() {
+    public static FontOptionFragmentDELETE newInstance() {
 
         Bundle args = new Bundle();
 
-        FontOptionFragment fragment = new FontOptionFragment();
+        FontOptionFragmentDELETE fragment = new FontOptionFragmentDELETE();
         fragment.setArguments(args);
         return fragment;
     }

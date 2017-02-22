@@ -18,5 +18,11 @@
         android:icon="@drawable/ic_sort_white_24dp"
         yourapp:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/view"
+        android:title="@string/change_view"
+        yourapp:showAsAction="ifRoom" />
+
+
 
 </menu>
