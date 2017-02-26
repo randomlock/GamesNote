@@ -37,6 +37,25 @@
 
                 </item>
 
+                <item
+                    android:id="@+id/nav_giantbomb"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/giantbomb"
+                    >
+
+                </item>
+
+                <item
+                    android:id="@+id/nav_giantbomb_release"
+                    android:icon="@mipmap/ic_launcher"
+                    android:title="@string/giantbomb_release"
+                    >
+
+                </item>
+
+
+
+
 
                 <item
                     android:id="@+id/nav_g4tv"

@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -65,12 +64,12 @@ public class GameReviewActivity extends AppCompatActivity {
         toolbar = (Toolbar) coodinatorLayout.findViewById(R.id.my_toolbar);
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);
-        ratingBar = (RatingBar) parentLinearLayout.findViewById(R.id.myRatingBar);
-        webView = (WebView) parentLinearLayout.findViewById(R.id.webView);
-        deck = (TextView) parentLinearLayout.findViewById(R.id.deck);
-        reviewer = (TextView) parentLinearLayout.findViewById(R.id.reviewer);
-        publishDate = (TextView) parentLinearLayout.findViewById(R.id.date);
-        gameTitle = (TextView) parentLinearLayout.findViewById(R.id.title);
+        ratingBar = (RatingBar) coodinatorLayout.findViewById(R.id.myRatingBar);
+        webView = (WebView) coodinatorLayout.findViewById(R.id.webView);
+        deck = (TextView) coodinatorLayout.findViewById(R.id.deck);
+        reviewer = (TextView) coodinatorLayout.findViewById(R.id.reviewer);
+        publishDate = (TextView) coodinatorLayout.findViewById(R.id.date);
+        gameTitle = (TextView) coodinatorLayout.findViewById(R.id.title);
         gameTitle.setText(getIntent().getStringExtra(GiantBomb.TITLE));
         String full_id = getIntent().getStringExtra(GiantBomb.REVIEW);
         String str[] = full_id.split("/");
@@ -121,6 +120,7 @@ public class GameReviewActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<GameReviewModalList> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Snackbar.make(coodinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
                         .setAction("RETRY", new View.OnClickListener() {
                             @Override
@@ -195,6 +195,8 @@ public class GameReviewActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.game_news_detail_menu, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -250,6 +250,7 @@
     <string name="reduce_list_view">reduce_list_view</string>
     <string name="compact_list_view">compact_list_view</string>
     <string name="change_view">change view</string>
+    <string name="giantbomb_release">Giantbomb releases</string>
 
 
 </resources>

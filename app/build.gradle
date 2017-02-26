@@ -52,6 +52,7 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.3'
     compile 'com.malmstein:fenster:0.0.2'
+    compile 'com.github.arimorty:floatingsearchview:2.0.3'
 
 
 }

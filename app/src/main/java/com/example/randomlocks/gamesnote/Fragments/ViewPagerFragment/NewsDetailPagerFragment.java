@@ -1,11 +1,16 @@
-package com.example.randomlocks.gamesnote.Activity;
+package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -22,13 +27,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PagerZoomOutSlideAnimation;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.VideoEnabledWebChromeClient;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.VideoEnabledWebView;
@@ -38,45 +43,73 @@ import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewsDetailPagerActivity extends AppCompatActivity {
+/**
+ * Created by randomlock on 2/23/2017.
+ */
 
+public class NewsDetailPagerFragment extends Fragment {
 
     ViewPager viewPager;
     List<NewsModal> modalList;
     int position;
     Toolbar toolbar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_detail);
 
-        position = getIntent().getExtras().getInt(GiantBomb.POSITION);
-        modalList = getIntent().getExtras().getParcelableArrayList(GiantBomb.MODAL);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        viewPager.setAdapter(new NewsDetailPagerAdapter(getSupportFragmentManager(), modalList));
+
+    public NewsDetailPagerFragment(){
+
+    }
+
+    public static NewsDetailPagerFragment newInstance(List<NewsModal> modalList,int position) {
+
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(GiantBomb.MODAL, (ArrayList<? extends Parcelable>) modalList);
+        args.putInt(GiantBomb.POSITION, position);
+        NewsDetailPagerFragment fragment = new NewsDetailPagerFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        position = getArguments().getInt(GiantBomb.POSITION);
+        modalList = getArguments().getParcelableArrayList(GiantBomb.MODAL);
+        setHasOptionsMenu(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_news_detail,container,false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        if (activity!=null && activity.getSupportActionBar()!=null) {
+            activity.setSupportActionBar(toolbar);
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        viewPager.setAdapter(new NewsDetailPagerAdapter(getChildFragmentManager(), modalList));
         viewPager.setPageTransformer(false, new PagerZoomOutSlideAnimation());
         viewPager.setCurrentItem(position, true);
-
     }
 
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
     public static class NewsDetailPagerAdapter extends FragmentStatePagerAdapter {
 
         List<NewsModal> modalList;
 
-        public NewsDetailPagerAdapter(FragmentManager fm, List<NewsModal> modalList) {
+        NewsDetailPagerAdapter(FragmentManager fm, List<NewsModal> modalList) {
             super(fm);
             this.modalList = modalList;
         }
@@ -90,6 +123,7 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
         public int getCount() {
             return modalList.size();
         }
+
 
     }
 
@@ -111,7 +145,6 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
         ImageView titleImage;
         NewsModal newsModal;
         CardView cardView;
-        Button button;
         CustomTabActivityHelper customTabActivityHelper;
         ViewGroup videoLayout;
         View loadingView;
@@ -143,7 +176,7 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_game_news_detail, container, false);
+            return inflater.inflate(R.layout.fragment_pager_news_detail, container, false);
         }
 
         @Override
@@ -159,9 +192,8 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
             webChromeClient = new VideoEnabledWebChromeClient(parentLayout, videoLayout, loadingView, webView);
             title = (TextView) parentLayout.findViewById(R.id.news_heading);
             cardView = (CardView) parentLayout.findViewById(R.id.image_card);
-            titleImage = (ImageView) cardView.findViewById(R.id.appbar_image);
+            titleImage = (ImageView)parentLayout.findViewById(R.id.appbar_image);
             webView = (VideoEnabledWebView) parentLayout.findViewById(R.id.web_view);
-            button = (Button) parentLayout.findViewById(R.id.view_in_browser1);
 
 
             webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
@@ -192,14 +224,9 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
             });
 
 
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    runBrowser(newsModal.link);
-                }
-            });
 
             if (newsModal.content != null) {
+                Toaster.make(getContext(),"hello");
                 Picasso.with(getContext()).load(newsModal.content).into(titleImage, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -207,10 +234,12 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
 
                     @Override
                     public void onError() {
+
                         cardView.setVisibility(View.GONE);
                     }
                 });
             } else {
+
                 cardView.setVisibility(View.GONE);
             }
 
@@ -239,22 +268,14 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
 
     /*    Elements elements =  doc.getAllElements();
         StringBuilder str = new StringBuilder();
-
         for(Element element : elements){
             String tag = element.tagName();
-
-
-
-
             if(tag.equals("figure")||tag.equals("img")){
                 ImageView imageview = new ImageView(getContext());
                 parentLayout.addView(imageview);
                 if (element.attr("src")!=null&& !element.attr("src").equals("")) {
                     Picasso.with(getContext()).load(element.attr("src")).into(imageview);
                 }
-
-
-
             }
             else if(tag.equals("p")){
                 TextView textview = new TextView(getContext());
@@ -298,19 +319,28 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
         } */
         }
 
-
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            super.onCreateOptionsMenu(menu, inflater);
             inflater.inflate(R.menu.game_news_detail_menu, menu);
+
+        }
+
+        @Override
+        public void onPrepareOptionsMenu(Menu menu) {
+            super.onPrepareOptionsMenu(menu);
+            Drawable drawable = menu.findItem(R.id.internet).getIcon();
+            if (drawable != null && AppCompatDelegate.getDefaultNightMode()== AppCompatDelegate.MODE_NIGHT_NO) {
+                drawable.mutate();
+                drawable.setColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP);
+            }
         }
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
+
             switch (item.getItemId()) {
 
                 case android.R.id.home:
-                    getActivity().onBackPressed();
                     return true;
 
                 case R.id.internet:
@@ -322,6 +352,9 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
 
             return super.onOptionsItemSelected(item);
         }
+
+
+
 
 
         void runBrowser(String url) {
@@ -347,3 +380,10 @@ public class NewsDetailPagerActivity extends AppCompatActivity {
 
 
 }
+
+
+
+
+
+
+

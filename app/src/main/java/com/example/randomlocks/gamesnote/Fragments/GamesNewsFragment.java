@@ -321,6 +321,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
 
             case android.R.id.home:
@@ -496,6 +497,16 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
             case R.id.nav_dsogaming:
                 URL = "http://www.dsogaming.com/feed/";
                 BASE_URL = "http://dsogaming.com";
+                break;
+
+            case R.id.nav_giantbomb:
+                URL = "http://www.giantbomb.com/feeds/news/";
+                BASE_URL = "http://www.giantbomb.com/";
+                break;
+
+            case R.id.nav_giantbomb_release :
+                URL = "http://www.giantbomb.com/feeds/new_releases/";
+                BASE_URL = "http://www.giantbomb.com/";
                 break;
 
 

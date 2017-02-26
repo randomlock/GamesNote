@@ -139,6 +139,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
     ImageView appbarImage;
     TextView  review, userReview;
     TextView status , score , platform , hours;
+    TextView characters_heading,image_heading,related_video_heading,similar_game_heading;
     RelativeLayout relativeLayout;
     FloatingActionMenu floatingActionsMenu;
     FloatingActionButton replaying, planning, dropped, playing, completed;
@@ -590,11 +591,15 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         toggleArrow = (ImageView) statsCardView.findViewById(R.id.stats_toggle);
         statsCardView.setOnClickListener(this);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
+        similar_game_heading = (TextView) nestedScrollView.findViewById(R.id.similar_game_heading);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
+        characters_heading = (TextView) nestedScrollView.findViewById(R.id.character_heading);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
         imageRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.image_recycler_view);
+        image_heading = (TextView) nestedScrollView.findViewById(R.id.image_heading);
         videoRecyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.video_recycler_view);
+        related_video_heading = (TextView) nestedScrollView.findViewById(R.id.video_heading);
         review = (TextView) nestedScrollView.findViewById(R.id.review);
         userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
@@ -865,6 +870,16 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         List<CharacterImage> image = gameDetailModal.images;
         List<GameDetailVideo> videos = gameDetailModal.videos;
 
+        if(gameDetailModal.characters==null||gameDetailModal.characters.isEmpty())
+            characters_heading.setVisibility(View.GONE);
+        if(gameDetailModal.images==null||gameDetailModal.images.isEmpty())
+            image_heading.setVisibility(View.GONE);
+        if(gameDetailModal.videos==null||gameDetailModal.videos.isEmpty())
+            related_video_heading.setVisibility(View.GONE);
+        if(gameDetailModal.similarGames==null||gameDetailModal.videos.isEmpty())
+            similar_game_heading.setVisibility(View.GONE);
+
+
 
 
       /*  ArrayList<String> images = new ArrayList<>(image.size());
@@ -961,6 +976,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             });
 
 
+        }else {
+            description.setText("No available info");
         }
 
 
@@ -999,7 +1016,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
 
         if (characterImage == null) {
-            Log.d("tag", "null character image");
         }
 
 

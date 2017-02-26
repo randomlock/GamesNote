@@ -61,6 +61,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     Map<String, String> map;
     CharacterModal characterDetailModal = null;
     TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
+    TextView image_heading;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
     CoordinatorLayout coordinatorLayout;
@@ -101,6 +102,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         mBigDescription = (TextView) parentLayout.findViewById(R.id.description);
         mFirstAppearance = (TextView) parentLayout.findViewById(R.id.first_appearance);
         mAlias = (TextView) parentLayout.findViewById(R.id.alias);
+        image_heading = (TextView) parentLayout.findViewById(R.id.image_heading);
         recyclerview = (RecyclerView) parentLayout.findViewById(R.id.recycler_view);
         recyclerview.setNestedScrollingEnabled(false);
 
@@ -192,6 +194,8 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                             Toaster.make(CharacterDetailActivity.this,"image loaded");
                             imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
                             imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,title));
+                        }else {
+                            image_heading.setVisibility(View.GONE);
                         }
                     }
                 }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/character/" + apiUrl);

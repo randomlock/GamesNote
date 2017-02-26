@@ -14,6 +14,7 @@ import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     private static final int SIMPLE_VIEW_TYPE = 0;
     private static final int CARD_VIEW_TYPE = 1;
 
-    List<NewsModal> modals;
+    private List<NewsModal> modals;
     Context context;
-    boolean isSimple;
+    private boolean isSimple;
     Calendar calendar = Calendar.getInstance();
 
     public GameNewsAdapter(List<NewsModal> modals, Context context, boolean isSimple) {
@@ -63,42 +64,47 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
     @Override
     public void onBindViewHolder(MyNewsHolder holder, int position) {
         NewsModal newsModal = modals.get(position);
-        if (newsModal.title != null) {
-            holder.heading.setText(newsModal.title);
-        }
-        if (newsModal.content != null) {
-            if (isSimple) {
-                holder.cardView.setVisibility(View.VISIBLE);
-            } else {
-                holder.image.setVisibility(View.VISIBLE);
+        if (newsModal!=null) {
+            if (newsModal.title != null) {
+                holder.heading.setText(newsModal.title);
             }
-            Picasso.with(context).load(newsModal.content).fit().into(holder.image);
-        } else {
-            if (isSimple) {
-                holder.cardView.setVisibility(View.GONE);
-            } else {
-                holder.image.setVisibility(View.GONE);
-            }
-        }
-        String dateArray[] = newsModal.pubDate.split(" ");
-
-        if (dateArray.length >= 3) {
-            String date = dateArray[0] + " " + dateArray[1] + " " + dateArray[2];
-            holder.date.setText(date);
-        } else if (newsModal.pubDate.length() >= 10) {
-
-            holder.date.setText(newsModal.pubDate.substring(0, 10));
-        }
-
-        if (isSimple) {
-            if (newsModal.smallDescription != null && newsModal.smallDescription.trim().length() > 0) {
-                if (newsModal.smallDescription.length() > 50) {
-                    holder.description.setText(newsModal.smallDescription.substring(0, 50));
+            if (newsModal.content != null) {
+                if (isSimple) {
+                    holder.cardView.setVisibility(View.VISIBLE);
                 } else {
-                    holder.description.setText(newsModal.smallDescription);
+                    holder.image.setVisibility(View.VISIBLE);
+                }
+                Picasso.with(context).load(newsModal.content).fit().centerCrop().into(holder.image);
+            } else {
+                if (isSimple) {
+                    holder.cardView.setVisibility(View.VISIBLE);
+                } else {
+                    holder.image.setVisibility(View.VISIBLE);
+                }
+                holder.image.setBackgroundResource(R.drawable.news_image_drawable);
+            }
+            if (newsModal.pubDate!=null) {
+                String dateArray[] = newsModal.pubDate.split(" ");
+
+                if (dateArray.length >= 3) {
+                    String date = dateArray[0] + " " + dateArray[1] + " " + dateArray[2];
+                    holder.date.setText(date);
+                } else if (newsModal.pubDate.length() >= 10) {
+
+                    holder.date.setText(newsModal.pubDate.substring(0, 10));
                 }
             }
 
+            if (isSimple) {
+                if (newsModal.smallDescription != null && newsModal.smallDescription.trim().length() > 0) {
+                    if (newsModal.smallDescription.length() > 50) {
+                        holder.description.setText(newsModal.smallDescription.substring(0, 50));
+                    } else {
+                        holder.description.setText(newsModal.smallDescription);
+                    }
+                }
+
+            }
         }
 
     }
@@ -115,7 +121,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
         ImageView image;
 
 
-        public MyNewsHolder(View itemView) {
+         MyNewsHolder(View itemView) {
             super(itemView);
             heading = (TextView) itemView.findViewById(R.id.news_heading);
             if (isSimple) {

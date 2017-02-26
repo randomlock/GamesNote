@@ -730,22 +730,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
 
 
-                case R.id.imageView:
-                    String medium_url = (String) view.getTag(R.string.mediumImageUrl);
-                    String small_url = (String) view.getTag(R.string.smallImageUrl);
-                    if(medium_url==null)
-                        Toaster.make(context,"no image found");
-                    else {
-                        CoverImageViewerFragment dialog = CoverImageViewerFragment.newInstance(small_url,medium_url,list.get(getAdapterPosition()).name);
-                        dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");
-                    }
-
-
-
-                    break;
-
-
-
                 case R.id.popup :
                     final PopupMenu popup = new PopupMenu(context, view);
                     popup.setOnMenuItemClickListener(this);

@@ -4,7 +4,6 @@ package com.example.randomlocks.gamesnote.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,15 +25,16 @@ import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
 import com.example.randomlocks.gamesnote.Fragments.SettingFragment;
+import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.NewsDetailPagerFragment;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
-import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public String mtitle;
     int mselectedId;
     private DrawerLayout mDrawer;
-    private NavigationView mNavigation;
     public ActionBarDrawerToggle mDrawableToggle;
     Fragment fragment;
 
@@ -72,52 +71,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         fragment = null;
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigation = (NavigationView) findViewById(R.id.navigation_view);
-        View headerView = mNavigation.inflateHeaderView(R.layout.navigaion_header);
-        navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
+        NavigationView mNavigation = (NavigationView) findViewById(R.id.navigation_view);
+        View headerView = null;
+        if (mNavigation != null) {
+            headerView = mNavigation.inflateHeaderView(R.layout.navigaion_header);
+
+            navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
 
 
-        final String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL, null, this);
-        if (imageUrl != null) {
-            navHeaderLayout.setUrl(imageUrl);
-            navHeaderLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            final String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL, null, this);
+            if (imageUrl != null) {
+                navHeaderLayout.setUrl(imageUrl);
+                navHeaderLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.headerbackground).error(R.drawable.headerbackground).into(navHeaderLayout);
+                    }
+                });
+            } else
+                navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
+
+
+            mDrawableToggle = setupDrawerToggle(mDrawer);
+            mDrawer.addDrawerListener(mDrawableToggle);
+            mNavigation.setNavigationItemSelectedListener(this);
+            mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
                 @Override
-                public void onGlobalLayout() {
-                    navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.headerbackground).error(R.drawable.headerbackground).into(navHeaderLayout);
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                }
+
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    InputMethodHelper.hideKeyBoard(getWindow().getCurrentFocus(), MainActivity.this);
+
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+
+                }
+
+                @Override
+                public void onDrawerStateChanged(int newState) {
+
                 }
             });
-        } else
-            navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
 
-
-        mDrawableToggle = setupDrawerToggle(mDrawer);
-        mDrawer.addDrawerListener(mDrawableToggle);
-        mNavigation.setNavigationItemSelectedListener(this);
-        mDrawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                InputMethodHelper.hideKeyBoard(getWindow().getCurrentFocus(),MainActivity.this);
-
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-
-
+        }
         mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-   /*     if(savedInstanceState!=null){
+        /*     if(savedInstanceState!=null){
             fragment = getSupportFragmentManager().findFragmentByTag("GamesHome");
             if(fragment==null){
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesList");
@@ -169,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case android.R.id.home:
-
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                     getSupportFragmentManager().popBackStack();
                 } else {
@@ -345,6 +346,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
 
+
         GamesNewsFragment gamesNewsFragment = (GamesNewsFragment) getSupportFragmentManager().findFragmentByTag("GamesNews");
         GamesVideoFragment gamesVideoFragment = (GamesVideoFragment) getSupportFragmentManager().findFragmentByTag("GamesVideo");
 
@@ -415,11 +417,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void startNewsFragment(List<NewsModal> modalList, int position) {
 
-        Intent intent = new Intent(this, NewsDetailPagerActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(GiantBomb.MODAL, (ArrayList<? extends Parcelable>) modalList);
-        bundle.putInt(GiantBomb.POSITION, position);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        mDrawableToggle.setDrawerIndicatorEnabled(false);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("NewsDetail");
+
+        if (fragment == null) {
+            fragment = NewsDetailPagerFragment.newInstance(modalList,position);
+        }
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "NewsDetail");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
+
     }
 }

@@ -47,7 +47,6 @@
             android:name=".Activity.CharacterDetailActivity"
             android:configChanges="keyboard|keyboardHidden" />
         <activity android:name=".Activity.CharacterFriendEnemyActivity" />
-        <activity android:name=".Activity.NewsDetailPagerActivity" />
         <activity android:name=".Activity.VideoPlayerActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:configChanges="orientation|screenSize"

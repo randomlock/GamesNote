@@ -244,6 +244,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="GENDER"
+                        style="@style/SubTitleText"
                         android:layout_weight="1"
                         android:textColor="@color/primary_text_light" />
 
@@ -323,7 +324,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="FIRSR APPEARANCE"
+                        android:text="FIRST APPEARANCE"
                         android:textColor="@color/primary_text_light" />
 
 
@@ -370,6 +371,7 @@
 
 
                 <TextView
+                    android:id="@+id/image_heading"
                     style="@style/cardview_textstyle"
                     android:text="Images"
                     android:layout_marginLeft="12dp"
