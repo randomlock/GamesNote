@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -112,6 +113,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
     public static final String API_URL = "apiUrl";
     public static final String IMAGE_URL = "imageUrl";
     public static final String NAME = "name";
+    private static final String GAME_CHARACTER = "game_detail_character" ;
+    private static final String  GAME_SIMILAR = "game_detail_similar";
     Realm realm;
     int list_category;
     Toolbar toolbar;
@@ -683,6 +686,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         if (savedInstanceState != null) {
             Toaster.make(getContext(),"hell osave instance");
             gameDetailModal = savedInstanceState.getParcelable(MODAL);
+            characterImage = savedInstanceState.getParcelableArrayList(GAME_CHARACTER);
+            similarGameImage = savedInstanceState.getParcelableArrayList(GAME_SIMILAR);
             fillData(gameDetailModal);
         } else {
             if (gameDetailModal != null) {
@@ -818,6 +823,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(GiantBomb.MODAL,gameDetailModal);
+        if (characterImage!=null) {
+            outState.putParcelableArrayList(GAME_CHARACTER,new ArrayList<>(characterImage));
+        }
+        if (similarGameImage!=null) {
+            outState.putParcelableArrayList(GAME_SIMILAR,new ArrayList<>(similarGameImage));
+        }
     }
 
     private void getGameDetail(final GameWikiDetailInterface gameWikiDetailInterface, final Map<String, String> map) {
@@ -1015,8 +1026,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
                 }); */
 
 
-        if (characterImage == null) {
-        }
 
 
         /******************* SETTING THE CHARACTER **************************************/

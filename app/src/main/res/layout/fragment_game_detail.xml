@@ -136,7 +136,8 @@
                 android:id="@+id/game_info_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 app:cardCornerRadius="4dp"
                 app:elevation="14dp"
                 app:cardBackgroundColor="@color/cardColor"
@@ -156,6 +157,8 @@
                         android:id="@+id/overview_heading"
                         style="@style/cardview_textstyle"
                         android:text="Overview"
+                        android:drawableLeft="@drawable/ic_insert_comment"
+                        android:drawableStart="@drawable/ic_insert_comment"
                         />
 
 
@@ -179,7 +182,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 app:cardCornerRadius="4dp"
                 app:elevation="14dp"
                 app:cardBackgroundColor="@color/cardColor">
@@ -195,7 +199,8 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         style="@style/cardview_textstyle"
-                        android:gravity="center"
+                        android:drawableLeft="@drawable/ic_star"
+                        android:drawableStart="@drawable/ic_star"
                         android:text="Review"
                         android:background="?android:attr/selectableItemBackground" />
 
@@ -209,8 +214,10 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         style="@style/cardview_textstyle"
+                        android:drawableLeft="@drawable/ic_child_care"
+                        android:drawableStart="@drawable/ic_child_care"
+
                         android:text="User review"
                         android:background="?android:attr/selectableItemBackground" />
 
@@ -225,7 +232,8 @@
                 android:id="@+id/description_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 app:cardCornerRadius="4dp"
                 app:elevation="14dp"
                 app:cardBackgroundColor="@color/cardColor"
@@ -242,8 +250,9 @@
                         android:id="@+id/description_heading"
                         style="@style/cardview_textstyle"
                         android:text="Description"
+                        android:drawableLeft="@drawable/ic_description"
+                        android:drawableStart="@drawable/ic_description"
                         android:drawableEnd="@drawable/ic_open_in_browser_black_24dp"
-                        android:foreground="?android:attr/selectableItemBackground"
                         android:drawableRight="@drawable/ic_open_in_browser_black_24dp" />
 
 
@@ -279,13 +288,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/character_heading"
                         style="@style/cardview_textstyle"
                         android:text="Character"
+                        android:drawableLeft="@drawable/ic_people"
+                        android:drawableStart="@drawable/ic_people"
                         />
 
 
@@ -306,13 +318,16 @@
                 android:id="@+id/game_image_cardview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/image_heading"
                     style="@style/cardview_textstyle"
                     android:text="Images"
+                    android:drawableLeft="@drawable/ic_image"
+                    android:drawableStart="@drawable/ic_image"
                     />
 
 
@@ -331,13 +346,17 @@
                 android:id="@+id/game_video_cardview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/video_heading"
                     style="@style/cardview_textstyle"
-                    android:text="Related videos" />
+                    android:text="Related videos"
+                    android:drawableLeft="@drawable/ic_ondemand_video"
+                    android:drawableStart="@drawable/ic_ondemand_video"
+                    />
 
 
                 <android.support.v7.widget.RecyclerView
@@ -354,13 +373,16 @@
                 android:id="@+id/game_similar_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/similar_game_heading"
                     style="@style/cardview_textstyle"
                     android:text="Similar games"
+                    android:drawableLeft="@drawable/ic_compare_arrows"
+                    android:drawableStart="@drawable/ic_compare_arrows"
                     />
 
                 <android.support.v7.widget.RecyclerView

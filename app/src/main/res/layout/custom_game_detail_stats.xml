@@ -3,9 +3,10 @@
     android:id="@+id/stats_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
     app:cardCornerRadius="4dp"
-    app:elevation="14dp"
+    app:elevation="4dp"
     app:cardBackgroundColor="@color/cardColor"
     android:animateLayoutChanges="true"
     android:visibility="gone"
@@ -27,6 +28,8 @@
             android:id="@+id/stats_heading"
             style="@style/cardview_textstyle"
             android:text="Stats"
+            android:drawableLeft="@drawable/ic_pie_chart"
+            android:drawableStart="@drawable/ic_pie_chart"
             />
 
         <ImageView

@@ -36,11 +36,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
     }
 
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-    }
 
 
    /* public void loadWebView(String string) {
