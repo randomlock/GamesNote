@@ -62,6 +62,7 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_margin="@dimen/search_view_inset"
                 app:layout_collapseMode="pin" />
 
 
@@ -132,6 +133,23 @@
 
 
     </FrameLayout>
+
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
+        app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
+        app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
+        app:floatingSearch_searchHint="Search games..."
+        app:floatingSearch_suggestionsListAnimDuration="250"
+        app:floatingSearch_showSearchKey="true"
+        app:floatingSearch_leftActionMode="showHamburger"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"
+        app:floatingSearch_showVoiceInput="true"
+        app:floatingSearch_menu="@menu/game_wiki_menu"
+        />
 
 
 

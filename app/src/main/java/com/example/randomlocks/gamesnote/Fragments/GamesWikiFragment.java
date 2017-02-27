@@ -29,6 +29,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
@@ -61,7 +63,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTextListener, SearchFilterFragment.SearchFilterInterface {
+public class GamesWikiFragment extends Fragment implements SearchFilterFragment.SearchFilterInterface {
 
     private static final String MODAL = "list_modal";
     private static final String SCROLL_POSITION = "recyclerScrollPosition";
@@ -69,6 +71,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     Toolbar toolbar;
     RecyclerView recyclerView;
     AVLoadingIndicatorView progressBar;
+    FloatingSearchView floatingSearchView;
     List<GameWikiModal> listModals = null;
     GameWikiAdapter adapter;
     ConsistentGridLayoutManager manager;
@@ -91,7 +94,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         listModals = new ArrayList<>();
         context = getContext();
         viewType = SharedPreference.getFromSharedPreferences(GiantBomb.VIEW_TYPE,0,context);
@@ -112,6 +114,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
         View v = inflater.inflate(R.layout.fragment_game_wiki, container, false);
         coordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.root_coordinator);
+        floatingSearchView = (FloatingSearchView) coordinatorLayout.findViewById(R.id.floating_search_view);
         toolbar = (Toolbar) coordinatorLayout.findViewById(R.id.my_toolbar);
         viewPager = (ViewPager) coordinatorLayout.findViewById(R.id.viewpager);
         recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.recycler_view);
@@ -143,12 +146,115 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(toolbar);
-        actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         DrawerLayout drawer = (DrawerLayout) actionBar.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        floatingSearchView.attachNavigationDrawerToMenuButton(drawer);
+
+
+
+
+        /**************************** HANDLING SEARCH ********************************/
+
+
+        floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, String newQuery) {
+                //change suggestion hints here
+            }
+        });
+
+
+
+
+
+
+        floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+
+            @Override
+            public void onSearchAction(String currentQuery) {
+                if (currentQuery.trim().length() > 0) {
+
+                    String field = "name:" + currentQuery;
+
+                    map.put(GiantBomb.FIELD, field);
+                    map.put(GiantBomb.OFFSET, "0");
+
+                    if (!listModals.isEmpty()) {
+                        listModals.clear();
+                    }
+
+
+                    if (errorText.getVisibility() == View.VISIBLE) {
+                        errorText.setVisibility(View.GONE);
+                    }
+
+                    getGameWiki(gameWikiListInterface, map);
+
+                }else {
+                    Toaster.make(getContext(),"no search text entered");
+                }
+
+            }
+        });
+
+        floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+            @Override
+            public void onActionMenuItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+
+
+                    case R.id.filter:
+
+                        SearchFilterFragment filterFragment = SearchFilterFragment.newInstance(R.array.search_filter);
+                        filterFragment.setTargetFragment(GamesWikiFragment.this, 0);
+                        filterFragment.show(getActivity().getSupportFragmentManager(), "seach filter");
+                        break;
+
+
+                    case R.id.view :
+                        final CharSequence[] items = {"Card+Platforms", "Card+Desc", "Image+Title"};
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Make your selection");
+                        builder.setSingleChoiceItems(items, viewType, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if(adapter!=null && adapter.getItemCount()>0){
+                                    viewType = i;
+
+                                    if(viewType==2){
+                                        manager.setSpanCount(3);
+                                    }else{
+                                        manager.setSpanCount(1);
+                                    }
+
+                                    adapter.changeView(i);
+
+                                }else {
+                                    Toaster.make(getContext(),"game not loaded");
+                                }
+                                dialogInterface.dismiss();
+                            }
+
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.setCancelable(true);
+                        alert.show();
+
+                        break;
+
+
+
+                    default:
+                        break;
+                }
+
+            }
+        });
+
 
 
         /*************** SAVE INSTANCE *************************/
@@ -236,73 +342,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.game_wiki_menu, menu);
-        getSearchManager(context, menu, false);
-    }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                getActivity().onBackPressed();
-                return true;
-
-            case R.id.search:
-
-
-                return true;
-
-            case R.id.filter:
-
-                SearchFilterFragment filterFragment = SearchFilterFragment.newInstance(R.array.search_filter);
-                filterFragment.setTargetFragment(this, 0);
-                filterFragment.show(getActivity().getSupportFragmentManager(), "seach filter");
-                return true;
-
-
-            case R.id.view :
-                final CharSequence[] items = {"Card+Platforms", "Card+Desc", "Image+Title"};
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Make your selection");
-                builder.setSingleChoiceItems(items, viewType, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if(adapter!=null && adapter.getItemCount()>0){
-                            viewType = i;
-
-                            if(viewType==2){
-                                manager.setSpanCount(3);
-                            }else{
-                                manager.setSpanCount(1);
-                            }
-
-                            adapter.changeView(i);
-
-                        }else {
-                            Toaster.make(getContext(),"game not loaded");
-                        }
-                        dialogInterface.dismiss();
-                    }
-
-                });
-                AlertDialog alert = builder.create();
-                alert.setCancelable(true);
-                alert.show();
-
-                return true;
-
-
-
-            default:
-                super.onOptionsItemSelected(item);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 
     /***********************
@@ -310,65 +350,9 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
      ********************************/
 
 
-    public void getSearchManager(final Context context, Menu menu, boolean isDefaultIconified) {
-
-        SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setQueryHint(Html.fromHtml("<font color = #ffffff>" + getResources().getString(R.string.search) + "</font>"));
-
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity) context).getComponentName()));
-        searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default
-
-        MenuItem searchMenuItem = menu.findItem(R.id.search);
-       /* MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
 
 
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                if (toolbar != null) {
-                    toolbar.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-                }
-                return true;
-            }
 
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                if (toolbar != null) {
-                    toolbar.setBackgroundColor(Color.TRANSPARENT);
-                }
-                return true;
-            }
-        });*/
-
-        searchView.setOnQueryTextListener(this);
-
-
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), context);
-
-        String field = "name:" + query;
-
-        map.put(GiantBomb.FIELD, field);
-        map.put(GiantBomb.OFFSET, "0");
-
-        if (!listModals.isEmpty()) {
-            listModals.clear();
-        }
-
-
-        if (errorText.getVisibility() == View.VISIBLE) {
-            errorText.setVisibility(View.GONE);
-        }
-
-        getGameWiki(gameWikiListInterface, map);
-
-
-        return true;
-    }
 
     @Override
     public void onPause() {
@@ -395,7 +379,6 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
             public void onResponse(Call<GameWikiListModal> call, Response<GameWikiListModal> response) {
 
 
-                    Toaster.make(getContext(),response.body().results.size()+"");
                 if (progressBar.getVisibility()==View.VISIBLE) {
                     progressBar.setVisibility(View.GONE);
                 }
@@ -504,10 +487,7 @@ public class GamesWikiFragment extends Fragment implements SearchView.OnQueryTex
 
 
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
+
 
     @Override
     public void onSelect(int which, boolean asc) {

@@ -8,38 +8,35 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.Activity.MainActivity;
 import com.example.randomlocks.gamesnote.Adapter.GameCharacterSearchAdapter;
-import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
-import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterface;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModalList;
-import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +58,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
 
     CoordinatorLayout coordinator;
-    EditText searchCharacter;
+    ImageView imageView;
     RecyclerView recyclerView;
     AVLoadingIndicatorView pacman;
     TextView errorText;
@@ -70,6 +67,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     Map<String, String> map;
     GameCharacterSearchAdapter adapter;
     Toolbar toolbar;
+    FloatingSearchView floatingSearchView;
     LinearLayoutManager manager;
     int scrollToPosition = 0;
     boolean isLoadingMore = false;
@@ -109,25 +107,25 @@ public class GamesCharacterWikiFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         coordinator = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
+        imageView = (ImageView) coordinator.findViewById(R.id.image);
         toolbar = (Toolbar) coordinator.findViewById(R.id.my_toolbar);
-        searchCharacter = (EditText) coordinator.findViewById(R.id.search_character);
+        floatingSearchView = (FloatingSearchView) coordinator.findViewById(R.id.floating_search_view);
         recyclerView = (RecyclerView) coordinator.findViewById(R.id.recycler_view);
         pacman = (AVLoadingIndicatorView) coordinator.findViewById(R.id.progressBar);
         errorText = (TextView) coordinator.findViewById(R.id.errortext);
         //     imageView = (ImageView) coordinator.findViewById(R.id.appbar_image);
 
-
-        //    Picasso.with(getContext()).load("http://images.popmatters.com/blog_art/m/max_payne_old.jpg").placeholder(R.drawable.headerbackground).fit().centerInside().into(imageView);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        imageView.getLayoutParams().height = metrics.heightPixels/3;
+        Picasso.with(getContext()).load("http://www.nymgamer.com/wp-content/uploads/2015/07/video_game_characters_wallpaper_by_v1d30guy-d60lnsh-copy-720x340.jpg").placeholder(R.drawable.news_image_drawable).fit().centerCrop().into(imageView);
 
 
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(toolbar);
-        actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        DrawerLayout drawer = (DrawerLayout) actionBar.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        floatingSearchView.attachNavigationDrawerToMenuButton(drawer);
 
 
 
@@ -153,19 +151,37 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         }
 
-        searchCharacter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (searchCharacter.getText().toString().trim().length() > 0) {
-                        performSearch(searchCharacter.getText().toString());
-                        return true;
 
-                    }
-                }
-                return false;
+
+        floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, String newQuery) {
+                //change suggestion hints here
             }
         });
+
+
+
+
+
+
+        floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+
+            @Override
+            public void onSearchAction(String currentQuery) {
+                if (currentQuery.trim().length() > 0) {
+                    performSearch(floatingSearchView.getQuery());
+                }else {
+                    Toaster.make(getContext(),"no search text entered");
+                }
+
+            }
+        });
+
 
 
     }
@@ -312,7 +328,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.game_character_wiki_menu, menu);
+        inflater.inflate(R.menu.empty_menu, menu);
     }
 
     @Override

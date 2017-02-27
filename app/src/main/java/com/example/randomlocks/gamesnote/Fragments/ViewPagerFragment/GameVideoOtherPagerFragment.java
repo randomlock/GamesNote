@@ -3,7 +3,6 @@ package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoOtherAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -33,7 +33,7 @@ public class GameVideoOtherPagerFragment extends Fragment {
     int position;
     GameVideoOtherAdapter adapter;
     RealmResults<GamesVideoModal> listModals;
-    DrawerLayout mDrawer;
+    FloatingSearchView floatingSearchView;
     SwipeRefreshLayout swipeRefreshLayout;
 
 
@@ -76,6 +76,7 @@ public class GameVideoOtherPagerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
         swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeContainer);
         recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recycler_view);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -137,8 +138,10 @@ public class GameVideoOtherPagerFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (!realm.isClosed()) {
+            realm.close();
+        }
     }
 }

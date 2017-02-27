@@ -26,6 +26,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -76,10 +78,11 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     NavigationView mNavigation;
     String mTitle;
     int mSelectedId;
-    EditText searchVideos;
     TextView errorText;
     CoordinatorLayout coordinatorLayout;
+    FloatingSearchView floatingSearchView;
     SwipeRefreshLayout swipeRefreshLayout;
+
 
 
     public GameVideoPagerFragment() {
@@ -98,7 +101,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_VIEW, false, getContext());
         realm = Realm.getDefaultInstance();
 
@@ -117,12 +119,12 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         mDrawer = (DrawerLayout) getActivity().findViewById(R.id.drawer);
         mNavigation = (NavigationView) getActivity().findViewById(R.id.navigation);
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.root_coordinator);
-        searchVideos = (EditText) coordinatorLayout.findViewById(R.id.search_video);
+        floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
         swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeContainer);
         recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recycler_view);
-        errorText = (TextView) getView().findViewById(R.id.errortext);
+        errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
 
-        pacman = (AVLoadingIndicatorView) getView().findViewById(R.id.progressBar);
+        pacman = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
         pacman.setVisibility(View.VISIBLE);
 
 
@@ -158,33 +160,83 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         }
 
 
-        searchVideos.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+
+
+
+        floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (searchVideos.getText().toString().trim().length() > 0) {
-                        performSearch(searchVideos.getText().toString());
-                        return true;
-
-                    }
-                }
-
-                if (actionId == EditorInfo.IME_ACTION_PREVIOUS) {
-                    Toaster.make(getContext(), "hello");
-                }
-
-                return false;
+            public void onSearchTextChanged(String oldQuery, String newQuery) {
+                //change suggestion hints here
             }
         });
 
-        searchVideos.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+
+        floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+
             @Override
-            public void onClick(View v) {
-                if (!searchVideos.isCursorVisible()) {
-                    searchVideos.setCursorVisible(true);
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+
+            }
+
+            @Override
+            public void onSearchAction(String currentQuery) {
+                if (currentQuery.trim().length() > 0) {
+                        performSearch(currentQuery);
+                }else {
+                    Toaster.make(getContext(),"no search text entered");
                 }
+
             }
         });
+
+        floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+            @Override
+            public void onActionMenuItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+
+
+                    case R.id.view:
+
+
+                        if (item.getTitle().equals(getString(R.string.compact_view))) {
+                            isReduced = true;
+                            item.setTitle(getString(R.string.reduce_view));
+
+
+                        } else {
+                            item.setTitle(getString(R.string.compact_view));
+                            isReduced = false;
+                        }
+
+
+                        if (adapter != null) {
+                            adapter.setSimple(isReduced);
+                        }
+
+                        break;
+
+                    case R.id.nav_open:
+                        mDrawer.openDrawer(GravityCompat.END);
+                        break;
+
+
+                }
+
+            }
+        });
+
+
+
+
+
+
+
 
 
     }
@@ -303,7 +355,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawers();
         }
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mTitle);
 
     }
 
@@ -478,50 +529,10 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.game_video_menu, menu);
+    //    inflater.inflate(R.menu.game_video_menu, menu);
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                getActivity().onBackPressed();
-                return true;
-
-            case R.id.view:
-
-
-                if (item.getTitle().equals(getString(R.string.compact_view))) {
-                    isReduced = true;
-                    item.setTitle(getString(R.string.reduce_view));
-
-
-                } else {
-                    item.setTitle(getString(R.string.compact_view));
-                    isReduced = false;
-                }
-
-
-                if (adapter != null) {
-                    adapter.setSimple(isReduced);
-                }
-
-                return true;
-
-            case R.id.nav_open:
-                mDrawer.openDrawer(GravityCompat.END);
-                return true;
-
-
-        }
-
-
-        return super.onOptionsItemSelected(item);
-
-    }
 
 
     @Override
@@ -534,7 +545,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             SharedPreference.saveToSharedPreference(VIDEO_TITLE, mTitle, context);
         }
 
-        if (realm != null && realm.isInTransaction()) {
+        if (realm != null && !realm.isClosed() && realm.isInTransaction()) {
             realm.cancelTransaction();
         }
 
@@ -561,11 +572,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
-    }
+
 
 
     @Override

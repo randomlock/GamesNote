@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -173,7 +175,8 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     }
                 });*/
-
+                viewHolder.profileImage.setTag(R.string.smallImageUrl, modal.image.thumbUrl);
+                viewHolder.profileImage.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
                 Picasso.with(context).load(modal.image.mediumUrl).fit().centerCrop().into(viewHolder.profileImage);
 
 
@@ -223,13 +226,29 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
             profileImage = (ImageView) itemView.findViewById(R.id.image);
             name = (TextView) itemView.findViewById(R.id.name);
             deck = (TextView) itemView.findViewById(R.id.card_deck);
+            profileImage.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            CharacterSearchModal modal = modals.get(getLayoutPosition());
-            mOnClickInterface.onItemClick(modal.apiDetailUrl, modal.image != null ? modal.image.mediumUrl : null,modal.name);
+
+            if(v.getId()==R.id.image){
+                String medium_url = (String) profileImage.getTag(R.string.mediumImageUrl);
+                String small_url = (String) profileImage.getTag(R.string.smallImageUrl);
+                if(medium_url==null)
+                    Toaster.make(context,"no image found");
+                else {
+                    CoverImageViewerFragment dialog = CoverImageViewerFragment.newInstance(small_url,medium_url,modals.get(getAdapterPosition()).name);
+                    dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");
+                }
+            }
+
+            else {
+                CharacterSearchModal modal = modals.get(getLayoutPosition());
+                mOnClickInterface.onItemClick(modal.apiDetailUrl, modal.image != null ? modal.image.mediumUrl : null,modal.name);
+            }
+
         }
     }
 

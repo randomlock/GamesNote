@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
@@ -18,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -228,10 +232,29 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         super.onPrepareOptionsMenu(menu);
         if (isSimple) {
             menu.getItem(menu.size()-1).setTitle(getString(R.string.reduce_list_view));
+            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_list_white_24dp);
         } else {
             menu.getItem(menu.size()-1).setTitle(getString(R.string.compact_list_view));
+            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_view_compact_white_24dp);
+
         }
+
+        Drawable drawable = menu.findItem(R.id.filter).getIcon();
+        if (drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        }
+
+        drawable = menu.findItem(R.id.view).getIcon();
+        if(drawable!=null){
+            drawable.mutate();
+            drawable.setColorFilter(Color.WHITE,PorterDuff.Mode.SRC_ATOP);
+        }
+
+
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -257,11 +280,12 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                 if (item.getTitle().equals(getString(R.string.compact_list_view))) {
                     isSimple = true;
                     item.setTitle(getString(R.string.reduce_list_view));
-
+                    item.setIcon(R.drawable.ic_list_white_24dp);
 
                 } else {
                     item.setTitle(getString(R.string.compact_list_view));
                     isSimple = false;
+                    item.setIcon(R.drawable.ic_view_compact_white_24dp);
                 }
 
 

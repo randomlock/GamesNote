@@ -33,15 +33,15 @@ import io.realm.RealmResults;
 //TODO FIX optimization on query ASAP effectively
 public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyViewHolder> {
 
-    List<GamesVideoModal> modalList;
-    boolean isSimple, isAllVideo;
+    private List<GamesVideoModal> modalList;
+    private boolean isSimple, isAllVideo;
     Context context;
     private static final int SIMPLE_VIEW_TYPE = 0;
     private static final int CARD_VIEW_TYPE = 1;
-    OnClickInterface mOnClickInteraface;
-    Realm realm;
-    RealmAsyncTask transaction;
-    HashMap<Integer, GamesVideoModal> hashResults;
+    private OnClickInterface mOnClickInteraface;
+    private Realm realm;
+    private RealmAsyncTask transaction;
+    private HashMap<Integer, GamesVideoModal> hashResults;
 
     public void swapModal(List<GamesVideoModal> listModals, boolean isAllVideo) {
 
@@ -181,7 +181,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<GameVideoAdapter.MyVi
 
     public void setSimple(boolean simple) {
         isSimple = simple;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0,getItemCount());
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

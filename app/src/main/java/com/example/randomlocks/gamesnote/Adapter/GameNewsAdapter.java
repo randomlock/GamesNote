@@ -58,7 +58,7 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
     public void setSimple(boolean simple) {
         isSimple = simple;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0,getItemCount());
     }
 
     @Override

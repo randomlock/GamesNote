@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--it should be always at first place-->
-    <item
-        android:id="@+id/view"
-        android:title="@string/compact_view"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/nav_open"
         android:title="Video Categories"
         android:icon="@drawable/ic_keyboard_arrow_left_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/view"
+        android:title="@string/compact_view"
+        android:icon="@drawable/ic_view_compact_white_24dp"
         app:showAsAction="ifRoom" />
 
 </menu>
