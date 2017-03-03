@@ -4,6 +4,9 @@ package com.example.randomlocks.gamesnote.Fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,8 +20,10 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
@@ -88,6 +94,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -222,7 +229,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
                             if (current_video_pos+1 < gameDetailModal.videos.size()) {
                                 getInit(gameDetailModal.videos.get(++current_video_pos));
                             }else {
-                                Toaster.make(getContext(),"no next video");
+                                Toasty.warning(getContext(),"no next video", Toast.LENGTH_SHORT,true).show();
+
+
                             }
                         }
                     }, //for prev video
@@ -232,7 +241,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
                             if(current_video_pos>0){
                                 getInit(gameDetailModal.videos.get(--current_video_pos));
                             }else {
-                                Toaster.make(getContext(),"no previous video");
+                                Toasty.warning(getContext(),"no previous video", Toast.LENGTH_SHORT,true).show();
                             }
                         }
                     });
@@ -310,7 +319,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
             @Override
             public void onFailure(Call<GameVideoMinimal> call, Throwable t) {
-                Toaster.makeSnackbar(coordinatorLayout,"error cannot play");
+                Toaster.makeSnackBar(coordinatorLayout,"error cannot play");
             }
         });
 
@@ -379,7 +388,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             Toaster.make(getContext(),"hello");
             addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
         } else {
-            Toaster.makeSnackbar(coordinatorLayout, "waiting to load data");
+            Toasty.warning(getContext(),"waiting to load data", Toast.LENGTH_SHORT,true).show();
+
         }
 
     }
@@ -421,7 +431,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Toaster.makeSnackbar(coordinatorLayout, "Game added");
+                Toasty.success(getContext(),"Game added", Toast.LENGTH_SHORT,true).show();
+
             }
         });
     }
@@ -569,9 +580,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             public void onClick(View view) {
 
                 if(gameDetailModal==null){
-                    Toaster.makeSnackbar(coordinatorLayout,"waiting to load data");
+                    Toaster.makeSnackBar(coordinatorLayout,"waiting to load data");
                 }else if(gameDetailModal.videos.size()==0){
-                    Toaster.makeSnackbar(coordinatorLayout,"no video found");
+                    Toaster.makeSnackBar(coordinatorLayout,"no video found");
                     playViewButton.setVisibility(View.GONE);
                 } else {
                     appbarImage.setVisibility(View.INVISIBLE);
@@ -608,7 +619,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
 
         style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 0, getContext()) + 1);
-
+     /*   if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            setIconColor(characters_heading);
+            setIconColor(image_heading);
+            setIconColor(related_video_heading);
+            setIconColor(similar_game_heading);
+        }*/
         recyclerView.setNestedScrollingEnabled(false);
         characterRecycleView.setNestedScrollingEnabled(false);
         similarGameRecycleView.setNestedScrollingEnabled(false);
@@ -703,38 +719,10 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             getGameDetail(gameWikiDetailInterface, map);
 
 
-            asyncCharacters = new JsoupCharacters(new JsoupCharacters.AsyncResponse() {
-                @Override
-                public void processFinish(List<CharacterGamesImage> characters) {
-
-                    if (characters != null) {
-                        if (characterRecycleView.getAdapter() != null) {
-                            characterAdapter.setImages(characters);
-                            characterImage = characters;
-                        } else {
-                            characterImage = characters;
-                        }
-                    }
-
-                }
-            });
-            asyncCharacters.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "http://www.giantbomb.com/game/" + apiUrl + "/characters/");
 
 
-            asyncGames = new JsoupGames(new JsoupGames.AsyncResponse() {
-                @Override
-                public void processFinish(List<CharacterGamesImage> similarGame) {
-                    if (similarGame != null) {
-                        if (similarGameRecycleView.getAdapter() != null) {
-                            similarGameAdapter.setImages(similarGame);
-                            similarGameImage = similarGame;
-                        } else {
-                            similarGameImage = similarGame;
-                        }
-                    }
-                }
-            });
-            asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "http://www.giantbomb.com/game/" + apiUrl + "/similar-games/");
+            runAsyncTask();
+
         }
             }
 
@@ -818,6 +806,60 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
     }
 
+    private void runAsyncTask() {
+
+        asyncCharacters = new JsoupCharacters(new JsoupCharacters.AsyncResponse() {
+            @Override
+            public void processFinish(List<CharacterGamesImage> characters) {
+
+                if (characters != null) {
+                    if (characterRecycleView.getAdapter() != null) {
+                        characterAdapter.setImages(characters);
+                        characterImage = characters;
+                    } else {
+                        characterImage = characters;
+                    }
+                }
+
+            }
+        });
+        asyncCharacters.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "http://www.giantbomb.com/game/" + apiUrl + "/characters/");
+
+
+        asyncGames = new JsoupGames(new JsoupGames.AsyncResponse() {
+            @Override
+            public void processFinish(List<CharacterGamesImage> similarGame) {
+                if (similarGame != null) {
+                    if (similarGameRecycleView.getAdapter() != null) {
+                        similarGameAdapter.setImages(similarGame);
+                        similarGameImage = similarGame;
+                    } else {
+                        similarGameImage = similarGame;
+                    }
+                }
+            }
+        });
+        asyncGames.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "http://www.giantbomb.com/game/" + apiUrl + "/similar-games/");
+
+
+
+
+    }
+
+    private void setIconColor(TextView textview) {
+
+        for (Drawable drawable : textview.getCompoundDrawables()) {
+            if (drawable != null) {
+                drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getContext(),R.color.primary), PorterDuff.Mode.SRC_IN));
+            }
+        }
+
+
+    }
+
+
+
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -850,15 +892,15 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
                 pacman.setVisibility(View.GONE);
 
-                Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                getGameDetail(gameWikiDetailInterface, map);
-
-                            }
-                        }).show();
-
+                if (!call.isCanceled()) {
+                    Toaster.makeSnackBar(coordinatorLayout, "Connectivity Problem", "RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getGameDetail(gameWikiDetailInterface,map);
+                            runAsyncTask();
+                        }
+                    });
+                }
 
             }
         });
@@ -887,7 +929,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             image_heading.setVisibility(View.GONE);
         if(gameDetailModal.videos==null||gameDetailModal.videos.isEmpty())
             related_video_heading.setVisibility(View.GONE);
-        if(gameDetailModal.similarGames==null||gameDetailModal.videos.isEmpty())
+        if(gameDetailModal.similarGames==null||gameDetailModal.similarGames.isEmpty())
             similar_game_heading.setVisibility(View.GONE);
 
 
@@ -1099,7 +1141,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
                     }
 
                 } else {
-                    Toaster.make(getContext(), "No Review Found");
+                    Toasty.error(getContext(),"No Review Found", Toast.LENGTH_SHORT,true).show();
+
                 }
             }
         });
@@ -1125,7 +1168,8 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
                     }
 
                 } else {
-                    Toaster.make(getContext(), "No User Reviews Found");
+                    Toasty.error(getContext(),"No User Reviews Found", Toast.LENGTH_SHORT,true).show();
+
                 }
             }
         });

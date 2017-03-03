@@ -25,6 +25,7 @@
             android:id="@+id/imageView"
             android:layout_width="75dp"
             android:layout_height="112dp"
+            android:layout_centerVertical="true"
             android:src="@drawable/testimage"
              />
 

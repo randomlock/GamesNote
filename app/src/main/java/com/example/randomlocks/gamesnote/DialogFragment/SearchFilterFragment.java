@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -78,7 +79,7 @@ public class SearchFilterFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        view = getActivity().getLayoutInflater().inflate(R.layout.search_option_layout, null);
+        view = getActivity().getLayoutInflater().inflate(R.layout.search_option_layout,null);
 
         final AlertDialog dialog =  new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
                 .setCancelable(true)
@@ -125,7 +126,6 @@ public class SearchFilterFragment extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
 
         checkbox = (CheckBox) view.findViewById(R.id.checkbox);
-        final int check_color = ContextCompat.getColor(getContext(),R.color.accent);
         final int uncheck_color = ContextCompat.getColor(getContext(),R.color.black_white);
         checkbox.setChecked(!isAscending);
         if (!checkbox.isChecked()) { checkbox.setTextColor(uncheck_color) ;}

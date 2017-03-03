@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
@@ -22,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by randomlocks on 7/11/2016.
@@ -237,7 +240,8 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
                 String medium_url = (String) profileImage.getTag(R.string.mediumImageUrl);
                 String small_url = (String) profileImage.getTag(R.string.smallImageUrl);
                 if(medium_url==null)
-                    Toaster.make(context,"no image found");
+                Toasty.error(context,"no image found", Toast.LENGTH_SHORT,true).show();
+
                 else {
                     CoverImageViewerFragment dialog = CoverImageViewerFragment.newInstance(small_url,medium_url,modals.get(getAdapterPosition()).name);
                     dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");

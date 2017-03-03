@@ -58,6 +58,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     RecyclerView recyclerview, imageRecyclerView;
     LinearLayout parentLayout;
     GameCharacterInterface mGameCharacterInterface;
+    Call<CharacterListModal> call;
     Map<String, String> map;
     CharacterModal characterDetailModal = null;
     TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
@@ -187,18 +188,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                 map.put(GiantBomb.FORMAT, "JSON");
                 getCharacterDetail(mGameCharacterInterface, map);
 
-                asyncCharacterWikiImage = new JsoupCharacterWikiImage(new JsoupCharacterWikiImage.AsyncResponse() {
-                    @Override
-                    public void processFinish(List<CharacterImage> imageUrls) {
-                        if (imageUrls != null) {
-                            Toaster.make(CharacterDetailActivity.this,"image loaded");
-                            imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                            imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,title));
-                        }else {
-                            image_heading.setVisibility(View.GONE);
-                        }
-                    }
-                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/character/" + apiUrl);
+                runAsyncTask();
 
 
             }
@@ -207,10 +197,28 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
     }
 
+    private void runAsyncTask() {
+
+        asyncCharacterWikiImage = new JsoupCharacterWikiImage(new JsoupCharacterWikiImage.AsyncResponse() {
+            @Override
+            public void processFinish(List<CharacterImage> imageUrls) {
+                if (imageUrls != null) {
+                    Toaster.make(CharacterDetailActivity.this,"image loaded");
+                    imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,title));
+                }else {
+                    image_heading.setVisibility(View.GONE);
+                }
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/character/" + apiUrl);
+
+    }
+
 
     private void getCharacterDetail(final GameCharacterInterface mGameCharacterInterface, final Map<String, String> map) {
-
-        mGameCharacterInterface.getResult(apiUrl, map).enqueue(new Callback<CharacterListModal>() {
+        dialog.show();
+        call = mGameCharacterInterface.getResult(apiUrl,map);
+        call.enqueue(new Callback<CharacterListModal>() {
             @Override
             public void onResponse(Call<CharacterListModal> call, Response<CharacterListModal> response) {
                 characterDetailModal = response.body().results;
@@ -222,14 +230,19 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                 dialog.dismiss();
                 parentLayout.setVisibility(View.VISIBLE);
 
-                Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                getCharacterDetail(mGameCharacterInterface, map);
+                if(!call.isCanceled()){
+                    Toaster.makeSnackBar(coordinatorLayout, "Connectivity Problem", "RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getCharacterDetail(mGameCharacterInterface,map);
+                            runAsyncTask();
+                        }
+                    });
 
-                            }
-                        }).show();
+
+                }
+
+
             }
         });
     }
@@ -403,5 +416,12 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         }
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(call!=null)
+            call.cancel();
     }
 }

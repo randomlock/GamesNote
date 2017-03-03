@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PhotoViewPager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -34,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -152,7 +154,8 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
                 case R.id.profile_image :
                     SharedPreference.saveToSharedPreference(GiantBomb.NAV_HEADER_URL,imageUrls.get(viewPager.getCurrentItem()),ImageViewPagerActivity.this);
-                    Toaster.make(ImageViewPagerActivity.this,"profile photo will change after restart");
+                    Toasty.info(ImageViewPagerActivity.this,"profile photo will change after restart", Toast.LENGTH_LONG,true).show();
+
                     break;
 
 
@@ -180,7 +183,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             // Launch sharing dialog for image
             startActivity(Intent.createChooser(shareIntent, "Share Image"));
         } else {
-            Toaster.make(this,"cannot share");
+            Toasty.error(this,"cannot share", Toast.LENGTH_SHORT,true).show();
         }
 
 

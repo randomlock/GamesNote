@@ -4,6 +4,8 @@ package com.example.randomlocks.gamesnote.Fragments;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
@@ -43,6 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,14 +59,17 @@ public class GamesCharacterWikiFragment extends Fragment {
     private static final String RECYCLER_STYLE = "character_recycler_style";
     private static final String SCROLL_POSITION = "scroll_position";
     private static final String LIMIT = "50";
+    private static final java.lang.String SEARCH_QUERY = "search_query" ;
 
 
     CoordinatorLayout coordinator;
+    AppBarLayout appBarLayout;
     ImageView imageView;
     RecyclerView recyclerView;
     AVLoadingIndicatorView pacman;
     TextView errorText;
     GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
+    Call<CharacterSearchModalList> call;
     List<CharacterSearchModal> modals;
     Map<String, String> map;
     GameCharacterSearchAdapter adapter;
@@ -107,17 +114,18 @@ public class GamesCharacterWikiFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         coordinator = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
-        imageView = (ImageView) coordinator.findViewById(R.id.image);
-        toolbar = (Toolbar) coordinator.findViewById(R.id.my_toolbar);
-        floatingSearchView = (FloatingSearchView) coordinator.findViewById(R.id.floating_search_view);
-        recyclerView = (RecyclerView) coordinator.findViewById(R.id.recycler_view);
-        pacman = (AVLoadingIndicatorView) coordinator.findViewById(R.id.progressBar);
-        errorText = (TextView) coordinator.findViewById(R.id.errortext);
-        //     imageView = (ImageView) coordinator.findViewById(R.id.appbar_image);
+        appBarLayout = (AppBarLayout) coordinator.findViewById(R.id.app_bar_layout);
+        imageView = (ImageView) getActivity().findViewById(R.id.imageView);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+        floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
+        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
+        pacman = (AVLoadingIndicatorView) getActivity().findViewById(R.id.progressBar);
+        errorText = (TextView) getActivity().findViewById(R.id.errortext);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        imageView.getLayoutParams().height = metrics.heightPixels/3;
+        CollapsingToolbarLayout.LayoutParams params = new CollapsingToolbarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,metrics.heightPixels/3);
+        imageView.setLayoutParams(params);
         Picasso.with(getContext()).load("http://www.nymgamer.com/wp-content/uploads/2015/07/video_game_characters_wallpaper_by_v1d30guy-d60lnsh-copy-720x340.jpg").placeholder(R.drawable.news_image_drawable).fit().centerCrop().into(imageView);
 
 
@@ -142,6 +150,8 @@ public class GamesCharacterWikiFragment extends Fragment {
             modals = savedInstanceState.getParcelableArrayList(GiantBomb.MODAL);
             if (modals != null) {
                 loadRecycler(modals, savedInstanceState.getParcelable(SCROLL_POSITION));
+            }else {
+                performSearch(savedInstanceState.getString(SEARCH_QUERY),false);
             }
         } else {
 
@@ -174,9 +184,10 @@ public class GamesCharacterWikiFragment extends Fragment {
             @Override
             public void onSearchAction(String currentQuery) {
                 if (currentQuery.trim().length() > 0) {
-                    performSearch(floatingSearchView.getQuery());
+                    performSearch(floatingSearchView.getQuery(),false);
                 }else {
-                    Toaster.make(getContext(),"no search text entered");
+                    Toasty.warning(getContext(),"no search text entered", Toast.LENGTH_SHORT,true).show();
+
                 }
 
             }
@@ -186,9 +197,9 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     }
 
-    private void performSearch(String text) {
+    private void performSearch(String text,boolean allSearch) {
 
-        InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
+    //    InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
 
         if (modals!=null && !modals.isEmpty()) {
             modals.clear();
@@ -203,10 +214,13 @@ public class GamesCharacterWikiFragment extends Fragment {
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
-        pacman.setVisibility(View.VISIBLE);
 
-        String filter = "name:" + text;
-        map.put(GiantBomb.FILTER, filter);
+        String filter = null;
+        if (!allSearch) {
+            filter = "name:" + text;
+            map.put(GiantBomb.FILTER, filter);
+
+        }
         map.put(GiantBomb.OFFSET, "0");
 
         gameCharacterSearchWikiInterface = GiantBomb.createGameCharacterSearchService();
@@ -216,8 +230,9 @@ public class GamesCharacterWikiFragment extends Fragment {
     }
 
     private void getCharacterWiki(final GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface, final Map<String, String> map) {
-
-        gameCharacterSearchWikiInterface.getResult(map).enqueue(new Callback<CharacterSearchModalList>() {
+        pacman.setVisibility(View.VISIBLE);
+        call = gameCharacterSearchWikiInterface.getResult(map);
+        call.enqueue(new Callback<CharacterSearchModalList>() {
             @Override
             public void onResponse(Call<CharacterSearchModalList> call, Response<CharacterSearchModalList> response) {
 
@@ -291,13 +306,18 @@ public class GamesCharacterWikiFragment extends Fragment {
             @Override
             public void onFailure(Call<CharacterSearchModalList> call, Throwable t) {
                 pacman.setVisibility(View.GONE);
-                Snackbar.make(coordinator, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                getCharacterWiki(gameCharacterSearchWikiInterface, map);
-                            }
-                        }).show();
+
+                if (!call.isCanceled()) {
+                    Toaster.makeSnackBar(coordinator, "Connectivity Problem", "RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getCharacterWiki(gameCharacterSearchWikiInterface,map);
+                        }
+                    });
+                }
+
+
+
             }
         });
 
@@ -319,10 +339,6 @@ public class GamesCharacterWikiFragment extends Fragment {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
     }
-
-
-
-
 
 
 
@@ -376,8 +392,16 @@ public class GamesCharacterWikiFragment extends Fragment {
         if (modals != null) {
             outState.putParcelableArrayList(GiantBomb.MODAL, new ArrayList<>(modals));
         }
+        outState.putString(SEARCH_QUERY,floatingSearchView.getQuery());
         if (recyclerView != null && recyclerView.getLayoutManager() != null) {
             outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(call!=null)
+            call.cancel();
     }
 }

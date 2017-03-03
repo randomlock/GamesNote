@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Activity.ImageViewPagerActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -19,6 +20,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by randomlocks on 4/28/2016.
@@ -75,7 +78,7 @@ public class CoverImageViewerFragment extends DialogFragment {
 
             @Override
             public void onError() {
-                Toaster.make(getContext(), "cannot load image");
+                Toasty.error(getContext(),"cannot load image", Toast.LENGTH_SHORT,true).show();
             }
         });
 

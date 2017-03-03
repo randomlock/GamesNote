@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment;
@@ -29,6 +30,7 @@ import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentGridLa
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
+import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
@@ -37,6 +39,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -65,7 +68,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int lastVisibleItem, totalItemCount;
 
 
-    public GameWikiAdapter(List<GameWikiModal> list,int viewType, Context context, int lastPosition,RecyclerView recyclerView) {
+    public GameWikiAdapter(final List<GameWikiModal> list, int viewType, Context context, int lastPosition, RecyclerView recyclerView) {
         this.list = list;
         this.viewType = viewType;
         this.context = context;
@@ -83,7 +86,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)&& list.size()>=50 && list.size() % 50 ==0) {
                     if (mOnLoadMoreListener != null) {
                         mOnLoadMoreListener.onLoadMore();
                     }
@@ -107,6 +110,28 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         list.addAll(newList);
             notifyItemRangeInserted(0,getItemCount());
 
+    }
+
+    public void removeAll() {
+        list.clear();
+        notifyItemRangeRemoved(0,getItemCount());
+    }
+
+
+
+    public void updateModal(List<GameWikiModal> list){
+        this.list.remove(this.list.size() - 1);
+        notifyItemRemoved(this.list.size());
+        int size = this.list.size();
+        this.list.addAll(list);
+        notifyItemRangeChanged(size,this.list.size());
+        setLoaded();
+
+    }
+
+    public void addNull() {
+        list.add(null);
+        notifyItemInserted(list.size()-1);
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
@@ -379,7 +404,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     String medium_url = (String) view.getTag(R.string.mediumImageUrl);
                     String small_url = (String) view.getTag(R.string.smallImageUrl);
                     if(medium_url==null)
-                        Toaster.make(context,"no image found");
+                    Toasty.error(context,"no image found", Toast.LENGTH_SHORT,true).show();
+
                     else {
                         CoverImageViewerFragment dialog = CoverImageViewerFragment.newInstance(small_url,medium_url,list.get(getAdapterPosition()).name);
                         dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");
@@ -391,28 +417,29 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 case R.id.platform1:
                     if (list.get(getLayoutPosition()).platforms != null) {
-                        Toaster.make(context, list.get(getLayoutPosition()).platforms.get(0).name);
+                        Toasty.info(context,list.get(getLayoutPosition()).platforms.get(0).name, Toast.LENGTH_SHORT,true).show();
+
                     }
                     break;
 
                 case R.id.platform2:
                     if (list.get(getLayoutPosition()).platforms != null) {
                         if (list.get(getLayoutPosition()).platforms.size() == 1)
-                            Toaster.make(context, list.get(getLayoutPosition()).platforms.get(0).name);
+                        Toasty.info(context,list.get(getLayoutPosition()).platforms.get(0).name, Toast.LENGTH_SHORT,true).show();
+
                         else
-                            Toaster.make(context, list.get(getLayoutPosition()).platforms.get(1).name);
+                        Toasty.info(context,list.get(getLayoutPosition()).platforms.get(1).name, Toast.LENGTH_SHORT,true).show();
+
                     }
                     break;
 
                 case R.id.platform3:
                     if(list.get(getLayoutPosition()).platforms!=null){
                         if(list.get(getLayoutPosition()).platforms.size()==2){
-                            Toaster.make(context,list.get(getLayoutPosition()).platforms.get(1).name);
+                            Toasty.info(context,list.get(getLayoutPosition()).platforms.get(1).name, Toast.LENGTH_SHORT,true).show();
                         } else if(list.get(getLayoutPosition()).platforms.size()==3){
-                            Toaster.make(context,list.get(getLayoutPosition()).platforms.get(2).name);
+                            Toasty.info(context,list.get(getLayoutPosition()).platforms.get(2).name, Toast.LENGTH_SHORT,true).show();
                         }else if(list.get(getLayoutPosition()).platforms.size()>3) {
-                            Toaster.make(context,"third");
-
                             PopupMenu popup = new PopupMenu(context, view);
                             GameWikiModal platformModal = list.get(getLayoutPosition());
                             for(int i=2, len = platformModal.platforms.size();i<len;i++){
@@ -464,7 +491,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        Toaster.make(context,"deleted");
+                        Toasty.warning(context,"deleted", Toast.LENGTH_SHORT,true).show();
+
                     }
                 });
                 return true;
@@ -499,7 +527,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        Toaster.make(context,"added");
+                        Toasty.success(context,"added", Toast.LENGTH_SHORT,true).show();
+
                     }
                 });
 
@@ -577,7 +606,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     String medium_url = (String) view.getTag(R.string.mediumImageUrl);
                     String small_url = (String) view.getTag(R.string.smallImageUrl);
                     if(medium_url==null)
-                        Toaster.make(context,"no image found");
+                    Toasty.error(context,"no image found", Toast.LENGTH_SHORT,true).show();
+
                     else {
                         CoverImageViewerFragment dialog = CoverImageViewerFragment.newInstance(small_url,medium_url,list.get(getAdapterPosition()).name);
                         dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");
@@ -629,7 +659,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        Toaster.make(context,"deleted");
+                        Toasty.error(context,"deleted", Toast.LENGTH_SHORT,true).show();
                     }
                 });
                 return true;
@@ -664,7 +694,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        Toaster.make(context,"added");
+                        Toasty.success(context,"added", Toast.LENGTH_SHORT,true).show();
                     }
                 });
 
@@ -770,7 +800,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        Toaster.make(context,"deleted");
+                        Toasty.warning(context,"deleted", Toast.LENGTH_SHORT,true).show();
                     }
                 });
                 return true;
@@ -805,7 +835,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        Toaster.make(context,"added");
+                        Toasty.success(context,"added", Toast.LENGTH_SHORT,true).show();
                     }
                 });
 

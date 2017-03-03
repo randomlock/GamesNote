@@ -166,7 +166,6 @@ public class GameReviewActivity extends AppCompatActivity {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     if (modals.siteDetailUrl != null) {
-                        Toaster.make(GameReviewActivity.this, modals.siteDetailUrl);
                         runBrowser(modals.siteDetailUrl);
                     }
 

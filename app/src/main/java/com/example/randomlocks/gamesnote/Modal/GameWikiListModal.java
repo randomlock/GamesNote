@@ -10,6 +10,9 @@ import java.util.List;
 public class GameWikiListModal {
 
     @Expose
+    public int numberOfTotalResults;
+
+    @Expose
     public List<GameWikiModal> results;
 
 }

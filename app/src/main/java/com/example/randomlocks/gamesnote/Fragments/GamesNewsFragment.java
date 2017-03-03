@@ -29,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Adapter.GameNewsAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
@@ -49,6 +50,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -155,7 +157,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 try {
                     runOkHttp();
                 } catch (IOException e) {
-                    Toaster.make(getContext(), "connectivity problem");
+                    Toasty.error(getContext(),"connectivity problem", Toast.LENGTH_SHORT,true).show();
+
                 }
             } else {
                 loadRecycler(modals, null);
@@ -275,7 +278,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                         @Override
                         public void run() {
                             progressBar.setVisibility(View.GONE);
-                            Toaster.make(getContext(), "Unable to get the news feed");
+                            Toasty.error(getContext(),"Unable to get the news feed", Toast.LENGTH_SHORT,true).show();
+
                         }
                     });
 

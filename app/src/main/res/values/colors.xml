@@ -43,6 +43,14 @@
     <color name="white_black">#FFF</color>
     <color name="default_bg">#aa000000</color>
 
+    <color name="fab_1">#7C4DFF</color>
+    <color name="fab_2">#536DFE</color>
+    <color name="fab_3">#448AFF</color>
+    <color name="fab_4">#40C4FF</color>
+    <color name="fab_5">#69F0AE</color>
+
+
+
     <array name="score_color">
         <item>@color/no_score</item>
         <item>@color/worst</item>

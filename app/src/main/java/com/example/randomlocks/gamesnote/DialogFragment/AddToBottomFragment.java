@@ -126,8 +126,29 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
             case R.id.start_date:
             case R.id.end_date:
                 view_id = v.getId();
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+               // DialogFragment newFragment = new DatePickerFragment();
+               // newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+
+
+                new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        if (view_id == R.id.start_date){
+                            startDate.setText(month + 1 + "/" + day + "/" + year);
+                            startDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                        } else {
+                            endDate.setText(month + 1 + "/" + day + "/" + year);
+                            endDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                        }
+                    }
+                },year,month,day).show();
+
+
                 break;
             case R.id.quick_add:
                 mAddToBottomInterface.onAdd(0, "-", "-", "-");
@@ -233,39 +254,5 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
     }
 
 
-    class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
-
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-
-            if (view_id == R.id.start_date){
-                startDate.setText(month + 1 + "/" + day + "/" + year);
-                startDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
-            } else {
-                endDate.setText(month + 1 + "/" + day + "/" + year);
-                endDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
-            }
-
-        }
-
-
-    }
 
 }

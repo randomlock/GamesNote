@@ -11,10 +11,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
+
+import es.dmoral.toasty.Toasty;
 
 public class ImprovedWebViewActivity extends AppCompatActivity {
 
@@ -80,7 +83,7 @@ public class ImprovedWebViewActivity extends AppCompatActivity {
     public void loadUrl(String url) {
         if (mIsWebViewAvailable) getWebView().loadUrl(mUrl = url);
         else
-            Toaster.make(this, "cannot load page");
+        Toasty.info(this,"cannot load page", Toast.LENGTH_SHORT,true).show();
     }
 
     /**

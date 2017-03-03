@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -19,6 +20,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by randomlocks on 6/10/2016.
@@ -135,7 +138,8 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
         @Override
         public boolean onLongClick(View v) {
 
-            Toaster.make(context, stringList.get(getLayoutPosition()).name);
+            Toasty.info(context,stringList.get(getLayoutPosition()).name, Toast.LENGTH_SHORT,true).show();
+
             return true;
         }
     }

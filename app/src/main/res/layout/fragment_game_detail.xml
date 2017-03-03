@@ -465,10 +465,10 @@
             android:id="@+id/completed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/white"
+            app:fab_colorNormal="@color/fab_1"
             app:fab_label="Completed"
             app:fab_colorPressed="@color/accent"
-
+            app:fab_size="mini"
             />
 
         <com.github.clans.fab.FloatingActionButton
@@ -476,8 +476,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_label="Playing"
-            app:fab_colorNormal="@color/white"
+            app:fab_colorNormal="@color/fab_2"
             app:fab_colorPressed="@color/accent"
+            app:fab_size="mini"
 
             />
 
@@ -487,8 +488,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_label="Dropped"
-            app:fab_colorNormal="@color/white"
+            app:fab_colorNormal="@color/fab_3"
             app:fab_colorPressed="@color/accent"
+            app:fab_size="mini"
             />
 
 
@@ -497,9 +499,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_label="Planning"
-            app:fab_colorNormal="@color/white"
+            app:fab_colorNormal="@color/fab_4"
             app:fab_colorPressed="@color/accent"
+            app:fab_size="mini"
             />
+
 
 
         <com.github.clans.fab.FloatingActionButton
@@ -507,8 +511,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_label="Replaying"
-            app:fab_colorNormal="@color/white"
+            app:fab_colorNormal="@color/fab_5"
             app:fab_colorPressed="@color/accent"
+            app:fab_size="mini"
             />
 
 

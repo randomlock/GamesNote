@@ -15,8 +15,12 @@ public class Toaster {
         Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
     }
 
-    public static void makeSnackbar(View view, String title) {
-        Snackbar.make(view, title, Snackbar.LENGTH_SHORT).show();
+    public static void makeSnackBar(View view, String title,String retryText, View.OnClickListener listener) {
+        Snackbar.make(view, title, Snackbar.LENGTH_INDEFINITE).setAction(retryText,listener).show();
+    }
+
+   public static void makeSnackBar(View view,String title){
+        Snackbar.make(view,title,Snackbar.LENGTH_SHORT).show();
     }
 
 }

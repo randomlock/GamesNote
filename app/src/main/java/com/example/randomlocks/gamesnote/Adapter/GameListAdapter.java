@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -17,7 +16,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -26,6 +27,7 @@ import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.squareup.picasso.Picasso;
 
 import at.grabner.circleprogress.CircleProgressView;
+import es.dmoral.toasty.Toasty;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
@@ -204,7 +206,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
                     @Override
                     public void execute(Realm realm) {
                         getData().deleteFromRealm(getAdapterPosition());
-
+                        Toasty.error(context,"game deleted",Toast.LENGTH_SHORT).show();
                        // realm.where(GameListDatabase.class).equalTo("apiDetailUrl",gameListDatabase.getApiDetailUrl()).findFirst().deleteFromRealm();
                     }
                 });
