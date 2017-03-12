@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,7 +74,6 @@ public class GamesCharacterWikiFragment extends Fragment {
     List<CharacterSearchModal> modals;
     Map<String, String> map;
     GameCharacterSearchAdapter adapter;
-    Toolbar toolbar;
     FloatingSearchView floatingSearchView;
     LinearLayoutManager manager;
     int scrollToPosition = 0;
@@ -94,7 +94,6 @@ public class GamesCharacterWikiFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         map = new HashMap<>();
         map.put(GiantBomb.KEY, GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");
@@ -115,12 +114,11 @@ public class GamesCharacterWikiFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         coordinator = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
         appBarLayout = (AppBarLayout) coordinator.findViewById(R.id.app_bar_layout);
-        imageView = (ImageView) getActivity().findViewById(R.id.imageView);
-        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+        imageView = (ImageView) appBarLayout.findViewById(R.id.imageView);
         floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
-        pacman = (AVLoadingIndicatorView) getActivity().findViewById(R.id.progressBar);
-        errorText = (TextView) getActivity().findViewById(R.id.errortext);
+        recyclerView = (RecyclerView) coordinator.findViewById(R.id.recycler_view);
+        pacman = (AVLoadingIndicatorView) coordinator.findViewById(R.id.progressBar);
+        errorText = (TextView) coordinator.findViewById(R.id.errortext);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -129,17 +127,14 @@ public class GamesCharacterWikiFragment extends Fragment {
         Picasso.with(getContext()).load("http://www.nymgamer.com/wp-content/uploads/2015/07/video_game_characters_wallpaper_by_v1d30guy-d60lnsh-copy-720x340.jpg").placeholder(R.drawable.news_image_drawable).fit().centerCrop().into(imageView);
 
 
-        AppCompatActivity actionBar = (AppCompatActivity) getActivity();
-        actionBar.setSupportActionBar(toolbar);
-        actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+       ;
         DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         floatingSearchView.attachNavigationDrawerToMenuButton(drawer);
 
 
-
-
         manager = new ConsistentLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
+
 
 
 
@@ -346,7 +341,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.empty_menu, menu);
+       // inflater.inflate(R.menu.empty_menu, menu);
     }
 
     @Override

@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoOtherAdapter;
+import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
+import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -28,6 +30,7 @@ public class GameVideoOtherPagerFragment extends Fragment {
 
     private static final String MODAL = "list_modals";
     private static final String SCROLL_POSITION = "scroll_position";
+    private static final int LIKE_TYPE = 1;
     Realm realm;
     RecyclerView recyclerView;
     boolean isReduced = false;
@@ -35,6 +38,7 @@ public class GameVideoOtherPagerFragment extends Fragment {
     GameVideoOtherAdapter adapter;
     RealmResults<GamesVideoModal> listModals;
     FloatingSearchView floatingSearchView;
+    ConsistentLinearLayoutManager manager;
 
 
     public GameVideoOtherPagerFragment() {
@@ -70,14 +74,10 @@ public class GameVideoOtherPagerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_games_video_pager, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_games_video_pager,container,false);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
       /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -88,18 +88,32 @@ public class GameVideoOtherPagerFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });*/
+        manager = new ConsistentLinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(manager);
+        if(isReduced)
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+
+
         if (listModals != null) {
             fillRecyclerView(listModals);
         } else {
-            if (position == GamesVideoModal.LIKE_TYPE) {
+            if (position == LIKE_TYPE) {
                 listModals = realm.where(GamesVideoModal.class).equalTo("isFavorite", true).findAll();
             } else {
                 listModals = realm.where(GamesVideoModal.class).equalTo("isWatchLater", true).findAll();
             }
-            Toaster.make(getContext(),listModals.size()+"");
             fillRecyclerView(listModals);
 
         }
+
+
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
 
     }
@@ -109,30 +123,17 @@ public class GameVideoOtherPagerFragment extends Fragment {
         //TODO add error text for no video
 
         if (adapter == null) {
-            adapter = new GameVideoOtherAdapter(getContext(), listModals, true, isReduced, new GameVideoOtherAdapter.OnClickInterface() {
-                @Override
-                public void onWatchLater(GamesVideoModal modal) {
-
-                }
-
-                @Override
-                public void onLike(GamesVideoModal modal) {
-
-                }
-
-                @Override
-                public void onShare() {
-
-                }
-            });
+            adapter = new GameVideoOtherAdapter(getContext(), listModals, true, isReduced,realm,position);
         }
 
-        if (recyclerView.getLayoutManager() == null) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if(recyclerView.getLayoutManager()==null){
+            recyclerView.setLayoutManager(manager);
         }
+
         if (recyclerView.getAdapter() == null) {
             recyclerView.setAdapter(adapter);
         }
+
 
     }
 

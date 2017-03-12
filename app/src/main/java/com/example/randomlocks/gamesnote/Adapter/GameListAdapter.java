@@ -164,8 +164,10 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         TextView title;
         ImageView image;
         CircleProgressView scoreView;
-        ImageButton popup;
+        ImageButton popupMenu;
         LabelView statusLabel;
+
+        PopupMenu popup;
 
 
          MyViewHolder(View itemView) {
@@ -175,15 +177,18 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
              statusLabel = (LabelView) itemView.findViewById(R.id.status_label);
              if(status!=GiantBomb.ALL_GAMES)
                  statusLabel.setVisibility(View.GONE);
-             popup = (ImageButton) itemView.findViewById(R.id.popup);
+             popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
-                popup.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+                popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
             scoreView = (CircleProgressView) itemView.findViewById(R.id.score_view);
             itemView.setOnClickListener(this);
             scoreView.setOnClickListener(this);
-            popup.setOnClickListener(this);
-
+            popupMenu.setOnClickListener(this);
+              popup = new PopupMenu(context, popupMenu);
+             popup.setOnMenuItemClickListener(this);
+             MenuInflater inflater = popup.getMenuInflater();
+             inflater.inflate(R.menu.popup_list,popup.getMenu());
 
         }
 
@@ -193,10 +198,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
             if(view.getId()==R.id.score_view){
                 mOnClickInterface.onScoreClick(getData().get(getAdapterPosition()).getApiDetailUrl(),getData().get(getAdapterPosition()).getScore(),getAdapterPosition());
             }else  if(view.getId()==R.id.popup){
-                PopupMenu popup = new PopupMenu(context, view);
-                popup.setOnMenuItemClickListener(this);
-                MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.popup_list,popup.getMenu());
+
                 popup.show();
 
 

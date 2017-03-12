@@ -1,3 +1,13 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+
+
 <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_coordinator"
@@ -84,6 +94,14 @@
     </FrameLayout>
 
 
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/floating_search_view"
         android:layout_width="match_parent"
@@ -103,4 +121,5 @@
 
 
 
-</android.support.design.widget.CoordinatorLayout>
+
+    </RelativeLayout>

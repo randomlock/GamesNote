@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_navigation_more_vert"
         android:layout_toLeftOf="@+id/cardView"
+        android:layout_toStartOf="@+id/cardView"
         android:background="@null"
         />
 
@@ -119,12 +120,15 @@
         android:gravity="end"
         android:textColor="@color/accent"
         android:layout_marginTop="4dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginStart="6dp"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:paddingRight="12dp"
+        android:paddingEnd="12dp"
         android:textSize="12sp"
         android:layout_below="@+id/description"
-        android:layout_alignRight="@+id/title"
-        android:layout_alignEnd="@+id/title" />
+       android:layout_toLeftOf="@+id/cardView"
+        android:layout_toStartOf="@+id/cardView"
+        />
 
 
 

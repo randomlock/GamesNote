@@ -39,8 +39,7 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     @Expose
     public String youtubeId;
 
-    public static final int LIKE_TYPE = 1;
-    public static final int WATCH_LATER_TYPE = 2;
+
 
     public boolean isFavorite = false;
     public boolean isWatchLater = false;

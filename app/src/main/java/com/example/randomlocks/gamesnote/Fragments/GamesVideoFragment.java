@@ -5,16 +5,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +19,6 @@ import android.view.ViewGroup;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoOtherPagerFragment;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoPagerFragment;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 
 import java.util.ArrayList;
@@ -109,7 +105,9 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
 
         /************* SETTING Viewpager *****************/
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(new GameVideoPagerAdapter(getChildFragmentManager(), getContext()));
+
         tabLayout.setupWithViewPager(viewPager);
 
     }
@@ -120,7 +118,7 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     }
 
 
-    static class GameVideoPagerAdapter extends FragmentPagerAdapter {
+   public static class GameVideoPagerAdapter extends FragmentPagerAdapter {
 
         final int PAGE_COUNT = 3;
         private Context context;
@@ -139,7 +137,6 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
         @Override
         public Fragment getItem(int position) {
-
             return fragments.get(position);
         }
 

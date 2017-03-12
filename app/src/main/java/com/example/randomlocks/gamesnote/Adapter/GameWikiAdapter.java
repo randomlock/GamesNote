@@ -345,9 +345,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView title, date;
         Button platform1, platform2, platform3;
         ImageView imageView;
-        public View view;
         CardView cardView;
-        ImageButton popup;
+        ImageButton popupMenu;
+         PopupMenu popup;
 
         String str[];
 
@@ -361,13 +361,14 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             platform2 = (Button) itemView.findViewById(R.id.platform2);
             platform3 = (Button) itemView.findViewById(R.id.platform3);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            popup = (ImageButton) itemView.findViewById(R.id.popup);
+            popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
-            popup.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+            popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+            popup = new PopupMenu(context, popupMenu);
+            popup.setOnMenuItemClickListener(this);
 
-
-            popup.setOnClickListener(this);
+            popupMenu.setOnClickListener(this);
             itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
             platform1.setOnClickListener(this);
@@ -452,8 +453,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
 
                 case R.id.popup :
-                    final PopupMenu popup = new PopupMenu(context, view);
-                    popup.setOnMenuItemClickListener(this);
+
                     final MenuInflater inflater = popup.getMenuInflater();
                      str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -555,7 +555,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView title, description;
         ImageView imageView;
         CardView cardView;
-        ImageButton popup;
+        ImageButton popupMenu;
+        PopupMenu popup;
 
         String str[];
 
@@ -566,13 +567,14 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             title = (TextView) itemView.findViewById(R.id.title);
             description = (TextView) itemView.findViewById(R.id.description);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            popup = (ImageButton) itemView.findViewById(R.id.popup);
+            popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
-                popup.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+                popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+            popup = new PopupMenu(context, popupMenu);
+            popup.setOnMenuItemClickListener(this);
 
-
-            popup.setOnClickListener(this);
+            popupMenu.setOnClickListener(this);
             itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
 
@@ -620,8 +622,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 case R.id.popup :
-                    final PopupMenu popup = new PopupMenu(context, view);
-                    popup.setOnMenuItemClickListener(this);
+
                     final MenuInflater inflater = popup.getMenuInflater();
                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -714,7 +715,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView title;
         ImageView imageView;
         CardView cardView;
-        ImageButton popup;
+        ImageButton popupMenu;
+        PopupMenu popup;
 
         String str[];
 
@@ -724,13 +726,14 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardView = (CardView) itemView.findViewById(R.id.cardView);
             title = (TextView) itemView.findViewById(R.id.title);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            popup = (ImageButton) itemView.findViewById(R.id.popup);
+            popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
-                popup.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+                popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+            popup = new PopupMenu(context, popupMenu);
+            popup.setOnMenuItemClickListener(this);
 
-
-            popup.setOnClickListener(this);
+            popupMenu.setOnClickListener(this);
             itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
 
@@ -761,8 +764,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 case R.id.popup :
-                    final PopupMenu popup = new PopupMenu(context, view);
-                    popup.setOnMenuItemClickListener(this);
+
                     final MenuInflater inflater = popup.getMenuInflater();
                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();

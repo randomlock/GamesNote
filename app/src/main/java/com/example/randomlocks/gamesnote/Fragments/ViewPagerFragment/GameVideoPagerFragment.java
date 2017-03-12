@@ -274,7 +274,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         if (listModals!=null && !listModals.isEmpty()) {
             listModals.clear();
             if(adapter!=null){
-                Toaster.make(getContext(),"clear modal");
                 adapter.removeAll();
 
             }
@@ -395,7 +394,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     }
 
     private void getGameVideos(final GamesVideosInterface gamesVideoInterface, final Map<String, String> map) {
-        Toaster.make(getContext(),"getGameVideos");
        call =  gamesVideoInterface.getResult(map);
         call.enqueue(new Callback<GamesVideoModalList>() {
             @Override
@@ -410,7 +408,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 }else {
 
                     if (response.body().results.isEmpty()) {
-                        Toaster.make(getContext(),"empty response");
                         errorText.setVisibility(View.VISIBLE);
 
 
@@ -418,18 +415,16 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                     } else {
                         //searching the data for first time
                         if(adapter==null){
-                            Toaster.make(getContext(),"adapter is null");
 
 
 
                             listModals = response.body().results;
-                            adapter = new GameVideoAdapter(listModals, getContext(), isReduced,GameVideoPagerFragment.this,realmMap,recyclerView);
+                            adapter = new GameVideoAdapter(listModals, getContext(), isReduced,realm,GameVideoPagerFragment.this,realmMap,recyclerView);
                             recyclerView.setAdapter(adapter);
 
                         }else {  //searching the data after first time
                             listModals = response.body().results;
                             adapter.swap(listModals);
-                            Toaster.make(getContext(),"coming to swap"+listModals.size());
 
                         }
 
@@ -442,7 +437,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                     adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
                         @Override
                         public void onLoadMore() {
-                            Toaster.make(getContext(),"on load more");
                             // modals.add(null);
                             adapter.addNull();
                             //   adapter.notifyItemInserted(modals.size()-1);
@@ -462,15 +456,17 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             @Override
             public void onFailure(Call<GamesVideoModalList> call, Throwable t) {
                 pacman.setVisibility(View.GONE);
-                Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                pacman.setVisibility(View.VISIBLE);
-                                getGameVideos(gamesVideoInterface, map);
+                if (!call.isCanceled()) {
+                    Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("RETRY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    pacman.setVisibility(View.VISIBLE);
+                                    getGameVideos(gamesVideoInterface, map);
 
-                            }
-                        }).show();
+                                }
+                            }).show();
+                }
             }
         });
     }
@@ -479,10 +475,11 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
 
         if(adapter==null){
-            adapter = new GameVideoAdapter(listModals, getContext(), isReduced,GameVideoPagerFragment.this,realmMap,recyclerView);
+            adapter = new GameVideoAdapter(listModals, getContext(), isReduced,realm,GameVideoPagerFragment.this,realmMap,recyclerView);
+        }
+        if (recyclerView.getAdapter() == null) {
             recyclerView.setAdapter(adapter);
         }
-
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
@@ -629,7 +626,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     private void changeVideoSource() {
 
         if (recyclerView!=null && recyclerView.getAdapter() != null) {
-            Toaster.make(getContext(),"heelo");
             adapter.removeAll();
         }
         pacman.setVisibility(View.VISIBLE);

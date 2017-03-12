@@ -253,6 +253,8 @@
     <string name="giantbomb_release">Giantbomb releases</string>
     <string name="remove_watch_list">Remove from watch list</string>
     <string name="remove_like">Remove from like video</string>
+    <string name="like">Like</string>
+    <string name="watch_later">Watch later</string>
 
 
 </resources>

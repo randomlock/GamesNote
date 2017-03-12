@@ -121,9 +121,9 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         View v = inflater.inflate(R.layout.fragment_game_wiki, container, false);
 
         coordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.root_coordinator);
+        floatingSearchView = (FloatingSearchView) v.findViewById(R.id.floating_search_view);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(this);
-        floatingSearchView = (FloatingSearchView) coordinatorLayout.findViewById(R.id.floating_search_view);
         //  viewPager = (ViewPager) coordinatorLayout.findViewById(R.id.viewpager);
         recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.recycler_view);
         progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);

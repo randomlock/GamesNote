@@ -30,13 +30,6 @@
             android:title="@string/games_news" />
 
 
-        <item
-            android:id="@+id/nav_calender"
-            android:icon="@mipmap/ic_launcher"
-            android:title="@string/games_calender" />
-
-
-
 
         <item
             android:id="@+id/nav_trailer"
