@@ -49,8 +49,8 @@ public class GiantBomb {
     public static final String OFFSET = "offset";
     public static final String FIELD = "filter";
     public static final String WHICH = "which";
-    public static final int SMALL_IMAGE_URL = 1;
-    public static final int MEDIUM_IMAGE_URL = 2;
+    public static final int SMALL_IMAGE_URL = 10;
+    public static final int MEDIUM_IMAGE_URL = 11;
     public static final String ASCENDING = "ascending";
     public static final String FONT = "fontoption";
     public static final String NAV_HEADER_URL = "navHeaderUrl";
@@ -71,6 +71,7 @@ public class GiantBomb {
     public static final String REDUCE_LIST_VIEW = "reduce_list_view";
     public static final  String SEEK_POSITION = "seek_position";
     public static final String VIEW_TYPE = "view_type" ;
+    public static final int ALL_GAMES = 0 ;
     public static String REDUCE_VIEW = "reduce_view";
     public static final int REPLAYING = 1;
     public static final int PLANNING = 2;

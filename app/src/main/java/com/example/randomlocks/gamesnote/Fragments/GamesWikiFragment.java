@@ -124,7 +124,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(this);
         floatingSearchView = (FloatingSearchView) coordinatorLayout.findViewById(R.id.floating_search_view);
-      //  viewPager = (ViewPager) coordinatorLayout.findViewById(R.id.viewpager);
+        //  viewPager = (ViewPager) coordinatorLayout.findViewById(R.id.viewpager);
         recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.recycler_view);
         progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
         errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
@@ -262,7 +262,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
             if(listModals==null){
                 performSearch(savedInstanceState.getString(SEARCH_QUERY),false);
             }else
-            fillRecycler(listModals, savedInstanceState.getParcelable(SCROLL_POSITION));
+                fillRecycler(listModals, savedInstanceState.getParcelable(SCROLL_POSITION));
         } else {
             if (listModals != null && !listModals.isEmpty()) {
                 fillRecycler(listModals, null);
@@ -317,6 +317,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
+        progressBar.setVisibility(View.VISIBLE);
 
         String filter = null;
         if (!allSearch) {
@@ -381,7 +382,6 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
 
     public void getGameWiki(final GameWikiListInterface gameWikiListInterface, final Map<String, String> map) {
-        progressBar.setVisibility(View.VISIBLE);
         Toaster.make(getContext(),"coming here");
         call = gameWikiListInterface.getResult(map);
         call.enqueue(new Callback<GameWikiListModal>() {
@@ -455,6 +455,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                     Toaster.makeSnackBar(coordinatorLayout, "Connectivity Problem", "RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            progressBar.setVisibility(View.VISIBLE);
                             getGameWiki(gameWikiListInterface,map);
                         }
                     });
@@ -570,7 +571,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         }
         outState.putString(SEARCH_QUERY,floatingSearchView.getQuery());
         if(recyclerView != null && recyclerView.getLayoutManager() != null)
-        outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
+            outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
 
 
     }

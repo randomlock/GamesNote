@@ -111,13 +111,14 @@ public class GamesListFragment extends Fragment {
 
     class GameListPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int PAGE_COUNT = 5;
-        private String pageTitle[] = {"Replaying", "Planning", "dropped", "playing", "completed"};
+        private final int PAGE_COUNT = 6;
+        private String pageTitle[] = {"All","Replaying", "Planning", "dropped", "playing", "completed"};
         private ArrayList<Fragment> fragments;
 
         public GameListPagerAdapter(FragmentManager fm) {
             super(fm);
             fragments = new ArrayList<>();
+            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.ALL_GAMES));
             fragments.add(GamesListPagerFragment.newInstance(GiantBomb.REPLAYING));
             fragments.add(GamesListPagerFragment.newInstance(GiantBomb.PLANNING));
             fragments.add(GamesListPagerFragment.newInstance(GiantBomb.DROPPED));

@@ -14,7 +14,6 @@ import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -126,14 +125,14 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
             heading = (TextView) itemView.findViewById(R.id.news_heading);
             if (isSimple) {
                 cardView = (CardView) itemView.findViewById(R.id.cardView);
-                image = (ImageView) cardView.findViewById(R.id.news_image);
+                image = (ImageView) cardView.findViewById(R.id.imageView);
 
             } else {
-                image = (ImageView) itemView.findViewById(R.id.news_image);
+                image = (ImageView) itemView.findViewById(R.id.imageView);
 
             }
-            date = (TextView) itemView.findViewById(R.id.news_date);
-            description = (TextView) itemView.findViewById(R.id.news_description);
+            date = (TextView) itemView.findViewById(R.id.date);
+            description = (TextView) itemView.findViewById(R.id.description);
             itemView.setOnClickListener(this);
 
         }

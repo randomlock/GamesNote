@@ -251,6 +251,8 @@
     <string name="compact_list_view">compact_list_view</string>
     <string name="change_view">change view</string>
     <string name="giantbomb_release">Giantbomb releases</string>
+    <string name="remove_watch_list">Remove from watch list</string>
+    <string name="remove_like">Remove from like video</string>
 
 
 </resources>

@@ -124,12 +124,20 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         textView = (TextView) view.findViewById(R.id.errortext);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if(isSimple)
+            recyclerView.addItemDecoration(itemDecoration);
 
         if (!realm.isInTransaction()) {
             if (isAscending) {
-                realmResult = realm.where(GameListDatabase.class).equalTo("status", status).findAllSortedAsync(sort_option,Sort.ASCENDING);
+                if(status==GiantBomb.ALL_GAMES)
+                    realmResult = realm.where(GameListDatabase.class).findAllSortedAsync(sort_option,Sort.ASCENDING);
+                else
+                    realmResult = realm.where(GameListDatabase.class).equalTo("status", status).findAllSortedAsync(sort_option,Sort.ASCENDING);
             }else {
-                realmResult = realm.where(GameListDatabase.class).equalTo("status",status).findAllSortedAsync(sort_option,Sort.DESCENDING);
+                if(status==GiantBomb.ALL_GAMES)
+                    realmResult = realm.where(GameListDatabase.class).findAllSortedAsync(sort_option,Sort.DESCENDING);
+                else
+                    realmResult = realm.where(GameListDatabase.class).equalTo("status", status).findAllSortedAsync(sort_option,Sort.DESCENDING);
             }
         }
 

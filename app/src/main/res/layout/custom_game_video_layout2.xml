@@ -1,124 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root_view"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F44336"
-    android:foreground="?android:attr/selectableItemBackground">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:selectableItemBackground"
+    android:layout_margin="12dp">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/white" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:background="@drawable/headerbackground"
-        android:adjustViewBounds="true"
-        android:layout_below="@+id/view" />
-
-
-    <Button
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#35000000"
-        android:text="watched"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView" />
-
-
-    <Button
-        android:id="@+id/length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/time"
-        android:textColor="@color/white"
-        android:background="#35000000"
-        android:textSize="12sp"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/title"
-        android:textColor="@color/white"
-        android:layout_margin="12dp"
-        android:layout_alignParentTop="true"
+        android:textColor="@color/primary_text"
+        android:text="Hello how are your bro"
+        style="@style/TextStyle3"
+        android:gravity="top"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/popup"
+        android:layout_toStartOf="@+id/popup"
+        android:layout_alignParentTop="true" />
+
+
+    <ImageButton
+        android:id="@+id/popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_navigation_more_vert"
+        android:layout_toLeftOf="@+id/cardView"
+        android:background="@null"
+        />
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_centerVertical="true"
+        app:cardCornerRadius="4dp"
+        app:cardBackgroundColor="@color/cardColor">
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="120dp"
+            android:layout_height="90dp"
+            android:src="@drawable/news_image_drawable"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            />
+
+        <com.flyco.labelview.LabelView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lv_text="hello"
+            app:lv_text_size="12sp"
+            app:lv_background_color="@color/primary"
+            />
+
+        <com.flyco.labelview.LabelView
+            android:id="@+id/is_watch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lv_text="watched"
+            app:lv_text_size="12sp"
+            android:layout_gravity="bottom|end"
+            app:lv_gravity="BOTTOM_RIGHT"
+            app:lv_background_color="@color/primary"
+
+            />
+
+
+    </android.support.v7.widget.CardView>
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_description"
-        android:textColor="?android:attr/textColorPrimary"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_marginLeft="12dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:maxLines="2"
         android:ellipsize="end"
-        android:visibility="gone"
-        android:layout_alignRight="@+id/title"
-        android:layout_alignEnd="@+id/title"
+        android:text="hello bro how are you ding in this world"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/cardView"
+        android:layout_toStartOf="@+id/cardView"
         android:layout_below="@+id/title"
-        android:layout_alignBottom="@+id/share" />
+        />
 
-
-    <ImageButton
-        android:id="@+id/share"
+    <TextView
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_share_grey600_24dp"
-        android:background="@null"
-        android:visibility="gone"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignRight="@+id/description"
-        android:layout_alignEnd="@+id/description"
-        android:layout_margin="12dp"
-        android:tint="@color/white" />
+        android:text="-"
+        android:fontFamily="serif"
+        android:textColor="@color/black_white"
+        android:gravity="center_vertical"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignStart="@+id/title"
+        android:layout_below="@+id/description"
+        />
 
-    <ImageButton
-        android:id="@+id/like"
+    <TextView
+        android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_heart_outline_grey600_24dp"
-        android:background="@null"
-        android:visibility="gone"
-        android:tint="@color/white"
-        android:layout_alignTop="@+id/watch_later"
-        android:layout_toLeftOf="@+id/share"
-        android:layout_toStartOf="@+id/share" />
+        android:text="-"
+        android:gravity="end"
+        android:textColor="@color/accent"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:textSize="12sp"
+        android:layout_below="@+id/description"
+        android:layout_alignRight="@+id/title"
+        android:layout_alignEnd="@+id/title" />
 
-
-    <ImageButton
-        android:id="@+id/watch_later"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_timer_grey600_24dp"
-        android:background="@null"
-        android:tint="@color/white"
-        android:visibility="gone"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_toLeftOf="@+id/like"
-        android:layout_margin="12dp"
-        android:layout_toStartOf="@+id/like" />
 
 
 </RelativeLayout>
+
+
+

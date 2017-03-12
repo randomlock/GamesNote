@@ -105,7 +105,7 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
             }
 
 
-            holder.length.setText(date.toString());
+           // holder.length.setText(date.toString());
         }
 
 
@@ -118,7 +118,7 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
         TextView title, description, date;
 
 
-        public MyViewHolder(View itemView) {
+         MyViewHolder(View itemView) {
             super(itemView);
             videoThumb = (ImageView) itemView.findViewById(R.id.imageView);
             length = (Button) itemView.findViewById(R.id.length);

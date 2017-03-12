@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Activity.ImageViewPagerActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -67,7 +66,7 @@ public class CoverImageViewerFragment extends DialogFragment {
         getDialog().setCanceledOnTouchOutside(true);
 
 
-        imageView = (ImageView) v.findViewById(R.id.imageview);
+        imageView = (ImageView) v.findViewById(R.id.imageView);
         hdButton = (Button) v.findViewById(R.id.button);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
         Picasso.with(getContext()).load(mediumImageUrl).fit().centerCrop().into(imageView, new Callback() {

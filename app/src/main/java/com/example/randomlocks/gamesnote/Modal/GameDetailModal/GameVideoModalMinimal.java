@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.Modal.GamesVideoModal;
+package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
 import com.google.gson.annotations.Expose;
 

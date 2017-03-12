@@ -14,6 +14,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoOtherAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
 
@@ -34,7 +35,6 @@ public class GameVideoOtherPagerFragment extends Fragment {
     GameVideoOtherAdapter adapter;
     RealmResults<GamesVideoModal> listModals;
     FloatingSearchView floatingSearchView;
-    SwipeRefreshLayout swipeRefreshLayout;
 
 
     public GameVideoOtherPagerFragment() {
@@ -77,9 +77,8 @@ public class GameVideoOtherPagerFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
-        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeContainer);
-        recyclerView = (RecyclerView) swipeRefreshLayout.findViewById(R.id.recycler_view);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
+      /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (adapter != null) {
@@ -88,7 +87,7 @@ public class GameVideoOtherPagerFragment extends Fragment {
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
-        });
+        });*/
         if (listModals != null) {
             fillRecyclerView(listModals);
         } else {
@@ -97,7 +96,7 @@ public class GameVideoOtherPagerFragment extends Fragment {
             } else {
                 listModals = realm.where(GamesVideoModal.class).equalTo("isWatchLater", true).findAll();
             }
-
+            Toaster.make(getContext(),listModals.size()+"");
             fillRecyclerView(listModals);
 
         }

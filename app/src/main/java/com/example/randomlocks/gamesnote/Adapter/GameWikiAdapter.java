@@ -108,7 +108,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void swap(List<GameWikiModal> newList) {
         list.clear();
         list.addAll(newList);
-            notifyItemRangeInserted(0,getItemCount());
+        notifyItemRangeInserted(0,getItemCount());
 
     }
 
@@ -321,7 +321,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return list==null?0:list.size();
     }
 
-    public void setLoaded() {
+    private void setLoaded() {
         isLoading = false;
     }
 

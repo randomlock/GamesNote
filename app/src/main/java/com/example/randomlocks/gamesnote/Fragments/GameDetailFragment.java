@@ -12,18 +12,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,8 +72,8 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
-import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GameVideoMinimal;
-import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GameVideoModalMinimal;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoMinimal;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoModalMinimal;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.github.clans.fab.FloatingActionButton;
@@ -1106,7 +1103,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
 
             similarGameRecycleView.setLayoutManager(new ConsistentLinearLayoutManager(getContext(), ConsistentLinearLayoutManager.HORIZONTAL, false));
-            // similarGameRecycleView.addItemDecoration(new VerticalSpaceItemDecoration(6));
             similarGameAdapter = new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext(), new SimilarGameAdapter.OnClickInterface() {
                 @Override
                 public void onItemClick(String apiUrl, String imageUrl) {

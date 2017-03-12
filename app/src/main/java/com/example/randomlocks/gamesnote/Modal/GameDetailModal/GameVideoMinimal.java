@@ -1,6 +1,5 @@
-package com.example.randomlocks.gamesnote.Modal.GamesVideoModal;
+package com.example.randomlocks.gamesnote.Modal.GameDetailModal;
 
-import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.google.gson.annotations.Expose;
 
 import io.realm.RealmObject;

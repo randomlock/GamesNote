@@ -15,6 +15,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -241,10 +243,13 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         PhotoViewAttacher mAttacher;
         PhotoView imageView;
         Context context;
-
+        LayoutInflater layoutInflater;
+        DisplayMetrics metrics;
 
         public ImageViewerPagerAdapter(Context context) {
             this.context = context;
+             metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
         }
 
 
@@ -260,7 +265,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == object;
+            return view == ((View) object);
         }
 
 
@@ -268,22 +273,36 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, int position) {
 
             String imageUrl = imageUrls.get(position);
-            imageView = new PhotoView(context);
-            imageView.setId(R.id.imageview);
+
+            layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = layoutInflater.inflate(R.layout.image_viewpager, container, false);
+
+            imageView = (PhotoView) view.findViewById(R.id.image_preview);
             imageView.setTag(GiantBomb.IMAGE_URL+ position);
+
+
+
+
+
+
+
+
+
+
             mAttacher = new PhotoViewAttacher(imageView);
             mAttacher.setOnViewTapListener(this);
 
             if (shouldFit) {
-                Picasso.with(context).load(imageUrl).fit().into(imageView,callback);
-            } else {
                 Picasso.with(context).load(imageUrl).into(imageView,callback);
+            } else {
+                Toaster.make(context,"hello");
+                Picasso.with(context).load(imageUrl).resize(metrics.widthPixels, (int) ((int) (double)metrics.heightPixels/1.5)).centerCrop().into(imageView,callback);
             }
 
-            container.addView(imageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            container.addView(view);
 
 
-            return imageView;
+            return view;
         }
 
         private Callback callback = new Callback() {

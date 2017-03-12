@@ -6,33 +6,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <FrameLayout
+        android:id="@+id/image_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="75dp"
             android:layout_height="112dp"
             android:src="@drawable/testimage"
-            android:background="?android:selectableItemBackground" />
+            android:background="?android:selectableItemBackground"
+            />
 
 
-        <TextView
-            android:id="@+id/title"
+        <com.flyco.labelview.LabelView
+            android:id="@+id/status_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bioshock Infinite"
-            style="@style/TitleText"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/image"
-            android:layout_toEndOf="@+id/image"
-            android:layout_toLeftOf="@+id/score_view"
-            android:layout_toStartOf="@+id/score_view" />
+            app:lv_text="-"
+            app:lv_text_size="12sp"
+            app:lv_background_color="@color/primary"
+            />
 
-        <ImageButton
+    </FrameLayout>
+
+    <ImageButton
             android:id="@+id/popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +55,23 @@
             android:layout_toLeftOf="@+id/popup"
             android:layout_toStartOf="@+id/popup" />
 
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bioshock Infinite"
+        style="@style/TitleText"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/score_view"
+        android:layout_toStartOf="@+id/score_view"
+        android:layout_marginRight="33dp"
+        android:layout_marginEnd="33dp"
+        android:layout_toRightOf="@+id/image_parent"
+        android:layout_toEndOf="@+id/image_parent" />
 
-    </RelativeLayout>
+
+</RelativeLayout>
 
 

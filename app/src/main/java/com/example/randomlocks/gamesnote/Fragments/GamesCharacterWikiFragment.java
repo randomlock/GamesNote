@@ -184,7 +184,7 @@ public class GamesCharacterWikiFragment extends Fragment {
             @Override
             public void onSearchAction(String currentQuery) {
                 if (currentQuery.trim().length() > 0) {
-                    performSearch(floatingSearchView.getQuery(),false);
+                    performSearch(currentQuery,false);
                 }else {
                     Toasty.warning(getContext(),"no search text entered", Toast.LENGTH_SHORT,true).show();
 
@@ -214,6 +214,8 @@ public class GamesCharacterWikiFragment extends Fragment {
         if (errorText.getVisibility() == View.VISIBLE) {
             errorText.setVisibility(View.GONE);
         }
+        pacman.setVisibility(View.VISIBLE);
+
 
         String filter = null;
         if (!allSearch) {
@@ -230,7 +232,6 @@ public class GamesCharacterWikiFragment extends Fragment {
     }
 
     private void getCharacterWiki(final GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface, final Map<String, String> map) {
-        pacman.setVisibility(View.VISIBLE);
         call = gameCharacterSearchWikiInterface.getResult(map);
         call.enqueue(new Callback<CharacterSearchModalList>() {
             @Override
@@ -311,6 +312,7 @@ public class GamesCharacterWikiFragment extends Fragment {
                     Toaster.makeSnackBar(coordinator, "Connectivity Problem", "RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            pacman.setVisibility(View.VISIBLE);
                             getCharacterWiki(gameCharacterSearchWikiInterface,map);
                         }
                     });
