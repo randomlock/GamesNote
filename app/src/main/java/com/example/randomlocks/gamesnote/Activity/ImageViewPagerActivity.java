@@ -22,12 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PhotoViewPager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -123,56 +123,6 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
     }
 
-    private class DownloadFileTask extends AsyncTask<ImageView,Void,Uri>{
-
-
-        @Override
-        protected Uri doInBackground(ImageView... imageViews) {
-                return getLocalBitmapUri(imageViews[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Uri bmpUri) {
-
-            switch (option_id){
-
-
-                case R.id.share:
-                    shareImage(bmpUri);
-                    break;
-
-
-
-
-                case R.id.save:
-                    break;
-
-                case R.id.gallery :
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setDataAndType(bmpUri,"image/*");
-                    startActivity(intent);
-                    break;
-
-                case R.id.profile_image :
-                    SharedPreference.saveToSharedPreference(GiantBomb.NAV_HEADER_URL,imageUrls.get(viewPager.getCurrentItem()),ImageViewPagerActivity.this);
-                    Toasty.info(ImageViewPagerActivity.this,"profile photo will change after restart", Toast.LENGTH_LONG,true).show();
-
-                    break;
-
-
-
-
-
-
-
-
-            }
-
-        }
-    }
-
-
     private void shareImage(Uri bmpUri) {
 
         if (bmpUri != null) {
@@ -224,7 +174,6 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         return bmpUri;
     }
 
-
     public void animateToolbar(){
         float alpha = toolbar.getAlpha();
         if (alpha == 1) {
@@ -235,23 +184,75 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         }
     }
 
+    private class DownloadFileTask extends AsyncTask<ImageView, Void, Uri> {
+
+
+        @Override
+        protected Uri doInBackground(ImageView... imageViews) {
+            return getLocalBitmapUri(imageViews[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Uri bmpUri) {
+
+            switch (option_id) {
+
+
+                case R.id.share:
+                    shareImage(bmpUri);
+                    break;
+
+
+                case R.id.save:
+                    break;
+
+                case R.id.gallery:
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(bmpUri, "image/*");
+                    startActivity(intent);
+                    break;
+
+                case R.id.profile_image:
+                    SharedPreference.saveToSharedPreference(GiantBomb.NAV_HEADER_URL, imageUrls.get(viewPager.getCurrentItem()), ImageViewPagerActivity.this);
+                    Toasty.info(ImageViewPagerActivity.this, "profile photo will change after restart", Toast.LENGTH_LONG, true).show();
+
+                    break;
+
+
+            }
+
+        }
+    }
+
     //Adapter Class
 
     class ImageViewerPagerAdapter extends PagerAdapter implements PhotoViewAttacher.OnViewTapListener {
 
 
-        PhotoViewAttacher mAttacher;
         PhotoView imageView;
+        ProgressBar progressBar;
         Context context;
         LayoutInflater layoutInflater;
         DisplayMetrics metrics;
+        private Callback callback = new Callback() {
+            @Override
+            public void onSuccess() {
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        };
+
 
         public ImageViewerPagerAdapter(Context context) {
             this.context = context;
              metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
         }
-
 
         @Override
         public int getCount() {
@@ -268,7 +269,6 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             return view == ((View) object);
         }
 
-
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
@@ -276,9 +276,11 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.image_viewpager, container, false);
+            progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
             imageView = (PhotoView) view.findViewById(R.id.image_preview);
             imageView.setTag(GiantBomb.IMAGE_URL+ position);
+            imageView.setOnViewTapListener(this);
 
 
 
@@ -288,15 +290,13 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
 
 
-
-            mAttacher = new PhotoViewAttacher(imageView);
-            mAttacher.setOnViewTapListener(this);
 
             if (shouldFit) {
                 Picasso.with(context).load(imageUrl).into(imageView,callback);
             } else {
-                Toaster.make(context,"hello");
-                Picasso.with(context).load(imageUrl).resize(metrics.widthPixels, (int) ((int) (double)metrics.heightPixels/1.5)).centerCrop().into(imageView,callback);
+                //   Picasso.with(context).load(imageUrl).resize(metrics.widthPixels, (int) ((int) (double)metrics.heightPixels/1.5)).centerCrop().into(imageView,callback);
+                Picasso.with(context).load(imageUrl).into(imageView, callback);
+
             }
 
             container.addView(view);
@@ -304,19 +304,6 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
             return view;
         }
-
-        private Callback callback = new Callback() {
-            @Override
-            public void onSuccess() {
-                mAttacher.update();
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        };
-
 
         @Override
         public void onViewTap(View view, float v, float v1) {

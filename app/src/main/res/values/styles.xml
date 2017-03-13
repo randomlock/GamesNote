@@ -106,7 +106,7 @@
     </style>
 
 
-    <style name="MyDialogTheme" parent="Theme.AppCompat.DayNight">
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!--item RadioButton or CheckBox color-->
         <item name="colorControlNormal">@color/black_white</item>
         <item name="colorControlActivated">@color/accent</item>
