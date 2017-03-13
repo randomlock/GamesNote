@@ -106,7 +106,7 @@
     </style>
 
 
-    <style name="MyDialogTheme" parent="Theme.AppCompat.DayNight.Dialog">
+    <style name="MyDialogTheme" parent="Theme.AppCompat.DayNight">
         <!--item RadioButton or CheckBox color-->
         <item name="colorControlNormal">@color/black_white</item>
         <item name="colorControlActivated">@color/accent</item>
@@ -116,12 +116,11 @@
         <item name="colorAccent">@color/accent</item>
         <!--title and message color-->
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-
+        <item name="android:background">@color/cardColor</item>
 
     </style>
 
 
-    <style name="MyDialogTheme2" parent="Theme.AppCompat.DayNight.Dialog"/>
 
     <style name="MyCheckBox" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/black_white</item>

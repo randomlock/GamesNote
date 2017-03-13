@@ -41,6 +41,7 @@ public class GiantBomb {
     public static final String BASE_URL = "http://www.giantbomb.com/api/";
     public static final String KEY = "api_key";
     public static final String API_KEY = "b318d66445bfc79e6d74a65fe52744b45b345948";
+    public static final String YOUTUBE_API_KEY = "AIzaSyBU189k9G4pa1nej-1SsIzLWVihafwLNAA";
     public static final String FORMAT = "format";
     public static final String SORT = "sort";
     public static final String FILTER = "filter";
@@ -72,21 +73,26 @@ public class GiantBomb {
     public static final  String SEEK_POSITION = "seek_position";
     public static final String VIEW_TYPE = "view_type" ;
     public static final int ALL_GAMES = 0 ;
-    public static String REDUCE_VIEW = "reduce_view";
     public static final int REPLAYING = 1;
     public static final int PLANNING = 2;
     public static final int DROPPED = 3;
     public static final int PLAYING = 4;
     public static final int COMPLETED = 5;
-
-
-    private GiantBomb() {
-    }
-
-
+    public static String REDUCE_VIEW = "reduce_view";
     private static OkHttpClient httpClient = null;
     private static Request request = null;
     private static Retrofit retrofit = null;
+    private static GameWikiListInterface gameWikiListInterface = null;
+    private static GameWikiDetailInterface gameWikiDetailInterface = null;
+    private static GameCharacterInterface gameCharacterInterface = null;
+    private static GameReviewInterface gameReviewInterface = null;
+    private static UserReviewInterface userReviewInterface = null;
+    private static GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
+    private static GamesVideosInterface gamesVideoInterface = null;
+    private static GameDetailVideoInterface gameDetailVideoInterface = null;
+
+    private GiantBomb() {
+    }
 
     public static Request getRequest(String url) {
         if (request == null) {
@@ -101,7 +107,6 @@ public class GiantBomb {
 
         return request;
     }
-
 
     public static Retrofit getRetrofit() {
         if (retrofit == null) {
@@ -121,7 +126,6 @@ public class GiantBomb {
 
         return retrofit;
     }
-
 
     public static OkHttpClient getHttpClient() {
         if (httpClient == null) {
@@ -143,7 +147,6 @@ public class GiantBomb {
 
         return httpClient;
     }
-
 
     public static Interceptor provideOfflineCacheInterceptor() {
         return new Interceptor() {
@@ -223,7 +226,6 @@ public class GiantBomb {
         };
     }
 
-
     public static Interceptor provideCacheInterceptor() {
         return new Interceptor() {
             @Override
@@ -244,17 +246,6 @@ public class GiantBomb {
             }
         };
     }
-
-
-    private static GameWikiListInterface gameWikiListInterface = null;
-    private static GameWikiDetailInterface gameWikiDetailInterface = null;
-    private static GameCharacterInterface gameCharacterInterface = null;
-    private static GameReviewInterface gameReviewInterface = null;
-    private static UserReviewInterface userReviewInterface = null;
-    private static GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
-    private static GamesVideosInterface gamesVideoInterface = null;
-    private static  GameDetailVideoInterface gameDetailVideoInterface = null;
-
 
     public static GameWikiListInterface createGameWikiService() {
         if (gameWikiListInterface == null) {

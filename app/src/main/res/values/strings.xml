@@ -8,7 +8,7 @@
     <string name="List">My List</string>
     <string name="Wiki">Games Wiki</string>
     <string name="games_news">News &amp; Reviews</string>
-    <string name="game_trailer">Trailers</string>
+    <string name="game_videos">Videos</string>
     <string name="help_and_support"><![CDATA[Help & Support]]></string>
     <string name="giantbomb_site">Visit giantbomb</string>
     <string name="email_me">ContactUs</string>
@@ -79,6 +79,14 @@
         <item>Date updated</item>
         <item>No of user review</item>
         <item>Default</item>
+    </string-array>
+
+    <string-array name="video_quality">
+        <item>Low</item>
+        <item>High</item>
+        <item>Youtube</item>
+        <item>View in Giantbomb</item>
+
     </string-array>
 
     <string-array name="sort_filter">

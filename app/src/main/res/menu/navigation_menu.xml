@@ -20,8 +20,8 @@
 
         <item
             android:id="@+id/nav_home"
-            android:title="@string/characterwiki"
-            android:icon="@mipmap/ic_launcher" />
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/characterwiki" />
 
 
         <item
@@ -34,7 +34,7 @@
         <item
             android:id="@+id/nav_trailer"
             android:icon="@mipmap/ic_launcher"
-            android:title="@string/game_trailer" />
+            android:title="@string/game_videos" />
 
 
 

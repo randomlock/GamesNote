@@ -1,47 +1,48 @@
 package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoAdapter;
+import com.example.randomlocks.gamesnote.DialogFragment.VideoOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Interface.GamesVideosInterface;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
+import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModalList;
 import com.example.randomlocks.gamesnote.R;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,16 +63,15 @@ import retrofit2.Response;
 
 //TODO EDIT TEXT FIX for keyboard and cursor . Cancel the realmasynctask if query is not completed
 
-public class GameVideoPagerFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, GameVideoAdapter.OnClickInterface {
+public class GameVideoPagerFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, GameVideoAdapter.OnClickInterface, VideoOptionFragment.OnPlayInterface {
 
-    private static final String MODAL = "list_modals";
-    private static final String SCROLL_POSITION = "scroll_position";
     public static final String VIDEO_KEY = "navigation_video_id"; //FOR SAVING MENU ITEM
     public static final String VIDEO_TITLE = "navigation_video_title"; //FOR MENU TOOLBAR TITLE
+    private static final String MODAL = "list_modals";
+    private static final String SCROLL_POSITION = "scroll_position";
     private static final java.lang.String SEARCH_QUERY = "search_query" ;
     private static final String LIMIT = "50";
-
-
+    public DrawerLayout mDrawer;
     ConsistentLinearLayoutManager manager;
     GamesVideosInterface gamesVideoInterface = null;
     RecyclerView recyclerView;
@@ -82,7 +82,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     AVLoadingIndicatorView pacman;
     Realm realm;
     RealmAsyncTask realmAsyncTask;
-    public DrawerLayout mDrawer;
     NavigationView mNavigation;
     String mTitle;
     int mSelectedId;
@@ -93,6 +92,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     HashMap<Integer, GamesVideoModal> realmMap;
     Call<GamesVideoModalList> call;
 
+
+    VideoPlayInterface videoPlayInterface;
 
 
     public GameVideoPagerFragment() {
@@ -267,6 +268,11 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        videoPlayInterface = (VideoPlayInterface) getActivity();
+    }
 
     private void performSearch(String text,boolean allSearch) {
 
@@ -661,11 +667,74 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     }
 
     @Override
+    public void onVideoClick(GamesVideoModal modal) {
+        //call the video option dialog
+        VideoOptionFragment videoOptionFragment = VideoOptionFragment.newInstance(modal);
+        videoOptionFragment.setTargetFragment(this, 0);
+        videoOptionFragment.setCancelable(false);
+        videoOptionFragment.show(getActivity().getSupportFragmentManager(), "video_option_fragment");
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if(call!=null)
             call.cancel();
     }
+
+
+    @Override
+    public void onPlay(GamesVideoModal modal, int video_option, boolean use_inbuilt) {
+        String url;
+        switch (video_option) {
+            case 0:
+                url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
+                if (use_inbuilt)
+                    videoPlayInterface.onVideoClick(url);
+                else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.setDataAndType(Uri.parse(url), "video/mp4");
+                    startActivity(intent);
+                }
+
+                break;
+
+            case 1:
+                url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+                if (use_inbuilt)
+                    videoPlayInterface.onVideoClick(url);
+                else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.setDataAndType(Uri.parse(url), "video/mp4");
+                    startActivity(intent);
+                }
+                break;
+            case 2:
+                url = modal.youtubeId;
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(), GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
+                startActivity(intent);
+                break;
+
+            case 3:
+                url = modal.siteDetailUrl;
+                runBrowser(url);
+                break;
+
+            default:
+                break;
+
+
+        }
+
+
+    }
+
+    void runBrowser(String url) {
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
+        CustomTabActivityHelper.openCustomTab(
+                getActivity(), customTabsIntent, Uri.parse(url), new WebViewFallback());
+    }
+
 
 
 }

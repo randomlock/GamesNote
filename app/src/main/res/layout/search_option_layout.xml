@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
 
-<CheckBox android:id="@+id/checkbox"
+    >
+
+
+    <CheckBox android:id="@+id/checkbox"
+        style="?android:attr/textAppearanceMedium"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+        android:drawableLeft="@android:color/transparent"
+        android:drawablePadding="20dp"
+        android:drawableStart="@android:color/transparent"
     android:text="Descending"
     android:textColor="?android:attr/textColorPrimary"
-    android:layout_margin="18dp"
-    android:theme="@style/MyCheckBox"
-    android:drawableLeft="@android:color/transparent"
-    android:drawableStart="@android:color/transparent"
-    android:drawablePadding="20dp"
-    style="?android:attr/textAppearanceMedium"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:theme="@style/MyCheckBox" />
 
 
-
+</FrameLayout>
 
 

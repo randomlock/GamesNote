@@ -71,9 +71,9 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListMod
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
-import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoMinimal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoModalMinimal;
+import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.github.clans.fab.FloatingActionButton;
@@ -165,10 +165,37 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
     CustomMediaController media_Controller;
     View playViewButton;
     ProgressBar videoProgress;
+    int current_video_pos = 0;
     private int stopPosition;
     private DisplayMetrics metrics;
     private String video_url;
-    int current_video_pos=0;
+    private RealmChangeListener statsCallback = new RealmChangeListener() {
+        @Override
+        public void onChange(Object element) {
+            if (statsDatabase.isLoaded()) {
+                if (statsDatabase.isValid()) {
+                    statsCardView.setVisibility(View.VISIBLE);
+                    floatingActionsMenu.hideMenu(true);
+
+                    //inflate views and update stats
+
+                    status = (TextView) statsDetailView.findViewById(R.id.status_value);
+                    score = (TextView) statsDetailView.findViewById(R.id.score_value);
+                    platform = (TextView) statsDetailView.findViewById(R.id.platfom_value);
+                    hours = (TextView) statsDetailView.findViewById(R.id.hours_value);
+
+                    status.setText(getResources().getStringArray(R.array.status)[statsDatabase.getStatus() - 1]);
+                    score.setText(String.valueOf(statsDatabase.getScore()));
+                    platform.setText(statsDatabase.getPlatform());
+                    hours.setText(statsDatabase.getGameplay_hours());
+
+
+                }
+
+            }
+        }
+
+    };
 
 
     public GameDetailFragment() {
@@ -176,10 +203,19 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
     }
 
+    public static GameDetailFragment newInstance(String apiUrl, String name, String imageUrl) {
+
+        Bundle args = new Bundle();
+        args.putString(API_URL, apiUrl);
+        args.putString(NAME, name);
+        args.putString(IMAGE_URL, imageUrl);
+        GameDetailFragment fragment = new GameDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public void getInit(final GameDetailVideo gameDetailVideo) {
         videoProgress = (ProgressBar) toolbarLayout.findViewById(R.id.video_progress);
-        videoProgress.setVisibility(View.VISIBLE);
         //geting video url from the api
         if (videoMap==null) {
             videoMap = new HashMap<>();
@@ -241,20 +277,39 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
                                 Toasty.warning(getContext(),"no previous video", Toast.LENGTH_SHORT,true).show();
                             }
                         }
-                    });
-                    videoView.setMediaController(media_Controller);
-                    videoView.setVideoPath(video_url);
-                    videoView.requestFocus();
-                    videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        // Close the progress bar and play the video
-                        public void onPrepared(MediaPlayer mp) {
-                            videoProgress.setVisibility(View.GONE);
-                            videoView.start();
-                        }
-                    });
+                            });
+                videoView.setMediaController(media_Controller);
+                videoView.setVideoPath(video_url);
+                videoView.requestFocus();
+                videoView.start();
 
-                    videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
+
+                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                            @Override
+                            public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                                if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
+                                    videoProgress.setVisibility(View.VISIBLE);
+                                if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
+                                    videoProgress.setVisibility(View.GONE);
+                                return false;
+                            }
+                        });
+                    }
+                });
+                videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        videoProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                });
+
+
+                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
                         public void onCompletion(MediaPlayer mediaPlayer) {
                             animateToolbar();
                         }
@@ -331,11 +386,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
         }
     }
-
-
-
-
-
 
     @Override
     public void onClick(View v) {
@@ -434,31 +484,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         });
     }
 
-
-
-
-    public interface CommunicationInterface {
-        void onReviewClick(String apiUrl, String gameTitle, String imageUrl);
-
-        void onUserReviewClick(String apiUrl, String gameTitle, String imageUrl);
-
-        void onVideoClick(String url,boolean needRequest,int seek_position);
-
-    }
-
-
-    public static GameDetailFragment newInstance(String apiUrl, String name, String imageUrl) {
-
-        Bundle args = new Bundle();
-        args.putString(API_URL, apiUrl);
-        args.putString(NAME, name);
-        args.putString(IMAGE_URL, imageUrl);
-        GameDetailFragment fragment = new GameDetailFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -501,34 +526,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
     }
 
-    private RealmChangeListener statsCallback = new RealmChangeListener() {
-        @Override
-        public void onChange(Object element) {
-            if(statsDatabase.isLoaded()){
-                if(statsDatabase.isValid()){
-                    statsCardView.setVisibility(View.VISIBLE);
-                    floatingActionsMenu.hideMenu(true);
-
-                    //inflate views and update stats
-
-                        status = (TextView) statsDetailView.findViewById(R.id.status_value);
-                        score = (TextView) statsDetailView.findViewById(R.id.score_value);
-                        platform = (TextView) statsDetailView.findViewById(R.id.platfom_value);
-                        hours = (TextView) statsDetailView.findViewById(R.id.hours_value);
-
-                        status.setText(getResources().getStringArray(R.array.status)[statsDatabase.getStatus()-1]);
-                        score.setText(String.valueOf(statsDatabase.getScore()));
-                        platform.setText(statsDatabase.getPlatform());
-                        hours.setText(statsDatabase.getGameplay_hours());
-
-
-                }
-
-            }
-        }
-
-    };
-
     private void setBackgroundDimming(final View view, boolean dimmed) {
         final float targetAlpha = dimmed ? 1f : 0;
         final int endVisibility = dimmed ? View.VISIBLE : View.GONE;
@@ -543,9 +540,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
                 })
                 .start();
     }
-
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -854,10 +848,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
     }
 
-
-
-
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -902,7 +892,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             }
         });
     }
-
 
     void fillData(final GameDetailModal gameDetailModal) {
         pacman.setVisibility(View.GONE);
@@ -1183,7 +1172,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         }
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -1227,7 +1215,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         return builder.toString();
 
     }
-
 
     @Override
     public void onSelect(int which) {
@@ -1321,7 +1308,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         }
 
 
-       
+
     }
 
     @Override
@@ -1334,6 +1321,14 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         }
 
 
+    }
+
+    public interface CommunicationInterface {
+        void onReviewClick(String apiUrl, String gameTitle, String imageUrl);
+
+        void onUserReviewClick(String apiUrl, String gameTitle, String imageUrl);
+
+        void onVideoClick(String url, boolean needRequest, int seek_position);
 
     }
 

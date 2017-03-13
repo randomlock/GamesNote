@@ -1,30 +1,20 @@
 package com.example.randomlocks.gamesnote.Fragments;
 
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +27,7 @@ import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentGridLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.EndlessRecyclerOnScrollListener;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
@@ -58,7 +45,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import es.dmoral.toasty.Toasty;
-import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +57,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     private static final String MODAL = "list_modal";
     private static final String SCROLL_POSITION = "recyclerScrollPosition";
     private static final String SEARCH_QUERY = "search_query" ;
+    private static final String LIMIT = "50";
     ViewPager viewPager;
     RecyclerView recyclerView;
     AVLoadingIndicatorView progressBar;
@@ -85,14 +72,11 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     CoordinatorLayout coordinatorLayout;
     AppBarLayout appBarLayout;
     Context context;
-
     int viewType;
     int spanCount;
     boolean isLoadingMore = false;
-
-
-    private static final String LIMIT = "50";
-
+    Timer timer;
+    int page = 0;
 
     public GamesWikiFragment() {
         // Required empty public constructor
@@ -355,9 +339,6 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         }
     }
 
-
-
-
     /***********************
      * SEARCH MANAGER FUNCTION
      ********************************/
@@ -469,11 +450,6 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
     }
 
-
-
-
-
-
     @Override
     public void onSelect(int which, boolean asc) {
 
@@ -488,7 +464,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         map.put(GiantBomb.SORT, sort);
         map.put(GiantBomb.OFFSET, "0");
         listModals.clear();
-
+        progressBar.setVisibility(View.VISIBLE);
         getGameWiki(gameWikiListInterface, map);
 
 
@@ -520,10 +496,6 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
     }
 
-
-    Timer timer;
-    int page = 0;
-
     public void pageSwitcher(int seconds) {
         timer = new Timer(); // At this line a new Thread will be created
         timer.scheduleAtFixedRate(new RemindTask(), 0, seconds * 1000); // delay
@@ -535,6 +507,35 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         floatingSearchView.setTranslationY(verticalOffset);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+        if (listModals!=null) {
+            outState.putParcelableArrayList(MODAL, new ArrayList<>(listModals));
+        }
+        outState.putString(SEARCH_QUERY,floatingSearchView.getQuery());
+        if(recyclerView != null && recyclerView.getLayoutManager() != null)
+            outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
+
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (call != null)
+            call.cancel();
+    }
+
+
+  /*  @Override
+    public void onDetach() {
+        super.onDetach();
+        context = null;
+    }*/
 
     // this is an inner class...
     class RemindTask extends TimerTask {
@@ -558,35 +559,5 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
             });
 
         }
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-
-        if (listModals!=null) {
-            outState.putParcelableArrayList(MODAL, new ArrayList<>(listModals));
-        }
-        outState.putString(SEARCH_QUERY,floatingSearchView.getQuery());
-        if(recyclerView != null && recyclerView.getLayoutManager() != null)
-            outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
-
-
-    }
-
-
-  /*  @Override
-    public void onDetach() {
-        super.onDetach();
-        context = null;
-    }*/
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(call!=null)
-            call.cancel();
     }
 }

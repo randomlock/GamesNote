@@ -21,18 +21,19 @@ public class CustomMediaControllerFullscreen extends MediaController {
 
 
 
-    public static interface OnMediaControllerInteractionListener {
-        void onRequestHalfScreen();
-    }
-
-    public void setListener(OnMediaControllerInteractionListener listener) {
-        mListener = listener;
-    }
-
 
     public CustomMediaControllerFullscreen(Context context) {
         super(context);
         this.context = context;
+    }
+
+    public CustomMediaControllerFullscreen(Context context, boolean useFastForward) {
+        super(context, useFastForward);
+        this.context = context;
+    }
+
+    public void setListener(OnMediaControllerInteractionListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -59,6 +60,10 @@ public class CustomMediaControllerFullscreen extends MediaController {
 
 
         addView(fullscreenButton, frameParams);
+    }
+
+    public static interface OnMediaControllerInteractionListener {
+        void onRequestHalfScreen();
     }
 
 

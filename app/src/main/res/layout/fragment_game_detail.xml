@@ -1,5 +1,5 @@
-<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,8 +20,8 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="?attr/colorPrimary"
             android:theme="@style/MyToolbar"
+            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
             >
@@ -34,13 +34,14 @@
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/default_bg">
+                android:background="@color/default_bg"
+                app:layout_collapseMode="parallax">
 
                 <com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomVideoView
                     android:id="@+id/play_video_texture"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:keepScreenOn="true"
+                    android:layout_height="match_parent"
+
                     />
 
 
@@ -71,8 +72,8 @@
                 android:id="@+id/play"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@drawable/ic_play_circle_outline_white_48dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:background="@drawable/ic_play_circle_outline_white_48dp" />
 
 
             <android.support.v7.widget.Toolbar
@@ -80,6 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
+
                 />
 
 
@@ -119,9 +121,9 @@
             android:id="@+id/parent_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
             android:visibility="invisible"
-            android:animateLayoutChanges="true"
             >
 
 
@@ -136,12 +138,12 @@
                 android:id="@+id/game_info_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                android:animateLayoutChanges="true"
+                app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="4dp"
                 app:elevation="14dp"
-                app:cardBackgroundColor="@color/cardColor"
-                android:animateLayoutChanges="true"
                 >
 
 
@@ -149,16 +151,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:animateLayoutChanges="true"
+                    android:orientation="vertical"
                     >
 
                     <TextView
                         android:id="@+id/overview_heading"
                         style="@style/cardview_textstyle"
-                        android:text="Overview"
                         android:drawableLeft="@drawable/ic_insert_comment"
                         android:drawableStart="@drawable/ic_insert_comment"
+                        android:text="Overview"
                         />
 
 
@@ -182,11 +184,11 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="4dp"
-                app:elevation="14dp"
-                app:cardBackgroundColor="@color/cardColor">
+                app:elevation="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -195,14 +197,14 @@
 
                     <TextView
                         android:id="@+id/review"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
                         style="@style/cardview_textstyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableLeft="@drawable/ic_star"
                         android:drawableStart="@drawable/ic_star"
-                        android:text="Review"
-                        android:background="?android:attr/selectableItemBackground" />
+                        android:text="Review" />
 
                     <View
                         android:layout_width="0.5dp"
@@ -211,15 +213,15 @@
 
                     <TextView
                         android:id="@+id/user_review"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
                         style="@style/cardview_textstyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableLeft="@drawable/ic_child_care"
-                        android:drawableStart="@drawable/ic_child_care"
 
-                        android:text="User review"
-                        android:background="?android:attr/selectableItemBackground" />
+                        android:drawableStart="@drawable/ic_child_care"
+                        android:text="User review" />
 
 
                 </LinearLayout>
@@ -232,11 +234,11 @@
                 android:id="@+id/description_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="4dp"
                 app:elevation="14dp"
-                app:cardBackgroundColor="@color/cardColor"
 
                 >
 
@@ -249,24 +251,24 @@
                     <TextView
                         android:id="@+id/description_heading"
                         style="@style/cardview_textstyle"
-                        android:text="Description"
-                        android:drawableLeft="@drawable/ic_description"
-                        android:drawableStart="@drawable/ic_description"
                         android:drawableEnd="@drawable/ic_open_in_browser_black_24dp"
-                        android:drawableRight="@drawable/ic_open_in_browser_black_24dp" />
+                        android:drawableLeft="@drawable/ic_description"
+                        android:drawableRight="@drawable/ic_open_in_browser_black_24dp"
+                        android:drawableStart="@drawable/ic_description"
+                        android:text="Description" />
 
 
                     <TextView
                         android:id="@+id/description"
+                        style="@style/TextStyle12"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
 
-                        android:maxLines="12"
+                        android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:padding="8dp"
                         android:lineSpacingMultiplier="1.25"
-                        android:textColor="@color/primary_text"
-                        style="@style/TextStyle12" />
+                        android:maxLines="12"
+                        android:padding="8dp"
+                        android:textColor="@color/primary_text" />
 
 
                 </LinearLayout>
@@ -288,16 +290,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
                     android:layout_marginBottom="6dp"
+                    android:layout_marginTop="6dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/character_heading"
                         style="@style/cardview_textstyle"
-                        android:text="Character"
                         android:drawableLeft="@drawable/ic_people"
                         android:drawableStart="@drawable/ic_people"
+                        android:text="Character"
                         />
 
 
@@ -318,24 +320,24 @@
                 android:id="@+id/game_image_cardview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/image_heading"
                     style="@style/cardview_textstyle"
-                    android:text="Images"
                     android:drawableLeft="@drawable/ic_image"
                     android:drawableStart="@drawable/ic_image"
+                    android:text="Images"
                     />
 
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/image_recycler_view"
-                    android:padding="3dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="3dp"
                     />
 
 
@@ -346,24 +348,24 @@
                 android:id="@+id/game_video_cardview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/video_heading"
                     style="@style/cardview_textstyle"
-                    android:text="Related videos"
                     android:drawableLeft="@drawable/ic_ondemand_video"
                     android:drawableStart="@drawable/ic_ondemand_video"
+                    android:text="Related videos"
                     />
 
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/video_recycler_view"
-                    android:padding="3dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:padding="3dp" />
 
 
             </LinearLayout>
@@ -373,16 +375,16 @@
                 android:id="@+id/game_similar_cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/similar_game_heading"
                     style="@style/cardview_textstyle"
-                    android:text="Similar games"
                     android:drawableLeft="@drawable/ic_compare_arrows"
                     android:drawableStart="@drawable/ic_compare_arrows"
+                    android:text="Similar games"
                     />
 
                 <android.support.v7.widget.RecyclerView
@@ -409,16 +411,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
-                app:indicator="Pacman"
                 android:visibility="gone"
+                app:indicator="Pacman"
                 app:indicator_color="@color/accent" />
 
             <View
                 android:id="@+id/video_dimmer_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#e0000000"
                 android:alpha="0"
+                android:background="#e0000000"
                />
 
 
@@ -433,8 +435,8 @@
         android:id="@+id/dimmer_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#e0ffffff"
         android:alpha="0"
+        android:background="#e0ffffff"
         android:visibility="gone"
          />
 
@@ -443,22 +445,22 @@
         android:id="@+id/floating_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:menu_labels_position="left"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_anchor="@id/scroll_view"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingActionMenuBehavior"
         app:menu_colorNormal="@color/accent"
         app:menu_colorPressed="@color/accent"
-        app:menu_icon="@drawable/fab_add"
-        app:menu_openDirection="up"
-        app:menu_labels_colorPressed="@color/accent"
-        app:menu_labels_showAnimation="@anim/fab_slide_in_from_left"
-        app:menu_labels_colorNormal="@color/primary"
-        app:menu_fab_show_animation="@anim/fab_scale_up"
         app:menu_fab_hide_animation="@anim/fab_scale_down"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingActionMenuBehavior"
-        app:layout_anchor="@id/scroll_view"
-        app:layout_anchorGravity="bottom|right|end">
+        app:menu_fab_show_animation="@anim/fab_scale_up"
+        app:menu_icon="@drawable/fab_add"
+        app:menu_labels_colorNormal="@color/primary"
+        app:menu_labels_colorPressed="@color/accent"
+        app:menu_labels_position="left"
+        app:menu_labels_showAnimation="@anim/fab_slide_in_from_left"
+        app:menu_openDirection="up">
 
 
         <com.github.clans.fab.FloatingActionButton
@@ -466,8 +468,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_colorNormal="@color/fab_1"
-            app:fab_label="Completed"
             app:fab_colorPressed="@color/accent"
+            app:fab_label="Completed"
             app:fab_size="mini"
             />
 
@@ -475,9 +477,9 @@
             android:id="@+id/playing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_label="Playing"
             app:fab_colorNormal="@color/fab_2"
             app:fab_colorPressed="@color/accent"
+            app:fab_label="Playing"
             app:fab_size="mini"
 
             />
@@ -487,9 +489,9 @@
             android:id="@+id/dropped"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_label="Dropped"
             app:fab_colorNormal="@color/fab_3"
             app:fab_colorPressed="@color/accent"
+            app:fab_label="Dropped"
             app:fab_size="mini"
             />
 
@@ -498,9 +500,9 @@
             android:id="@+id/planning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_label="Planning"
             app:fab_colorNormal="@color/fab_4"
             app:fab_colorPressed="@color/accent"
+            app:fab_label="Planning"
             app:fab_size="mini"
             />
 
@@ -510,9 +512,9 @@
             android:id="@+id/replaying"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_label="Replaying"
             app:fab_colorNormal="@color/fab_5"
             app:fab_colorPressed="@color/accent"
+            app:fab_label="Replaying"
             app:fab_size="mini"
             />
 

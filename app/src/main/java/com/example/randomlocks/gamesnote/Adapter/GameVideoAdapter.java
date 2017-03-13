@@ -2,28 +2,22 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.DisplayMetrics;
-import android.widget.FrameLayout;
-import android.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.ScaleAnimation;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
@@ -39,28 +33,51 @@ import io.realm.Realm;
 //TODO FIX optimization on query ASAP effectively
 public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<GamesVideoModal> modalList;
-    Context context;
-    private OnClickInterface mOnClickInteraface;
-    private HashMap<Integer, GamesVideoModal> hashResults;
-    private Realm realm;
-
-
     //variable for endless scroll
     private static final int VIEW_TYPE_LOADING = -1;
     private static final int SIMPLE_VIEW_TYPE = 0;
     private static final int CARD_VIEW_TYPE = 1;
-
+    Context context;
     int viewType = 0;
-
-
-
+    private List<GamesVideoModal> modalList;
+    private OnClickInterface mOnClickInteraface;
+    private HashMap<Integer, GamesVideoModal> hashResults;
+    private Realm realm;
     private OnLoadMoreListener mOnLoadMoreListener;
 
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
 
+
+    public GameVideoAdapter(final List<GamesVideoModal> modalList, Context context, boolean isSimple, Realm realm, OnClickInterface mOnClickInterface, HashMap<Integer, GamesVideoModal> realmResults, RecyclerView recyclerView) {
+        this.modalList = modalList;
+        viewType = isSimple ? 0 : 1;
+        this.context = context;
+        this.mOnClickInteraface = mOnClickInterface;
+        this.hashResults = realmResults;
+        this.realm = realm;
+
+        final ConsistentLinearLayoutManager linearLayoutManager = (ConsistentLinearLayoutManager) recyclerView.getLayoutManager();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                totalItemCount = linearLayoutManager.getItemCount();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold) && modalList.size() >= 50 && modalList.size() % 50 == 0) {
+                    if (mOnLoadMoreListener != null) {
+                        mOnLoadMoreListener.onLoadMore();
+                    }
+                    isLoading = true;
+                }
+            }
+        });
+
+
+    }
 
     public void setSimple(boolean simple) {
         this.viewType = simple ? SIMPLE_VIEW_TYPE : CARD_VIEW_TYPE;
@@ -97,7 +114,6 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.mOnLoadMoreListener = mOnLoadMoreListener;
     }
 
-
     @Override
     public int getItemViewType(int position) {
         //return list.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
@@ -112,58 +128,9 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-
     private void setLoaded() {
         isLoading = false;
     }
-
-
-
-
-    public interface OnClickInterface {
-        void onWatchLater(GamesVideoModal modal);
-
-        void onLike(GamesVideoModal modal);
-
-        void onShare();
-    }
-
-
-    public GameVideoAdapter(final List<GamesVideoModal> modalList, Context context, boolean isSimple, Realm realm , OnClickInterface mOnClickInterface, HashMap<Integer, GamesVideoModal> realmResults, RecyclerView recyclerView) {
-        this.modalList = modalList;
-        viewType = isSimple ? 0 : 1;
-        this.context = context;
-        this.mOnClickInteraface = mOnClickInterface;
-        this.hashResults = realmResults;
-        this.realm = realm;
-
-        final ConsistentLinearLayoutManager linearLayoutManager = (ConsistentLinearLayoutManager) recyclerView.getLayoutManager();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                totalItemCount = linearLayoutManager.getItemCount();
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)&& modalList.size()>=50 && modalList.size() % 50 ==0) {
-                    if (mOnLoadMoreListener != null) {
-                        mOnLoadMoreListener.onLoadMore();
-                    }
-                    isLoading = true;
-                }
-            }
-        });
-
-
-
-
-    }
-
-
-
-
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -242,17 +209,21 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-
     @Override
     public int getItemCount() {
         return modalList==null ? 0:modalList.size();
     }
 
 
+    public interface OnClickInterface {
+        void onWatchLater(GamesVideoModal modal);
 
+        void onLike(GamesVideoModal modal);
 
+        void onShare();
 
-
+        void onVideoClick(GamesVideoModal modal);
+    }
 
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
         AVLoadingIndicatorView progressBar;
@@ -346,8 +317,9 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
 
 
-
-
+                case R.id.root_view:
+                    mOnClickInteraface.onVideoClick(modal);
+                    break;
 
 
 

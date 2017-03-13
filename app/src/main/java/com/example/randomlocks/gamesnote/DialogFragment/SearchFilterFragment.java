@@ -1,19 +1,16 @@
 package com.example.randomlocks.gamesnote.DialogFragment;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -32,13 +29,6 @@ public class SearchFilterFragment extends DialogFragment {
     int which_one;
     int array_id;
 
-
-    public interface SearchFilterInterface {
-
-        void onSelect(int which, boolean asc);
-    }
-
-
     public static SearchFilterFragment newInstance(@ArrayRes int array_id) {
 
         Bundle args = new Bundle();
@@ -48,16 +38,15 @@ public class SearchFilterFragment extends DialogFragment {
         return fragment;
     }
 
-
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
             searchFilterInterface = (SearchFilterInterface) getTargetFragment();
         } catch (Exception e) {
             Toaster.make(getContext(), "interface cast exception");
         }
+
 
     }
 
@@ -74,16 +63,23 @@ public class SearchFilterFragment extends DialogFragment {
         }
     }
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         view = getActivity().getLayoutInflater().inflate(R.layout.search_option_layout,null);
 
+        checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+        final int uncheck_color = ContextCompat.getColor(getContext(), R.color.black_white);
+        checkbox.setChecked(!isAscending);
+        if (!checkbox.isChecked()) {
+            checkbox.setTextColor(uncheck_color);
+        }
+
+
         final AlertDialog dialog =  new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
                 .setCancelable(true)
-                .setTitle("Sort Result")
+                .setTitle("Sort result")
 
                 .setSingleChoiceItems(getResources().getStringArray(array_id), which_one, new DialogInterface.OnClickListener() {
                     @Override
@@ -121,18 +117,13 @@ public class SearchFilterFragment extends DialogFragment {
                 return dialog;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
-        checkbox = (CheckBox) view.findViewById(R.id.checkbox);
-        final int uncheck_color = ContextCompat.getColor(getContext(),R.color.black_white);
-        checkbox.setChecked(!isAscending);
-        if (!checkbox.isChecked()) { checkbox.setTextColor(uncheck_color) ;}
+    public interface SearchFilterInterface {
 
-
-
+        void onSelect(int which, boolean asc);
     }
+
+
 
 
 }

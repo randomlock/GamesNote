@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -20,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +28,7 @@ import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentGridLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
-import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
@@ -50,17 +48,14 @@ import io.realm.RealmList;
 //TODO fix popup speed database
 public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    //variable for endless scroll
+    private final int VIEW_TYPE_LOADING = -1;
+    int viewType = 0;
     private List<GameWikiModal> list;
     private Context context;
     private int lastPosition;
     private Realm realm;
     private GameListDatabase database;
-    int viewType=0;
-
-
-    //variable for endless scroll
-    private final int VIEW_TYPE_LOADING = -1;
-
     private OnLoadMoreListener mOnLoadMoreListener;
 
     private boolean isLoading;
@@ -271,7 +266,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.thumbUrl).fit().into(viewHolder.imageView);
             }else {
                 Picasso.with(context).cancelRequest(viewHolder.imageView);
             }
@@ -325,8 +320,17 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         isLoading = false;
     }
 
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
 
 
+        if (holder instanceof MyViewHolder1 || holder instanceof MyViewHolder2) {
+            holder.itemView.clearAnimation();
+        }
+
+
+    }
 
      private class LoadingViewHolder extends RecyclerView.ViewHolder {
          AVLoadingIndicatorView progressBar;
@@ -337,7 +341,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-
+    //viewholder for layout 2
 
      private class MyViewHolder1 extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
@@ -365,8 +369,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
             popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
-            popup = new PopupMenu(context, popupMenu);
-            popup.setOnMenuItemClickListener(this);
+
 
             popupMenu.setOnClickListener(this);
             itemView.setOnClickListener(this);
@@ -453,7 +456,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
 
                 case R.id.popup :
-
+                    popup = new PopupMenu(context, popupMenu);
+                    popup.setOnMenuItemClickListener(this);
                     final MenuInflater inflater = popup.getMenuInflater();
                      str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -547,8 +551,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    //viewholder for layout 2
-
     private class MyViewHolder2 extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
 
@@ -571,8 +573,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
                 popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
-            popup = new PopupMenu(context, popupMenu);
-            popup.setOnMenuItemClickListener(this);
+
 
             popupMenu.setOnClickListener(this);
             itemView.setOnClickListener(this);
@@ -622,7 +623,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 case R.id.popup :
-
+                    popup = new PopupMenu(context, popupMenu);
+                    popup.setOnMenuItemClickListener(this);
                     final MenuInflater inflater = popup.getMenuInflater();
                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -730,8 +732,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
                 popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
-            popup = new PopupMenu(context, popupMenu);
-            popup.setOnMenuItemClickListener(this);
+
 
             popupMenu.setOnClickListener(this);
             itemView.setOnClickListener(this);
@@ -764,7 +765,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 case R.id.popup :
-
+                    popup = new PopupMenu(context, popupMenu);
+                    popup.setOnMenuItemClickListener(this);
                     final MenuInflater inflater = popup.getMenuInflater();
                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -846,25 +848,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
 
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-    @Override
-    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
-
-
-        if (holder instanceof MyViewHolder1 || holder instanceof MyViewHolder2) {
-            holder.itemView.clearAnimation();
         }
 
 

@@ -3,7 +3,6 @@ package com.example.randomlocks.gamesnote.Adapter;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +14,11 @@ import android.widget.Toast;
 import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -31,51 +28,17 @@ import es.dmoral.toasty.Toasty;
  */
 public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<CharacterSearchModal> modals;
-    private Context context;
-    private OnClickInterface mOnClickInterface;
-
-
     //variable for endless scroll
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-
+    private List<CharacterSearchModal> modals;
+    private Context context;
+    private OnClickInterface mOnClickInterface;
     private OnLoadMoreListener mOnLoadMoreListener;
 
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
-
-    public void swap(List<CharacterSearchModal> newModals) {
-        modals.clear();
-        modals.addAll(newModals);
-        notifyItemRangeInserted(0,getItemCount());
-    }
-
-    public void removeAll() {
-        modals.clear();
-        notifyItemRangeRemoved(0,getItemCount());
-    }
-
-    public void updateModal(List<CharacterSearchModal> modals){
-        this.modals.remove(this.modals.size() - 1);
-        notifyItemRemoved(this.modals.size());
-        int size = this.modals.size();
-        this.modals.addAll(modals);
-        notifyItemRangeChanged(size,this.modals.size());
-        setLoaded();
-
-    }
-
-    public void addNull() {
-        modals.add(null);
-        notifyItemInserted(modals.size()-1);
-    }
-
-
-    public interface OnClickInterface {
-        void onItemClick(String apiUrl, String image, String name);
-    }
 
     public GameCharacterSearchAdapter(final List<CharacterSearchModal> modals, final Context context, RecyclerView recyclerView, OnClickInterface mOnClickInterface) {
         this.modals = modals;
@@ -129,6 +92,32 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
 
     }
 
+    public void swap(List<CharacterSearchModal> newModals) {
+        modals.clear();
+        modals.addAll(newModals);
+        notifyItemRangeInserted(0, getItemCount());
+    }
+
+    public void removeAll() {
+        modals.clear();
+        notifyItemRangeRemoved(0, getItemCount());
+    }
+
+    public void updateModal(List<CharacterSearchModal> modals) {
+        this.modals.remove(this.modals.size() - 1);
+        notifyItemRemoved(this.modals.size());
+        int size = this.modals.size();
+        this.modals.addAll(modals);
+        notifyItemRangeChanged(size, this.modals.size());
+        setLoaded();
+
+    }
+
+    public void addNull() {
+        modals.add(null);
+        notifyItemInserted(modals.size() - 1);
+    }
+
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
         this.mOnLoadMoreListener = mOnLoadMoreListener;
     }
@@ -137,8 +126,6 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
     public int getItemViewType(int position) {
         return modals.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
-
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -180,7 +167,7 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
                 });*/
                 viewHolder.profileImage.setTag(R.string.smallImageUrl, modal.image.thumbUrl);
                 viewHolder.profileImage.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.mediumUrl).fit().centerCrop().into(viewHolder.profileImage);
+                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().into(viewHolder.profileImage);
 
 
             } else {
@@ -206,8 +193,11 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
         isLoading = false;
     }
 
-//    public boolean getLoaded(){ return isLoading;}
+    public interface OnClickInterface {
+        void onItemClick(String apiUrl, String image, String name);
+    }
 
+//    public boolean getLoaded(){ return isLoading;}
 
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
         AVLoadingIndicatorView progressBar;

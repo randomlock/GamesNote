@@ -8,15 +8,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
-import com.example.randomlocks.gamesnote.Fragments.VideoPlayerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 
 public class GameDetailActivity extends AppCompatActivity implements GameDetailFragment.CommunicationInterface {
 
+    public int seek_position = 0;
     FragmentTransaction fragmentTransaction;
     FragmentManager fragmentManager;
-   public int seek_position=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +132,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
         intent.putExtra(GiantBomb.SEEK_POSITION,seek_position);
-
+        intent.putExtra("Activity", GameDetailActivity.this.getClass().getSimpleName());
         startActivityForResult(intent,1);
 
     }
@@ -142,6 +142,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK){
+                Toaster.make(this, seek_position + "");
                 seek_position =data.getIntExtra(GiantBomb.SEEK_POSITION,0);
             }
         }

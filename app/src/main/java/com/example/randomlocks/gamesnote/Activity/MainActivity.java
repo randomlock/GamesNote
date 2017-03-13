@@ -29,8 +29,9 @@ import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.NewsDetailP
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
+import com.example.randomlocks.gamesnote.HelperClass.InputMethodLeak.IMMLeaks;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
@@ -44,31 +45,30 @@ add share preference so that when user open app he is automatically in correct f
 
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ImageUrlFragment.ImageUrlInterface {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ImageUrlFragment.ImageUrlInterface, VideoPlayInterface {
 
 
-    private static final String FRAGMENT_KEY = "restored_fragment";
     public static final String KEY = "NAViGATION_SELECTED_ID"; //FOR SAVING MENU ITEM
     public static final String TITLE = "NAVIGATION_SELECTED_TITLE"; //FOR MENU TOOLBAR TITLE
     public static final String DEFAULT_TITLE = "Game Wiki";
+    private static final String FRAGMENT_KEY = "restored_fragment";
     public List<NewsModal> newsModals;
-    PicassoFrameLayout navHeaderLayout;
     public String mtitle;
-    int mselectedId;
-    private DrawerLayout mDrawer;
     public ActionBarDrawerToggle mDrawableToggle;
+    PicassoFrameLayout navHeaderLayout;
+    int mselectedId;
     Fragment fragment;
+    private DrawerLayout mDrawer;
 
   /*  static {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }*/
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        IMMLeaks.fixFocusedViewLeak(getApplication());
         fragment = null;
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView mNavigation = (NavigationView) findViewById(R.id.navigation_view);
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
         }
-        mselectedId = savedInstanceState == null ? R.id.nav_home : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_trailer : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -430,6 +430,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
 
 
+    }
 
+    @Override
+    public void onVideoClick(String url) {
+        Intent intent = new Intent(this, VideoPlayerActivity.class);
+        intent.putExtra(GiantBomb.API_URL, url);
+        intent.putExtra("Activity", MainActivity.this.getClass().getSimpleName());
+        startActivityForResult(intent, 1);
     }
 }
