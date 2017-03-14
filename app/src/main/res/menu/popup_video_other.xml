@@ -5,4 +5,9 @@
         android:title="remove"
 
         />
+
+    <item
+        android:id="@+id/share"
+        android:title="@string/share" />
+
 </menu>

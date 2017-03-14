@@ -1,24 +1,25 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDelegate;
-import android.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
 import com.flyco.labelview.LabelView;
@@ -38,15 +39,17 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
     private static final int CARD_VIEW_TYPE = 1;
     private final int position;
     Context context;
-    private boolean isSimple;
     Realm realm;
+    OnClickInterface onClickInterface;
+    private boolean isSimple;
 
-    public GameVideoOtherAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<GamesVideoModal> data, boolean autoUpdate, boolean isSimple,Realm realm,int position) {
+    public GameVideoOtherAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<GamesVideoModal> data, boolean autoUpdate, boolean isSimple, Realm realm, int position, OnClickInterface onClickInterface) {
         super(context, data, autoUpdate);
         this.context = context;
         this.isSimple = isSimple;
         this.realm = realm;
         this.position = position;
+        this.onClickInterface = onClickInterface;
     }
 
     @Override
@@ -72,7 +75,6 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
 
         return new MyViewHolder(view);
     }
-
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
@@ -124,6 +126,11 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
 
     }
 
+
+    public interface OnClickInterface {
+        void onVideoClick(GamesVideoModal modal);
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
         ImageView videoThumb;
@@ -153,6 +160,13 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
             final MenuInflater inflater = popup.getMenuInflater();
             inflater.inflate(R.menu.popup_video_other, popup.getMenu());
 
+            if (!isSimple) {
+                DisplayMetrics metrics;
+                metrics = context.getResources().getDisplayMetrics();
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, metrics.heightPixels / 3);
+                videoThumb.setLayoutParams(params);
+            }
+
 
             itemView.setOnClickListener(this);
 
@@ -166,6 +180,10 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
                 case R.id.popup:
 
                     popup.show();
+                    break;
+
+                case R.id.root_view:
+                    onClickInterface.onVideoClick(modal);
                     break;
 
 
@@ -193,6 +211,21 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
                     }
                 });
                 return true;
+            } else if (item.getItemId() == R.id.share) {
+                String bmpUri = modal.siteDetailUrl;
+                if (bmpUri != null) {
+                    // Construct a ShareIntent with link to image
+
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, bmpUri);
+                    //shareIntent.setType("image/png");
+                    // Launch sharing dialog for image
+                    context.startActivity(Intent.createChooser(shareIntent, "Share Video"));
+                } else {
+                    Toasty.error(context, "cannot share", Toast.LENGTH_SHORT, true).show();
+                }
             }
             return false;
         }

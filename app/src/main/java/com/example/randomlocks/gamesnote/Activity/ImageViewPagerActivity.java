@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PhotoViewPager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.SingleMediaScanner;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -35,7 +37,10 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 import uk.co.senab.photoview.PhotoView;
@@ -124,13 +129,13 @@ public class ImageViewPagerActivity extends AppCompatActivity {
     }
 
     private void shareImage(Uri bmpUri) {
-
+        Log.d("FILE_PATH", bmpUri.toString());
         if (bmpUri != null) {
             // Construct a ShareIntent with link to image
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-            shareIntent.setType("image*//**//*");
+            shareIntent.setType("image/jpg");
             //shareIntent.setType("image/png");
             // Launch sharing dialog for image
             startActivity(Intent.createChooser(shareIntent, "Share Image"));
@@ -152,13 +157,36 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         }
         // Store image to default external storage directory
         Uri bmpUri = null;
-        File file;
+        File file = null;
         try {
+            if (option_id == R.id.save) {
+                File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                        + "/GamesNote/Pictures");
 
-            file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+                // This location works best if you want the created images to be shared
+                // between applications and persist after your app has been uninstalled.
+
+                // Create the storage directory if it does not exist
+                if (!mediaStorageDir.exists()) {
+                    if (!mediaStorageDir.mkdirs()) {
+                        return null;
+                    }
+                }
+                // Create a media file name
+                String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm", Locale.getDefault()).format(new Date());
+                String mImageName = gameTitle + timeStamp + ".jpg";
+                file = new File(mediaStorageDir + File.separator + mImageName);
+            } else {
+                file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+            }
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();
+
+
+            new SingleMediaScanner(this, file);
+
+
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                 bmpUri = Uri.fromFile(file);
@@ -195,6 +223,9 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Uri bmpUri) {
 
+            Toasty.info(ImageViewPagerActivity.this, bmpUri.getPath(), Toast.LENGTH_LONG).show();
+
+
             switch (option_id) {
 
 
@@ -204,6 +235,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
 
                 case R.id.save:
+                    Toasty.success(ImageViewPagerActivity.this, "image saved").show();
                     break;
 
                 case R.id.gallery:

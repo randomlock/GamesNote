@@ -4,14 +4,14 @@
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:layout_marginTop="6dp"
     android:layout_marginBottom="6dp"
     android:layout_marginLeft="6dp"
     android:layout_marginRight="6dp"
+    android:layout_marginTop="6dp"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/cardColor"
-    app:elevation="4dp"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="4dp"
+    app:elevation="4dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,29 +26,29 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:src="@drawable/headerbackground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true" />
+            android:layout_height="130dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/headerbackground" />
 
             <com.flyco.labelview.LabelView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:lv_background_color="@color/primary"
                 app:lv_text="hello"
                 app:lv_text_size="12sp"
-                app:lv_background_color="@color/primary"
                 />
 
             <com.flyco.labelview.LabelView
                 android:id="@+id/is_watch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                app:lv_background_color="@color/primary"
+                app:lv_gravity="BOTTOM_RIGHT"
                 app:lv_text="watched"
                 app:lv_text_size="12sp"
-                android:layout_gravity="bottom|end"
-                app:lv_gravity="BOTTOM_RIGHT"
-                app:lv_background_color="@color/primary"
 
                 />
 
@@ -66,12 +66,12 @@
             android:id="@+id/popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#35000000"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/parentImage"
+            android:layout_margin="6dp"
+            android:background="@null"
             android:src="@drawable/ic_action_navigation_more_vert"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-
             />
 
 
@@ -80,56 +80,56 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:layout_margin="12dp"
-            android:text="video title"
-            android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            android:layout_below="@+id/parentImage"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_below="@+id/parentImage"
+            android:layout_margin="12dp"
+            android:gravity="end"
+            android:text="video title"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold" />
 
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:text="video description"
-            android:textColor="?android:attr/textColorPrimary"
-            android:gravity="end"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="12dp" />
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/title"
+            android:layout_margin="12dp"
+            android:gravity="end"
+            android:text="video description"
+            android:textColor="?android:attr/textColorPrimary" />
 
         <TextView
             android:id="@+id/category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-"
-            android:fontFamily="serif"
-            android:textColor="@color/accent"
-            android:gravity="center_vertical"
-            android:layout_margin="12dp"
-            android:textSize="12sp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/view4"
+            android:layout_margin="12dp"
+            android:fontFamily="serif"
+            android:gravity="center_vertical"
+            android:text="-"
+            android:textColor="@color/accent"
+            android:textSize="12sp"
             />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-"
-            android:fontFamily="serif"
-            android:textColor="@color/black_white"
-            android:gravity="center_vertical"
-            android:layout_margin="12dp"
-            android:textSize="12sp"
-            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/view4"
+            android:layout_margin="12dp"
+            android:fontFamily="serif"
+            android:gravity="center_vertical"
+            android:text="-"
+            android:textColor="@color/black_white"
+            android:textSize="12sp"
             />
 
 
@@ -138,9 +138,9 @@
             android:id="@+id/view4"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="?android:attr/textColorPrimary"
+            android:layout_below="@+id/description"
             android:alpha="0.3"
-            android:layout_below="@+id/description" />
+            android:background="?android:attr/textColorPrimary" />
 
 
 

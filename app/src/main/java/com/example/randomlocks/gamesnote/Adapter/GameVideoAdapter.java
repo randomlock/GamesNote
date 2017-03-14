@@ -220,7 +220,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void onLike(GamesVideoModal modal);
 
-        void onShare();
+        void onShare(GamesVideoModal modal);
 
         void onVideoClick(GamesVideoModal modal);
     }
@@ -275,7 +275,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(this);
 
             if (viewType==CARD_VIEW_TYPE) {
-                DisplayMetrics metrics = new DisplayMetrics();
+                DisplayMetrics metrics;
                 metrics = context.getResources().getDisplayMetrics();
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,metrics.heightPixels/3);
                 videoThumb.setLayoutParams(params);
@@ -337,6 +337,10 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 case  R.id.like :
                     modal.isFavorite = !modal.isFavorite;
                     mOnClickInteraface.onLike(modalList.get(getLayoutPosition()));
+                    return true;
+
+                case R.id.share:
+                    mOnClickInteraface.onShare(modalList.get(getLayoutPosition()));
                     return true;
 
 

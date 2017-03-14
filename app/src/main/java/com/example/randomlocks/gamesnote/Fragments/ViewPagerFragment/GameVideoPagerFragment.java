@@ -662,8 +662,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     }
 
     @Override
-    public void onShare() {
-
+    public void onShare(GamesVideoModal modal) {
+        shareVideo(modal.siteDetailUrl);
     }
 
     @Override
@@ -734,6 +734,26 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         CustomTabActivityHelper.openCustomTab(
                 getActivity(), customTabsIntent, Uri.parse(url), new WebViewFallback());
     }
+
+
+    private void shareVideo(String bmpUri) {
+        if (bmpUri != null) {
+            // Construct a ShareIntent with link to image
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, bmpUri);
+            //shareIntent.setType("image/png");
+            // Launch sharing dialog for image
+            startActivity(Intent.createChooser(shareIntent, "Share Video"));
+        } else {
+            Toasty.error(getContext(), "cannot share", Toast.LENGTH_SHORT, true).show();
+        }
+
+
+    }
+
 
 
 
