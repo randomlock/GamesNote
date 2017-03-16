@@ -6,7 +6,7 @@ package com.example.randomlocks.gamesnote.Interface;
 
 public interface VideoPlayInterface {
 
-    void onVideoClick(String url, int id, int elapsed_time);
+    void onVideoClick(String url, int id, int elapsed_time, int request_code);
 
     void onYoutubeVideoClick(String url, int id);
 

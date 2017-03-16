@@ -463,7 +463,9 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
         map.put(GiantBomb.SORT, sort);
         map.put(GiantBomb.OFFSET, "0");
-        listModals.clear();
+        if (listModals != null) {
+            listModals.clear();
+        }
         progressBar.setVisibility(View.VISIBLE);
         getGameWiki(gameWikiListInterface, map);
 

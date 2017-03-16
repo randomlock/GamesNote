@@ -696,7 +696,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             case 0:
                 url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time);
+                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, 0);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 
@@ -707,7 +707,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             case 1:
                 url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time);
+                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, 0);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 
@@ -760,7 +760,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+        if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 final int time_elapsed = data.getIntExtra(GiantBomb.SEEK_POSITION, 0);
 

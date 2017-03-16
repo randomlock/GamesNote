@@ -79,6 +79,7 @@ public class GiantBomb {
     public static final int DROPPED = 3;
     public static final int PLAYING = 4;
     public static final int COMPLETED = 5;
+    public static final String REQUEST_CODE = "request_code";
     public static String REDUCE_VIEW = "reduce_view";
     private static OkHttpClient httpClient = null;
     private static Request request = null;

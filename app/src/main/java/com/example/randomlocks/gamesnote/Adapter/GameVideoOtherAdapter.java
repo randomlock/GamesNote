@@ -41,9 +41,9 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
     private static final int CARD_VIEW_TYPE = 1;
     private final int position;
     Context context;
-    Realm realm;
-    OnClickInterface onClickInterface;
-    HashMap<Integer, Integer> realmMap;
+    private Realm realm;
+    private OnClickInterface onClickInterface;
+    private HashMap<Integer, Integer> realmMap;
     private boolean isSimple;
 
     public GameVideoOtherAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<GamesVideoModal> data, boolean autoUpdate,
@@ -64,7 +64,7 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
 
     public void setSimple(boolean simple) {
         isSimple = simple;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
     }
 
     public void updateModal(int position, HashMap<Integer, Integer> realmMap) {
@@ -145,7 +145,7 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
 
 
     public interface OnClickInterface {
-        void onVideoClick(GamesVideoModal modal);
+        void onVideoClick(GamesVideoModal modal, int adapter_position, int elapsed_time);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
@@ -200,7 +200,7 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
                     break;
 
                 case R.id.root_view:
-                    onClickInterface.onVideoClick(modal);
+                    onClickInterface.onVideoClick(modal, getAdapterPosition(), realmMap.containsKey(modal.id) ? realmMap.get(modal.id) : 0);
                     break;
 
 

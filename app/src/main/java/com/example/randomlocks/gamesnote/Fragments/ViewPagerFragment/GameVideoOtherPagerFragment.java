@@ -28,9 +28,10 @@ import com.example.randomlocks.gamesnote.RealmDatabase.WatchedVideoDatabase;
 
 import java.util.HashMap;
 
-import es.dmoral.toasty.Toasty;
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by randomlocks on 7/19/2016.
@@ -51,6 +52,9 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
 
     VideoPlayInterface videoPlayInterface;
     HashMap<Integer, Integer> realmMap;
+
+    int video_id;
+    int adapterPosition;
 
 
     public GameVideoOtherPagerFragment() {
@@ -78,7 +82,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         position = getArguments().getInt(GiantBomb.POSITION);
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_VIEW, false, getContext());
         realm = Realm.getDefaultInstance();
-
+        realmMap = new HashMap<>();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -154,8 +158,10 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         if (adapter == null) {
             adapter = new GameVideoOtherAdapter(getContext(), listModals, true, isReduced, realm, position, realmMap, new GameVideoOtherAdapter.OnClickInterface() {
                 @Override
-                public void onVideoClick(GamesVideoModal modal) {
-                    VideoOptionFragment videoOptionFragment = VideoOptionFragment.newInstance(modal, 0);
+                public void onVideoClick(GamesVideoModal modal, int position, int elapsed_time) {
+                    adapterPosition = position;
+                    video_id = modal.id;
+                    VideoOptionFragment videoOptionFragment = VideoOptionFragment.newInstance(modal, elapsed_time);
                     videoOptionFragment.setTargetFragment(GameVideoOtherPagerFragment.this, 0);
                     videoOptionFragment.setCancelable(false);
                     videoOptionFragment.show(getActivity().getSupportFragmentManager(), "video_option_fragment");
@@ -189,7 +195,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
             case 0:
                 url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time);
+                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, position);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 
@@ -200,7 +206,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
             case 1:
                 url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time);
+                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, position);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 
@@ -234,6 +240,31 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toasty.info(getContext(), "not you").show();
+        if (requestCode == position) {
+            if (resultCode == RESULT_OK) {
+                final int time_elapsed = data.getIntExtra(GiantBomb.SEEK_POSITION, 0);
+
+                if (time_elapsed > 0) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            WatchedVideoDatabase database = new WatchedVideoDatabase(video_id, time_elapsed);
+                            realm.copyToRealmOrUpdate(database);
+                            RealmResults<WatchedVideoDatabase> realmResults = realm.where(WatchedVideoDatabase.class).findAll();
+                            for (WatchedVideoDatabase modal : realmResults) {
+                                realmMap.put(modal.id, modal.time_elapsed);
+                            }
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            adapter.updateModal(adapterPosition, realmMap);
+                        }
+                    });
+                }
+
+
+            }
+        }
     }
 }

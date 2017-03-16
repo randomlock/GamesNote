@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
-
-<android.support.v7.widget.RecyclerView
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
-    />
-
+        app:fastScrollAutoHide="true"
+        app:fastScrollThumbColor="@color/accent"
+        app:fastScrollTrackColor="#1f000000" />
 
 
     <TextView
         android:id="@+id/errortext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Games Added"
-        android:drawableTop="@drawable/ic_error_outline_black_48dp"
         android:layout_gravity="center|top"
+        android:layout_marginTop="12dp"
+        android:drawableTop="@drawable/ic_error_outline_black_48dp"
+        android:text="No Games Added"
         android:textColor="?android:attr/textColorPrimary"
         android:visibility="gone"
-        android:layout_marginTop="12dp"
         />
 
     </FrameLayout>

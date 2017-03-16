@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -41,6 +41,8 @@ import io.realm.RealmRecyclerViewAdapter;
 public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, GameListAdapter.MyViewHolder> implements Filterable {
 
 
+    private static final int SIMPLE_VIEW_TYPE = 0;
+    private static final int CARD_VIEW_TYPE = 1;
     Context context;
     private int[] rainbow;
     private OnClickInterface mOnClickInterface;
@@ -48,9 +50,18 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     private OrderedRealmCollection<GameListDatabase> model;
     private int status;
     private boolean isSimple;
+    private int last_position = -1;
 
-    private static final int SIMPLE_VIEW_TYPE = 0;
-    private static final int CARD_VIEW_TYPE = 1;
+    public GameListAdapter(@NonNull Context context, Realm realm, @Nullable OrderedRealmCollection<GameListDatabase> data, boolean autoUpdate, int status, boolean isSimple, OnClickInterface mOnClickInterface) {
+        super(context, data, autoUpdate);
+        this.context = context;
+        this.mOnClickInterface = mOnClickInterface;
+        rainbow = context.getResources().getIntArray(R.array.score_color);
+        this.realm = realm;
+        model = data;
+        this.status = status;
+        this.isSimple = isSimple;
+    }
 
     @Override
     public Filter getFilter() {
@@ -61,27 +72,6 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         this.isSimple = isSimple;
         notifyItemRangeChanged(0,getItemCount());
 
-    }
-
-
-    private class GameListFilter
-            extends Filter {
-        private final GameListAdapter adapter;
-
-        private GameListFilter(GameListAdapter adapter) {
-            super();
-            this.adapter = adapter;
-        }
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            return new FilterResults();
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            adapter.filterResults(constraint.toString());
-        }
     }
 
     private void filterResults(String text) {
@@ -96,24 +86,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
                     .findAll();
         }
         updateData(model);
-    }
 
-
-    public interface OnClickInterface{
-        void onClick(GameListDatabase gameListDatabase);
-        void onScoreClick(String primaryKey,int oldScore , int position);
-    }
-
-
-    public GameListAdapter(@NonNull Context context, Realm realm, @Nullable OrderedRealmCollection<GameListDatabase> data, boolean autoUpdate, int status, boolean isSimple, OnClickInterface mOnClickInterface) {
-        super(context, data, autoUpdate);
-        this.context = context;
-        this.mOnClickInterface = mOnClickInterface;
-        rainbow = context.getResources().getIntArray(R.array.score_color);
-        this.realm = realm;
-        model = data;
-        this.status = status;
-        this.isSimple = isSimple;
     }
 
     @Override
@@ -138,25 +111,63 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         }
         holder.title.setText(listDatabase.getName());
 
-        holder.scoreView.setValue(listDatabase.getScore());
+        holder.scoreView.setValueAnimated(listDatabase.getScore());
         holder.scoreView.setBarColor(rainbow[listDatabase.getScore()/10]);
+
 
         if(status==GiantBomb.ALL_GAMES){
             holder.statusLabel.setText(context.getResources().getStringArray(R.array.status)[listDatabase.getStatus()-1]);
         }
 
+        setFadeAnimation(holder.itemView, position);
+
 
     }
-
-    @Override
-    public int getItemCount() {
-        return super.getItemCount();
-    }
-
 
     @Override
     public int getItemViewType(int position) {
         return isSimple ? SIMPLE_VIEW_TYPE : CARD_VIEW_TYPE;
+    }
+
+    private void setFadeAnimation(View view, int position) {
+        if (position > last_position) {
+            AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(700);
+            view.startAnimation(anim);
+            last_position = position;
+        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(MyViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        ((MyViewHolder) holder).itemView.clearAnimation();
+    }
+
+    public interface OnClickInterface {
+        void onClick(GameListDatabase gameListDatabase);
+
+        void onScoreClick(String primaryKey, int oldScore, int position);
+    }
+
+    private class GameListFilter
+            extends Filter {
+        private final GameListAdapter adapter;
+
+        private GameListFilter(GameListAdapter adapter) {
+            super();
+            this.adapter = adapter;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            return new FilterResults();
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            adapter.filterResults(constraint.toString());
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
@@ -168,6 +179,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         LabelView statusLabel;
 
         PopupMenu popup;
+        GameListDatabase gameListDatabase;
 
 
          MyViewHolder(View itemView) {
@@ -194,24 +206,23 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
 
         @Override
         public void onClick(View view) {
-
+            gameListDatabase = getItem(getAdapterPosition());
             if(view.getId()==R.id.score_view){
-                mOnClickInterface.onScoreClick(getData().get(getAdapterPosition()).getApiDetailUrl(),getData().get(getAdapterPosition()).getScore(),getAdapterPosition());
+
+                mOnClickInterface.onScoreClick(gameListDatabase.getApiDetailUrl(), gameListDatabase.getScore(), getAdapterPosition());
             }else  if(view.getId()==R.id.popup){
 
                 popup.show();
 
 
             } else {
-                mOnClickInterface.onClick(getData().get(getAdapterPosition()));
+                mOnClickInterface.onClick(gameListDatabase);
             }
         }
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             int id = item.getItemId();
-            final GameListDatabase gameListDatabase = getData().get(getAdapterPosition());
-
             if(id==R.id.remove){
 
                 realm.executeTransaction(new Realm.Transaction() {
@@ -239,7 +250,5 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
             }
         }
     }
-
-
 }
 

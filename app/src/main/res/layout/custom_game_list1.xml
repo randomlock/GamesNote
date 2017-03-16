@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <FrameLayout
         android:id="@+id/image_parent"
@@ -15,8 +15,8 @@
             android:id="@+id/image"
             android:layout_width="75dp"
             android:layout_height="112dp"
-            android:src="@drawable/testimage"
             android:background="?android:selectableItemBackground"
+            android:src="@drawable/testimage"
             />
 
 
@@ -24,9 +24,9 @@
             android:id="@+id/status_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:lv_background_color="@color/primary"
             app:lv_text="-"
             app:lv_text_size="12sp"
-            app:lv_background_color="@color/primary"
             />
 
     </FrameLayout>
@@ -35,41 +35,43 @@
             android:id="@+id/popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_navigation_more_vert"
-            android:background="@null"
-            android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:src="@drawable/ic_action_navigation_more_vert" />
 
 
         <at.grabner.circleprogress.CircleProgressView
             android:id="@+id/score_view"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:cpv_rimColor="@color/score_rim"
-            app:cpv_rimWidth="3dp"
-            app:cpv_barWidth="3dp"
-            app:cpv_textSize="20sp"
-            app:cpv_textColor="?android:attr/textColorPrimary"
             android:layout_below="@+id/popup"
             android:layout_toLeftOf="@+id/popup"
-            android:layout_toStartOf="@+id/popup" />
+            android:layout_toStartOf="@+id/popup"
+            app:cpv_barWidth="3dp"
+            app:cpv_rimColor="@color/score_rim"
+            app:cpv_rimWidth="3dp"
+            app:cpv_textColor="?android:attr/textColorPrimary"
+            app:cpv_textSize="20sp" />
 
     <TextView
         android:id="@+id/title"
+        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bioshock Infinite"
-        style="@style/TitleText"
-        android:maxLines="2"
-        android:ellipsize="end"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/image_parent"
         android:layout_toLeftOf="@+id/score_view"
-        android:layout_toStartOf="@+id/score_view"
-        android:layout_marginRight="33dp"
-        android:layout_marginEnd="33dp"
         android:layout_toRightOf="@+id/image_parent"
-        android:layout_toEndOf="@+id/image_parent" />
+        android:layout_toStartOf="@+id/score_view"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Bioshock Infinite" />
 
 
 </RelativeLayout>

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <Spinner
         android:id="@+id/status_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
         />
 
 
@@ -27,9 +25,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         >
 
 
@@ -39,9 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="FROM"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp"
-            android:text="FROM" />
+            android:textSize="12sp" />
 
         <View
             android:layout_width="1dp"
@@ -55,9 +53,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="TO"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp"
-            android:text="TO" />
+            android:textSize="12sp" />
 
 
         <View
@@ -72,9 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="HOURS"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp"
-            android:text="HOURS" />
+            android:textSize="12sp" />
 
 
 
@@ -86,8 +84,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="12dp"
+        android:orientation="horizontal"
         android:paddingBottom="12dp"
         >
 
@@ -98,8 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="-"
             android:linksClickable="true"
+            android:text="-"
             android:textColor="@color/primary" />
 
 
@@ -120,11 +118,11 @@
 
         <Spinner
             android:id="@+id/gameplay_hours_spinner"
-            android:background="@null"
             style="@style/AddtoListStyle"
-            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:background="@null"
 
-            android:layout_height="wrap_content" />
+            android:gravity="right" />
 
 
 
@@ -145,8 +143,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         android:paddingTop="12dp"
         >
 
@@ -157,9 +155,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="PLATFORM"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp"
-            android:text="PLATFORM" />
+            android:textSize="12sp" />
 
         <View
             android:layout_width="1dp"
@@ -173,9 +171,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="MEDIUM"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp"
-            android:text="MEDIUM" />
+            android:textSize="12sp" />
 
         <View
             android:layout_width="1dp"
@@ -189,9 +187,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="Price($)"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp"
-            android:text="Price($)"
 
             />
 
@@ -209,8 +207,8 @@
 
         <Spinner
             android:id="@+id/platform_spinner"
-            android:background="@null"
             style="@style/AddtoListStyle"
+            android:background="@null"
             android:gravity="right"
 
             />
@@ -221,8 +219,8 @@
 
         <Spinner
             android:id="@+id/medium_spinner"
-            android:background="@null"
             style="@style/AddtoListStyle"
+            android:background="@null"
             android:gravity="right"
 
             />
@@ -231,8 +229,8 @@
 
         <Spinner
             android:id="@+id/price_spinner"
-            android:background="@null"
             style="@style/AddtoListStyle"
+            android:background="@null"
             android:gravity="right"
 
             />
@@ -255,8 +253,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="24dp"
+        android:orientation="horizontal"
 
         >
 
@@ -266,11 +264,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="12sp"
             android:drawableTop="@drawable/youtube"
+            android:gravity="center"
             android:linksClickable="true"
-            android:textColor="@color/primary" />
+            android:textColor="@color/primary"
+            android:textSize="12sp" />
 
 
 
@@ -281,10 +279,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="12sp"
             android:drawableTop="@drawable/google_48"
-            android:textColor="@color/primary" />
+            android:gravity="center"
+            android:textColor="@color/primary"
+            android:textSize="12sp" />
 
 
 
@@ -294,10 +292,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="12sp"
             android:drawableTop="@drawable/wikipedia_48"
-            android:textColor="@color/primary" />
+            android:gravity="center"
+            android:textColor="@color/primary"
+            android:textSize="12sp" />
 
 
 
@@ -307,10 +305,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="12sp"
             android:drawableTop="@drawable/header_48"
-            android:textColor="@color/primary" />
+            android:gravity="center"
+            android:textColor="@color/primary"
+            android:textSize="12sp" />
 
 
     </LinearLayout>
@@ -326,10 +324,10 @@
     <Button
         android:id="@+id/close"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:text="Close"
+        android:layout_weight="1"
         android:background="#F44336"
+        android:text="Close"
         />
 
 
@@ -337,10 +335,10 @@
 <Button
     android:id="@+id/update"
     android:layout_width="0dp"
-    android:layout_weight="1"
     android:layout_height="wrap_content"
-    android:text="Update"
+    android:layout_weight="1"
     android:background="#4CAF50"
+    android:text="Update"
     />
 
 

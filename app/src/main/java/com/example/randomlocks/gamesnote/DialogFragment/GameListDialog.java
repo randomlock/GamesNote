@@ -1,13 +1,11 @@
 package com.example.randomlocks.gamesnote.DialogFragment;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.DialogFragment;
@@ -42,6 +40,7 @@ import io.realm.Realm;
 
 public  class GameListDialog extends DialogFragment implements View.OnClickListener {
 
+    private static final String PRIMARY_KEY = "PRIMARY_KEY";
     TextView startDate , endDate;
     Spinner status,platform , medium , hours , price ;
     int view_id;
@@ -51,7 +50,6 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
     GameListDatabase gameListDatabase;
     Realm realm;
 
-    private static final String PRIMARY_KEY = "PRIMARY_KEY";
     public static GameListDialog newInstance(String primaryId) {
 
         Bundle args = new Bundle();
@@ -184,12 +182,15 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
                         gameListDatabase.setGameplay_hours(hours.getSelectedItem().toString());
                         gameListDatabase.setMedium(medium.getSelectedItem().toString());
                         gameListDatabase.setPrice(price.getSelectedItem().toString());
-                        if(old_status!=status.getSelectedItemPosition()+1){
-                            pager.getAdapter().notifyDataSetChanged();
-                        }
+
 
                     }
                 });
+
+                if (old_status != status.getSelectedItemPosition() + 1) {
+                    pager.getAdapter().notifyDataSetChanged();
+                }
+
                 Toasty.success(getContext(),"updated", Toast.LENGTH_SHORT,true).show();
                 getDialog().cancel();
                 break;
@@ -251,7 +252,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
+                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END);
                 ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
 
             }
@@ -265,7 +266,17 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
 
     }
 
+    private int getIndex(Spinner spinner, String myString) {
+        int index = 0;
 
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 
     class CustomAdapter extends ArrayAdapter<CharSequence> {
 
@@ -285,21 +296,6 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
         public int getCount() {
             return gameListDatabase.getPlatform_list().size()+1;
         }
-    }
-
-
-
-    private int getIndex(Spinner spinner, String myString)
-    {
-        int index = 0;
-
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
-                index = i;
-                break;
-            }
-        }
-        return index;
     }
 
 

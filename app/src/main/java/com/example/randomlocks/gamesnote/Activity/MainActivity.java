@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
         }
-        mselectedId = savedInstanceState == null ? R.id.nav_trailer : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_mylist : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -438,11 +438,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onVideoClick(String url, int id, int elapsed_time) {
+    public void onVideoClick(String url, int id, int elapsed_time, int request_code) {
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
         intent.putExtra(GiantBomb.SEEK_POSITION, elapsed_time);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, request_code);
     }
 
     @Override
