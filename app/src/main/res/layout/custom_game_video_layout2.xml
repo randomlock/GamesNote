@@ -70,6 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            android:visibility="gone"
             app:lv_background_color="@color/primary"
             app:lv_gravity="BOTTOM_RIGHT"
             app:lv_text="watched"

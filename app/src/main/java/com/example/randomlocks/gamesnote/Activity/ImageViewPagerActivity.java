@@ -183,7 +183,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();
 
-
+            if (option_id == R.id.save)
             new SingleMediaScanner(this, file);
 
 
@@ -214,6 +214,11 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
     private class DownloadFileTask extends AsyncTask<ImageView, Void, Uri> {
 
+        @Override
+        protected void onPreExecute() {
+            if (option_id == R.id.save)
+                Toasty.info(ImageViewPagerActivity.this, "saving...").show();
+        }
 
         @Override
         protected Uri doInBackground(ImageView... imageViews) {

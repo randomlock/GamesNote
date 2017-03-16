@@ -36,7 +36,6 @@ import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicat
 import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 
@@ -53,6 +52,7 @@ import java.util.List;
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 /**
@@ -60,12 +60,15 @@ import okhttp3.Response;
  */
 public class GamesNewsFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String KEY = "navigation_news_id"; //FOR SAVING MENU ITEM
+    public static final String TITLE = "navigation_news_title"; //FOR MENU TOOLBAR TITLE
+    private static final String TAG = "okhttp_tag";
     private static final String MODAL = "news_modal";
     private static final String SCROLL_POSITION = "recycler_scroll_position";
     private static final String DEFAULT_TITLE = "GiantBomb";
-    public static final String KEY = "navigation_news_id"; //FOR SAVING MENU ITEM
-    public static final String TITLE = "navigation_news_title"; //FOR MENU TOOLBAR TITLE
     public DrawerLayout mDrawer;
+    public String URL = "http://www.eurogamer.net/?format=rss";
+    public String BASE_URL;
     NavigationView mNavigation;
     RecyclerView recyclerView;
     AVLoadingIndicatorView progressBar;
@@ -75,12 +78,12 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     DividerItemDecoration itemDecoration;
     GameNewsAdapter gameNewsAdapter;
     LinearLayoutManager layoutManager;
-    public String URL = "http://www.eurogamer.net/?format=rss";
-    public String BASE_URL;
     String mTitle;
     int mSelectedId;
     boolean isReduced;
     SwipeRefreshLayout refreshLayout;
+
+    OkHttpClient okHttpClient;
 
 
     public GamesNewsFragment() {
@@ -173,11 +176,14 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
     public void runOkHttp() throws IOException {
 
+        if (okHttpClient != null) {
+            GiantBomb.cancelCallWithTag(okHttpClient, TAG);
+        }
 
-        GiantBomb.getHttpClient().newCall(GiantBomb.getRequest(URL)).enqueue(new Callback() {
+        okHttpClient = GiantBomb.getHttpClient();
+        okHttpClient.newCall(GiantBomb.getRequest(URL, TAG)).enqueue(new Callback() {
 
             Handler mainHandler = new Handler(Looper.getMainLooper());
-
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -208,83 +214,85 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                String str = response.body().string();
-                NewsModal mod = new NewsModal();
-                try {
-                    modals = mod.parse(str);
-                    for (int i = 0, size = modals.size(); i < size; i++) {
-                        Document document = Jsoup.parse(modals.get(i).description);
-                        modals.get(i).smallDescription = document.text();
-                        if (modals.get(i).content == null) {
-                            Element element = null;
-                            Elements elements = document.getElementsByTag("img");
-                            String jsoupImageUrl = null;
-                            if (elements != null && elements.size() > 0) {
-                                element = elements.get(0);
-                                if (element.hasAttr("src")) {
-                                    jsoupImageUrl = element.attr("src");
-                                    element.remove();
-                                    modals.get(i).description = document.toString();
-                                }
-                            }
-
-
-                            if (jsoupImageUrl != null) {
-                                //for eurogamer relative img
-                                if (jsoupImageUrl.substring(0, 2).equals("//")) {
-                                    jsoupImageUrl = "http:" + jsoupImageUrl;
-                                }
-
-                                modals.get(i).content = jsoupImageUrl;
-
-                            }
-                        }
-
-                        Elements iframeElements = document.getElementsByTag("iframe");
-
-                        if (iframeElements != null && iframeElements.size() > 0) {
-                            for (Element iframeElement : iframeElements) {
-
-                                if (iframeElement.hasAttr("src")) {
-                                    String iframeSrc = iframeElement.attr("src");
-                                    if (!iframeSrc.contains("http")) {
-                                        iframeSrc = BASE_URL + iframeSrc;
-                                        iframeElement.attr("src", iframeSrc);
-                                        modals.get(i).description = document.toString();
+                if (response != null) {
+                    String str = response.body().string();
+                    NewsModal mod = new NewsModal();
+                    try {
+                        modals = mod.parse(str);
+                        for (int i = 0, size = modals.size(); i < size; i++) {
+                            Document document = Jsoup.parse(modals.get(i).description);
+                            modals.get(i).smallDescription = document.text();
+                            if (modals.get(i).content == null) {
+                                Element element = null;
+                                Elements elements = document.getElementsByTag("img");
+                                String jsoupImageUrl = null;
+                                if (elements != null && elements.size() > 0) {
+                                    element = elements.get(0);
+                                    if (element.hasAttr("src")) {
+                                        jsoupImageUrl = element.attr("src");
+                                        element.remove();
                                         modals.get(i).description = document.toString();
                                     }
+                                }
+
+
+                                if (jsoupImageUrl != null) {
+                                    //for eurogamer relative img
+                                    if (jsoupImageUrl.substring(0, 2).equals("//")) {
+                                        jsoupImageUrl = "http:" + jsoupImageUrl;
+                                    }
+
+                                    modals.get(i).content = jsoupImageUrl;
 
                                 }
                             }
+
+                            Elements iframeElements = document.getElementsByTag("iframe");
+
+                            if (iframeElements != null && iframeElements.size() > 0) {
+                                for (Element iframeElement : iframeElements) {
+
+                                    if (iframeElement.hasAttr("src")) {
+                                        String iframeSrc = iframeElement.attr("src");
+                                        if (!iframeSrc.contains("http")) {
+                                            iframeSrc = BASE_URL + iframeSrc;
+                                            iframeElement.attr("src", iframeSrc);
+                                            modals.get(i).description = document.toString();
+                                            modals.get(i).description = document.toString();
+                                        }
+
+                                    }
+                                }
+                            }
+
+
                         }
 
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (refreshLayout.isRefreshing()) {
+                                    refreshLayout.setRefreshing(false);
+                                }
+                                loadRecycler(modals, null);
+                            }
+                        });
+
+
+                    } catch (XmlPullParserException e) {
+                        Log.d("tag", e.toString());
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBar.setVisibility(View.GONE);
+                                Toasty.error(getContext(), "Unable to get the news feed", Toast.LENGTH_SHORT, true).show();
+
+                            }
+                        });
 
                     }
-
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (refreshLayout.isRefreshing()) {
-                                refreshLayout.setRefreshing(false);
-                            }
-                            loadRecycler(modals, null);
-                        }
-                    });
-
-
-                } catch (XmlPullParserException e) {
-                    Log.d("tag", e.toString());
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setVisibility(View.GONE);
-                            Toasty.error(getContext(),"Unable to get the news feed", Toast.LENGTH_SHORT,true).show();
-
-                        }
-                    });
-
                 }
-            }
+            } //function end
         });
 
 
@@ -588,5 +596,14 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
             SharedPreference.saveToSharedPreference(KEY, mSelectedId, context);
             SharedPreference.saveToSharedPreference(TITLE, mTitle, context);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (okHttpClient != null) {
+            GiantBomb.cancelCallWithTag(okHttpClient, TAG);
+        }
+
     }
 }

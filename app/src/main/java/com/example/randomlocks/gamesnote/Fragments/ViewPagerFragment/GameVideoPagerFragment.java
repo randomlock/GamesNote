@@ -42,7 +42,7 @@ import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModalList;
 import com.example.randomlocks.gamesnote.R;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.example.randomlocks.gamesnote.RealmDatabase.WatchedVideoDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +56,8 @@ import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by randomlocks on 7/19/2016.
@@ -89,11 +91,13 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     CoordinatorLayout coordinatorLayout;
     FloatingSearchView floatingSearchView;
     boolean isLoadingMore = false;
-    HashMap<Integer, GamesVideoModal> realmMap;
+    HashMap<Integer, Integer> realmMap;
     Call<GamesVideoModalList> call;
 
 
     VideoPlayInterface videoPlayInterface;
+    int video_id;
+    int adapterPosition;
 
 
     public GameVideoPagerFragment() {
@@ -125,9 +129,9 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<GamesVideoModal> realmResults = realm.where(GamesVideoModal.class).findAll();
-                for (GamesVideoModal modal : realmResults) {
-                    realmMap.put(modal.id, modal);
+                RealmResults<WatchedVideoDatabase> realmResults = realm.where(WatchedVideoDatabase.class).findAll();
+                for (WatchedVideoDatabase modal : realmResults) {
+                    realmMap.put(modal.id, modal.time_elapsed);
                 }
             }
         });
@@ -667,9 +671,11 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     }
 
     @Override
-    public void onVideoClick(GamesVideoModal modal) {
+    public void onVideoClick(GamesVideoModal modal, int adapterPosition, int elapsed_time) {
         //call the video option dialog
-        VideoOptionFragment videoOptionFragment = VideoOptionFragment.newInstance(modal);
+        this.adapterPosition = adapterPosition;
+        this.video_id = modal.id;
+        VideoOptionFragment videoOptionFragment = VideoOptionFragment.newInstance(modal, elapsed_time);
         videoOptionFragment.setTargetFragment(this, 0);
         videoOptionFragment.setCancelable(false);
         videoOptionFragment.show(getActivity().getSupportFragmentManager(), "video_option_fragment");
@@ -684,17 +690,16 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
 
     @Override
-    public void onPlay(GamesVideoModal modal, int video_option, boolean use_inbuilt) {
+    public void onPlay(GamesVideoModal modal, int video_option, boolean use_inbuilt, int elapsed_time) {
         String url;
         switch (video_option) {
             case 0:
                 url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url);
+                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time);
                 else {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    intent.setDataAndType(Uri.parse(url), "video/mp4");
-                    startActivity(intent);
+                    videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
+
                 }
 
                 break;
@@ -702,17 +707,15 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             case 1:
                 url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url);
+                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time);
                 else {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    intent.setDataAndType(Uri.parse(url), "video/mp4");
-                    startActivity(intent);
+                    videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
+
                 }
                 break;
             case 2:
                 url = modal.youtubeId;
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(), GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
-                startActivity(intent);
+                videoPlayInterface.onYoutubeVideoClick(url, modal.id);
                 break;
 
             case 3:
@@ -754,7 +757,38 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                final int time_elapsed = data.getIntExtra(GiantBomb.SEEK_POSITION, 0);
 
+                if (time_elapsed > 0) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            WatchedVideoDatabase database = new WatchedVideoDatabase(video_id, time_elapsed);
+                            realm.copyToRealmOrUpdate(database);
+                            RealmResults<WatchedVideoDatabase> realmResults = realm.where(WatchedVideoDatabase.class).findAll();
+                            for (WatchedVideoDatabase modal : realmResults) {
+                                realmMap.put(modal.id, modal.time_elapsed);
+                            }
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            adapter.updateModal(adapterPosition, realmMap);
+                        }
+                    });
+                }
+
+
+            }
+        }
+
+
+    }
 
 
 }

@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -25,20 +26,24 @@ import com.example.randomlocks.gamesnote.R;
 
 public class VideoOptionFragment extends DialogFragment {
 
-    private static String VIDEO_OPTION = "video_option";
-    private static String INBUILT_VIDEO = "inbuilt_player";
+    private static final String VIDEO_OPTION = "video_option";
+    private static final String INBUILT_VIDEO = "inbuilt_player";
+    private static final String ELAPSED_TIME = "elapsed_time";
     GamesVideoModal modal;
     View view;
     Spinner video_spinner;
-    CheckBox inbuilt_player_checkbox;
+    CheckBox inbuilt_player_checkbox, elapsed_time_checkbox;
     int video_option;
     boolean use_inbuilt;
     OnPlayInterface onPlayInterface;
 
-    public static VideoOptionFragment newInstance(GamesVideoModal modal) {
+    int elapsed_time;
+
+    public static VideoOptionFragment newInstance(GamesVideoModal modal, int elapsed_time) {
 
         Bundle args = new Bundle();
         args.putParcelable(GiantBomb.MODAL, modal);
+        args.putInt(ELAPSED_TIME, elapsed_time);
         VideoOptionFragment fragment = new VideoOptionFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,6 +65,7 @@ public class VideoOptionFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         modal = getArguments().getParcelable(GiantBomb.MODAL);
+        elapsed_time = getArguments().getInt(ELAPSED_TIME, 0);
         video_option = SharedPreference.getFromSharedPreferences(VIDEO_OPTION, 1, getContext());
         use_inbuilt = SharedPreference.getFromSharedPreferences(INBUILT_VIDEO, true, getContext());
     }
@@ -82,7 +88,7 @@ public class VideoOptionFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SharedPreference.saveToSharedPreference(VIDEO_OPTION, video_spinner.getSelectedItemPosition(), getContext());
                         SharedPreference.saveToSharedPreference(INBUILT_VIDEO, inbuilt_player_checkbox.isChecked(), getContext());
-                        onPlayInterface.onPlay(modal, video_spinner.getSelectedItemPosition(), inbuilt_player_checkbox.isChecked());
+                        onPlayInterface.onPlay(modal, video_spinner.getSelectedItemPosition(), inbuilt_player_checkbox.isChecked(), elapsed_time_checkbox.isChecked() ? elapsed_time : 0);
                         dismiss();
                     }
                 }).create();
@@ -102,6 +108,19 @@ public class VideoOptionFragment extends DialogFragment {
 
         video_spinner = (Spinner) view.findViewById(R.id.spinner);
         inbuilt_player_checkbox = (CheckBox) view.findViewById(R.id.checkbox);
+        elapsed_time_checkbox = (CheckBox) view.findViewById(R.id.resume_checkbox);
+
+        inbuilt_player_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && elapsed_time > 0) {
+                    elapsed_time_checkbox.setVisibility(View.VISIBLE);
+                } else {
+                    elapsed_time_checkbox.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         inbuilt_player_checkbox.setChecked(use_inbuilt);
         video_spinner.setSelection(video_option);
 
@@ -110,7 +129,7 @@ public class VideoOptionFragment extends DialogFragment {
 
 
     public interface OnPlayInterface {
-        void onPlay(GamesVideoModal modal, int video_option, boolean use_inbuilt);
+        void onPlay(GamesVideoModal modal, int video_option, boolean use_inbuilt, int elapsed_time);
     }
 
 

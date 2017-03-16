@@ -41,7 +41,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     int viewType = 0;
     private List<GamesVideoModal> modalList;
     private OnClickInterface mOnClickInteraface;
-    private HashMap<Integer, GamesVideoModal> hashResults;
+    private HashMap<Integer, Integer> hashResults;
     private Realm realm;
     private OnLoadMoreListener mOnLoadMoreListener;
 
@@ -50,7 +50,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private int lastVisibleItem, totalItemCount;
 
 
-    public GameVideoAdapter(final List<GamesVideoModal> modalList, Context context, boolean isSimple, Realm realm, OnClickInterface mOnClickInterface, HashMap<Integer, GamesVideoModal> realmResults, RecyclerView recyclerView) {
+    public GameVideoAdapter(final List<GamesVideoModal> modalList, Context context, boolean isSimple, Realm realm, OnClickInterface mOnClickInterface, HashMap<Integer, Integer> realmResults, RecyclerView recyclerView) {
         this.modalList = modalList;
         viewType = isSimple ? 0 : 1;
         this.context = context;
@@ -103,6 +103,11 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyItemRangeChanged(size,this.modalList.size());
         setLoaded();
 
+    }
+
+    public void updateModal(int position, HashMap<Integer, Integer> hashResults) {
+        this.hashResults = hashResults;
+        notifyItemChanged(position);
     }
 
     public void addNull() {
@@ -199,6 +204,15 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     date.append(minute).append(":").append(seconds);
                 }
             myHolder.timeLabel.setText(date.toString());
+
+
+                if (hashResults.containsKey(modal.id)) {
+
+                    myHolder.isWatchLabel.setVisibility(View.VISIBLE);
+
+                }
+
+
             }
 
         }else if (holder instanceof LoadingViewHolder) {
@@ -208,6 +222,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -222,7 +237,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void onShare(GamesVideoModal modal);
 
-        void onVideoClick(GamesVideoModal modal);
+        void onVideoClick(GamesVideoModal modal, int adapterPosition, int elapsed_time);
     }
 
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
@@ -318,7 +333,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
                 case R.id.root_view:
-                    mOnClickInteraface.onVideoClick(modal);
+                    mOnClickInteraface.onVideoClick(modal, getAdapterPosition(), hashResults.containsKey(modal.id) ? hashResults.get(modal.id) : 0);
                     break;
 
 

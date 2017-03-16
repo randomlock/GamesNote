@@ -25,6 +25,8 @@ import com.example.randomlocks.gamesnote.R;
 import com.flyco.labelview.LabelView;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 import es.dmoral.toasty.Toasty;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
@@ -41,14 +43,17 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
     Context context;
     Realm realm;
     OnClickInterface onClickInterface;
+    HashMap<Integer, Integer> realmMap;
     private boolean isSimple;
 
-    public GameVideoOtherAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<GamesVideoModal> data, boolean autoUpdate, boolean isSimple, Realm realm, int position, OnClickInterface onClickInterface) {
+    public GameVideoOtherAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<GamesVideoModal> data, boolean autoUpdate,
+                                 boolean isSimple, Realm realm, int position, HashMap<Integer, Integer> realmMap, OnClickInterface onClickInterface) {
         super(context, data, autoUpdate);
         this.context = context;
         this.isSimple = isSimple;
         this.realm = realm;
         this.position = position;
+        this.realmMap = realmMap;
         this.onClickInterface = onClickInterface;
     }
 
@@ -60,6 +65,11 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
     public void setSimple(boolean simple) {
         isSimple = simple;
         notifyDataSetChanged();
+    }
+
+    public void updateModal(int position, HashMap<Integer, Integer> realmMap) {
+        this.realmMap = realmMap;
+        notifyItemChanged(position);
     }
 
     @Override
@@ -121,6 +131,13 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
 
 
              holder.timeLabel.setText(date.toString());
+
+            if (realmMap.containsKey(modal.id)) {
+
+                holder.isWatchLabel.setVisibility(View.VISIBLE);
+
+            }
+
         }
 
 

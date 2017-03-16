@@ -30,9 +30,10 @@
 
     </LinearLayout>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="?dialogPreferredPadding"
         android:paddingRight="?dialogPreferredPadding">
 
@@ -45,7 +46,17 @@
             android:drawableStart="@android:color/transparent"
             android:text="Use inbuilt player" />
 
-    </FrameLayout>
+        <CheckBox
+            android:id="@+id/resume_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:drawableLeft="@android:color/transparent"
+            android:drawablePadding="20dp"
+            android:drawableStart="@android:color/transparent"
+            android:text="Resume" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

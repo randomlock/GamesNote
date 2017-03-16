@@ -29,6 +29,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         class_name = getIntent().getStringExtra("Activity");
         videoView = (CustomVideoView) findViewById(R.id.myvideoview);
         progressBar = (ProgressBar) findViewById(R.id.video_progress);
+        progressBar.setVisibility(View.VISIBLE);
         mediaController = new CustomMediaControllerFullscreen(this, true);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
@@ -36,6 +37,17 @@ public class VideoPlayerActivity extends AppCompatActivity {
         videoView.requestFocus();
         videoView.seekTo(seek_position);
         videoView.start();
+        videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
+            @Override
+            public void onPlay() {
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPause() {
+
+            }
+        });
 
 
         mediaController.setListener(new CustomMediaControllerFullscreen.OnMediaControllerInteractionListener() {
@@ -51,8 +63,11 @@ public class VideoPlayerActivity extends AppCompatActivity {
                 mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                     @Override
                     public boolean onInfo(MediaPlayer mp, int what, int extra) {
+
                         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
-                            progressBar.setVisibility(View.VISIBLE);
+                            if (progressBar.getVisibility() == View.GONE) {
+                                progressBar.setVisibility(View.VISIBLE);
+                            }
                         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
                             progressBar.setVisibility(View.GONE);
                         return false;
@@ -76,14 +91,10 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (class_name.equals("GameDetailActivity")) {
             Intent intent = new Intent();
             intent.putExtra(GiantBomb.SEEK_POSITION, videoView == null ? 0 : videoView.getCurrentPosition());
             setResult(RESULT_OK, intent);
             finish();
-        } else {
-            super.onBackPressed();
-        }
 
     }
 }

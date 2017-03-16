@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -29,9 +30,9 @@ import java.util.ArrayList;
 public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
 
 
+    public DrawerLayout mDrawer;
     ViewPager viewPager;
     TabLayout tabLayout;
-    public DrawerLayout mDrawer;
     AppBarLayout appBarLayout;
     FloatingSearchView floatingSearchView;
 
@@ -117,13 +118,21 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
         floatingSearchView.setTranslationY(verticalOffset);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
 
    public static class GameVideoPagerAdapter extends FragmentPagerAdapter {
 
         final int PAGE_COUNT = 3;
-        private Context context;
         String pageTitle[] = {"Videos", "Favorite", "Watch later"};
         ArrayList<Fragment> fragments;
+       private Context context;
 
         public GameVideoPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
@@ -153,13 +162,4 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
 
     }
-
-
-
-
-
-
-
-
-
 }

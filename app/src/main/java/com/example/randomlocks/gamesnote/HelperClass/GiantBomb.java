@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
+import okhttp3.Call;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -94,18 +95,30 @@ public class GiantBomb {
     private GiantBomb() {
     }
 
-    public static Request getRequest(String url) {
+    public static Request getRequest(String url, String tag) {
         if (request == null) {
             request = new Request.Builder()
                     .url(url)
+                    .tag(tag)
                     .build();
 
         } else if (!request.url().toString().equals(url)) {
-            // request = request.newBuilder().url(url).build();
-            request = new Request.Builder().url(url).build();
+            request = request.newBuilder().url(url).tag(tag).build();
+
         }
 
         return request;
+    }
+
+    public static void cancelCallWithTag(OkHttpClient client, String tag) {
+        for (Call call : client.dispatcher().queuedCalls()) {
+            if (call.request().tag().equals(tag))
+                call.cancel();
+        }
+        for (Call call : client.dispatcher().runningCalls()) {
+            if (call.request().tag().equals(tag))
+                call.cancel();
+        }
     }
 
     public static Retrofit getRetrofit() {

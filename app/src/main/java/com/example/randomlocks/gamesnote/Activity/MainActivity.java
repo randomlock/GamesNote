@@ -3,6 +3,7 @@ package com.example.randomlocks.gamesnote.Activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,7 @@ import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -59,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int mselectedId;
     Fragment fragment;
     private DrawerLayout mDrawer;
+
+
+
 
   /*  static {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
         }
-        mselectedId = savedInstanceState == null ? R.id.nav_wiki : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_trailer : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -433,10 +438,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onVideoClick(String url) {
+    public void onVideoClick(String url, int id, int elapsed_time) {
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
-        intent.putExtra("Activity", MainActivity.this.getClass().getSimpleName());
+        intent.putExtra(GiantBomb.SEEK_POSITION, elapsed_time);
         startActivityForResult(intent, 1);
     }
+
+    @Override
+    public void onYoutubeVideoClick(String url, int id) {
+        Intent intent = YouTubeStandalonePlayer.createVideoIntent(this, GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onExternalPlayerVideoClick(String url, int id) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.setDataAndType(Uri.parse(url), "video/mp4");
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("GamesVideo");
+        fragment.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
+
 }

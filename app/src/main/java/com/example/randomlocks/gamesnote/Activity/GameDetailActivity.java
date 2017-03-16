@@ -132,7 +132,6 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
         intent.putExtra(GiantBomb.SEEK_POSITION,seek_position);
-        intent.putExtra("Activity", GameDetailActivity.this.getClass().getSimpleName());
         startActivityForResult(intent,1);
 
     }
