@@ -63,7 +63,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int lastVisibleItem, totalItemCount;
 
 
-    public GameWikiAdapter(final List<GameWikiModal> list, int viewType, Context context, int lastPosition, RecyclerView recyclerView) {
+    public GameWikiAdapter(List<GameWikiModal> list, int viewType, Context context, int lastPosition, RecyclerView recyclerView) {
         this.list = list;
         this.viewType = viewType;
         this.context = context;
@@ -81,7 +81,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)&& list.size()>=50 && list.size() % 50 ==0) {
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold) && GameWikiAdapter.this.list.size() >= 50 && GameWikiAdapter.this.list.size() % 50 == 0) {
                     if (mOnLoadMoreListener != null) {
                         mOnLoadMoreListener.onLoadMore();
                     }
@@ -108,8 +108,10 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void removeAll() {
-        list.clear();
-        notifyItemRangeRemoved(0,getItemCount());
+        int size = this.list.size();
+        this.list.clear();
+        notifyItemRangeRemoved(0, size);
+
     }
 
 
@@ -181,9 +183,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.smallUrl).fit().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
-                Picasso.with(context).cancelRequest(viewHolder.imageView);
+                viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
 
             String date_time = modal.originalReleaseDate;
@@ -266,9 +268,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.thumbUrl).fit().into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.smallUrl).fit().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
-                Picasso.with(context).cancelRequest(viewHolder.imageView);
+                viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
 
 
@@ -292,9 +294,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.smallUrl).fit().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
-                Picasso.with(context).cancelRequest(viewHolder.imageView);
+                viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
 
 
@@ -370,7 +372,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)
             popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
 
-
+            popup = new PopupMenu(context, popupMenu);
+            popup.setOnMenuItemClickListener(this);
             popupMenu.setOnClickListener(this);
             itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
@@ -456,8 +459,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
 
                 case R.id.popup :
-                    popup = new PopupMenu(context, popupMenu);
-                    popup.setOnMenuItemClickListener(this);
+                    popup.getMenu().clear();
                     final MenuInflater inflater = popup.getMenuInflater();
                      str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -576,6 +578,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
             popupMenu.setOnClickListener(this);
+            popup = new PopupMenu(context, popupMenu);
+            popup.setOnMenuItemClickListener(this);
             itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
 
@@ -623,8 +627,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 case R.id.popup :
-                    popup = new PopupMenu(context, popupMenu);
-                    popup.setOnMenuItemClickListener(this);
+                    popup.getMenu().clear();
                     final MenuInflater inflater = popup.getMenuInflater();
                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -735,6 +738,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
             popupMenu.setOnClickListener(this);
+            popup = new PopupMenu(context, popupMenu);
+            popup.setOnMenuItemClickListener(this);
             itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
 
@@ -765,8 +770,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 case R.id.popup :
-                    popup = new PopupMenu(context, popupMenu);
-                    popup.setOnMenuItemClickListener(this);
+                    popup.getMenu().clear();
                     final MenuInflater inflater = popup.getMenuInflater();
                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
                     database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
@@ -834,7 +838,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.insert(newListDatabase);
+                        realm.insertOrUpdate(newListDatabase);
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override

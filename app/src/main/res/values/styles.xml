@@ -90,13 +90,15 @@
 
     </style>
 
-    <style name="sectionHeader" parent="android:Widget.Holo.Light.TextView">
+    <style name="sectionHeader" parent="android:TextAppearance.Widget.TextView">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:paddingLeft">4dp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:paddingRight">4dp</item>
+
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textAppearance">?attr/textAppearanceLargePopupMenu</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">serif</item>
     </style>
 
 

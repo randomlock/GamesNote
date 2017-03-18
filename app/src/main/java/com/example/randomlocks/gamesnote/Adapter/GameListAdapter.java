@@ -107,7 +107,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         if (listDatabase.getImageUrl() != null) {
             Picasso.with(context).load(listDatabase.getImageUrl()).centerCrop().fit().into(holder.image);
         } else {
-            holder.image.setImageResource(R.drawable.testimage);
+            holder.image.setImageResource(R.drawable.news_image_drawable);
         }
         holder.title.setText(listDatabase.getName());
 

@@ -364,6 +364,8 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
     public void getGameWiki(final GameWikiListInterface gameWikiListInterface, final Map<String, String> map) {
         Toaster.make(getContext(),"coming here");
+        if (call != null)
+            call.cancel();
         call = gameWikiListInterface.getResult(map);
         call.enqueue(new Callback<GameWikiListModal>() {
             @Override
@@ -463,9 +465,12 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
         map.put(GiantBomb.SORT, sort);
         map.put(GiantBomb.OFFSET, "0");
-        if (listModals != null) {
-            listModals.clear();
+
+        if (adapter != null) {
+            adapter.removeAll();
         }
+
+
         progressBar.setVisibility(View.VISIBLE);
         getGameWiki(gameWikiListInterface, map);
 

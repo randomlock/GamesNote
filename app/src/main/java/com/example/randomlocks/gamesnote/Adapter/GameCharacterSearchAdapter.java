@@ -40,7 +40,7 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
 
-    public GameCharacterSearchAdapter(final List<CharacterSearchModal> modals, final Context context, RecyclerView recyclerView, OnClickInterface mOnClickInterface) {
+    public GameCharacterSearchAdapter(List<CharacterSearchModal> modals, final Context context, RecyclerView recyclerView, OnClickInterface mOnClickInterface) {
         this.modals = modals;
         this.context = context;
         this.mOnClickInterface = mOnClickInterface;
@@ -58,7 +58,7 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
                     totalItemCount = linearLayoutManager.getItemCount();
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
-                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)&& modals.size()>=50 && modals.size() % 50 ==0) {
+                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold) && GameCharacterSearchAdapter.this.modals.size() >= 50 && GameCharacterSearchAdapter.this.modals.size() % 50 == 0) {
                         if (mOnLoadMoreListener != null) {
                             mOnLoadMoreListener.onLoadMore();
                         }
@@ -77,7 +77,7 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
                     totalItemCount = gridLayoutManager.getItemCount();
                     lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition();
 
-                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold )&& modals.size()>=50 && modals.size() % 50 ==0) {
+                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold) && GameCharacterSearchAdapter.this.modals.size() >= 50 && GameCharacterSearchAdapter.this.modals.size() % 50 == 0) {
                         if (mOnLoadMoreListener != null) {
                             mOnLoadMoreListener.onLoadMore();
                         }
@@ -167,11 +167,11 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
                 });*/
                 viewHolder.profileImage.setTag(R.string.smallImageUrl, modal.image.thumbUrl);
                 viewHolder.profileImage.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().into(viewHolder.profileImage);
+                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.profileImage);
 
 
             } else {
-                viewHolder.profileImage.setImageResource(R.drawable.headerbackground);
+                viewHolder.profileImage.setImageResource(R.drawable.news_image_drawable);
             }
 
             if(modal.deck!=null){

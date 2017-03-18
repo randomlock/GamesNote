@@ -1,6 +1,5 @@
 package com.example.randomlocks.gamesnote.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.CharacterDetailImageAdapter;
@@ -61,6 +61,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     Call<CharacterListModal> call;
     Map<String, String> map;
     CharacterModal characterDetailModal = null;
+    ProgressBar progressBar;
     TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
     TextView image_heading;
     PicassoNestedScrollView scrollView;
@@ -69,7 +70,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     AsyncTask asyncCharacterWikiImage = null;
     AppBarLayout appBarLayout;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    ProgressDialog dialog;
 
 
     @Override
@@ -89,6 +89,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         coverImage2 = (CircleImageView) coordinatorLayout.findViewById(R.id.character_image2);
         scrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
+        progressBar = (ProgressBar) parentLayout.findViewById(R.id.progressBar);
         mTitle = (TextView) parentLayout.findViewById(R.id.character_name);
         mEnemies = (TextView) parentLayout.findViewById(R.id.enemies);
         mEnemiesTitle = (TextView) parentLayout.findViewById(R.id.enemies_title);
@@ -112,9 +113,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dialog = ProgressDialog.show(this, "",
-                "Loading. Please wait...", true);
-        dialog.show();
+
 
 
         /*coverImage.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -216,7 +215,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
 
     private void getCharacterDetail(final GameCharacterInterface mGameCharacterInterface, final Map<String, String> map) {
-        dialog.show();
         call = mGameCharacterInterface.getResult(apiUrl,map);
         call.enqueue(new Callback<CharacterListModal>() {
             @Override
@@ -227,7 +225,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onFailure(Call<CharacterListModal> call, Throwable t) {
-                dialog.dismiss();
                 parentLayout.setVisibility(View.VISIBLE);
 
                 if(!call.isCanceled()){
@@ -248,7 +245,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     }
 
     private void fillData(CharacterModal characterDetailModal) {
-        parentLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
         if (characterDetailModal.name != null) {
             collapsingToolbarLayout.setTitle(characterDetailModal.name);
             mTitle.setText(characterDetailModal.name);
@@ -314,7 +311,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             }
         }
 
-        dialog.dismiss();
 
     }
 

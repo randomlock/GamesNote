@@ -2,30 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clickable="true"
     android:layout_margin="6dp"
-    android:background="?android:selectableItemBackground">
+    android:background="?android:selectableItemBackground"
+    android:clickable="true">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/testimage"
-        android:layout_gravity="center" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/news_image_drawable" />
 
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello"
-        android:gravity="center"
-        android:layout_marginTop="12dp"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textStyle="bold"
         android:layout_below="@+id/image"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:maxWidth="100dp"
+        android:text="Hello"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold" />
 
 
 

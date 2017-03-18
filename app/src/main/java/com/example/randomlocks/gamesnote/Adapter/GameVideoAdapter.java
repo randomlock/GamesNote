@@ -50,7 +50,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private int lastVisibleItem, totalItemCount;
 
 
-    public GameVideoAdapter(final List<GamesVideoModal> modalList, Context context, boolean isSimple, Realm realm, OnClickInterface mOnClickInterface, HashMap<Integer, Integer> realmResults, RecyclerView recyclerView) {
+    public GameVideoAdapter(List<GamesVideoModal> modalList, Context context, boolean isSimple, Realm realm, OnClickInterface mOnClickInterface, HashMap<Integer, Integer> realmResults, RecyclerView recyclerView) {
         this.modalList = modalList;
         viewType = isSimple ? 0 : 1;
         this.context = context;
@@ -67,7 +67,7 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold) && modalList.size() >= 50 && modalList.size() % 50 == 0) {
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold) && GameVideoAdapter.this.modalList.size() >= 50 && GameVideoAdapter.this.modalList.size() % 50 == 0) {
                     if (mOnLoadMoreListener != null) {
                         mOnLoadMoreListener.onLoadMore();
                     }

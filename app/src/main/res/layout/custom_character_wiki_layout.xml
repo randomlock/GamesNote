@@ -9,11 +9,11 @@
     android:layout_marginLeft="@dimen/leftmargin"
     android:layout_marginRight="@dimen/leftmargin"
     android:layout_marginTop="@dimen/leftmargin"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/cardColor"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/cardColor"
     app:cardPreventCornerOverlap="false"
-    android:foreground="?android:attr/selectableItemBackground"
     >
 
 
@@ -24,25 +24,24 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="75dp"
-            android:layout_height="112dp"
-            android:src="@drawable/testimage" />
+            android:layout_height="112dp" />
 
 
         <TextView
             android:id="@+id/name"
+            style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bioshock Infinite"
-            style="@style/TitleText"
             android:layout_margin="12dp"
-            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_toRightOf="@+id/image"
+            android:layout_marginStart="12dp"
             android:layout_toEndOf="@+id/image"
+            android:layout_toRightOf="@+id/image"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Bioshock Infinite"
            />
 
 
@@ -50,8 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/name"
-            android:layout_toRightOf="@+id/image"
             android:layout_toEndOf="@+id/image"
+            android:layout_toRightOf="@+id/image"
             android:background="@color/linecolor"
             />
 
@@ -60,16 +59,16 @@
 
         <TextView
             android:id="@+id/card_deck"
+            style="@style/SubTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorPrimary"
-            style="@style/SubTitleText"
-            android:maxLines="3"
-            android:ellipsize="end"
             android:layout_below="@+id/name"
-            android:layout_toRightOf="@+id/image"
-            android:layout_toEndOf="@+id/image"
             android:layout_margin="12dp"
+            android:layout_toEndOf="@+id/image"
+            android:layout_toRightOf="@+id/image"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textColor="?android:attr/textColorPrimary"
             />
 
 

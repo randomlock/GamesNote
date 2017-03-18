@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,11 +17,11 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/MyToolbar"
             app:contentScrim="@android:color/transparent"
-            app:layout_scrollFlags="exitUntilCollapsed|scroll"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
-            app:title=""
-            android:theme="@style/MyToolbar">
+            app:layout_scrollFlags="exitUntilCollapsed|scroll"
+            app:title="">
 
 
             <FrameLayout
@@ -62,8 +62,9 @@
 
     <com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView
         android:id="@+id/scroll_view"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -72,32 +73,39 @@
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/parentLinearLayout"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 android:layout_marginTop="48dp"
-                android:animateLayoutChanges="true">
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
+
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminateOnly="true" />
 
 
                 <TextView
                     android:id="@+id/character_name"
                     style="@style/cardview_textstyle"
+                    android:layout_marginTop="12dp"
                     android:gravity="center"
                     android:padding="0dp"
-                    android:layout_marginTop="12dp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/deck"
-                    android:layout_margin="12dp"
+                    style="@style/SubTitleText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="deck info"
-                    style="@style/SubTitleText"
                     android:layout_gravity="center"
+                    android:layout_margin="12dp"
                     android:gravity="center"
                     android:lineSpacingMultiplier="1.25"
+                    android:text="deck info"
                     android:textColor="@color/primary_text" />
 
 
@@ -112,8 +120,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="12dp">
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
 
 
                     <TextView
@@ -122,8 +130,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="-"
                         android:linksClickable="true"
+                        android:text="-"
                         android:textColor="@color/primary" />
 
 
@@ -164,9 +172,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp"
                     android:gravity="center"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="horizontal">
 
 
                     <TextView
@@ -223,11 +231,11 @@
 
                 <TextView
                     style="@style/cardview_textstyle"
-                    android:text="Overview"
                     android:layout_marginLeft="12dp"
                     android:layout_marginStart="12dp"
-                    android:padding="0dp"
                     android:layout_marginTop="12dp"
+                    android:padding="0dp"
+                    android:text="Overview"
 
                     />
 
@@ -235,24 +243,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp">
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
 
                     <TextView
+                        style="@style/SubTitleText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="GENDER"
-                        style="@style/SubTitleText"
                         android:layout_weight="1"
+                        android:text="GENDER"
                         android:textColor="@color/primary_text_light" />
 
                     <TextView
                         android:id="@+id/gender"
+                        style="@style/CharacterTextStyle"
                         android:layout_weight="1"
                         android:text="-"
-                        style="@style/CharacterTextStyle"
 
                         />
                 </LinearLayout>
@@ -287,23 +295,23 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="12dp"
+                    android:orientation="horizontal"
 
                     >
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="BIRTHDAY "
                         android:layout_weight="1"
+                        android:text="BIRTHDAY "
                         android:textColor="@color/primary_text_light" />
 
                     <TextView
                         android:id="@+id/birthday"
+                        style="@style/CharacterTextStyle"
                         android:layout_weight="1"
                         android:text="-"
-                        style="@style/CharacterTextStyle"
 
                         />
                 </LinearLayout>
@@ -313,9 +321,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
+                    android:orientation="horizontal"
 
 
                     >
@@ -331,9 +339,9 @@
                     <TextView
                         android:id="@+id/first_appearance"
                         style="@style/CharacterTextStyle"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:text="-"
-                        android:layout_gravity="center" />
+                        android:text="-" />
 
 
                 </LinearLayout>
@@ -365,19 +373,19 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/primary_light"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp" />
+                    android:layout_marginRight="12dp"
+                    android:background="@color/primary_light" />
 
 
                 <TextView
                     android:id="@+id/image_heading"
                     style="@style/cardview_textstyle"
-                    android:text="Images"
                     android:layout_marginLeft="12dp"
                     android:layout_marginStart="12dp"
-                    android:padding="0dp"
                     android:layout_marginTop="12dp"
+                    android:padding="0dp"
+                    android:text="Images"
 
                     />
 
@@ -400,11 +408,11 @@
 
                 <TextView
                     style="@style/cardview_textstyle"
-                    android:text="Detail Description"
                     android:layout_marginLeft="12dp"
                     android:layout_marginStart="12dp"
-                    android:padding="0dp"
                     android:layout_marginTop="12dp"
+                    android:padding="0dp"
+                    android:text="Detail Description"
 
                     />
 
@@ -414,8 +422,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
-                    android:text="No Additional info"
                     android:lineSpacingMultiplier="1.25"
+                    android:text="No Additional info"
                     android:textColor="@color/primary_text" />
 
 
