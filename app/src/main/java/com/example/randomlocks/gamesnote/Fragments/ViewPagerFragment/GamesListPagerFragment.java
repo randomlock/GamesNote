@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
@@ -30,7 +31,6 @@ import android.widget.Toast;
 import com.example.randomlocks.gamesnote.Adapter.GameListAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.GameListDialog;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
-import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.R;
@@ -82,7 +82,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         realm = Realm.getDefaultInstance();
         status = getArguments().getInt(STATUS);
         setHasOptionsMenu(true);
-        itemDecoration = new DividerItemDecoration(getContext());
+        itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
 
         int index = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_WHICH,1,getContext());
         sort_option = getField(index);
@@ -189,8 +189,8 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.cancel();
                                 }
-                            })
-                            .setView(sp, 60, 60, 60, 60); //make it not static
+                            }).setView(sp);
+
                     final AlertDialog dialog = builder.create();
                     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override

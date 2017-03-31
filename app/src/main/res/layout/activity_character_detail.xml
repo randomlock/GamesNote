@@ -446,7 +446,7 @@
         android:id="@+id/character_image2"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:src="@drawable/headerbackground"
+        android:src="@drawable/news_image_drawable"
         app:layout_anchor="@+id/character_image"
         app:layout_anchorGravity="bottom|center" />
 

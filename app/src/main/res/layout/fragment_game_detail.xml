@@ -158,8 +158,8 @@
                     <TextView
                         android:id="@+id/overview_heading"
                         style="@style/cardview_textstyle"
-                        android:drawableLeft="@drawable/ic_insert_comment"
-                        android:drawableStart="@drawable/ic_insert_comment"
+                        android:drawableLeft="@drawable/ic_action_overview"
+                        android:drawableStart="@drawable/ic_action_overview"
                         android:text="Overview"
                         />
 
@@ -202,8 +202,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
-                        android:drawableLeft="@drawable/ic_star"
-                        android:drawableStart="@drawable/ic_star"
+                        android:drawableLeft="@drawable/ic_action_star"
+                        android:drawableStart="@drawable/ic_action_star"
                         android:text="Review" />
 
                     <View
@@ -219,7 +219,6 @@
                         android:layout_weight="1"
                         android:background="?android:attr/selectableItemBackground"
                         android:drawableLeft="@drawable/ic_child_care"
-
                         android:drawableStart="@drawable/ic_child_care"
                         android:text="User review" />
 
@@ -327,8 +326,8 @@
                 <TextView
                     android:id="@+id/image_heading"
                     style="@style/cardview_textstyle"
-                    android:drawableLeft="@drawable/ic_image"
-                    android:drawableStart="@drawable/ic_image"
+                    android:drawableLeft="@drawable/ic_wikipedia"
+                    android:drawableStart="@drawable/ic_wikipedia"
                     android:text="Images"
                     />
 

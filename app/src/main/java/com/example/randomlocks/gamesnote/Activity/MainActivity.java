@@ -35,7 +35,6 @@ import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -91,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onGlobalLayout() {
                         navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.headerbackground).error(R.drawable.headerbackground).into(navHeaderLayout);
+                        Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(navHeaderLayout);
                     }
                 });
             } else
-                navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
+                navHeaderLayout.setBackgroundResource(R.drawable.news_image_drawable);
 
 
             mDrawableToggle = setupDrawerToggle(mDrawer);
@@ -371,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onSelect(String url) {
 
         if (url == null) {
-            navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
+            navHeaderLayout.setBackgroundResource(R.drawable.news_image_drawable);
             SharedPreference.removeFromSharedPreference(GiantBomb.NAV_HEADER_URL, this);
         } else {
             navHeaderLayout.setUrl(url);
@@ -447,8 +446,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onYoutubeVideoClick(String url, int id) {
-        Intent intent = YouTubeStandalonePlayer.createVideoIntent(this, GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
-        startActivity(intent);
+        /*Intent intent = YouTubeStandalonePlayer.createVideoIntent(this, GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
+        startActivity(intent);*/
     }
 
     @Override

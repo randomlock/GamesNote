@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:layout_marginTop="12dp"
-        android:drawableTop="@drawable/ic_error_outline_black_48dp"
+        android:drawableTop="@drawable/ic_error"
         android:text="No Games Added"
         android:textColor="?android:attr/textColorPrimary"
         android:visibility="gone"

@@ -28,7 +28,7 @@
             android:id="@+id/stats_heading"
             style="@style/cardview_textstyle"
             android:text="Stats"
-            android:drawableLeft="@drawable/ic_pie"
+            android:drawableLeft="@drawable/ic_pie_chart"
             android:drawableStart="@drawable/ic_pie_chart"
             />
 

@@ -1172,11 +1172,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.game_detail_menu, menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

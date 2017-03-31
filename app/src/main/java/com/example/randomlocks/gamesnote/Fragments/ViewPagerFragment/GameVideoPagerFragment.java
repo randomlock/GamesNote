@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +31,6 @@ import com.example.randomlocks.gamesnote.Adapter.GameVideoAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.VideoOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -171,7 +171,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         manager = new ConsistentLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         if(isReduced)
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
 
 
 
@@ -226,9 +226,9 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                         }
 
                         if(isReduced)
-                            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+                            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
                         else
-                            recyclerView.removeItemDecoration(new DividerItemDecoration(getContext()));
+                            recyclerView.removeItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
 
 
 

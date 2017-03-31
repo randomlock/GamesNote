@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoOtherAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.VideoOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.DividerItemDecoration;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
@@ -117,7 +117,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         manager = new ConsistentLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         if(isReduced)
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
 
 
         if (listModals != null) {
