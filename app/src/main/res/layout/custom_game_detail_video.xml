@@ -34,6 +34,7 @@
         android:background="@drawable/gradient"
         android:ellipsize="end"
         android:gravity="center"
+        android:minLines="2"
         android:maxLines="2"
         android:maxWidth="150dp"
         android:textColor="@color/white" />

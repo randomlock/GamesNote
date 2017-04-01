@@ -198,7 +198,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             @Override
             public void onSearchAction(String currentQuery) {
                 if (currentQuery.trim().length() > 0) {
-                        performSearch(currentQuery,false);
+                    performSearch(currentQuery,false);
                 }else {
                     Toasty.warning(getContext(),"no search text entered", Toast.LENGTH_SHORT,true).show();
                 }
@@ -282,10 +282,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
         pacman.setVisibility(View.VISIBLE);
         if (listModals!=null && !listModals.isEmpty()) {
-            listModals.clear();
             if(adapter!=null){
                 adapter.removeAll();
-
             }
 
         }
@@ -404,7 +402,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     }
 
     private void getGameVideos(final GamesVideosInterface gamesVideoInterface, final Map<String, String> map) {
-       call =  gamesVideoInterface.getResult(map);
+        call =  gamesVideoInterface.getResult(map);
         call.enqueue(new Callback<GamesVideoModalList>() {
             @Override
             public void onResponse(Call<GamesVideoModalList> call, Response<GamesVideoModalList> response) {
@@ -574,7 +572,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-    //    inflater.inflate(R.menu.game_video_menu, menu);
+        //    inflater.inflate(R.menu.game_video_menu, menu);
 
     }
 
@@ -625,6 +623,10 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         item.setChecked(true);
         mSelectedId = item.getItemId();
         mTitle = item.getTitle().toString();
+
+
+
+
         selectDrawer(mSelectedId, mTitle);
 
         changeVideoSource();
@@ -635,9 +637,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     //TODO analyze this function
     private void changeVideoSource() {
 
-        if (recyclerView!=null && recyclerView.getAdapter() != null) {
-            adapter.removeAll();
-        }
+
         pacman.setVisibility(View.VISIBLE);
         if (gamesVideoInterface != null && map != null) {
             performSearch("",true);

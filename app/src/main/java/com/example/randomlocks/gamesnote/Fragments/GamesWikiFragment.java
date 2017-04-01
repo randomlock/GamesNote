@@ -289,13 +289,9 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     private void performSearch(String name, boolean allSearch) {
 
         if (listModals!=null && !listModals.isEmpty()) {
-            listModals.clear();
             if(adapter!=null){
-                Toaster.make(getContext(),"clear modal");
                 adapter.removeAll();
-
             }
-
         }
 
         if (errorText.getVisibility() == View.VISIBLE) {

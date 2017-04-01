@@ -99,8 +99,9 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void removeAll() {
-        modals.clear();
-        notifyItemRangeRemoved(0, getItemCount());
+        int size = this.modals.size();
+        this.modals.clear();
+        notifyItemRangeRemoved(0, size);
     }
 
     public void updateModal(List<CharacterSearchModal> modals) {

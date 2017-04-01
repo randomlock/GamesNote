@@ -199,6 +199,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:drawablePadding">8dp</item>
     </style>
 
     <style name="AddtoListStyle">

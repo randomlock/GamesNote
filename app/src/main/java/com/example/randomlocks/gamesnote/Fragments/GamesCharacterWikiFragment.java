@@ -197,7 +197,6 @@ public class GamesCharacterWikiFragment extends Fragment {
     //    InputMethodHelper.hideKeyBoard(getActivity().getWindow().getCurrentFocus(), getContext());
 
         if (modals!=null && !modals.isEmpty()) {
-            modals.clear();
             if(adapter!=null){
                 Toaster.make(getContext(),"clear modal");
                 adapter.removeAll();

@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -151,11 +152,14 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                             R.array.score, android.R.layout.simple_spinner_item);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     final Spinner sp = new Spinner(getActivity());
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(50, 50, 0, 0);
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    float dpi = getResources().getDisplayMetrics().density;
+                    params.setMargins((int)(19*dpi), (int)(19*dpi), (int)(19*dpi), (int)(19*dpi));
+                    FrameLayout layout = new FrameLayout(getContext());
                     sp.setLayoutParams(params);
                     sp.setAdapter(adapter);
                     sp.setSelection(oldScore / 10);
+                    layout.addView(sp);
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setCancelable(false).setTitle("SelectScore")
                             .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                                 @Override
@@ -189,9 +193,11 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.cancel();
                                 }
-                            }).setView(sp);
+                            }).setView(layout);
+
 
                     final AlertDialog dialog = builder.create();
+
                     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
                         public void onShow(DialogInterface dialogInterface) {

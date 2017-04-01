@@ -91,8 +91,9 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void removeAll() {
-        modalList.clear();
-        notifyItemRangeRemoved(0,getItemCount());
+        int size = this.modalList.size();
+        this.modalList.clear();
+        notifyItemRangeRemoved(0, size);
     }
 
     public void updateModal(List<GamesVideoModal> modals){

@@ -48,8 +48,7 @@ dependencies {
     compile 'com.android.support:mediarouter-v7:25.3.0'
     compile 'com.google.android.gms:play-services-cast-framework:10.2.0'
     compile 'com.simplecityapps:recyclerview-fastscroll:1.0.14'
-
-
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
 
 

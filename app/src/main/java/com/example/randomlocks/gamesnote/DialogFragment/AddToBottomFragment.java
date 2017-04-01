@@ -62,8 +62,8 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
         try {
             mAddToBottomInterface = (AddToBottomInterface) getTargetFragment();
@@ -181,13 +181,39 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
 
     void setSpinner(Spinner spinner, String str) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.score, android.R.layout.simple_spinner_item);
+                R.array.score,R.layout.spinner);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setPrompt(str);
 
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
+
+    public void setCustomSpinner(Spinner spinner, String str) {
+
+        CustomAdapter adapter = new CustomAdapter(getContext(),R.layout.spinner);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setPrompt(str);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -205,33 +231,8 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
 
     }
 
-    public void setCustomSpinner(Spinner spinner, String str) {
 
-        CustomAdapter adapter = new CustomAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item);
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        spinner.setPrompt(str);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END | Gravity.BOTTOM);
-                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-    }
-
-
-    class CustomAdapter extends ArrayAdapter<CharSequence> {
+    private class CustomAdapter extends ArrayAdapter<CharSequence> {
 
 
         CustomAdapter(Context context, int resource) {
@@ -251,7 +252,10 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         public int getCount() {
             return platforms.size()+1;
         }
+
     }
+
+
 
 
 

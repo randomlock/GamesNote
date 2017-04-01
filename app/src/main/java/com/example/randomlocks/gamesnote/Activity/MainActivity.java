@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -35,9 +36,12 @@ import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 
 /*
@@ -446,8 +450,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onYoutubeVideoClick(String url, int id) {
-        /*Intent intent = YouTubeStandalonePlayer.createVideoIntent(this, GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
-        startActivity(intent);*/
+        if (url!=null) {
+            Intent intent = YouTubeStandalonePlayer.createVideoIntent(this, GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
+            startActivity(intent);
+        }else {
+            Toasty.error(this,"Not available on youtube").show();
+        }
+
     }
 
     @Override

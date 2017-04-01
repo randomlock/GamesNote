@@ -160,6 +160,7 @@
                         style="@style/cardview_textstyle"
                         android:drawableLeft="@drawable/ic_action_overview"
                         android:drawableStart="@drawable/ic_action_overview"
+
                         android:text="Overview"
                         />
 
@@ -326,8 +327,8 @@
                 <TextView
                     android:id="@+id/image_heading"
                     style="@style/cardview_textstyle"
-                    android:drawableLeft="@drawable/ic_wikipedia"
-                    android:drawableStart="@drawable/ic_wikipedia"
+                    android:drawableLeft="@drawable/ic_images"
+                    android:drawableStart="@drawable/ic_images"
                     android:text="Images"
                     />
 
