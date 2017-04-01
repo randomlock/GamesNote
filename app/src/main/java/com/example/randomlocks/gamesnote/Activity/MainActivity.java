@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPreference.removeFromSharedPreference(GiantBomb.NAV_HEADER_URL, this);
         } else {
             navHeaderLayout.setUrl(url);
-            Picasso.with(this).load(url).into(navHeaderLayout);
+            Picasso.with(MainActivity.this).load(url).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(navHeaderLayout);
         }
 
 

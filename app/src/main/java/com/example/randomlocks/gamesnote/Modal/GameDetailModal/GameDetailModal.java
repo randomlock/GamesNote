@@ -19,7 +19,6 @@ import io.realm.RealmObject;
  */
 public class GameDetailModal implements Parcelable {
 
-    public int api_url_key;
     @Expose
     public String description;
     @Expose
@@ -57,7 +56,6 @@ public class GameDetailModal implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.api_url_key);
         dest.writeString(this.description);
         dest.writeString(this.name);
         dest.writeTypedList(this.platforms);
@@ -78,7 +76,6 @@ public class GameDetailModal implements Parcelable {
     }
 
     protected GameDetailModal(Parcel in) {
-        this.api_url_key = in.readInt();
         this.description = in.readString();
         this.name = in.readString();
         this.platforms = in.createTypedArrayList(GameWikiPlatform.CREATOR);
