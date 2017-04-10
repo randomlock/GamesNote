@@ -14,10 +14,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +32,19 @@ import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentGridLa
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailIInnerJson;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListModal;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiListModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
+import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
+import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +55,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import es.dmoral.toasty.Toasty;
+import io.realm.Realm;
+import io.realm.RealmAsyncTask;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,6 +81,8 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     ConsistentGridLayoutManager manager;
     Map<String, String> map;
     GameWikiListInterface gameWikiListInterface;
+    GameWikiDetailInterface gameWikiDetailInterface;
+    Call<GameDetailListModal> gameDetailCall;
     Call<GameWikiListModal> call;
     TextView errorText;
     CoordinatorLayout coordinatorLayout;
@@ -77,6 +93,11 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     boolean isLoadingMore = false;
     Timer timer;
     int page = 0;
+    String apiUrl;
+    Realm realm;
+    RealmAsyncTask realmAsyncTask;
+    private int game_id;
+
 
     public GamesWikiFragment() {
         // Required empty public constructor
@@ -86,6 +107,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        realm = Realm.getDefaultInstance();
         viewType = SharedPreference.getFromSharedPreferences(GiantBomb.VIEW_TYPE,0,context);
         spanCount = viewType==2 ? 3 : 1;
         map = new HashMap<>(7);
@@ -93,7 +115,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         map.put(GiantBomb.FORMAT, "JSON");
         map.put(GiantBomb.LIMIT, LIMIT);
         map.put(GiantBomb.OFFSET, "0");
-        String field_list = "api_detail_url,deck,expected_release_day,expected_release_month,expected_release_year,image,name,original_release_date,platforms";
+        String field_list = "api_detail_url,deck,expected_release_day,expected_release_month,expected_release_year,image,name,id,original_release_date,platforms";
         map.put(GiantBomb.FIELD_LIST, field_list);
     }
 
@@ -326,13 +348,160 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
 
         if(adapter==null){
-            adapter = new GameWikiAdapter(listModals,viewType,getContext(),recyclerView.getChildCount(),recyclerView);
+            adapter = new GameWikiAdapter(listModals, viewType, getContext(), recyclerView.getChildCount(), recyclerView, realm, new GameWikiAdapter.OnPopupClickInterface() {
+                @Override
+                public void onRemove(GameWikiModal gameWikiModal) {
+                    removeFromDatabase(gameWikiModal);
+                }
+
+                @Override
+                public void onAdd(GameWikiModal gameWikiModal,int addTypeId) {
+                        addToDatabase(gameWikiModal,addTypeId);
+                }
+            });
             recyclerView.setAdapter(adapter);
         }
 
         if (parcelable != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
+    }
+
+    private void addToDatabase(final GameWikiModal modal, final int id) {
+
+        String str[] = modal.apiDetailUrl.split("/");
+        apiUrl = str[str.length-1];
+
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmList<GameWikiPlatform> platforms = new RealmList<>();
+                if (modal.platforms != null) {
+                    platforms.addAll(modal.platforms);
+                }
+                final GameListDatabase newListDatabase = new GameListDatabase(modal.id, apiUrl, modal.name, modal.image != null ? modal.image.mediumUrl : null, platforms);
+                if (id == R.id.replaying)
+                    newListDatabase.setStatus(GiantBomb.REPLAYING);
+                else if (id == R.id.planning)
+                    newListDatabase.setStatus(GiantBomb.PLANNING);
+                else if (id == R.id.dropped)
+                    newListDatabase.setStatus(GiantBomb.DROPPED);
+                else if (id == R.id.playing)
+                    newListDatabase.setStatus(GiantBomb.PLAYING);
+                else
+                    newListDatabase.setStatus(GiantBomb.COMPLETED);
+                realm.insertOrUpdate(newListDatabase);
+
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toasty.success(context,"added", Toast.LENGTH_SHORT,true).show();
+            }
+        });
+
+
+
+        if (gameWikiDetailInterface==null) {
+            gameWikiDetailInterface = GiantBomb.createGameDetailService();
+            map = new HashMap<>();
+            map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+            map.put(GiantBomb.FORMAT, "JSON");
+            String field_list = "id,developers,franchises,genres,publishers,similar_games,themes";
+            map.put(GiantBomb.FIELD_LIST, field_list);
+        }
+        getGameDetail(gameWikiDetailInterface, map,modal,id);
+
+
+
+    }
+
+    private void getGameDetail(GameWikiDetailInterface gameWikiDetailInterface, Map<String, String> map, final GameWikiModal modal, final int id) {
+
+        if (gameDetailCall != null)
+            gameDetailCall.cancel();
+
+        gameDetailCall = gameWikiDetailInterface.getResult(apiUrl,map);
+        gameDetailCall.enqueue(new Callback<GameDetailListModal>() {
+            @Override
+            public void onResponse(Call<GameDetailListModal> call, Response<GameDetailListModal> response) {
+                final GameDetailModal gameDetailModal = response.body().results;
+                game_id = gameDetailModal.id;
+
+              realmAsyncTask =   realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        //now add gameDetail
+
+                        updateGameDetail(gameDetailModal.developers, GameDetailDatabase.DEVELOPER_TYPE,realm);
+                        updateGameDetail(gameDetailModal.publishers, GameDetailDatabase.PUBLISHER_TYPE,realm);
+                        updateGameDetail(gameDetailModal.themes, GameDetailDatabase.THEME_TYPE,realm);
+                        updateGameDetail(gameDetailModal.franchises, GameDetailDatabase.FRANCHISE_TYPE,realm);
+                        updateGameDetail(gameDetailModal.genres, GameDetailDatabase.GENRE_TYPE,realm);
+                        updateGameDetail(gameDetailModal.similarGames, GameDetailDatabase.SIMILAR_GAME_TYPE,realm);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<GameDetailListModal> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+    private void updateGameDetail(List<GameDetailIInnerJson> gameDetailDatabase, int type, Realm realm) {
+        if (gameDetailDatabase != null) {
+            for (GameDetailIInnerJson gameDatabase : gameDetailDatabase) {
+                GameDetailDatabase gameDeveloperDatabase = realm.where(GameDetailDatabase.class)
+                        .equalTo(GameDetailDatabase.TYPE, type)
+                        .equalTo(GameDetailDatabase.NAME, gameDatabase.name).findFirst();
+                if (gameDeveloperDatabase != null) {
+                    gameDeveloperDatabase.getGames_id().add(new RealmInteger(game_id));
+                } else {
+                    RealmList<RealmInteger> games_id = new RealmList<RealmInteger>();
+                    games_id.add(new RealmInteger(game_id));
+                    int auto_increment_x=0;
+                    Number number = realm.where(GameDetailDatabase.class).equalTo(GameDetailDatabase.TYPE,type).max(GameDetailDatabase.AUTO_INCREMENT_X_VALUE);
+                    if(number!=null)
+                        auto_increment_x = number.intValue()+1;
+                    gameDeveloperDatabase = new GameDetailDatabase(type, gameDatabase.name,auto_increment_x, games_id);
+                    realm.insertOrUpdate(gameDeveloperDatabase);
+                }
+            }
+        }
+    }
+
+    private void removeFromDatabase(final GameWikiModal modal) {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                //Remove gamelist info from database
+                GameListDatabase database =   realm.where(GameListDatabase.class).equalTo(GameListDatabase.GAME_ID,modal.id).findFirst();
+                if (database.getPlatform_list()!=null) {
+                    database.getPlatform_list().deleteAllFromRealm();
+                }
+                database.deleteFromRealm();
+                //Remove gamedetail infro from database
+                RealmInteger gameId  = realm.where(RealmInteger.class).equalTo(GameListDatabase.GAME_ID,modal.id).findFirst();
+                if (gameId!=null) {
+                    gameId.deleteFromRealm();
+                }
+                RealmResults<GameDetailDatabase> gameDetailDatabases =  realm.where(GameDetailDatabase.class).isEmpty("games_id").findAll();
+                if(gameDetailDatabases!=null)
+                    gameDetailDatabases.deleteAllFromRealm();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toasty.warning(context,"deleted", Toast.LENGTH_SHORT,true).show();
+            }
+        });
     }
 
     /***********************
@@ -388,7 +557,17 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                             Toaster.make(getContext(),"adapter is null");
 
                             listModals = response.body().results;
-                            adapter = new GameWikiAdapter(listModals,viewType,getContext(),recyclerView.getChildCount(),recyclerView);
+                            adapter = new GameWikiAdapter(listModals, viewType, getContext(), recyclerView.getChildCount(), recyclerView, realm, new GameWikiAdapter.OnPopupClickInterface() {
+                                @Override
+                                public void onRemove(GameWikiModal gameWikiModal) {
+                                    removeFromDatabase(gameWikiModal);
+                                }
+
+                                @Override
+                                public void onAdd(GameWikiModal gameWikiModal,int addToType) {
+                                    addToDatabase(gameWikiModal,addToType);
+                                }
+                            });
                             recyclerView.setAdapter(adapter);
 
                         }else {  //searching the data after first time
@@ -499,12 +678,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
     }
 
-    public void pageSwitcher(int seconds) {
-        timer = new Timer(); // At this line a new Thread will be created
-        timer.scheduleAtFixedRate(new RemindTask(), 0, seconds * 1000); // delay
-        // in
-        // milliseconds
-    }
+
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -531,6 +705,16 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         super.onDestroyView();
         if (call != null)
             call.cancel();
+        if(gameDetailCall!=null)
+            gameDetailCall.cancel();
+
+        if (realmAsyncTask != null && !realmAsyncTask.isCancelled()) {
+            realmAsyncTask.cancel();
+        }
+
+        if(realm!=null && !realm.isClosed())
+            realm.close();
+
     }
 
 
@@ -541,7 +725,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     }*/
 
     // this is an inner class...
-    class RemindTask extends TimerTask {
+    private class RemindTask extends TimerTask {
 
         @Override
         public void run() {
