@@ -11,6 +11,7 @@ import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
 import com.example.randomlocks.gamesnote.Interface.GamesVideosInterface;
 import com.example.randomlocks.gamesnote.Interface.UserReviewInterface;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -155,6 +156,7 @@ public class GiantBomb {
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(provideOfflineCacheInterceptor())
                     .addNetworkInterceptor(provideCacheInterceptor())
+                    .addNetworkInterceptor(new StethoInterceptor())
                     .build();
 
         }

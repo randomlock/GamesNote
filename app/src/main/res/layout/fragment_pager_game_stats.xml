@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v4.widget.NestedScrollView  xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    >
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+
+    <at.grabner.circleprogress.CircleProgressView
+        android:id="@+id/score_game_count"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cpv_barWidth="3dp"
+        app:cpv_rimColor="@color/score_rim"
+        app:cpv_rimWidth="3dp"
+        app:cpv_textColor="?android:attr/textColorPrimary"
+        android:layout_alignParentRight="true"
+        app:cpv_textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/game_count"
+        style="@style/cardview_textstyle"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="GAME COUNT"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp" />
+
+    <View
+        android:id="@+id/count_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/linecolor"
+        android:layout_below="@+id/score_game_count"
+        android:layout_margin="12dp"
+        />
+
+    <TextView
+        android:id="@+id/status_distribution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/count_view"
+        style="@style/cardview_textstyle"
+        android:text="Status stats"
+        android:layout_marginTop="6dp"
+        />
+
+
+    
+    
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/status_pie_chart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="6dp"
+        android:layout_below="@+id/status_distribution"
+        />
+
+    <View
+        android:id="@+id/pie_chart_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/linecolor"
+        android:layout_below="@+id/status_pie_chart"
+        android:layout_margin="12dp"
+        />
+
+    <TextView
+        android:id="@+id/score_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pie_chart_view"
+        style="@style/cardview_textstyle"
+        android:text="Top 5 highest score game"
+        android:layout_marginTop="6dp"
+        />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/score_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/score_count"
+        android:layout_marginTop="6dp"
+
+        />
+
+    <View
+        android:id="@+id/top_score_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/linecolor"
+        android:layout_below="@+id/score_list"
+        android:layout_margin="12dp" />
+
+
+    <TextView
+        android:id="@+id/score_distribution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_score_view"
+        style="@style/cardview_textstyle"
+        android:text="Score stats"
+        android:layout_marginTop="6dp"
+        />
+
+
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/score_bar_chart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="6dp"
+        android:layout_below="@+id/score_distribution"
+        />
+
+
+
+
+
+
+
+
+
+</RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+

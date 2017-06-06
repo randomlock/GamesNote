@@ -19,9 +19,14 @@
                 android:title="@string/Wiki" />
 
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_character"
             android:icon="@mipmap/ic_launcher"
             android:title="@string/characterwiki" />
+
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/statistics" />
 
 
         <item

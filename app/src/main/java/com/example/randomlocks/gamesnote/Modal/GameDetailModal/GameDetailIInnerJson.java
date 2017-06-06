@@ -5,12 +5,10 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 
-import io.realm.RealmObject;
-
 /**
  * Created by randomlocks on 5/29/2016.
  */
-public class GameDetailFranchises implements Parcelable {
+public class GameDetailIInnerJson implements Parcelable {
 
     @Expose
     public String apiDetailUrl;
@@ -34,23 +32,23 @@ public class GameDetailFranchises implements Parcelable {
         dest.writeString(this.name);
     }
 
-    public GameDetailFranchises() {
+    public GameDetailIInnerJson() {
     }
 
-    protected GameDetailFranchises(Parcel in) {
+    private GameDetailIInnerJson(Parcel in) {
         this.apiDetailUrl = in.readString();
         this.name = in.readString();
     }
 
-    public static final Parcelable.Creator<GameDetailFranchises> CREATOR = new Parcelable.Creator<GameDetailFranchises>() {
+    public static final Parcelable.Creator<GameDetailIInnerJson> CREATOR = new Parcelable.Creator<GameDetailIInnerJson>() {
         @Override
-        public GameDetailFranchises createFromParcel(Parcel source) {
-            return new GameDetailFranchises(source);
+        public GameDetailIInnerJson createFromParcel(Parcel source) {
+            return new GameDetailIInnerJson(source);
         }
 
         @Override
-        public GameDetailFranchises[] newArray(int size) {
-            return new GameDetailFranchises[size];
+        public GameDetailIInnerJson[] newArray(int size) {
+            return new GameDetailIInnerJson[size];
         }
     };
 }

@@ -8,7 +8,7 @@ import io.realm.RealmObject;
  * Created by randomlock on 1/24/2017.
  */
 
-public class GameVideoModalMinimal extends RealmObject {
+public class GameVideoModalMinimal  {
 
     @Expose
     public String highUrl;

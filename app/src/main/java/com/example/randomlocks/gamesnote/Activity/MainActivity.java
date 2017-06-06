@@ -18,9 +18,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageUrlFragment;
+import com.example.randomlocks.gamesnote.Fragments.GameStatsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesCharacterWikiFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String TITLE = "NAVIGATION_SELECTED_TITLE"; //FOR MENU TOOLBAR TITLE
     public static final String DEFAULT_TITLE = "Game Wiki";
     private static final String FRAGMENT_KEY = "restored_fragment";
-    public List<NewsModal> newsModals;
     public String mtitle;
     public ActionBarDrawerToggle mDrawableToggle;
     PicassoFrameLayout navHeaderLayout;
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onGlobalLayout() {
                         navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(navHeaderLayout);
+                        Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().error(R.drawable.news_image_drawable).into(navHeaderLayout);
                     }
                 });
             } else
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
         }
-        mselectedId = savedInstanceState == null ? R.id.nav_mylist : savedInstanceState.getInt(KEY);
+        mselectedId = savedInstanceState == null ? R.id.nav_statistics : savedInstanceState.getInt(KEY);
         mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (mselectedId) {
 
 
-            case R.id.nav_home:
+            case R.id.nav_character:
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesHome");
 
                 if (fragment == null) {
@@ -289,6 +290,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                 break;
+
+            case R.id.nav_statistics :
+                fragment = getSupportFragmentManager().findFragmentByTag("GameStats");
+
+                if (fragment == null) {
+
+                    fragment = new GameStatsFragment();
+                }
+                FragmentTransactionHelper("replace", fragment, "GamesStats");
+
+
+                break;
+
+
 
             case R.id.nav_settings:
 

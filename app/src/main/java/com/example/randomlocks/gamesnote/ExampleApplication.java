@@ -4,8 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
+import com.facebook.stetho.Stetho;
+import com.squareup.leakcanary.LeakCanary;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by randomlock on 4/1/2017.
@@ -21,6 +27,23 @@ public class ExampleApplication extends Application {
         super.onCreate();
         sInstance = this;
         Realm.init(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().schemaVersion(13).build();
+        Realm.setDefaultConfiguration(configuration);
+
+        /* Initialize Leak canary */
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build());
+
     }
 
     public static ExampleApplication getInstance() {

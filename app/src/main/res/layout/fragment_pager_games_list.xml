@@ -24,6 +24,9 @@
         android:layout_marginTop="12dp"
         android:drawableTop="@drawable/ic_error"
         android:text="No Games Added"
+        android:drawablePadding="8dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
         android:textColor="?android:attr/textColorPrimary"
         android:visibility="gone"
         />

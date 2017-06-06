@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.example.randomlocks.gamesnote.DialogFragment.GameListDialog;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
@@ -81,6 +83,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
+        Log.d("path",realm.getPath());
         status = getArguments().getInt(STATUS);
         setHasOptionsMenu(true);
         itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
@@ -140,13 +143,13 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                 @Override
                 public void onClick(GameListDatabase gameListDatabase) {
                     GamesListPagerFragment.this.gameListDatabase = gameListDatabase;
-                    dialog = GameListDialog.newInstance(gameListDatabase.getApiDetailUrl());
+                    dialog = GameListDialog.newInstance(gameListDatabase.getGame_id());
                     dialog.setCancelable(false);
                     dialog.show(getActivity().getSupportFragmentManager(), "gamelist");
                 }
 
                 @Override
-                public void onScoreClick(final String primaryKey, final int oldScore, final int position) {
+                public void onScoreClick(final int primaryKey, final int oldScore, final int position) {
                     //    final Parcelable scroll_state = recyclerView.getLayoutManager().onSaveInstanceState();
                     final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                             R.array.score, android.R.layout.simple_spinner_item);
@@ -170,7 +173,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                                             if (sp.getSelectedItemPosition() * 10 == oldScore) {
                                                 dialogInterface.dismiss();
                                             } else {
-                                                GameListDatabase newListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl", primaryKey).findFirst();
+                                                GameListDatabase newListDatabase = realm.where(GameListDatabase.class).equalTo("game_id", primaryKey).findFirst();
                                                 newListDatabase.setScore(sp.getSelectedItemPosition() * 10);
                                                 newListDatabase.setLast_updated(new Date());
                                                 dialogInterface.dismiss();
@@ -287,6 +290,11 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
             return true;
         }else if(id==R.id.view){
 
+            if(adapter==null || adapter.getItemCount()==0){
+                Toasty.info(getContext(),"No games added").show();
+                return true;
+            }
+
             if (adapter!=null) {
                 if (item.getTitle().equals(getString(R.string.compact_list_view))) {
                     isSimple = true;
@@ -312,7 +320,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
             }
 
-
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -322,7 +330,6 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
         SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setQueryHint(Html.fromHtml("<font color = #ffffff>" + getResources().getString(R.string.search) + "</font>"));
         searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity) context).getComponentName()));
         searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default
         searchView.setOnQueryTextListener(this);
@@ -372,15 +379,19 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
     @Override
     public void onSelect(int which, boolean asc) {
-
-        if (asc) {
-            realmResult = realmResult.sort(getField(which),Sort.ASCENDING);
+        if(adapter==null || adapter.getItemCount()==0){
+            Toaster.make(getContext(),"No game added");
         }else {
-            realmResult = realmResult.sort(getField(which), Sort.DESCENDING);
+            if (asc) {
+                realmResult = realmResult.sort(getField(which),Sort.ASCENDING);
+            }else {
+                realmResult = realmResult.sort(getField(which), Sort.DESCENDING);
+            }
+            if(adapter!=null){
+                adapter.updateData(realmResult);
+            }
         }
-        if(adapter!=null){
-            adapter.updateData(realmResult);
-        }
+
 
     }
 

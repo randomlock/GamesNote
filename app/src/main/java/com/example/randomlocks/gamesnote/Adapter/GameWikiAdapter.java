@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,11 +29,14 @@ import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentGridLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
+import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -61,15 +65,25 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
+    DisplayMetrics displayMetrics;
 
 
-    public GameWikiAdapter(List<GameWikiModal> list, int viewType, Context context, int lastPosition, RecyclerView recyclerView) {
+    public interface OnPopupClickInterface{
+        void onRemove(GameWikiModal gameWikiModal);
+        void onAdd(GameWikiModal gameWikiModal,int addTypeId);
+    }
+
+    OnPopupClickInterface onPopupClickInterface;
+
+
+
+    public GameWikiAdapter(List<GameWikiModal> list, int viewType, Context context, int lastPosition, RecyclerView recyclerView,Realm realm,OnPopupClickInterface onPopupClickInterface) {
         this.list = list;
         this.viewType = viewType;
         this.context = context;
         this.lastPosition = lastPosition;
-        realm = Realm.getDefaultInstance();
-
+        this.realm = realm;
+        this.onPopupClickInterface = onPopupClickInterface;
 
         //setting scroll event
         final ConsistentGridLayoutManager linearLayoutManager = (ConsistentGridLayoutManager) recyclerView.getLayoutManager();
@@ -90,6 +104,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
 
+        displayMetrics = context.getResources().getDisplayMetrics();
 
 
 
@@ -183,7 +198,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
                 viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
@@ -268,7 +283,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
                 viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
@@ -289,12 +304,11 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             final GameWikiModal modal = list.get(holder.getAdapterPosition());
             MyViewHolder3 viewHolder = (MyViewHolder3) holder;
-            viewHolder.title.setText(modal.name);
 
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
                 viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
@@ -343,7 +357,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    //viewholder for layout 2
+    //viewholder for layout 1
 
      private class MyViewHolder1 extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
@@ -354,8 +368,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         CardView cardView;
         ImageButton popupMenu;
          PopupMenu popup;
+         GameWikiModal modal;
 
-        String str[];
 
 
         MyViewHolder1(View itemView) {
@@ -386,11 +400,12 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View view) {
-
+             modal = list.get(getLayoutPosition());
+            Toasty.info(context,modal.id+"").show();
             switch (view.getId()) {
 
                 case R.id.cardView:
-                    GameWikiModal modal = list.get(getLayoutPosition());
+                    Toaster.make(context,modal.name);
                     Intent it = new Intent(context, GameDetailActivity.class);
                     it.putExtra("apiUrl", modal.apiDetailUrl);
                     it.putExtra("name", modal.name);
@@ -461,8 +476,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.popup :
                     popup.getMenu().clear();
                     final MenuInflater inflater = popup.getMenuInflater();
-                     str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
-                    database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
+                    database = realm.where(GameListDatabase.class).equalTo("game_id",modal.id).findFirst();
                     if(database==null){
                         inflater.inflate(R.menu.popup_add,popup.getMenu());
                     }else {
@@ -486,58 +500,11 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
             int id = item.getItemId();
-
             if(id==R.id.remove){
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.where(GameListDatabase.class).equalTo("apiDetailUrl", str[str.length - 1]).findFirst().deleteFromRealm();
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toasty.warning(context,"deleted", Toast.LENGTH_SHORT,true).show();
-
-                    }
-                });
+                onPopupClickInterface.onRemove(modal);
                 return true;
             }else {
-                GameWikiModal newModal = list.get(getAdapterPosition());
-                RealmList<GameWikiPlatform> platforms = new RealmList<>();
-                if (newModal.platforms!=null) {
-                    platforms.addAll(newModal.platforms);
-                }
-
-                final GameListDatabase newListDatabase = new GameListDatabase(str[str.length-1],newModal.name,newModal.image!=null ? newModal.image.mediumUrl:null,platforms);
-
-                if(id==R.id.replaying)
-                    newListDatabase.setStatus(GiantBomb.REPLAYING);
-                else if(id==R.id.planning)
-                    newListDatabase.setStatus(GiantBomb.PLANNING);
-                else if(id==R.id.dropped)
-                    newListDatabase.setStatus(GiantBomb.DROPPED);
-                else if(id==R.id.playing)
-                    newListDatabase.setStatus(GiantBomb.PLAYING);
-                else
-                    newListDatabase.setStatus(GiantBomb.COMPLETED);
-
-
-
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.insert(newListDatabase);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toasty.success(context,"added", Toast.LENGTH_SHORT,true).show();
-
-                    }
-                });
-
+                onPopupClickInterface.onAdd(modal,id);
                 return true;
 
             }
@@ -561,8 +528,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         CardView cardView;
         ImageButton popupMenu;
         PopupMenu popup;
+        GameWikiModal modal;
 
-        String str[];
+
 
 
         MyViewHolder2(View itemView) {
@@ -588,11 +556,10 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View view) {
-
+            modal = list.get(getLayoutPosition());
             switch (view.getId()) {
 
                 case R.id.cardView:
-                    GameWikiModal modal = list.get(getLayoutPosition());
                     Intent it = new Intent(context, GameDetailActivity.class);
                     it.putExtra("apiUrl", modal.apiDetailUrl);
                     it.putExtra("name", modal.name);
@@ -629,8 +596,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.popup :
                     popup.getMenu().clear();
                     final MenuInflater inflater = popup.getMenuInflater();
-                    str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
-                    database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
+                    database = realm.where(GameListDatabase.class).equalTo("game_id",modal.id).findFirst();
                     if(database==null){
                         inflater.inflate(R.menu.popup_add,popup.getMenu());
                     }else {
@@ -656,54 +622,10 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int id = item.getItemId();
 
             if(id==R.id.remove){
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.where(GameListDatabase.class).equalTo("apiDetailUrl", str[str.length - 1]).findFirst().deleteFromRealm();
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toasty.error(context,"deleted", Toast.LENGTH_SHORT,true).show();
-                    }
-                });
+                onPopupClickInterface.onRemove(modal);
                 return true;
             }else {
-                GameWikiModal newModal = list.get(getAdapterPosition());
-                RealmList<GameWikiPlatform> platforms = new RealmList<>();
-                if (newModal.platforms!=null) {
-                    platforms.addAll(newModal.platforms);
-                }
-
-                final GameListDatabase newListDatabase = new GameListDatabase(str[str.length-1],newModal.name,newModal.image!=null ? newModal.image.mediumUrl:null,platforms);
-
-                if(id==R.id.replaying)
-                    newListDatabase.setStatus(GiantBomb.REPLAYING);
-                else if(id==R.id.planning)
-                    newListDatabase.setStatus(GiantBomb.PLANNING);
-                else if(id==R.id.dropped)
-                    newListDatabase.setStatus(GiantBomb.DROPPED);
-                else if(id==R.id.playing)
-                    newListDatabase.setStatus(GiantBomb.PLAYING);
-                else
-                    newListDatabase.setStatus(GiantBomb.COMPLETED);
-
-
-
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.insert(newListDatabase);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toasty.success(context,"added", Toast.LENGTH_SHORT,true).show();
-                    }
-                });
-
+                onPopupClickInterface.onAdd(modal,id);
                 return true;
 
             }
@@ -717,24 +639,21 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private class MyViewHolder3 extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
 
-        TextView title;
         ImageView imageView;
-        CardView cardView;
         ImageButton popupMenu;
         PopupMenu popup;
+        GameWikiModal modal;
 
-        String str[];
+
 
 
         MyViewHolder3(View itemView) {
             super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.cardView);
-            title = (TextView) itemView.findViewById(R.id.title);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView.getLayoutParams().height = (int) ((displayMetrics.widthPixels / 3)*1.3);
             popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
-            int mode = AppCompatDelegate.getDefaultNightMode();
-            if(mode==AppCompatDelegate.MODE_NIGHT_YES)
-                popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+
+            popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
 
 
             popupMenu.setOnClickListener(this);
@@ -748,11 +667,10 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View view) {
-
+             modal = list.get(getLayoutPosition());
             switch (view.getId()) {
 
-                case R.id.cardView:
-                    GameWikiModal modal = list.get(getLayoutPosition());
+                case R.id.imageView:
                     Intent it = new Intent(context, GameDetailActivity.class);
                     it.putExtra("apiUrl", modal.apiDetailUrl);
                     it.putExtra("name", modal.name);
@@ -772,8 +690,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.popup :
                     popup.getMenu().clear();
                     final MenuInflater inflater = popup.getMenuInflater();
-                    str = list.get(getAdapterPosition()).apiDetailUrl.split("/");
-                    database = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",str[str.length - 1]).findFirst();
+                    database = realm.where(GameListDatabase.class).equalTo("game_id",modal.id).findFirst();
                     if(database==null){
                         inflater.inflate(R.menu.popup_add,popup.getMenu());
                     }else {
@@ -798,57 +715,14 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             int id = item.getItemId();
 
-            if(id==R.id.remove){
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.where(GameListDatabase.class).equalTo("apiDetailUrl", str[str.length - 1]).findFirst().deleteFromRealm();
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toasty.warning(context,"deleted", Toast.LENGTH_SHORT,true).show();
-                    }
-                });
+            if(id==R.id.remove){
+                onPopupClickInterface.onRemove(modal);
+
                 return true;
             }else {
-                GameWikiModal newModal = list.get(getAdapterPosition());
-                RealmList<GameWikiPlatform> platforms = new RealmList<>();
-                if (newModal.platforms!=null) {
-                    platforms.addAll(newModal.platforms);
-                }
-
-                final GameListDatabase newListDatabase = new GameListDatabase(str[str.length-1],newModal.name,newModal.image!=null ? newModal.image.mediumUrl:null,platforms);
-
-                if(id==R.id.replaying)
-                    newListDatabase.setStatus(GiantBomb.REPLAYING);
-                else if(id==R.id.planning)
-                    newListDatabase.setStatus(GiantBomb.PLANNING);
-                else if(id==R.id.dropped)
-                    newListDatabase.setStatus(GiantBomb.DROPPED);
-                else if(id==R.id.playing)
-                    newListDatabase.setStatus(GiantBomb.PLAYING);
-                else
-                    newListDatabase.setStatus(GiantBomb.COMPLETED);
-
-
-
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.insertOrUpdate(newListDatabase);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toasty.success(context,"added", Toast.LENGTH_SHORT,true).show();
-                    }
-                });
-
+                onPopupClickInterface.onAdd(modal,id);
                 return true;
-
             }
 
 

@@ -61,15 +61,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
     public void startCharacterActivity(String apiUrl, String imageUrl,String title) {
 
-       /* Fragment fragment = fragmentManager.findFragmentByTag("characterDetail");
 
-        if (fragment == null) {
-            fragment = CharacterDetailFragmentDELETE.newInstance(apiUrl, imageUrl);
-        }
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_parent_layout, fragment, "characterDetail");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();*/
 
 
         Intent intent = new Intent(this, CharacterDetailActivity.class);
@@ -116,18 +108,6 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
     @Override
     public void onVideoClick(String url, boolean needRequest,int seek_position) {
-/*
-        FragmentManager fm = getSupportFragmentManager();
-        video_fragment = (VideoPlayerFragment) fm.findFragmentByTag("video_fragment");
-
-        // create the fragment and data the first time
-        if (video_fragment == null) {
-            // add the fragment
-            video_fragment = VideoPlayerFragment.newInstance(url);
-            fm.beginTransaction().replace(R.id.fragment_parent_layout,video_fragment,"video_fragment").commit();
-            // load the data from the web
-
-        }*/
 
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);

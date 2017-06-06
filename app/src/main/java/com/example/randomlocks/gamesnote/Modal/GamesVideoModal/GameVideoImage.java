@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.Modal.GameCharacterModal;
+package com.example.randomlocks.gamesnote.Modal.GamesVideoModal;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,19 +8,20 @@ import com.google.gson.annotations.Expose;
 import io.realm.RealmObject;
 
 /**
- * Created by randomlocks on 6/25/2016.
+ * Created by randomlock on 4/7/2017.
  */
-public class CharacterImage  implements Parcelable {
+
+public class GameVideoImage extends RealmObject implements Parcelable {
 
     @Expose
     public String mediumUrl;
     @Expose
     public String thumbUrl;
 
-    public CharacterImage() {
+    public GameVideoImage() {
     }
 
-    public CharacterImage(String mediumUrl, String thumbUrl) {
+    public GameVideoImage(String mediumUrl, String thumbUrl) {
         this.mediumUrl = mediumUrl;
         this.thumbUrl = thumbUrl;
     }
@@ -37,20 +38,20 @@ public class CharacterImage  implements Parcelable {
         dest.writeString(this.thumbUrl);
     }
 
-    protected CharacterImage(Parcel in) {
+    protected GameVideoImage(Parcel in) {
         this.mediumUrl = in.readString();
         this.thumbUrl = in.readString();
     }
 
-    public static final Parcelable.Creator<CharacterImage> CREATOR = new Parcelable.Creator<CharacterImage>() {
+    public static final Parcelable.Creator<GameVideoImage> CREATOR = new Parcelable.Creator<GameVideoImage>() {
         @Override
-        public CharacterImage createFromParcel(Parcel source) {
-            return new CharacterImage(source);
+        public GameVideoImage createFromParcel(Parcel source) {
+            return new GameVideoImage(source);
         }
 
         @Override
-        public CharacterImage[] newArray(int size) {
-            return new CharacterImage[size];
+        public GameVideoImage[] newArray(int size) {
+            return new GameVideoImage[size];
         }
     };
 }

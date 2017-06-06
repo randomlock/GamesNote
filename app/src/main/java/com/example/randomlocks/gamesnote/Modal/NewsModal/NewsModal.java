@@ -17,7 +17,7 @@ import io.realm.RealmObject;
 /**
  * Created by randomlocks on 6/30/2016.
  */
-public class NewsModal extends RealmObject implements Parcelable {
+public class NewsModal  implements Parcelable {
 
     public String title;
     public String link;
@@ -241,7 +241,7 @@ public class NewsModal extends RealmObject implements Parcelable {
         dest.writeString(this.smallDescription);
     }
 
-    protected NewsModal(Parcel in) {
+    private NewsModal(Parcel in) {
         this.title = in.readString();
         this.link = in.readString();
         this.description = in.readString();

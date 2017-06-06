@@ -30,5 +30,21 @@
 
     </style>
 
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog">
+        <!--item RadioButton or CheckBox color-->
+        <item name="colorControlNormal">@color/black_white</item>
+        <item name="colorControlActivated">@color/accent</item>
+        <!--item text color-->
+        <item name="textColorAlertDialogListItem">?android:attr/textColorPrimary</item>
+        <!--buttons color-->
+        <item name="colorAccent">@color/primary</item>
+        <!--title and message color-->
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:background">@color/cardColor</item>
+
+    </style>
+
+
+
 
 </resources>

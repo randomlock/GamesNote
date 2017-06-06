@@ -7,7 +7,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -21,13 +23,18 @@ import es.dmoral.toasty.Toasty;
 /**
  * Created by randomlocks on 6/13/2016.
  */
+
+//TODO add progress bar
+
 public class PicassoFrameLayout extends FrameLayout implements Target {
 
 
     String url;
 
+
     public PicassoFrameLayout(Context context) {
         super(context);
+
     }
 
     public PicassoFrameLayout(Context context, AttributeSet attrs) {
@@ -58,10 +65,15 @@ public class PicassoFrameLayout extends FrameLayout implements Target {
 
     @Override
     public void onPrepareLoad(Drawable placeHolderDrawable) {
-
     }
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public void addView(View child) {
+
+
     }
 }

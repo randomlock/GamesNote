@@ -462,6 +462,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                         .equalTo(GameDetailDatabase.NAME, gameDatabase.name).findFirst();
                 if (gameDeveloperDatabase != null) {
                     gameDeveloperDatabase.getGames_id().add(new RealmInteger(game_id));
+                    gameDeveloperDatabase.setCount(gameDeveloperDatabase.getCount()+1);
                 } else {
                     RealmList<RealmInteger> games_id = new RealmList<RealmInteger>();
                     games_id.add(new RealmInteger(game_id));
@@ -469,7 +470,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                     Number number = realm.where(GameDetailDatabase.class).equalTo(GameDetailDatabase.TYPE,type).max(GameDetailDatabase.AUTO_INCREMENT_X_VALUE);
                     if(number!=null)
                         auto_increment_x = number.intValue()+1;
-                    gameDeveloperDatabase = new GameDetailDatabase(type, gameDatabase.name,auto_increment_x, games_id);
+                    gameDeveloperDatabase = new GameDetailDatabase(type, gameDatabase.name,1,auto_increment_x, games_id);
                     realm.insertOrUpdate(gameDeveloperDatabase);
                 }
             }

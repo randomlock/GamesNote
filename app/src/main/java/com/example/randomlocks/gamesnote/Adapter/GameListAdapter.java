@@ -24,7 +24,9 @@ import android.widget.Toast;
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
+import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 import com.flyco.labelview.LabelView;
 import com.squareup.picasso.Picasso;
 
@@ -33,7 +35,9 @@ import es.dmoral.toasty.Toasty;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
 
 /**
  * Created by randomlocks on 3/19/2016.
@@ -111,7 +115,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         }
         holder.title.setText(listDatabase.getName());
 
-        holder.scoreView.setValueAnimated(listDatabase.getScore());
+        holder.scoreView.setValue(listDatabase.getScore());
         holder.scoreView.setBarColor(rainbow[listDatabase.getScore()/10]);
 
 
@@ -147,7 +151,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     public interface OnClickInterface {
         void onClick(GameListDatabase gameListDatabase);
 
-        void onScoreClick(String primaryKey, int oldScore, int position);
+        void onScoreClick(int primaryKey, int oldScore, int position);
     }
 
     private class GameListFilter
@@ -209,7 +213,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
             gameListDatabase = getItem(getAdapterPosition());
             if(view.getId()==R.id.score_view){
 
-                mOnClickInterface.onScoreClick(gameListDatabase.getApiDetailUrl(), gameListDatabase.getScore(), getAdapterPosition());
+                mOnClickInterface.onScoreClick(gameListDatabase.getGame_id(), gameListDatabase.getScore(), getAdapterPosition());
             }else  if(view.getId()==R.id.popup){
 
                 popup.show();
@@ -228,14 +232,29 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        getData().deleteFromRealm(getAdapterPosition());
+                        GameListDatabase database =  getData().get(getAdapterPosition());
+                        RealmInteger gameId  = realm.where(RealmInteger.class).equalTo("game_id",database.getGame_id()).findFirst();
+                        if (database.getPlatform_list()!=null) {
+                            database.getPlatform_list().deleteAllFromRealm();
+                        }
+                        database.deleteFromRealm();
+
+                        if (gameId!=null) {
+                            gameId.deleteFromRealm();
+                        }
+                       RealmResults<GameDetailDatabase> gameDetailDatabases =  realm.where(GameDetailDatabase.class).isEmpty("games_id").findAll();
+                        if(gameDetailDatabases!=null)
+                                gameDetailDatabases.deleteAllFromRealm();
+
+
+
                         Toasty.error(context,"game deleted",Toast.LENGTH_SHORT).show();
                        // realm.where(GameListDatabase.class).equalTo("apiDetailUrl",gameListDatabase.getApiDetailUrl()).findFirst().deleteFromRealm();
                     }
                 });
                 return true;
             }else {
-                //open wiki fragment ;
+                //open game details ;
                 Intent it = new Intent(context, GameDetailActivity.class);
                 it.putExtra("apiUrl", "http://www.giantbomb.com/api/game/" + gameListDatabase.getApiDetailUrl() + "/");
                 it.putExtra("name",gameListDatabase.getName());

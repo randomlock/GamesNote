@@ -11,7 +11,6 @@
 
     <TextView
         android:id="@+id/title"
-        style="@style/TextStyle3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -23,7 +22,9 @@
         android:layout_toStartOf="@+id/popup"
         android:gravity="top"
         android:text="Hello how are your bro"
-        android:textColor="@color/primary_text" />
+        android:textColor="@color/primary_text"
+        android:textStyle="bold"
+        />
 
 
     <ImageButton

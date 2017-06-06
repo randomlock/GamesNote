@@ -82,8 +82,7 @@ public class GamesListFragment extends Fragment {
         viewPager = (ViewPager) fragmentActivity.findViewById(R.id.my_pager);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        AppCompatActivity actionBar = (AppCompatActivity) getActivity();
-        DrawerLayout drawer = (DrawerLayout) actionBar.findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) fragmentActivity.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -106,13 +105,13 @@ public class GamesListFragment extends Fragment {
 
     //viewpager adapter
 
-    class GameListPagerAdapter extends FragmentStatePagerAdapter {
+    private class GameListPagerAdapter extends FragmentStatePagerAdapter {
 
         private final int PAGE_COUNT = 6;
         private String pageTitle[] = {"All","Replaying", "Planning", "dropped", "playing", "completed"};
         private ArrayList<Fragment> fragments;
 
-        public GameListPagerAdapter(FragmentManager fm) {
+        GameListPagerAdapter(FragmentManager fm) {
             super(fm);
             fragments = new ArrayList<>();
             fragments.add(GamesListPagerFragment.newInstance(GiantBomb.ALL_GAMES));

@@ -12,9 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
-import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailIInnerJson;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
@@ -34,17 +33,15 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
     }
 
 
-    List<GameDetailSimilarGames> stringList;
+    List<GameDetailIInnerJson> stringList;
     List<CharacterGamesImage> images = null;
     GameDetailFragment fragment;
     List<String> apiUrl;
     Context context;
-    int style;
     OnClickInterface onClickInterface;
 
-    public SimilarGameAdapter(List<GameDetailSimilarGames> stringList, List<CharacterGamesImage> images, int style, GameDetailFragment fragment, Context context, OnClickInterface onClickInterface) {
+    public SimilarGameAdapter(List<GameDetailIInnerJson> stringList, List<CharacterGamesImage> images, GameDetailFragment fragment, Context context, OnClickInterface onClickInterface) {
         this.stringList = stringList;
-        this.style = style;
         this.context = context;
         this.fragment = fragment;
 

@@ -28,8 +28,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,16 +64,17 @@ import com.example.randomlocks.gamesnote.Interface.GameDetailVideoInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
-import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailIInnerJson;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailListModal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
-import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailSimilarGames;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoMinimal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoModalMinimal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
+import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
@@ -111,7 +110,7 @@ import static com.example.randomlocks.gamesnote.HelperClass.GiantBomb.MODAL;
  ************/
 
 
-public class GameDetailFragment extends Fragment implements FontOptionFragmentDELETE.FontOptionInterface, View.OnClickListener, ReviewListDialogFragment.CommunicationInterface, AddToBottomFragment.AddToBottomInterface {
+public class GameDetailFragment extends Fragment implements View.OnClickListener, ReviewListDialogFragment.CommunicationInterface, AddToBottomFragment.AddToBottomInterface {
 
 
     public static final String API_URL = "apiUrl";
@@ -119,10 +118,12 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
     public static final String NAME = "name";
     private static final String GAME_CHARACTER = "game_detail_character" ;
     private static final String  GAME_SIMILAR = "game_detail_similar";
+    private static final String GAME_ID = "game_id" ;
     Realm realm;
     int list_category;
+    int game_id;
     Toolbar toolbar;
-    String apiUrl, imageUrl;
+    String apiUrl,imageUrl;
     GameWikiDetailInterface gameWikiDetailInterface;
     Map<String, String> map = null;
     Map<String,String> videoMap;
@@ -133,9 +134,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
     PicassoNestedScrollView nestedScrollView;
     TextView description;
     GameDetailOverviewAdapter adapter;
-    int style;
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
     List<GameWikiPlatform> platforms = null;
+    boolean isAdded=false;
 
     CoordinatorLayout coordinatorLayout;
     SimilarGameAdapter similarGameAdapter;
@@ -174,6 +175,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         public void onChange(Object element) {
             if (statsDatabase.isLoaded()) {
                 if (statsDatabase.isValid()) {
+                    isAdded = true;
                     statsCardView.setVisibility(View.VISIBLE);
                     floatingActionsMenu.hideMenu(true);
 
@@ -435,8 +437,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             Toaster.make(getContext(),"hello");
             addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
         } else {
-            Toasty.warning(getContext(),"waiting to load data", Toast.LENGTH_SHORT,true).show();
-
+            Toaster.makeSnackBar(coordinatorLayout,"waiting to load data");
         }
 
     }
@@ -448,24 +449,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         RealmList<GameWikiPlatform> realmPlatformList = new RealmList<>();
         for(GameWikiPlatform p : platforms)
             realmPlatformList.add(p);
-        final GameListDatabase gameListDatabase = new GameListDatabase(apiUrl,title,imageUrl,list_category,score,startDate,endDate,platform,realmPlatformList);
-        /*gameListDatabase.setApiDetailUrl(apiUrl);
-        gameListDatabase.setName(title);
-        gameListDatabase.setImageUrl(imageUrl);
-        gameListDatabase.setStatus(list_category);*/
-        /*gameListDatabase.setGameplay_hours(" ");
-        gameListDatabase.setMedium(" ");
-        gameListDatabase.setPrice(" ");
-        gameListDatabase.setScore(score);
-        gameListDatabase.setStartDate(startDate);
-        gameListDatabase.setEndDate(endDate);
-        gameListDatabase.setPlatform(platform);*/
-      /*  RealmList<RealmString> platformList = new RealmList<>();
-        for(GameWikiPlatform platform1 : platforms)
-        platformList.add(new RealmString(platform1.name,platform1.abbreviation));*/
-/*
-        gameListDatabase.setPlatform_list(platformRealmList);
-*/
+        final GameListDatabase gameListDatabase = new GameListDatabase(game_id,apiUrl,title,imageUrl,list_category,score,startDate,endDate,platform,realmPlatformList);
+        //adding developer
+
 
 
 
@@ -474,6 +460,17 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(gameListDatabase);
+                if (!isAdded) {
+                    updateGameDetail(gameDetailModal.developers, GameDetailDatabase.DEVELOPER_TYPE,realm);
+                    updateGameDetail(gameDetailModal.publishers, GameDetailDatabase.PUBLISHER_TYPE,realm);
+                    updateGameDetail(gameDetailModal.themes, GameDetailDatabase.THEME_TYPE,realm);
+                    updateGameDetail(gameDetailModal.franchises, GameDetailDatabase.FRANCHISE_TYPE,realm);
+                    updateGameDetail(gameDetailModal.genres, GameDetailDatabase.GENRE_TYPE,realm);
+                    updateGameDetail(gameDetailModal.similarGames, GameDetailDatabase.SIMILAR_GAME_TYPE,realm);
+
+
+
+                }
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -482,6 +479,33 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
             }
         });
+    }
+
+    private void updateGameDetail(List<GameDetailIInnerJson> gameDetailDatabase, int type,Realm realm) {
+
+        if (gameDetailDatabase!=null) {
+            //already added in database . Here we just update the game list
+            for(GameDetailIInnerJson gameDatabase : gameDetailDatabase){
+                GameDetailDatabase gameDeveloperDatabase = realm.where(GameDetailDatabase.class)
+                        .equalTo(GameDetailDatabase.TYPE,type)
+                        .equalTo(GameDetailDatabase.NAME,gameDatabase.name).findFirst();
+                if(gameDeveloperDatabase!=null){
+                    gameDeveloperDatabase.getGames_id().add(new RealmInteger(game_id));
+                    gameDeveloperDatabase.setCount(gameDeveloperDatabase.getCount()+1);
+                }else {
+                    //adding for the first time
+                    RealmList<RealmInteger> games_id = new RealmList<RealmInteger>();
+                    games_id.add(new RealmInteger(game_id));
+                    int auto_increment_x=0;
+                    Number number = realm.where(GameDetailDatabase.class).equalTo(GameDetailDatabase.TYPE,type).max(GameDetailDatabase.AUTO_INCREMENT_X_VALUE);
+                    if(number!=null)
+                        auto_increment_x = number.intValue()+1;
+                    gameDeveloperDatabase = new GameDetailDatabase(type,gameDatabase.name,1,auto_increment_x,games_id);
+                    realm.insertOrUpdate(gameDeveloperDatabase);
+                }
+            }
+        }
+
     }
 
     @Override
@@ -609,7 +633,6 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
         userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
 
-        style = selectStyle(SharedPreference.getFromSharedPreferences(GiantBomb.FONT, 0, getContext()) + 1);
      /*   if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             setIconColor(characters_heading);
             setIconColor(image_heading);
@@ -649,13 +672,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             }
         });
 
-        /***************************** TYPEFACE ************************************/
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            description.setTextAppearance(style);
-        } else {
-            description.setTextAppearance(getContext(), style);
-        }
+
+
 
 
         //Show toolbar icon after parallex is finished
@@ -699,12 +718,11 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
             if (gameDetailModal != null) {
                 fillData(gameDetailModal);
             }else {
-            Log.d("tag", "its null");
             gameWikiDetailInterface = GiantBomb.createGameDetailService();
             map = new HashMap<>();
             map.put(GiantBomb.KEY, GiantBomb.API_KEY);
             map.put(GiantBomb.FORMAT, "JSON");
-            String field_list = "description,name,platforms,images,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
+            String field_list = "description,name,platforms,images,id,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
             map.put(GiantBomb.FIELD_LIST, field_list);
             getGameDetail(gameWikiDetailInterface, map);
 
@@ -836,16 +854,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
     }
 
-    private void setIconColor(TextView textview) {
 
-        for (Drawable drawable : textview.getCompoundDrawables()) {
-            if (drawable != null) {
-                drawable.setColorFilter(new PorterDuffColorFilter(ContextCompat.getColor(getContext(),R.color.primary), PorterDuff.Mode.SRC_IN));
-            }
-        }
-
-
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -895,7 +904,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
     void fillData(final GameDetailModal gameDetailModal) {
         pacman.setVisibility(View.GONE);
         parentLayout.setVisibility(View.VISIBLE);
-
+        game_id = gameDetailModal.id;
 
         if (imageUrl == null && gameDetailModal.images.size() > 0) {
             Picasso.with(getContext()).load(gameDetailModal.images.get(0).mediumUrl).fit().centerCrop().into(appbarImage);
@@ -983,7 +992,7 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
 
         recyclerView.setLayoutManager(new ConsistentLinearLayoutManager(getContext()));
-        adapter = new GameDetailOverviewAdapter(key, values, GameDetailFragment.this, style);
+        adapter = new GameDetailOverviewAdapter(key, values);
         recyclerView.setAdapter(adapter);
 
 
@@ -1057,19 +1066,19 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
         /******************* SETTING THE CHARACTER **************************************/
 
-        List<GameDetailCharacters> characters = gameDetailModal.characters;
+        List<GameDetailIInnerJson> characters = gameDetailModal.characters;
 
         if (characters != null) {
-            Collections.sort(characters, new Comparator<GameDetailCharacters>() {
+            Collections.sort(characters, new Comparator<GameDetailIInnerJson>() {
                 @Override
-                public int compare(GameDetailCharacters lhs, GameDetailCharacters rhs) {
+                public int compare(GameDetailIInnerJson lhs, GameDetailIInnerJson rhs) {
                     return lhs.name.compareTo(rhs.name);
                 }
             });
 
 
             characterRecycleView.setLayoutManager(new ConsistentLinearLayoutManager(getContext(), ConsistentLinearLayoutManager.HORIZONTAL, false));
-            characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, style, getContext(), new GameDetailCharacterAdapter.OnClickInterface() {
+            characterAdapter = new GameDetailCharacterAdapter(characters, characterImage, getContext(), new GameDetailCharacterAdapter.OnClickInterface() {
                 @Override
                 public void onItemClick(String apiUrl, String imageUrl) {
                     ((GameDetailActivity) getActivity()).startCharacterActivity(apiUrl, imageUrl,title);
@@ -1080,18 +1089,18 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
         /******************** SETTING  THE SIMILAR GAMES ******************************/
 
-        List<GameDetailSimilarGames> games = gameDetailModal.similarGames;
+        List<GameDetailIInnerJson> games = gameDetailModal.similarGames;
         if (games != null) {
-            Collections.sort(games, new Comparator<GameDetailSimilarGames>() {
+            Collections.sort(games, new Comparator<GameDetailIInnerJson>() {
                 @Override
-                public int compare(GameDetailSimilarGames lhs, GameDetailSimilarGames rhs) {
+                public int compare(GameDetailIInnerJson lhs, GameDetailIInnerJson rhs) {
                     return lhs.name.compareTo(rhs.name);
                 }
             });
 
 
             similarGameRecycleView.setLayoutManager(new ConsistentLinearLayoutManager(getContext(), ConsistentLinearLayoutManager.HORIZONTAL, false));
-            similarGameAdapter = new SimilarGameAdapter(games, similarGameImage, style, GameDetailFragment.this, getContext(), new SimilarGameAdapter.OnClickInterface() {
+            similarGameAdapter = new SimilarGameAdapter(games, similarGameImage, GameDetailFragment.this, getContext(), new SimilarGameAdapter.OnClickInterface() {
                 @Override
                 public void onItemClick(String apiUrl, String imageUrl) {
                     ((GameDetailActivity) getActivity()).restartGameDetail(apiUrl, imageUrl);
@@ -1210,57 +1219,9 @@ public class GameDetailFragment extends Fragment implements FontOptionFragmentDE
 
     }
 
-    @Override
-    public void onSelect(int which) {
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            description.setTextAppearance(style);
-        } else {
-            description.setTextAppearance(getContext(), style);
-        }
 
-        Toaster.make(getContext(), "Font will be changed after going back");
-
-
-    }
-
-    public int selectStyle(int which) {
-
-
-        switch (which) {
-
-            case 1:
-                return R.style.TextStyle1;
-            case 2:
-                return R.style.TextStyle2;
-            case 3:
-                return R.style.TextStyle3;
-            case 4:
-                return R.style.TextStyle4;
-            case 5:
-                return R.style.TextStyle5;
-            case 6:
-                return R.style.TextStyle6;
-            case 7:
-                return R.style.TextStyle7;
-            case 8:
-                return R.style.TextStyle8;
-            case 9:
-                return R.style.TextStyle9;
-            case 10:
-                return R.style.TextStyle10;
-            case 11:
-                return R.style.TextStyle11;
-            case 12:
-                return R.style.TextStyle12;
-
-
-        }
-
-        return R.style.TextStyle1;
-
-    }
 
     @Override
     public void onDetach() {

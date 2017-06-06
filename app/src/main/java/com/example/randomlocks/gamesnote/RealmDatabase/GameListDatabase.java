@@ -17,9 +17,12 @@ import io.realm.annotations.PrimaryKey;
 
 public class GameListDatabase extends RealmObject {
 
+    public static final String GAME_ID = "game_id";
+
     @PrimaryKey
-    private String apiDetailUrl; //required
+    private int game_id; //required
     private String name; //required
+    private String apiDetailUrl;
     private String imageUrl;
     @Index
     private int status;
@@ -60,7 +63,8 @@ public class GameListDatabase extends RealmObject {
 
     }
 
-    public GameListDatabase(String apiDetailUrl, String name, String imageUrl, int status, RealmList<GameWikiPlatform> platform_list) {
+    public GameListDatabase(int game_id,String apiDetailUrl, String name, String imageUrl, int status, RealmList<GameWikiPlatform> platform_list) {
+        this.game_id = game_id;
         this.apiDetailUrl = apiDetailUrl;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -71,7 +75,10 @@ public class GameListDatabase extends RealmObject {
 
     }
 
-    public GameListDatabase(String apiDetailUrl, String name, String imageUrl, RealmList<GameWikiPlatform> platform_list) {
+
+
+    public GameListDatabase(int game_id,String apiDetailUrl, String name, String imageUrl, RealmList<GameWikiPlatform> platform_list) {
+        this.game_id = game_id;
         this.apiDetailUrl = apiDetailUrl;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -87,7 +94,8 @@ public class GameListDatabase extends RealmObject {
         last_updated = new Date();
     }
 
-    public GameListDatabase(String apiDetailUrl, String name, String imageUrl, int status, int score, String startDate, String endDate, String platform, RealmList<GameWikiPlatform> platform_list) {
+    public GameListDatabase(int game_id,String apiDetailUrl, String name, String imageUrl, int status, int score, String startDate, String endDate, String platform, RealmList<GameWikiPlatform> platform_list) {
+        this.game_id = game_id;
         this.apiDetailUrl = apiDetailUrl;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -105,9 +113,6 @@ public class GameListDatabase extends RealmObject {
     }
 
 
-    public void setApiDetailUrl(String apiDetailUrl) {
-        this.apiDetailUrl = apiDetailUrl;
-    }
 
     public void setStatus(int status) {
         this.status = status;
@@ -151,9 +156,7 @@ public class GameListDatabase extends RealmObject {
         return platform_list;
     }
 
-    public String getApiDetailUrl() {
-        return apiDetailUrl;
-    }
+
 
     public String getName() {
         return name;
@@ -204,5 +207,25 @@ public class GameListDatabase extends RealmObject {
 
     public void setLast_updated(Date last_updated) {
         this.last_updated = last_updated;
+    }
+
+    public int getGame_id() {
+        return game_id;
+    }
+
+    public void setGame_id(int game_id) {
+        this.game_id = game_id;
+    }
+
+    public String getApiDetailUrl() {
+        return apiDetailUrl;
+    }
+
+    public void setApiDetailUrl(String apiDetailUrl) {
+        this.apiDetailUrl = apiDetailUrl;
+    }
+
+    public void setDate_added(Date date_added) {
+        this.date_added = date_added;
     }
 }

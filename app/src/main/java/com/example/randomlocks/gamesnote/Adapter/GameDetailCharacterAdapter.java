@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.CharacterGamesImage;
-import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailCharacters;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailIInnerJson;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
 
@@ -23,15 +23,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailCharacterAdapter.MyViewHolder> {
 
 
-    List<GameDetailCharacters> stringList;
+    List<GameDetailIInnerJson> stringList;
     List<CharacterGamesImage> images = null;
     OnClickInterface onClickInterface;
     Context context;
-    int style;
 
-    public GameDetailCharacterAdapter(List<GameDetailCharacters> stringList, List<CharacterGamesImage> images, int style, Context context, OnClickInterface onClickInterface) {
+    public GameDetailCharacterAdapter(List<GameDetailIInnerJson> stringList, List<CharacterGamesImage> images, Context context, OnClickInterface onClickInterface) {
         this.stringList = stringList;
-        this.style = style;
         this.context = context;
         if (images != null) {
             this.images = images;
@@ -92,13 +90,7 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
             image = (CircleImageView) itemView.findViewById(R.id.image);
 
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                name.setTextAppearance(style);
 
-            } else {
-                name.setTextAppearance(context, style);
-
-            }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

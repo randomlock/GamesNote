@@ -4,15 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
-import com.example.randomlocks.gamesnote.Modal.GameWikiImage;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmList;
-import io.realm.RealmObject;
 
 /**
  * Created by randomlocks on 5/29/2016.
@@ -26,25 +22,27 @@ public class GameDetailModal implements Parcelable {
     @Expose
     public List<GameWikiPlatform> platforms;
     @Expose
+    public int id;
+    @Expose
     public List<CharacterImage> images;
     @Expose
     public List<GameDetailVideo> videos;
     @Expose
-    public List<GameDetailCharacters> characters;
+    public List<GameDetailIInnerJson> characters;
     @Expose
-    public List<GameDetailDevelopers> developers;
+    public List<GameDetailIInnerJson> developers;
     @Expose
-    public List<GameDetailFranchises> franchises;
+    public List<GameDetailIInnerJson> franchises;
     @Expose
-    public List<GameDetailGenres> genres;
+    public List<GameDetailIInnerJson> genres;
     @Expose
-    public List<GameDetailPublishers> publishers;
+    public List<GameDetailIInnerJson> publishers;
     @Expose
-    public List<GameDetailSimilarGames> similarGames;
+    public List<GameDetailIInnerJson> similarGames;
     @Expose
-    public List<GameDetailThemes> themes;
+    public List<GameDetailIInnerJson> themes;
     @Expose
-    public List<GameDetailReview> reviews;
+    public List<GameDetailIInnerJson> reviews;
     @Expose
     public List<GameDetailReleases> releases;
 
@@ -82,18 +80,18 @@ public class GameDetailModal implements Parcelable {
         this.images = in.createTypedArrayList(CharacterImage.CREATOR);
         this.videos = new ArrayList<GameDetailVideo>();
         in.readList(this.videos, GameDetailVideo.class.getClassLoader());
-        this.characters = in.createTypedArrayList(GameDetailCharacters.CREATOR);
-        this.developers = in.createTypedArrayList(GameDetailDevelopers.CREATOR);
-        this.franchises = in.createTypedArrayList(GameDetailFranchises.CREATOR);
-        this.genres = in.createTypedArrayList(GameDetailGenres.CREATOR);
-        this.publishers = new ArrayList<GameDetailPublishers>();
-        in.readList(this.publishers, GameDetailPublishers.class.getClassLoader());
-        this.similarGames = new ArrayList<GameDetailSimilarGames>();
-        in.readList(this.similarGames, GameDetailSimilarGames.class.getClassLoader());
-        this.themes = new ArrayList<GameDetailThemes>();
-        in.readList(this.themes, GameDetailThemes.class.getClassLoader());
-        this.reviews = new ArrayList<GameDetailReview>();
-        in.readList(this.reviews, GameDetailReview.class.getClassLoader());
+        this.characters = in.createTypedArrayList(GameDetailIInnerJson.CREATOR);
+        this.developers = in.createTypedArrayList(GameDetailIInnerJson.CREATOR);
+        this.franchises = in.createTypedArrayList(GameDetailIInnerJson.CREATOR);
+        this.genres = in.createTypedArrayList(GameDetailIInnerJson.CREATOR);
+        this.publishers = new ArrayList<GameDetailIInnerJson>();
+        in.readList(this.publishers, GameDetailIInnerJson.class.getClassLoader());
+        this.similarGames = new ArrayList<GameDetailIInnerJson>();
+        in.readList(this.similarGames, GameDetailIInnerJson.class.getClassLoader());
+        this.themes = new ArrayList<GameDetailIInnerJson>();
+        in.readList(this.themes, GameDetailIInnerJson.class.getClassLoader());
+        this.reviews = new ArrayList<GameDetailIInnerJson>();
+        in.readList(this.reviews, GameDetailIInnerJson.class.getClassLoader());
         this.releases = new ArrayList<GameDetailReleases>();
         in.readList(this.releases, GameDetailReleases.class.getClassLoader());
     }

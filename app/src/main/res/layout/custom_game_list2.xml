@@ -71,7 +71,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@null"
+            android:background="?android:selectableItemBackground"
             android:src="@drawable/ic_action_navigation_more_vert" />
 
 

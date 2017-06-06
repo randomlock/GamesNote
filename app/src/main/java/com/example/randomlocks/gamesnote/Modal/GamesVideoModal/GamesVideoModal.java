@@ -33,7 +33,7 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     @Expose
     public String siteDetailUrl;
     @Expose
-    public CharacterImage image;
+    public GameVideoImage image;
     @Expose
     public String videoType;
     @Expose
@@ -43,8 +43,7 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
 
     public boolean isFavorite = false;
     public boolean isWatchLater = false;
-    public boolean isWatched = false;
-    public int secondsWatched;
+
 
 
     @Override

@@ -305,7 +305,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="BIRTHDAY "
-                        android:textColor="@color/primary_text_light" />
+                        android:textColor="@color/primary_text_light"
+                        style="@style/SubTitleText"
+                        />
 
                     <TextView
                         android:id="@+id/birthday"
@@ -333,7 +335,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="FIRST APPEARANCE"
-                        android:textColor="@color/primary_text_light" />
+                        android:textColor="@color/primary_text_light"
+                        style="@style/SubTitleText" />
 
 
                     <TextView
@@ -358,7 +361,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="ALIAS"
-                        android:textColor="@color/primary_text_light" />
+                        android:textColor="@color/primary_text_light"
+                        style="@style/SubTitleText" />
 
 
                     <TextView

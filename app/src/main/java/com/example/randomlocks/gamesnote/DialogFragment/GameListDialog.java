@@ -50,10 +50,10 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
     GameListDatabase gameListDatabase;
     Realm realm;
 
-    public static GameListDialog newInstance(String primaryId) {
+    public static GameListDialog newInstance(int primaryId) {
 
         Bundle args = new Bundle();
-        args.putString(PRIMARY_KEY,primaryId);
+        args.putInt(PRIMARY_KEY,primaryId);
         GameListDialog fragment = new GameListDialog();
         fragment.setArguments(args);
         return fragment;
@@ -64,7 +64,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_TITLE, R.style.MyDialogTheme);
         realm = Realm.getDefaultInstance();
-        gameListDatabase = realm.where(GameListDatabase.class).equalTo("apiDetailUrl",getArguments().getString(PRIMARY_KEY)).findFirst();
+        gameListDatabase = realm.where(GameListDatabase.class).equalTo("game_id",getArguments().getInt(PRIMARY_KEY)).findFirst();
     }
 
 

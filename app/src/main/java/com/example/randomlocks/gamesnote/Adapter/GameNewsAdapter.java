@@ -96,8 +96,8 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
             if (isSimple) {
                 if (newsModal.smallDescription != null && newsModal.smallDescription.trim().length() > 0) {
-                    if (newsModal.smallDescription.length() > 50) {
-                        holder.description.setText(newsModal.smallDescription.substring(0, 50));
+                    if (newsModal.smallDescription.length() > 100) {
+                        holder.description.setText(newsModal.smallDescription.substring(0,100));
                     } else {
                         holder.description.setText(newsModal.smallDescription);
                     }

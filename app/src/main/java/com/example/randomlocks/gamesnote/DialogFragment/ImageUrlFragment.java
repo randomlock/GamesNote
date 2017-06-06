@@ -1,8 +1,10 @@
 package com.example.randomlocks.gamesnote.DialogFragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.widget.EditText;
 
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by randomlock on 4/1/2017.
@@ -44,11 +48,6 @@ public class ImageUrlFragment extends DialogFragment implements View.OnClickList
 
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
     public static ImageUrlFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -56,6 +55,13 @@ public class ImageUrlFragment extends DialogFragment implements View.OnClickList
         ImageUrlFragment fragment = new ImageUrlFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.MyDialogTheme);
+
     }
 
     @Nullable
@@ -66,9 +72,17 @@ public class ImageUrlFragment extends DialogFragment implements View.OnClickList
         view.findViewById(R.id.cancel).setOnClickListener(this);
         view.findViewById(R.id.remove).setOnClickListener(this);
         view.findViewById(R.id.update).setOnClickListener(this);
-
         return view;
     }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.setTitle("My Title");
+        return dialog;
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -80,9 +94,16 @@ public class ImageUrlFragment extends DialogFragment implements View.OnClickList
                 break;
             case R.id.remove :
                 mImageUrlInterface.onSelect(null);
+                dismiss();
                 break;
             case R.id.update :
-                mImageUrlInterface.onSelect(imageUrl.getText().toString());
+                if (imageUrl.getText().toString().trim().length()>0){
+                    mImageUrlInterface.onSelect(imageUrl.getText().toString());
+                    dismiss();
+                }else{
+                    Toasty.error(getContext(),"empty url").show();
+                }
+
                 break;
 
 

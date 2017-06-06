@@ -17,21 +17,14 @@ import java.util.ArrayList;
  */
 public class GameDetailOverviewAdapter extends RecyclerView.Adapter<GameDetailOverviewAdapter.MyViewHolder> {
 
-    ArrayList<String> key;
-    ArrayList<String> values;
-    GameDetailFragment fragment;
-    int style;
+    private ArrayList<String> key;
+    private ArrayList<String> values;
 
-    public GameDetailOverviewAdapter(ArrayList<String> key, ArrayList<String> values, GameDetailFragment fragment, int style) {
+    public GameDetailOverviewAdapter(ArrayList<String> key, ArrayList<String> values) {
         this.key = key;
         this.values = values;
-        this.fragment = fragment;
-        this.style = style;
     }
 
-    public void setStyle(int style) {
-        this.style = style;
-    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -69,11 +62,7 @@ public class GameDetailOverviewAdapter extends RecyclerView.Adapter<GameDetailOv
             key = (TextView) itemView.findViewById(R.id.key);
             value = (TextView) itemView.findViewById(R.id.value);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                value.setTextAppearance(style);
-            } else {
-                value.setTextAppearance(fragment.getContext(), style);
-            }
+
 
 
         }

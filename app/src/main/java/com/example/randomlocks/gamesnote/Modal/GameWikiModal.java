@@ -23,6 +23,8 @@ public class GameWikiModal implements Parcelable {
     @Expose
     public int expectedReleaseYear;
     @Expose
+    public int id;
+    @Expose
     public GameWikiImage image;
     @Expose
     public String name;

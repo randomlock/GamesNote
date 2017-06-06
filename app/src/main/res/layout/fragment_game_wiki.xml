@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:text="No Result Found"
                 android:drawableTop="@drawable/ic_error"
-                android:layout_gravity="center"
+                android:layout_gravity="center|top"
                 android:textColor="?android:attr/textColorPrimary"
                 android:visibility="gone"
                 />
