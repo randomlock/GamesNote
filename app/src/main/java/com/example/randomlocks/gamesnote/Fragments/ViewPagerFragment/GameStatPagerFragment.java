@@ -61,8 +61,8 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     CircleProgressView game_count;
     PieChart status_pie_chart;
     BarChart score_bar_chart;
-    RecyclerView score_list_view;
-    GameStatsAdapter top_score_adapter;
+    RecyclerView score_list_view,new_list_view,updated_list_view;
+    GameStatsAdapter top_score_adapter,new_game_adapter,recent_game_adapter;
     Realm realm;
     RealmResults<GameListDatabase> result;
     int count;
@@ -103,6 +103,10 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         score_list_view = (RecyclerView) view.findViewById(R.id.score_list);
         score_list_view.setNestedScrollingEnabled(false);
         score_bar_chart = (BarChart) view.findViewById(R.id.score_bar_chart);
+        new_list_view = (RecyclerView) view.findViewById(R.id.new_game_list);
+        new_list_view.setNestedScrollingEnabled(false);
+        updated_list_view = (RecyclerView) view.findViewById(R.id.updated_game_list);
+        updated_list_view.setNestedScrollingEnabled(false);
 
 
         return view;
@@ -121,19 +125,15 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
     private void setUpTopScoreList() {
 
-        RealmResults<GameListDatabase> result =  realm.where(GameListDatabase.class).findAllSorted("score", Sort.DESCENDING);
-        top_score_adapter = new GameStatsAdapter(getContext(),result,rainbow);
-        score_list_view.setLayoutManager(new LinearLayoutManager(getContext()));
-        score_list_view.setAdapter(top_score_adapter);
-
-
+        RealmResults<GameListDatabase> databases =  result.where().findAllSorted("score", Sort.DESCENDING);
+        setUpRecyclerView(score_list_view,databases,true,true);
     }
 
-    private void setUpSCoreBarChart() {
+    private void setUpScoreBarChart() {
         int max = 0;
         List<BarEntry> entries = new ArrayList<>();
         for (int i = 0; i <=100 ; i=i+10) {
-            int value = (int) realm.where(GameListDatabase.class).equalTo("score",i).count();
+            int value = (int) result.where().equalTo("score",i).count();
             if(value>max)
                 max = value;
             entries.add(new BarEntry(i,value));
@@ -170,7 +170,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         List<PieEntry> entries = new ArrayList<>();
 
         for (int i = 0; i <status.length ; i++) {
-            float status_count =  realm.where(GameListDatabase.class).equalTo("status",i+1).count();
+            float status_count =  result.where().equalTo("status",i+1).count();
             if (status_count>0) {
                 entries.add(new PieEntry(status_count,status[i]));
             }
@@ -202,8 +202,26 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
         }
 
+    }
+
+    private void setUpRecentGameList() {
+      RealmResults<GameListDatabase>  databases =   result.where().findAllSorted("date_added");
+      setUpRecyclerView(new_list_view,databases,false,false);
 
     }
+
+    private void setUpNewGameList() {
+        RealmResults<GameListDatabase>  databases =   result.where().findAllSorted("last_updated",Sort.DESCENDING);
+        setUpRecyclerView(updated_list_view,databases,false,true);
+    }
+
+    void setUpRecyclerView(RecyclerView recycler_view,List<GameListDatabase> list,boolean isScoreViewShown,boolean isNewGame){
+        GameStatsAdapter adapter = new GameStatsAdapter(getContext(),list,rainbow,isScoreViewShown,isNewGame);
+        recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
+        recycler_view.setAdapter(adapter);
+    }
+
+
 
     @Override
     public void onDestroy() {
@@ -225,9 +243,13 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
         if(!isAnimated && isViewVisible(score_bar_chart)){
             isAnimated = true;
-            setUpSCoreBarChart();
+            setUpScoreBarChart();
+            setUpNewGameList();
+            setUpRecentGameList();
         }
     }
+
+
 
     private boolean isViewVisible(View view){
 

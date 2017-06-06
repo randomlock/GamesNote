@@ -7,23 +7,25 @@
 
 <TextView
     android:id="@+id/text_list_view"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     style="@style/sectionHeader"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentLeft="true"
     android:layout_toStartOf="@+id/score_list_view"
     android:layout_toLeftOf="@+id/score_list_view" />
 
     <at.grabner.circleprogress.CircleProgressView
         android:id="@+id/score_list_view"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         app:cpv_barWidth="3dp"
         app:cpv_rimColor="@color/score_rim"
         app:cpv_rimWidth="3dp"
         app:cpv_textColor="?android:attr/textColorPrimary"
         app:cpv_autoTextSize="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        app:cpv_textSize="20sp"
         />
 
 </RelativeLayout>
