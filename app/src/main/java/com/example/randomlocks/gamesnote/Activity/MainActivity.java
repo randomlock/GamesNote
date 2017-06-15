@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
         }
-        mselectedId = savedInstanceState == null ? R.id.nav_statistics : savedInstanceState.getInt(KEY);
-        mtitle = savedInstanceState == null ? DEFAULT_TITLE : savedInstanceState.getString(TITLE);
+        mselectedId = savedInstanceState == null ? SharedPreference.getFromSharedPreferences(KEY,R.id.nav_wiki,this) : savedInstanceState.getInt(KEY);
+        mtitle = savedInstanceState == null ? SharedPreference.getFromSharedPreferences(TITLE,DEFAULT_TITLE,this) : savedInstanceState.getString(TITLE);
 
         navHeaderLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,10 +219,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
 
         item.setChecked(true);
-        mselectedId = item.getItemId();
-        mtitle = (String) item.getTitle();
+        if (item.getItemId()!=R.id.nav_settings) {
+            mselectedId = item.getItemId();
+            mtitle = (String) item.getTitle();
+        }
         fragment = null;
-        selectDrawerItem(mselectedId, (String) item.getTitle());
+        selectDrawerItem(item.getItemId(), (String) item.getTitle());
         mDrawableToggle.setDrawerIndicatorEnabled(true);
         return true;
 
@@ -357,6 +359,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onSaveInstanceState(out);
         out.putInt(KEY, mselectedId);
         out.putString(TITLE, mtitle);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreference.saveToSharedPreference(KEY,mselectedId,this);
+        SharedPreference.saveToSharedPreference(TITLE,mtitle,this);
 
     }
 

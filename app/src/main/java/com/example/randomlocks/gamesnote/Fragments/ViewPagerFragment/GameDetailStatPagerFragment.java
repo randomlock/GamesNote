@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +47,7 @@ import static com.example.randomlocks.gamesnote.R.string.List;
  * Created by randomlock on 6/5/2017.
  */
 
-public class GameStatOtherPagerFragment extends Fragment implements NestedScrollView.OnScrollChangeListener{
+public class GameDetailStatPagerFragment extends Fragment implements NestedScrollView.OnScrollChangeListener{
 
 
     private Realm realm;
@@ -59,7 +60,7 @@ public class GameStatOtherPagerFragment extends Fragment implements NestedScroll
     HorizontalBarChart developer_chart,publisher_chart,franchise_chart,theme_chart,genre_chart,similar_game_chart;
     boolean is_developer_shown,is_publisher_shown,is_franchise_shown,is_theme_shown,is_genre_shown,is_similar_game_shown;
 
-    public GameStatOtherPagerFragment() {
+    public GameDetailStatPagerFragment() {
     }
 
     @Override
@@ -161,6 +162,7 @@ public class GameStatOtherPagerFragment extends Fragment implements NestedScroll
         xl.setPosition(XAxis.XAxisPosition.BOTTOM);
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
+        xl.setTextColor(ContextCompat.getColor(getContext(),R.color.black_white));
         CategoryBarChartXaxisFormatter xaxisFormatter = new CategoryBarChartXaxisFormatter(databases);
         xl.setValueFormatter(xaxisFormatter);
         xl.setGranularity(1);
@@ -180,9 +182,11 @@ public class GameStatOtherPagerFragment extends Fragment implements NestedScroll
 
 
 
-        BarDataSet set1;
-        set1 = new BarDataSet(entries, "");
-        BarData data = new BarData(set1);
+        BarDataSet set;
+        set = new BarDataSet(entries, "");
+        set.setColors(new_rainbow);
+        set.setValueTextColor(ContextCompat.getColor(getContext(),R.color.white));
+        BarData data = new BarData(set);
         data.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {

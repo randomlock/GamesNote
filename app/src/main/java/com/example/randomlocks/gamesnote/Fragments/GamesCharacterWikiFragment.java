@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -76,6 +77,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     GameCharacterSearchAdapter adapter;
     FloatingSearchView floatingSearchView;
     LinearLayoutManager manager;
+    DividerItemDecoration itemDecoration;
     int scrollToPosition = 0;
     boolean isLoadingMore = false;
 //    ImageView imageView;
@@ -134,6 +136,8 @@ public class GamesCharacterWikiFragment extends Fragment {
 
         manager = new ConsistentLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
+        itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
 
 
 

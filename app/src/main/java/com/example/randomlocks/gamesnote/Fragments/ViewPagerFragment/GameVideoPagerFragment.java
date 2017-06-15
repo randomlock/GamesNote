@@ -220,8 +220,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                             item.setTitle(getString(R.string.reduce_view));
                             item.setIcon(R.drawable.ic_view_compact_white_24dp);
 
-
-
                         } else {
                             item.setTitle(getString(R.string.compact_view));
                             item.setIcon(R.drawable.ic_gamelist);

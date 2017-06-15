@@ -1,14 +1,12 @@
 package com.example.randomlocks.gamesnote.Fragments;
 
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,10 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameStatOtherPagerFragment;
+import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameDetailStatPagerFragment;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameStatPagerFragment;
-import com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomMediaController;
-import com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomVideoView;
 import com.example.randomlocks.gamesnote.R;
 
 import java.util.ArrayList;
@@ -96,7 +92,7 @@ public class GameStatsFragment extends Fragment {
             super(fm);
             fragments = new ArrayList<>();
             fragments.add(new GameStatPagerFragment());
-            fragments.add(new GameStatOtherPagerFragment());
+            fragments.add(new GameDetailStatPagerFragment());
         }
 
         @Override

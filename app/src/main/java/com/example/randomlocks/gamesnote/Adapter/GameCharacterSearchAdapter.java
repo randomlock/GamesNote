@@ -224,9 +224,9 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
 
         MyViewHolder(View itemView) {
             super(itemView);
-            profileImage = (ImageView) itemView.findViewById(R.id.image);
-            name = (TextView) itemView.findViewById(R.id.name);
-            deck = (TextView) itemView.findViewById(R.id.card_deck);
+            profileImage = (ImageView) itemView.findViewById(R.id.imageView);
+            name = (TextView) itemView.findViewById(R.id.title);
+            deck = (TextView) itemView.findViewById(R.id.description);
             profileImage.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }

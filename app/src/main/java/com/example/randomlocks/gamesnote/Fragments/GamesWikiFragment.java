@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
@@ -74,6 +75,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     private static final String LIMIT = "50";
     ViewPager viewPager;
     RecyclerView recyclerView;
+    DividerItemDecoration itemDecoration;
     AVLoadingIndicatorView progressBar;
     FloatingSearchView floatingSearchView;
     List<GameWikiModal> listModals = null;
@@ -109,7 +111,8 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         context = getContext();
         realm = Realm.getDefaultInstance();
         viewType = SharedPreference.getFromSharedPreferences(GiantBomb.VIEW_TYPE,0,context);
-        spanCount = viewType==2 ? 3 : 1;
+        itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        spanCount = viewType==2 ? 2 : 1;
         map = new HashMap<>(7);
         map.put(GiantBomb.KEY, GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");
@@ -164,8 +167,10 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         manager = new ConsistentGridLayoutManager(getContext(),spanCount);
 
         recyclerView.setLayoutManager(manager);
+        if(viewType==1)
+            recyclerView.addItemDecoration(itemDecoration);
         //Disable the animation
-        ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        //((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
 
 
@@ -226,10 +231,14 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                                     viewType = i;
 
                                     if(viewType==2){
-                                        manager.setSpanCount(3);
+                                        manager.setSpanCount(2);
                                     }else{
                                         manager.setSpanCount(1);
                                     }
+                                    if(viewType==1)
+                                        recyclerView.addItemDecoration(itemDecoration);
+                                    else
+                                        recyclerView.removeItemDecoration(itemDecoration);
 
                                     adapter.changeView(i);
 
@@ -359,6 +368,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                         addToDatabase(gameWikiModal,addTypeId);
                 }
             });
+
             recyclerView.setAdapter(adapter);
         }
 
@@ -630,8 +640,6 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
     @Override
     public void onSelect(int which, boolean asc) {
-
-        List<String> arrayList = Arrays.asList(context.getResources().getStringArray(R.array.search_filter));
 
         String sort = sortValue(which);
 

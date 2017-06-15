@@ -11,6 +11,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -157,12 +158,12 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-       //return list.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        //return list.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
 
         //load more view
         if(list.get(position)==null)
             return  VIEW_TYPE_LOADING;
-        //normal view
+            //normal view
         else
             return viewType;
 
@@ -303,10 +304,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.itemView.startAnimation(animation);
             lastPosition = position;
 
-        } else if (holder instanceof LoadingViewHolder) {
-            LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
-            loadingViewHolder.progressBar.setVisibility(View.VISIBLE);
-        }else if(holder instanceof MyViewHolder3){
+        } else if(holder instanceof MyViewHolder3){
 
             final GameWikiModal modal = list.get(holder.getAdapterPosition());
             MyViewHolder3 viewHolder = (MyViewHolder3) holder;
@@ -328,6 +326,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.itemView.startAnimation(animation);
             lastPosition = position;
 
+        }else if (holder instanceof LoadingViewHolder) {
+            LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
+            loadingViewHolder.progressBar.setVisibility(View.VISIBLE);
         }
 
 
@@ -642,7 +643,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    private class MyViewHolder3 extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
+    private class MyViewHolder3 extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, View.OnLongClickListener {
 
 
         ImageView imageView;
@@ -653,10 +654,11 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
+
         MyViewHolder3(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            imageView.getLayoutParams().height = (int) ((displayMetrics.widthPixels / 3)*1.3);
+            imageView.getLayoutParams().height = (int) ((displayMetrics.widthPixels / 2)*1.4);
             popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
 
             popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
@@ -665,8 +667,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             popupMenu.setOnClickListener(this);
             popup = new PopupMenu(context, popupMenu);
             popup.setOnMenuItemClickListener(this);
-            itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
+            imageView.setOnLongClickListener(this);
 
         }
 
@@ -735,6 +737,11 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
 
+        @Override
+        public boolean onLongClick(View v) {
+            Toaster.make(context,list.get(getLayoutPosition()).name);
+            return true;
+        }
     }
 
 }

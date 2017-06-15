@@ -73,6 +73,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     int count;
     private int[] rainbow;
     private int[] new_rainbow;
+    private int text_color;
 
     private String[] status;
     boolean isAnimated = false;
@@ -91,8 +92,8 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         count = result.size();
         rainbow = getActivity().getResources().getIntArray(R.array.score_color);
         new_rainbow = Arrays.copyOfRange(rainbow,1,rainbow.length);
-
         status = getActivity().getResources().getStringArray(R.array.status);
+        text_color = ContextCompat.getColor(getContext(),R.color.black_white);
 
     }
 
@@ -148,12 +149,29 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
         BarDataSet set = new BarDataSet(entries,"score distribution");
         set.setColors(new_rainbow);
+        set.setValueTextColor(text_color);
 
 
         BarData data = new BarData(set);
         data.setBarWidth(5);
+        data.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+
+                if(value==0)
+                    return "";
+
+                return Math.round(value)+"";
+
+            }
+        });
+
         score_bar_chart.setData(data);
         score_bar_chart.setFitBars(true);
+        score_bar_chart.getXAxis().setTextColor(text_color);
+        score_bar_chart.getAxisLeft().setTextColor(text_color);
+        score_bar_chart.getAxisRight().setTextColor(text_color);
+        score_bar_chart.getLegend().setTextColor(text_color);
         score_bar_chart.getAxisLeft().setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -166,7 +184,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
 
         Description des = score_bar_chart.getDescription();
-        des.setText("score distribution");
+        des.setText("");
         score_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
 
     }
@@ -224,6 +242,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         xl.setPosition(XAxis.XAxisPosition.BOTTOM);
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
+        xl.setTextColor(text_color);
         CategoryBarChartXaxisFormatter xaxisFormatter = new CategoryBarChartXaxisFormatter(labels);
         xl.setValueFormatter(xaxisFormatter);
         xl.setGranularity(1);
@@ -255,6 +274,8 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
         BarDataSet set1;
         set1 = new BarDataSet(yVals1, "");
+        set1.setColors(new_rainbow);
+        set1.setValueTextColor(ContextCompat.getColor(getContext(),R.color.white));
         ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
         dataSets.add(set1);
         BarData data = new BarData(dataSets);
@@ -306,6 +327,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
             des.setEnabled(false);
             status_pie_chart.getLegend().setOrientation(Legend.LegendOrientation.VERTICAL);
             status_pie_chart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            status_pie_chart.getLegend().setTextColor(text_color);
             status_pie_chart.getLegend().setYEntrySpace(5);
             data.setValueTextColor(ContextCompat.getColor(getContext(),R.color.white));
             data.setValueTextSize(10);
