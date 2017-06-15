@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.Modal.GameWikiImage;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -16,7 +17,7 @@ public class CharacterSearchModal implements Parcelable {
     @Expose
     public String name;
     @Expose
-    public CharacterImage image;
+    public GameWikiImage image;
     @Expose
     public String deck;
 

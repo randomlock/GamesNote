@@ -8,37 +8,37 @@
     <group android:checkableBehavior="single">
 
         <item android:id="@+id/nav_mylist"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_gamelist"
             android:title="@string/List" />
 
 
 
             <item
                 android:id="@+id/nav_wiki"
-                android:icon="@mipmap/ic_launcher"
+                android:icon="@drawable/ic_game_wiki"
                 android:title="@string/Wiki" />
 
         <item
             android:id="@+id/nav_character"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_character_wiki"
             android:title="@string/characterwiki" />
 
         <item
             android:id="@+id/nav_statistics"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_game_stats"
             android:title="@string/statistics" />
 
 
         <item
             android:id="@+id/nav_news"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_game_news"
             android:title="@string/games_news" />
 
 
 
         <item
             android:id="@+id/nav_trailer"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_game_video"
             android:title="@string/game_videos" />
 
 
@@ -57,19 +57,19 @@
 
             <item
             android:id="@+id/nav_settings"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_settings"
             android:title="@string/Settings" />
 
 
         <item
             android:id="@+id/nav_giantbomb"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_giantbomb"
             android:title="@string/giantbomb_site" />
 
 
         <item
             android:id="@+id/nav_contact_us"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_contact_us"
             android:title="@string/email_me">
 
         </item>

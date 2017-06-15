@@ -32,7 +32,7 @@ public class GameWikiImage implements Parcelable {
     public GameWikiImage() {
     }
 
-    protected GameWikiImage(Parcel in) {
+    private GameWikiImage(Parcel in) {
         this.thumbUrl = in.readString();
         this.mediumUrl = in.readString();
         this.smallUrl = in.readString();

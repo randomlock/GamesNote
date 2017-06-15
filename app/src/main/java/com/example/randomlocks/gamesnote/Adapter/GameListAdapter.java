@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
+import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
@@ -109,7 +111,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     public void onBindViewHolder(MyViewHolder holder, int position) {
         GameListDatabase listDatabase = getData().get(position);
         if (listDatabase.getImageUrl() != null) {
-            Picasso.with(context).load(listDatabase.getImageUrl()).centerCrop().fit().into(holder.image);
+            Picasso.with(context).load(listDatabase.getImageUrl()).placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).centerCrop().fit().into(holder.image);
         } else {
             holder.image.setImageResource(R.drawable.news_image_drawable);
         }
@@ -190,6 +192,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             image = (ImageView) itemView.findViewById(R.id.image);
+            image.setOnClickListener(this);
              statusLabel = (LabelView) itemView.findViewById(R.id.status_label);
              if(status!=GiantBomb.ALL_GAMES)
                  statusLabel.setVisibility(View.GONE);
@@ -219,7 +222,10 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
                 popup.show();
 
 
-            } else {
+            } else if(view.getId()==R.id.image){
+                CoverImageViewerFragment dialog = CoverImageViewerFragment.newInstance(gameListDatabase.getImageUrl(),gameListDatabase.getImageUrl(),gameListDatabase.getName());
+                dialog.show(((FragmentActivity) context).getSupportFragmentManager(), "ImageViewer");
+            }else {
                 mOnClickInterface.onClick(gameListDatabase);
             }
         }

@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <PreferenceCategory android:title="@string/view">
+    <PreferenceCategory android:title="General">
 
-        <CheckBoxPreference
+        <SwitchPreferenceCompat
             android:key="dark_theme_preference"
             android:title="Night mode"
             android:summary="Allow dark theme"
             android:defaultValue="false" />
 
+        <ListPreference
+            android:key="image_preference"
+            android:title="Images quality"
+            android:summary="Image quality when searching game or character"
+            android:dialogTitle="Choose quality"
+            android:entries="@array/entries_list_preference"
+            android:entryValues="@array/entryvalues_list_preference"
+            app:defaultValue="1"
+            />
+
 
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Data">
+
+
+        <Preference
+            android:key="backup_preference"
+            android:persistent="false"
+            android:summary="Backup data locally to restore later."
+            android:title="Backup data"
+            />
+
+        <Preference
+            android:key="restore_preference"
+            android:persistent="false"
+            android:summary="Restore data from last backup. WARNING: Current data will be overwritten."
+            android:title="Restore data" />
+
+        <Preference
+            android:key="backup_online_preference"
+            android:persistent="false"
+            android:summary="Backup data to google drive to restore later."
+            android:title="Backup data (online)" />
+
+        <Preference
+            android:key="restore_online_preference"
+            android:persistent="false"
+            android:summary="Restore data from last backup to google drive. WARNING: Current data will be overwritten."
+            android:title="Restore data (online)" />
+
+
+    </PreferenceCategory>
+
+
 
 
 

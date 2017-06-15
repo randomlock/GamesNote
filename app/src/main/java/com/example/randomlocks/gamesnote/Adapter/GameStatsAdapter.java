@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 
 import java.text.DateFormat;
@@ -25,10 +27,13 @@ import at.grabner.circleprogress.CircleProgressView;
 
 public class GameStatsAdapter extends RecyclerView.Adapter<GameStatsAdapter.MyViewHolder> {
 
-    List<GameListDatabase> list;
+    private List<GameListDatabase> list;
+    private List<GameDetailDatabase> detailList;
     Context context;
     private int rainbow[];
     private boolean isScoreViewShown,isNewGame;
+    private int last_position = -1;
+
 
     public  GameStatsAdapter(Context context,List<GameListDatabase> list,int rainbow[],boolean isScoreViewShown,boolean isNewGame){
         this.list = list;
@@ -36,6 +41,13 @@ public class GameStatsAdapter extends RecyclerView.Adapter<GameStatsAdapter.MyVi
         this.rainbow  = rainbow;
         this.isScoreViewShown = isScoreViewShown;
         this.isNewGame = isNewGame;
+    }
+
+    public GameStatsAdapter(Context context, List<GameDetailDatabase> detailList,int rainbow[]){
+        this.context = context;
+        this.detailList = detailList;
+        this.rainbow = rainbow;
+
     }
 
 
@@ -54,30 +66,62 @@ public class GameStatsAdapter extends RecyclerView.Adapter<GameStatsAdapter.MyVi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        GameListDatabase database = list.get(position);
-        holder.textView.setText(database.getName());
-        if (isScoreViewShown) {
-            holder.scoreView.setValue(database.getScore());
-            holder.scoreView.setBarColor(rainbow[database.getScore()/10]);
-        }else {
-            if(isNewGame){
-                DateFormat sdf = SimpleDateFormat.getDateInstance();
-                holder.dateText.setText(sdf.format(database.getDate_added()));
+        if (list!=null) {
+            if (list.isEmpty())
+                holder.textView.setText("No entry added");
+            else {
+                GameListDatabase database = list.get(position);
+                holder.textView.setText(database.getName());
+                if (isScoreViewShown) {
+                    holder.scoreView.setValue(database.getScore());
+                    holder.scoreView.setBarColor(rainbow[database.getScore()/10]);
+                }else {
+                    if(isNewGame){
+                        DateFormat sdf = SimpleDateFormat.getDateInstance();
+                        holder.dateText.setText(sdf.format(database.getDate_added()));
 
-            }
-            else{
-                DateFormat sdf = SimpleDateFormat.getDateInstance();
-                holder.dateText.setText(sdf.format(database.getLast_updated()));
+                    }
+                    else{
+                        DateFormat sdf = SimpleDateFormat.getDateInstance();
+                        holder.dateText.setText(sdf.format(database.getLast_updated()));
 
+                    }
+                }
             }
+        }else {   //detail list
+
+            if(detailList.isEmpty())
+                holder.textView.setText("No entry added");
+            else {
+                GameDetailDatabase database = detailList.get(position);
+                holder.textView.setText(database.getName());
+                holder.dateText.setText(String.valueOf(database.getCount()));
+            }
+            setFadeAnimation(holder.itemView, position);
         }
 
+    }
 
+    private void setFadeAnimation(View view, int position) {
+        if (position > last_position) {
+            AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(700);
+            view.startAnimation(anim);
+            last_position = position;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return list.size()>=5 ? 5 : list.size();
+        if (list!=null) {
+            if (list.isEmpty())
+                return 1;
+            return list.size()>=5 ? 5 : list.size();
+        }else {
+            if(detailList.isEmpty())
+                return 1;
+            return detailList.size()>=5 ? 5 : detailList.size();
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -85,7 +129,7 @@ public class GameStatsAdapter extends RecyclerView.Adapter<GameStatsAdapter.MyVi
         TextView textView,dateText;
         CircleProgressView scoreView;
 
-    public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView) {
         super(itemView);
         textView = (TextView) itemView.findViewById(R.id.text_list_view);
         if (isScoreViewShown) {

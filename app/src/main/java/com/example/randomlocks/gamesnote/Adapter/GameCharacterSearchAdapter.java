@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,12 +36,18 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
     private Context context;
     private OnClickInterface mOnClickInterface;
     private OnLoadMoreListener mOnLoadMoreListener;
+    private int imageQuality;
+
 
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
 
+    private static final String IMAGE_QUALITY_KEY = "image_preference";
+
+
     public GameCharacterSearchAdapter(List<CharacterSearchModal> modals, final Context context, RecyclerView recyclerView, OnClickInterface mOnClickInterface) {
+        imageQuality = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(IMAGE_QUALITY_KEY,"1"));
         this.modals = modals;
         this.context = context;
         this.mOnClickInterface = mOnClickInterface;
@@ -168,8 +175,8 @@ public class GameCharacterSearchAdapter extends RecyclerView.Adapter<RecyclerVie
                 });*/
                 viewHolder.profileImage.setTag(R.string.smallImageUrl, modal.image.thumbUrl);
                 viewHolder.profileImage.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.profileImage);
-
+                String url = imageQuality==0 ? modal.image.thumbUrl : modal.image.smallUrl;
+                Picasso.with(context).load(url).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.profileImage);
 
             } else {
                 viewHolder.profileImage.setImageResource(R.drawable.news_image_drawable);

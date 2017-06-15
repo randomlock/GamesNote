@@ -10,14 +10,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/sectionHeader"
-        android:layout_toStartOf="@+id/score_list_view"
-        android:layout_toLeftOf="@+id/score_list_view" />
+        android:textSize="12sp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toStartOf="@+id/date_list_view"
+        android:layout_toLeftOf="@+id/date_list_view" />
 
     <TextView
         android:id="@+id/date_list_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/sectionHeader"
-        android:layout_alignParentRight="true" />
+        android:textSize="12sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

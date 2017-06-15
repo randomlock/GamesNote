@@ -88,15 +88,14 @@ public class GameStatsFragment extends Fragment {
 
     private class GameStatsPagerAdapter extends FragmentPagerAdapter {
 
-        private final int PAGE_COUNT = 3;
-        private String pageTitle[] = {"basic","detail","More"};
+        private final int PAGE_COUNT = 2;
+        private String pageTitle[] = {"basic","detail"};
         private ArrayList<Fragment> fragments;
 
         private GameStatsPagerAdapter(FragmentManager fm) {
             super(fm);
             fragments = new ArrayList<>();
             fragments.add(new GameStatPagerFragment());
-            fragments.add(new GameStatOtherPagerFragment());
             fragments.add(new GameStatOtherPagerFragment());
         }
 

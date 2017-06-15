@@ -21,10 +21,13 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -35,6 +38,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
@@ -61,6 +65,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     CircleProgressView game_count;
     PieChart status_pie_chart;
     BarChart score_bar_chart;
+    HorizontalBarChart medium_bar_chart;
     RecyclerView score_list_view,new_list_view,updated_list_view;
     GameStatsAdapter top_score_adapter,new_game_adapter,recent_game_adapter;
     Realm realm;
@@ -71,6 +76,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
     private String[] status;
     boolean isAnimated = false;
+    boolean isMediumAnimated = false;
 
 
     public GameStatPagerFragment(){
@@ -107,6 +113,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         new_list_view.setNestedScrollingEnabled(false);
         updated_list_view = (RecyclerView) view.findViewById(R.id.updated_game_list);
         updated_list_view.setNestedScrollingEnabled(false);
+        medium_bar_chart = (HorizontalBarChart) view.findViewById(R.id.medium_bar_chart);
 
 
         return view;
@@ -161,9 +168,122 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         Description des = score_bar_chart.getDescription();
         des.setText("score distribution");
         score_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-        score_bar_chart.invalidate();
 
     }
+
+    private void setUpMediumBarChart() {
+
+      /*  List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(10,realm.where(GameListDatabase.class).equalTo("medium","Physical").count()));
+        entries.add(new BarEntry(15,realm.where(GameListDatabase.class).equalTo("medium","Digital").count()));
+        BarDataSet set = new BarDataSet(entries,"medium distribution");
+        set.setColors(new_rainbow);
+        BarData data = new BarData(set);
+        medium_bar_chart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                int val = (int) value;
+                String empty = "";
+                if(val==10)
+                    return "Physical";
+                else if (val==15)
+                    return "Digital";
+
+                else return empty;
+            }
+        });
+        medium_bar_chart.getAxisRight().setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return String.valueOf((int) Math.floor(value));
+            }
+        });
+        medium_bar_chart.getAxisRight().setLabelCount(3);
+        medium_bar_chart.getAxisLeft().setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return String.valueOf((int) Math.floor(value));
+            }
+        });
+
+        medium_bar_chart.getAxisLeft().setLabelCount(3);
+
+        medium_bar_chart.setDrawBarShadow(false);
+        medium_bar_chart.setDrawValueAboveBar(true);
+        medium_bar_chart.getDescription().setEnabled(false);
+        medium_bar_chart.setPinchZoom(false);
+        medium_bar_chart.setDrawGridBackground(false);
+        medium_bar_chart.setData(data);
+        medium_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);*/
+
+        ArrayList<String> labels = new ArrayList<>();
+        labels.add("Physical");
+        labels.add("Digital");
+
+        XAxis xl = medium_bar_chart.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xl.setDrawAxisLine(true);
+        xl.setDrawGridLines(false);
+        CategoryBarChartXaxisFormatter xaxisFormatter = new CategoryBarChartXaxisFormatter(labels);
+        xl.setValueFormatter(xaxisFormatter);
+        xl.setGranularity(1);
+
+        YAxis yl = medium_bar_chart.getAxisLeft();
+        yl.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        yl.setDrawGridLines(false);
+        yl.setEnabled(false);
+        yl.setAxisMinimum(0f);
+
+        YAxis yr = medium_bar_chart.getAxisRight();
+        yr.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return  String.valueOf((int) Math.floor(value));
+            }
+        });
+        yr.setGranularity(1);
+        yr.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        yr.setDrawGridLines(false);
+        yr.setAxisMinimum(0f);
+
+        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        String medium[] = getActivity().getResources().getStringArray(R.array.medium);
+        for (int i = 0; i < 2; i++) {
+            int val = (int) realm.where(GameListDatabase.class).equalTo("medium",medium[i+1]).count();
+            yVals1.add(new BarEntry(i,val));
+        }
+
+        BarDataSet set1;
+        set1 = new BarDataSet(yVals1, "");
+        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        dataSets.add(set1);
+        BarData data = new BarData(dataSets);
+        data.setValueTextSize(10f);
+        data.setBarWidth(.9f);
+        data.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return Math.round(value)+"";
+
+            }
+        });
+        medium_bar_chart.setData(data);
+        medium_bar_chart.getLegend().setEnabled(false);
+        medium_bar_chart.getDescription().setEnabled(false);
+        medium_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+
+
+
+
+
+
+
+
+
+
+
+    }
+
 
     private void setUpStatusPieChart() {
 
@@ -197,15 +317,16 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
             });
             status_pie_chart.setCenterText("Status stats");
             status_pie_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-            status_pie_chart.invalidate();
-
 
         }
 
     }
 
+
+
+
     private void setUpRecentGameList() {
-      RealmResults<GameListDatabase>  databases =   result.where().findAllSorted("date_added");
+      RealmResults<GameListDatabase>  databases =   result.where().findAllSorted("date_added",Sort.DESCENDING);
       setUpRecyclerView(new_list_view,databases,false,false);
 
     }
@@ -245,9 +366,19 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
             isAnimated = true;
             setUpScoreBarChart();
             setUpNewGameList();
+
+        }
+
+        if(!isMediumAnimated && isViewVisible(medium_bar_chart)){
+            isMediumAnimated = true;
+            setUpMediumBarChart();
             setUpRecentGameList();
         }
+
+
+
     }
+
 
 
 
@@ -256,17 +387,33 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         if (view!=null) {
             Rect scrollBounds = new Rect();
             nestedScrollView.getHitRect(scrollBounds);
-            if (view.getLocalVisibleRect(scrollBounds)) {
-                return true;
-            } else {
-                return false;
-            }
+            return view.getLocalVisibleRect(scrollBounds);
         }
         return false;
     }
 
 
+    private class CategoryBarChartXaxisFormatter implements IAxisValueFormatter {
 
+        ArrayList<String> mValues;
+
+        CategoryBarChartXaxisFormatter(ArrayList<String> values) {
+            this.mValues = values;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+
+            int val = (int) value;
+            String label = "";
+            if (val >= 0 && val < mValues.size()) {
+                label = mValues.get(val);
+            } else {
+                label = "";
+            }
+            return label;
+        }
+    }
 
 
 }

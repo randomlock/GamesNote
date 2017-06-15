@@ -2,8 +2,12 @@ package com.example.randomlocks.gamesnote;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
@@ -19,6 +23,8 @@ import io.realm.RealmConfiguration;
 
 //TODO realm configuration
 public class ExampleApplication extends Application {
+
+    public static final String DARK_THEME_KEY = "dark_theme_preference";
 
     private static ExampleApplication sInstance;
 
@@ -44,7 +50,29 @@ public class ExampleApplication extends Application {
                         .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
                         .build());
 
+        setNightTheme();
+
     }
+
+    public static void setNightTheme() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(sInstance.getApplicationContext());
+        setDarkTheme(preferences.getBoolean(DARK_THEME_KEY,false));
+
+    }
+
+    public static void setDarkTheme(boolean setDarkTheme) {
+        if (setDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+    }
+
+
+
+
+
 
     public static ExampleApplication getInstance() {
         return sInstance;

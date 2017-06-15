@@ -1,7 +1,6 @@
 package com.example.randomlocks.gamesnote.RealmDatabase;
 
-import com.github.mikephil.charting.data.realm.base.RealmBaseDataSet;
-import com.github.mikephil.charting.data.realm.implementation.RealmBarDataSet;
+
 
 import io.realm.RealmList;
 import io.realm.RealmObject;

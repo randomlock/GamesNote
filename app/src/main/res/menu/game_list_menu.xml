@@ -12,7 +12,7 @@
     <item
         android:id="@+id/filter"
         android:title="Filter Result"
-        android:icon="@drawable/ic_sort"
+        android:icon="@drawable/ic_sort_white"
         yourapp:showAsAction="ifRoom"/>
 
     <item

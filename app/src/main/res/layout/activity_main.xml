@@ -8,18 +8,6 @@
     >
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     <FrameLayout
         android:id="@+id/fragment_parent_layout"
         android:layout_width="match_parent"

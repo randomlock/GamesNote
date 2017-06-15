@@ -306,15 +306,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             case R.id.nav_settings:
-
-                fragment = getSupportFragmentManager().findFragmentByTag("GamesSetting");
-
-                if (fragment == null) {
-
-                    fragment = new SettingFragment();
-                }
-                FragmentTransactionHelper("replace", fragment, "GamesSetting");
-
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
 
             default:
@@ -423,20 +417,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void setDarkTheme(boolean setDarkTheme) {
-        if (setDarkTheme) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
 
-        Intent intent = getIntent();
-        finish();
-
-        startActivity(intent);
-
-
-    }
 
     public void startNewsFragment(List<NewsModal> modalList, int position) {
 

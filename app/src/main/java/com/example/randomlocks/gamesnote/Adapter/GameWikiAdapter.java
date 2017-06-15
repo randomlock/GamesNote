@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -58,6 +59,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<GameWikiModal> list;
     private Context context;
     private int lastPosition;
+    private int imageQuality;
     private Realm realm;
     private GameListDatabase database;
     private OnLoadMoreListener mOnLoadMoreListener;
@@ -65,7 +67,9 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
-    DisplayMetrics displayMetrics;
+    private DisplayMetrics displayMetrics;
+
+    private static final String IMAGE_QUALITY_KEY = "image_preference";
 
 
     public interface OnPopupClickInterface{
@@ -73,11 +77,12 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onAdd(GameWikiModal gameWikiModal,int addTypeId);
     }
 
-    OnPopupClickInterface onPopupClickInterface;
+    private OnPopupClickInterface onPopupClickInterface;
 
 
 
     public GameWikiAdapter(List<GameWikiModal> list, int viewType, Context context, int lastPosition, RecyclerView recyclerView,Realm realm,OnPopupClickInterface onPopupClickInterface) {
+        imageQuality = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(IMAGE_QUALITY_KEY,"1"));
         this.list = list;
         this.viewType = viewType;
         this.context = context;
@@ -198,7 +203,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
+                String url = imageQuality==0 ? modal.image.thumbUrl : modal.image.smallUrl;
+                Picasso.with(context).load(url).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
                 viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
@@ -283,7 +289,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.smallUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
                 viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }
@@ -308,7 +314,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.thumbUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
+                Picasso.with(context).load(modal.image.smallUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
             }else {
                 viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
             }

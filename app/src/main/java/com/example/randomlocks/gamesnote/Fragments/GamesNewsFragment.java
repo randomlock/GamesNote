@@ -322,25 +322,15 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         super.onPrepareOptionsMenu(menu);
         if (isReduced) {
             menu.getItem(0).setTitle(getString(R.string.reduce_view));
-            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_list_white_24dp);
+            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_gamelist_white);
 
         } else {
             menu.getItem(0).setTitle(getString(R.string.compact_view));
-            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_view_compact_white_24dp);
+            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_compat_white);
 
         }
 
-        Drawable drawable = menu.findItem(R.id.drawer_right).getIcon();
-        if (drawable != null) {
-            drawable.mutate();
-            drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-        }
 
-        drawable = menu.findItem(R.id.view).getIcon();
-        if(drawable!=null){
-            drawable.mutate();
-            drawable.setColorFilter(Color.WHITE,PorterDuff.Mode.SRC_ATOP);
-        }
 
 
 
@@ -370,13 +360,13 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                     if (item.getTitle().equals(getString(R.string.compact_view))) {
                         isReduced = true;
                         item.setTitle(getString(R.string.reduce_view));
-                        item.setIcon(R.drawable.ic_list_white_24dp);
+                        item.setIcon(R.drawable.ic_gamelist_white);
 
 
 
                     } else {
                         item.setTitle(getString(R.string.compact_view));
-                        item.setIcon(R.drawable.ic_view_compact_white_24dp);
+                        item.setIcon(R.drawable.ic_compat_white);
 
                         isReduced = false;
                     }

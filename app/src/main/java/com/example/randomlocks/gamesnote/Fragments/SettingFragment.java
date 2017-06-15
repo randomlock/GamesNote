@@ -4,9 +4,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.preference.CheckBoxPreference;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Activity.MainActivity;
+import com.example.randomlocks.gamesnote.Activity.SettingsActivity;
 import com.example.randomlocks.gamesnote.R;
 
 /**
@@ -15,14 +20,20 @@ import com.example.randomlocks.gamesnote.R;
 public class SettingFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String DARK_THEME_KEY = "dark_theme_preference";
-    CheckBoxPreference dark_theme_preference;
-    SharedPreferencesCompat sharedPreferences;
+    private static final String IMAGE_QUALITY_KEY = "image_preference";
+
+
+
+
+
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preference_settings);
 
     }
+
+
 
     @Override
     public void onResume() {
@@ -44,7 +55,7 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(DARK_THEME_KEY)) {
-            ((MainActivity) getActivity()).setDarkTheme(sharedPreferences.getBoolean(key, false));
+            ((SettingsActivity) getActivity()).restartMainActivity(sharedPreferences.getBoolean(key, false));
         }
 
     }

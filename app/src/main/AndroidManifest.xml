@@ -52,8 +52,10 @@
         <activity android:name=".Activity.VideoPlayerActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity android:name=".Activity.SettingsActivity"
+            android:parentActivityName=".Activity.MainActivity"/>
+
     </application>
 
 </manifest>
