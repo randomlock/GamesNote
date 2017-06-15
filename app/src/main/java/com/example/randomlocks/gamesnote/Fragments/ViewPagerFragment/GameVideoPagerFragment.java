@@ -218,19 +218,22 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                         if (item.getTitle().equals(getString(R.string.compact_view))) {
                             isReduced = false;
                             item.setTitle(getString(R.string.reduce_view));
+                            item.setIcon(R.drawable.ic_view_compact_white_24dp);
+
 
 
                         } else {
                             item.setTitle(getString(R.string.compact_view));
+                            item.setIcon(R.drawable.ic_gamelist);
                             isReduced = true;
                         }
 
-                        if(isReduced)
-                            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-                        else
-                            recyclerView.removeItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-
-
+                        if (recyclerView!=null) {
+                            if(isReduced)
+                                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+                            else
+                                recyclerView.removeItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+                        }
 
 
                         if (adapter != null) {

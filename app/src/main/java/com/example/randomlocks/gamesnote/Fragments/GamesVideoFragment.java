@@ -127,14 +127,14 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
     }
 
-   public static class GameVideoPagerAdapter extends FragmentPagerAdapter {
+   private static class GameVideoPagerAdapter extends FragmentPagerAdapter {
 
         final int PAGE_COUNT = 3;
         String pageTitle[] = {"Videos", "Favorite", "Watch later"};
         ArrayList<Fragment> fragments;
        private Context context;
 
-        public GameVideoPagerAdapter(FragmentManager fm, Context context) {
+        GameVideoPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
             this.context = context;
             fragments = new ArrayList<>();

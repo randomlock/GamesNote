@@ -358,17 +358,17 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
                 if (gameNewsAdapter!=null) {
                     if (item.getTitle().equals(getString(R.string.compact_view))) {
-                        isReduced = true;
+                        isReduced = false;
                         item.setTitle(getString(R.string.reduce_view));
-                        item.setIcon(R.drawable.ic_gamelist_white);
+                        item.setIcon(R.drawable.ic_compat_white);
 
 
 
                     } else {
                         item.setTitle(getString(R.string.compact_view));
-                        item.setIcon(R.drawable.ic_compat_white);
+                        item.setIcon(R.drawable.ic_gamelist_white);
 
-                        isReduced = false;
+                        isReduced = true;
                     }
 
                     gameNewsAdapter.setSimple(isReduced);
