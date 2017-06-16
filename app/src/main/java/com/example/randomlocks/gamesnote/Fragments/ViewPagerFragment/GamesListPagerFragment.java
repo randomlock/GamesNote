@@ -329,7 +329,8 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         super.onPause();
         Context context = getContext();
         if (context != null) {
-            SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_LIST_VIEW, isSimple, context);
+            Toaster.make(getContext(),isSimple+"");
+            SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_LIST_VIEW,isSimple, context);
 
         }
     }

@@ -1,12 +1,14 @@
 package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,14 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Adapter.GameStatsAdapter;
+import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
-import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -30,7 +31,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
@@ -40,8 +40,6 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-
-import static com.example.randomlocks.gamesnote.R.string.List;
 
 /**
  * Created by randomlock on 6/5/2017.
@@ -59,6 +57,11 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
     LinearLayoutManager manager;
     HorizontalBarChart developer_chart,publisher_chart,franchise_chart,theme_chart,genre_chart,similar_game_chart;
     boolean is_developer_shown,is_publisher_shown,is_franchise_shown,is_theme_shown,is_genre_shown,is_similar_game_shown;
+    private SharedPreferences preference;
+
+    private static String STAT_NUMBER_KEY = "stat_data_preference";
+    private static final String ANIMATION_KEY = "stats_animation_preference";
+
 
     public GameDetailStatPagerFragment() {
     }
@@ -71,6 +74,7 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
         count = result.size();
         rainbow = getActivity().getResources().getIntArray(R.array.score_color);
         new_rainbow = Arrays.copyOfRange(rainbow,1,rainbow.length);
+        preference = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
 
@@ -113,11 +117,12 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
         List<BarEntry> entries = new ArrayList<>();
         int max = 0;
         int i = 0;
+        int max_count = Integer.parseInt(preference.getString(STAT_NUMBER_KEY,"10"));
         for(GameDetailDatabase database : databases){
             if(max<database.getCount())
                 max = database.getCount();
             entries.add(new BarEntry(i++,database.getCount()));
-            if(i>=10)
+            if(i>=max_count)
                 break;
         }
         setUpRecyclerView(recyclerview,databases);
@@ -200,11 +205,12 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
         chart.getLegend().setEnabled(false);
         chart.getDescription().setEnabled(false);
         chart.setDrawValueAboveBar(false);
-        chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-
-
-
-
+        boolean isAnimated = preference.getBoolean(ANIMATION_KEY,true);
+        if (isAnimated) {
+            chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        }else {
+            chart.invalidate();
+        }
 
 
     }

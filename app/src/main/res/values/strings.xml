@@ -209,6 +209,16 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="stat_list_preference">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+    </string-array>
+
 
     <string name="enable_background_audio">Play in background</string>
 

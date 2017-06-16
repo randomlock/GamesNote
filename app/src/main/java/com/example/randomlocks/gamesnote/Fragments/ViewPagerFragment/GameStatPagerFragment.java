@@ -1,11 +1,13 @@
 package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -76,8 +78,12 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     private int text_color;
 
     private String[] status;
-    boolean isAnimated = false;
-    boolean isMediumAnimated = false;
+    boolean is_animated = false;
+    boolean is_medium_animated = false;
+    boolean is_animation_allowed_setting;
+
+    private static final String ANIMATION_KEY = "stats_animation_preference";
+
 
 
     public GameStatPagerFragment(){
@@ -94,6 +100,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         new_rainbow = Arrays.copyOfRange(rainbow,1,rainbow.length);
         status = getActivity().getResources().getStringArray(R.array.status);
         text_color = ContextCompat.getColor(getContext(),R.color.black_white);
+        is_animation_allowed_setting = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(ANIMATION_KEY,true);
 
     }
 
@@ -185,7 +192,11 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
         Description des = score_bar_chart.getDescription();
         des.setText("");
-        score_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        if (is_animation_allowed_setting) {
+            score_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        }else {
+            score_bar_chart.invalidate();
+        }
 
     }
 
@@ -276,9 +287,7 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
         set1 = new BarDataSet(yVals1, "");
         set1.setColors(new_rainbow);
         set1.setValueTextColor(ContextCompat.getColor(getContext(),R.color.white));
-        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-        dataSets.add(set1);
-        BarData data = new BarData(dataSets);
+        BarData data = new BarData(set1);
         data.setValueTextSize(10f);
         data.setBarWidth(.9f);
         data.setValueFormatter(new IValueFormatter() {
@@ -288,19 +297,17 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
             }
         });
+
         medium_bar_chart.setData(data);
         medium_bar_chart.getLegend().setEnabled(false);
         medium_bar_chart.getDescription().setEnabled(false);
-        medium_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        medium_bar_chart.setDrawValueAboveBar(false);
 
-
-
-
-
-
-
-
-
+        if (is_animation_allowed_setting) {
+            medium_bar_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        }else {
+            medium_bar_chart.invalidate();
+        }
 
 
     }
@@ -338,7 +345,11 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
                 }
             });
             status_pie_chart.setCenterText("Status stats");
-            status_pie_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+            if (is_animation_allowed_setting) {
+                status_pie_chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+            }else {
+                status_pie_chart.invalidate();
+            }
 
         }
 
@@ -384,15 +395,15 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
 
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        if(!isAnimated && isViewVisible(score_bar_chart)){
-            isAnimated = true;
+        if(!is_animated && isViewVisible(score_bar_chart)){
+            is_animated = true;
             setUpScoreBarChart();
             setUpNewGameList();
 
         }
 
-        if(!isMediumAnimated && isViewVisible(medium_bar_chart)){
-            isMediumAnimated = true;
+        if(!is_medium_animated && isViewVisible(medium_bar_chart)){
+            is_medium_animated = true;
             setUpMediumBarChart();
             setUpRecentGameList();
         }

@@ -30,27 +30,50 @@
         <Preference
             android:key="backup_preference"
             android:persistent="false"
-            android:summary="Backup data locally to restore later."
+            android:summary="Save your game data locally to restore later."
             android:title="Backup data"
             />
 
         <Preference
             android:key="restore_preference"
             android:persistent="false"
-            android:summary="Restore data from last backup. WARNING: Current data will be overwritten."
+            android:summary="Restore your game data from last backup. WARNING: Current data will be overwritten."
             android:title="Restore data" />
 
         <Preference
             android:key="backup_online_preference"
             android:persistent="false"
-            android:summary="Backup data to google drive to restore later."
+            android:summary="Save your game data on google drive to restore later."
             android:title="Backup data (online)" />
 
         <Preference
             android:key="restore_online_preference"
             android:persistent="false"
-            android:summary="Restore data from last backup to google drive. WARNING: Current data will be overwritten."
+            android:summary="Restore game data from last backup on google drive. WARNING: Current data will be overwritten."
             android:title="Restore data (online)" />
+
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="Game stats">
+
+
+        <SwitchPreferenceCompat
+            android:key="stats_animation_preference"
+            android:title="Animation"
+            android:summary="Disable bar/chart animations for smooth loading"
+            android:defaultValue="true" />
+
+        <ListPreference
+            android:key="stat_data_preference"
+            android:title="Data size"
+            android:summary="Total no of bars(data) shown in a bar chart"
+            android:dialogTitle="Choose number"
+            android:entries="@array/stat_list_preference"
+            android:entryValues="@array/stat_list_preference"
+            app:defaultValue="10"
+            />
 
 
     </PreferenceCategory>
