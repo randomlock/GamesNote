@@ -48,7 +48,8 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/TitleText"
+            style="@style/sectionHeader"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -61,8 +62,7 @@
             android:layout_toRightOf="@+id/image_parent"
             android:layout_toStartOf="@+id/score_view"
             android:ellipsize="end"
-            android:maxLines="2"
-            android:text="Bioshock Infinite" />
+            android:maxLines="2" />
 
         <ImageButton
             android:id="@+id/popup"

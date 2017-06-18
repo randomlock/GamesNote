@@ -127,6 +127,10 @@
         <item name="colorControlActivated">@color/accent</item>
     </style>
 
+    <style name="SearchView">
+        <item name="floatingSearch_backgroundColor">@color/cardColor</item>
+    </style>
+
 
 
 

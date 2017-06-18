@@ -201,6 +201,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:orientation="horizontal"
         >
 
@@ -244,6 +245,7 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
         android:background="@color/primary_light" />
 
 
@@ -253,7 +255,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:orientation="horizontal"
 
         >
@@ -268,7 +270,8 @@
             android:gravity="center"
             android:linksClickable="true"
             android:textColor="@color/primary"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
 
 
@@ -282,7 +285,8 @@
             android:drawableTop="@drawable/ic_google"
             android:gravity="center"
             android:textColor="@color/primary"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
 
 
@@ -295,7 +299,8 @@
             android:drawableTop="@drawable/ic_wikipedia"
             android:gravity="center"
             android:textColor="@color/primary"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
 
 
@@ -308,7 +313,8 @@
             android:drawableTop="@drawable/ic_hltb"
             android:gravity="center"
             android:textColor="@color/primary"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
 
     </LinearLayout>
@@ -319,6 +325,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    style="?android:attr/buttonBarStyle"
     >
 
     <Button
@@ -326,9 +333,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="#F44336"
-        android:text="Close"
-        />
+        android:background="@drawable/cancel_touch_feedback"
+        android:text="Close" />
 
 
 
@@ -337,9 +343,8 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:background="#4CAF50"
-    android:text="Update"
-    />
+    android:background="@drawable/touch_feedback"
+    android:text="Update" />
 
 
 

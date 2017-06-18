@@ -13,11 +13,11 @@
         android:id="@+id/filter"
         android:title="Filter Result"
         android:icon="@drawable/ic_sort_white"
-        yourapp:showAsAction="ifRoom"/>
+        yourapp:showAsAction="ifRoom|collapseActionView"/>
 
     <item
         android:id="@+id/view"
         android:title="@string/reduce_list_view"
-        yourapp:showAsAction="ifRoom"/>
+        yourapp:showAsAction="ifRoom|collapseActionView"/>
 
 </menu>

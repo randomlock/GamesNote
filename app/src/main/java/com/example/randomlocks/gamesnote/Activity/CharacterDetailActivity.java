@@ -64,6 +64,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     ProgressBar progressBar;
     TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
     TextView image_heading;
+    View above_image_line;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
     CoordinatorLayout coordinatorLayout;
@@ -104,6 +105,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         mBigDescription = (TextView) parentLayout.findViewById(R.id.description);
         mFirstAppearance = (TextView) parentLayout.findViewById(R.id.first_appearance);
         mAlias = (TextView) parentLayout.findViewById(R.id.alias);
+        above_image_line = parentLayout.findViewById(R.id.above_image_line);
         image_heading = (TextView) parentLayout.findViewById(R.id.image_heading);
         recyclerview = (RecyclerView) parentLayout.findViewById(R.id.recycler_view);
         recyclerview.setNestedScrollingEnabled(false);
@@ -206,6 +208,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                     imageRecyclerView.setLayoutManager(new LinearLayoutManager(CharacterDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
                     imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,title));
                 }else {
+                    above_image_line.setVisibility(View.GONE);
                     image_heading.setVisibility(View.GONE);
                 }
             }

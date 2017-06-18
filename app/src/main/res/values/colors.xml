@@ -48,7 +48,10 @@
     <color name="fab_3">#448AFF</color>
     <color name="fab_4">#40C4FF</color>
     <color name="fab_5">#69F0AE</color>
-
+    <color name="update_color">#4CAF50</color>
+    <color name="touch_color">#404CAF50</color>
+    <color name="cancel_color">#F44336</color>
+    <color name="cancel_touch_color">#40F44336</color>
 
 
     <array name="score_color">

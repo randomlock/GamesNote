@@ -2,6 +2,9 @@ package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -12,8 +15,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,10 +47,13 @@ import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModalList;
+import com.example.randomlocks.gamesnote.Modal.SearchSuggestionModel;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.SearchHistoryDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.WatchedVideoDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +102,9 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     boolean isLoadingMore = false;
     HashMap<Integer, Integer> realmMap;
     Call<GamesVideoModalList> call;
+
+    RealmResults<SearchHistoryDatabase> search_results;
+    List<SearchSuggestionModel> search_list;
 
 
     VideoPlayInterface videoPlayInterface;
@@ -154,6 +166,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         mNavigation = (NavigationView) getActivity().findViewById(R.id.navigation);
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.root_coordinator);
         floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
+        floatingSearchView.setShowMoveUpSuggestion(true);
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
         pacman = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
@@ -177,8 +190,47 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
         floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
-            public void onSearchTextChanged(String oldQuery, String newQuery) {
-                //change suggestion hints here
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+                if (!oldQuery.equals("") && newQuery.equals("")) {
+                    floatingSearchView.clearSuggestions();
+                } else {
+
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            search_results = SearchHistoryDatabase.search(realm,newQuery,SearchHistoryDatabase.VIDEO_WIKI, true);
+                            search_list = new ArrayList<>();
+                            int i=0;
+                            for(SearchHistoryDatabase search_result : search_results){
+                                search_list.add(new SearchSuggestionModel(search_result.getTitle()));
+                                if(++i > 5)
+                                    break;
+                            }
+
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            floatingSearchView.swapSuggestions(search_list);
+                        }
+                    });
+
+                }
+            }
+        });
+
+        floatingSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
+
+                //show suggestions when search bar gains focus (typically history suggestions)
+                floatingSearchView.swapSuggestions(SearchHistoryDatabase.getHistory(realm,SearchHistoryDatabase.VIDEO_WIKI,3));
+
+            }
+
+            @Override
+            public void onFocusCleared() {
+                // floatingSearchView.setSearchBarTitle(mLastQuery);
             }
         });
 
@@ -191,13 +243,29 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-
+                floatingSearchView.setSearchBarTitle(searchSuggestion.getBody());
+                performSearch(searchSuggestion.getBody(),false);
 
             }
 
             @Override
-            public void onSearchAction(String currentQuery) {
+            public void onSearchAction(final String currentQuery) {
                 if (currentQuery.trim().length() > 0) {
+
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            SearchHistoryDatabase is_added_database = realm.where(SearchHistoryDatabase.class).equalTo(SearchHistoryDatabase.SEARCH_TYPE,SearchHistoryDatabase.VIDEO_WIKI)
+                                    .equalTo(SearchHistoryDatabase.TITLE,currentQuery).findFirst();
+                            if(is_added_database==null){
+                                SearchHistoryDatabase database = new SearchHistoryDatabase(SearchHistoryDatabase.VIDEO_WIKI,currentQuery);
+                                realm.copyToRealm(database);
+                            }else {
+                                is_added_database.setDate_added(new Date());
+                            }
+
+                        }
+                    });
                     performSearch(currentQuery,false);
                 }else {
                     Toasty.warning(getContext(),"no search text entered", Toast.LENGTH_SHORT,true).show();
@@ -213,6 +281,11 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
 
                     case R.id.view:
+
+                        if(adapter==null || adapter.getItemCount()==0){
+                            Toasty.info(getContext(),"waiting to load video").show();
+                            break;
+                        }
 
 
                         if (item.getTitle().equals(getString(R.string.compact_view))) {
@@ -417,6 +490,13 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 }else {
 
                     if (response.body().results.isEmpty()) {
+                        if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES) {
+                            Drawable drawable = ContextCompat.getDrawable(getContext(),R.drawable.ic_error);
+                            drawable = DrawableCompat.wrap(drawable);
+                            DrawableCompat.setTint(drawable, Color.WHITE);
+                            DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_ATOP);
+                            errorText.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+                        }
                         errorText.setVisibility(View.VISIBLE);
 
 

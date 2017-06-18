@@ -4,24 +4,33 @@
     android:layout_height="wrap_content"
     android:padding="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/edit_text_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        >
     <EditText
         android:id="@+id/edit_text"
-        android:gravity="center"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Enter the Image Url"
+        android:hint="@string/image_url"
+        android:inputType="textUri"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
+    </android.support.design.widget.TextInputLayout>
     <Button
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="?android:selectableItemBackground"
-        android:text="Cancel"
-        android:layout_below="@id/edit_text"
+        android:text="@string/cancel"
+        android:layout_below="@id/edit_text_heading"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         />
@@ -29,7 +38,7 @@
         android:id="@+id/remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remove"
+        android:text="@string/remove"
         android:background="?android:selectableItemBackground"
         android:layout_alignTop="@id/cancel"
         android:layout_centerHorizontal="true" />
@@ -37,7 +46,7 @@
         android:id="@id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update"
+        android:text="@string/update"
         android:background="?android:selectableItemBackground"
         android:textColor="@color/primary"
         android:layout_alignBaseline="@+id/remove"

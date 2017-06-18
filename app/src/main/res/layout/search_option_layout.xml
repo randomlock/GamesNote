@@ -16,7 +16,7 @@
         android:drawablePadding="20dp"
         android:drawableStart="@android:color/transparent"
         android:text="Descending"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/black_white"
         />
 
 

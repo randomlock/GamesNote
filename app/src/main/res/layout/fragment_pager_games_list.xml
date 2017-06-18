@@ -23,7 +23,7 @@
         android:layout_gravity="center|top"
         android:layout_marginTop="12dp"
         android:drawableTop="@drawable/ic_error"
-        android:text="No Games Added"
+        android:text="@string/no_games_added"
         android:drawablePadding="8dp"
         android:textAllCaps="true"
         android:textStyle="bold"

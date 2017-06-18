@@ -11,8 +11,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
@@ -33,6 +36,7 @@ import android.widget.Toast;
 import com.example.randomlocks.gamesnote.Adapter.GameListAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.GameListDialog;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
+import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
@@ -50,10 +54,12 @@ import io.realm.Sort;
 /**
  * Created by randomlocks on 3/17/2016.
  */
-public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface {
+public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface, SearchManager.OnDismissListener, SearchManager.OnCancelListener {
 
+    private static final String IS_SIMPLE = "is_view_simple" ;
+    private GamesListFragment parentFragment;
     private static final String STATUS = "total page";
-    LinearLayoutManager manager;
+    private LinearLayoutManager manager;
     private FastScrollRecyclerView recyclerView;
     private GameListAdapter adapter = null;
     private int status;
@@ -66,13 +72,15 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     private boolean isAscending ;
     private boolean isSimple;
     private DividerItemDecoration itemDecoration;
+    private ViewPager pager;
 
     public GamesListPagerFragment() {
     }
 
-    public static GamesListPagerFragment newInstance(int page) {
+    public static GamesListPagerFragment newInstance(int page,boolean isSimple) {
         Bundle args = new Bundle();
         args.putInt(STATUS, page);
+        args.putBoolean(IS_SIMPLE,isSimple);
         GamesListPagerFragment fragment = new GamesListPagerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -91,7 +99,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         int index = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_WHICH,1,getContext());
         sort_option = getField(index);
         isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_ASCENDING,true,getContext());
-        isSimple = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_LIST_VIEW, false, getContext());
+        isSimple = getArguments().getBoolean(IS_SIMPLE);
 
 
         if (isAscending) {
@@ -122,10 +130,9 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pager_games_list, container, false);
+        parentFragment = (GamesListFragment) getParentFragment();
+        pager = (ViewPager) getActivity().findViewById(R.id.my_pager);
         recyclerView = (FastScrollRecyclerView) view.findViewById(R.id.recycler_view);
-
-
-
 
         textView = (TextView) view.findViewById(R.id.errortext);
         manager = new LinearLayoutManager(getContext());
@@ -137,6 +144,13 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
 
         if (realmResult.isEmpty()) {
+            if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES) {
+                Drawable drawable = ContextCompat.getDrawable(getContext(),R.drawable.ic_error);
+                drawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(drawable, Color.WHITE);
+                DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_ATOP);
+                textView.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            }
             textView.setVisibility(View.VISIBLE);
         } else {
             adapter = new GameListAdapter(getContext(), realm, realmResult, true, status, isSimple, new GameListAdapter.OnClickInterface() {
@@ -295,8 +309,6 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                 }
 
 
-                adapter.setSimple(isSimple);
-
                 if (recyclerView != null) {
                     if (isSimple) {
                         recyclerView.addItemDecoration(itemDecoration);
@@ -304,6 +316,10 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                         recyclerView.removeItemDecoration(itemDecoration);
                     }
                 }
+
+                SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_LIST_VIEW,isSimple,getContext());
+                adapter.setSimple(isSimple);
+
 
             }
 
@@ -319,6 +335,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(((AppCompatActivity) context).getComponentName()));
         searchView.setIconifiedByDefault(isDefaultIconified); // Do not iconify the widget; expand it by default
+        searchManager.setOnCancelListener(this);
         searchView.setOnQueryTextListener(this);
 
 
@@ -327,12 +344,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     @Override
     public void onPause() {
         super.onPause();
-        Context context = getContext();
-        if (context != null) {
-            Toaster.make(getContext(),isSimple+"");
-            SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_LIST_VIEW,isSimple, context);
 
-        }
     }
 
 
@@ -354,7 +366,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     @Override
     public boolean onQueryTextChange(String query) {
         query = query.toLowerCase();
-        if (query.trim().length() > 0) {
+        if (query.trim().length() >0) {
             if (adapter != null) {
                 adapter.getFilter().filter(query);
                 return true;
@@ -419,8 +431,14 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     }
 
 
+    @Override
+    public void onDismiss() {
+        Toaster.make(getContext(),"hello?");
+        adapter.getFilter().filter("");
+    }
 
+    @Override
+    public void onCancel() {
 
-
-
+    }
 }

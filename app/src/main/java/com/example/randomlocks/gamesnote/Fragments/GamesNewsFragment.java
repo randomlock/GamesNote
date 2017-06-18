@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -9,15 +10,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,16 +32,21 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.Adapter.GameNewsAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
+import com.example.randomlocks.gamesnote.RealmDatabase.NewsSourceDatabase;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,9 +59,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import io.realm.Realm;
+import io.realm.RealmResults;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -84,6 +96,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     SwipeRefreshLayout refreshLayout;
 
     OkHttpClient okHttpClient;
+    Realm realm;
 
 
     public GamesNewsFragment() {
@@ -94,6 +107,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        realm = Realm.getDefaultInstance();
         itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_NEWS_VIEW, true, getContext());
 
@@ -111,6 +125,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         super.onActivityCreated(savedInstanceState);
         mDrawer = (DrawerLayout) getView().findViewById(R.id.drawer);
         mNavigation = (NavigationView) mDrawer.findViewById(R.id.navigation);
+        mNavigation.setItemIconTintList(null);
+        setUpCustomNews();
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.coordinator);
         refreshLayout = (SwipeRefreshLayout) coordinatorLayout.findViewById(R.id.swipeContainer);
         recyclerView = (RecyclerView) refreshLayout.findViewById(R.id.news_recycler_view);
@@ -132,6 +148,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
         mSelectedId = SharedPreference.getFromSharedPreferences(KEY, R.id.nav_kotaku, getContext());
         mTitle = SharedPreference.getFromSharedPreferences(TITLE, getResources().getString(R.string.kotaku), getContext());
+        Toaster.make(getContext(),mSelectedId+"");
         mNavigation.setCheckedItem(mSelectedId);
         selectDrawer(mSelectedId, mTitle);
         refreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.accent, R.color.primary_character);
@@ -173,6 +190,50 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
     }
 
+    private void setUpCustomNews() {
+       MenuItem menuItem =  mNavigation.getMenu().findItem(R.id.nav_new_source);
+       SubMenu menu =  menuItem.getSubMenu();
+        menu.clear();
+        RealmResults<NewsSourceDatabase> results = realm.where(NewsSourceDatabase.class).findAll();
+        int i=0;
+        if(!results.isEmpty()){
+            for(final NewsSourceDatabase result:results){
+
+                final MenuItem item = menu.add(0,(int)result.getId(),++i,result.getTitle()).setActionView(R.layout.news_source_delete);
+                item.getActionView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                NewsSourceDatabase result = realm.where(NewsSourceDatabase.class).equalTo(NewsSourceDatabase.ID,item.getItemId()).findFirst();
+                                if(mTitle.equals(result.getTitle())){ //if the current source is being deleted , change the source to default and update menu and delete the preference
+                                    Toaster.make(getContext(),"title matches");
+                                    SharedPreference.removeFromSharedPreference(KEY,getContext());
+                                    SharedPreference.removeFromSharedPreference(TITLE,getContext());
+                                    result.deleteFromRealm();
+                                    setUpCustomNews();
+                                    mTitle = getResources().getString(R.string.kotaku);
+                                    mSelectedId = R.id.nav_kotaku;
+                                    mNavigation.setCheckedItem(mSelectedId);
+                                    selectDrawer(mSelectedId,mTitle);
+                                }else { //just update the view
+                                    result.deleteFromRealm();
+                                    setUpCustomNews();
+                                }
+
+
+                            }
+                        });
+
+                    }
+                });
+            }
+        }
+        menu.setGroupCheckable(0,true,true);
+
+    }
+
 
     public void runOkHttp() throws IOException {
 
@@ -181,119 +242,127 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         }
 
         okHttpClient = GiantBomb.getHttpClient();
-        okHttpClient.newCall(GiantBomb.getRequest(URL, TAG)).enqueue(new Callback() {
+        Request request = GiantBomb.getRequest(URL,TAG);
+        if(request==null){
+            Toaster.makeSnackBar(coordinatorLayout,"Wrong url");
+            progressBar.setVisibility(View.GONE);
+        }
+        else {
+            okHttpClient.newCall(GiantBomb.getRequest(URL, TAG)).enqueue(new Callback() {
 
-            Handler mainHandler = new Handler(Looper.getMainLooper());
+                Handler mainHandler = new Handler(Looper.getMainLooper());
 
-            @Override
-            public void onFailure(Call call, IOException e) {
-                mainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (refreshLayout.isRefreshing()) {
-                            refreshLayout.setRefreshing(false);
-                        }
-                        progressBar.setVisibility(View.GONE);
-                        Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("RETRY", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        try {
-                                            progressBar.setVisibility(View.VISIBLE);
-                                            runOkHttp();
-                                        } catch (IOException e1) {
-                                            e1.printStackTrace();
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (refreshLayout.isRefreshing()) {
+                                refreshLayout.setRefreshing(false);
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            Snackbar.make(coordinatorLayout, "Connectivity Problem", Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("RETRY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            try {
+                                                progressBar.setVisibility(View.VISIBLE);
+                                                runOkHttp();
+                                            } catch (IOException e1) {
+                                                e1.printStackTrace();
+                                            }
+
                                         }
-
-                                    }
-                                }).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                if (response != null) {
-                    String str = response.body().string();
-                    NewsModal mod = new NewsModal();
-                    try {
-                        modals = mod.parse(str);
-                        for (int i = 0, size = modals.size(); i < size; i++) {
-                            Document document = Jsoup.parse(modals.get(i).description);
-                            modals.get(i).smallDescription = document.text();
-                            if (modals.get(i).content == null) {
-                                Element element = null;
-                                Elements elements = document.getElementsByTag("img");
-                                String jsoupImageUrl = null;
-                                if (elements != null && elements.size() > 0) {
-                                    element = elements.get(0);
-                                    if (element.hasAttr("src")) {
-                                        jsoupImageUrl = element.attr("src");
-                                        element.remove();
-                                        modals.get(i).description = document.toString();
-                                    }
-                                }
-
-
-                                if (jsoupImageUrl != null) {
-                                    //for eurogamer relative img
-                                    if (jsoupImageUrl.substring(0, 2).equals("//")) {
-                                        jsoupImageUrl = "http:" + jsoupImageUrl;
-                                    }
-
-                                    modals.get(i).content = jsoupImageUrl;
-
-                                }
-                            }
-
-                            Elements iframeElements = document.getElementsByTag("iframe");
-
-                            if (iframeElements != null && iframeElements.size() > 0) {
-                                for (Element iframeElement : iframeElements) {
-
-                                    if (iframeElement.hasAttr("src")) {
-                                        String iframeSrc = iframeElement.attr("src");
-                                        if (!iframeSrc.contains("http")) {
-                                            iframeSrc = BASE_URL + iframeSrc;
-                                            iframeElement.attr("src", iframeSrc);
-                                            modals.get(i).description = document.toString();
-                                            modals.get(i).description = document.toString();
-                                        }
-
-                                    }
-                                }
-                            }
-
-
+                                    }).show();
                         }
-
-                        mainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (refreshLayout.isRefreshing()) {
-                                    refreshLayout.setRefreshing(false);
-                                }
-                                loadRecycler(modals, null);
-                            }
-                        });
-
-
-                    } catch (XmlPullParserException e) {
-                        Log.d("tag", e.toString());
-                        mainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setVisibility(View.GONE);
-                                Toasty.error(getContext(), "Unable to get the news feed", Toast.LENGTH_SHORT, true).show();
-
-                            }
-                        });
-
-                    }
+                    });
                 }
-            } //function end
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+
+                    if (response != null) {
+                        String str = response.body().string();
+                        NewsModal mod = new NewsModal();
+                        try {
+                            modals = mod.parse(str);
+                            for (int i = 0, size = modals.size(); i < size; i++) {
+                                Document document = Jsoup.parse(modals.get(i).description);
+                                modals.get(i).smallDescription = document.text();
+                                if (modals.get(i).content == null) {
+                                    Element element = null;
+                                    Elements elements = document.getElementsByTag("img");
+                                    String jsoupImageUrl = null;
+                                    if (elements != null && elements.size() > 0) {
+                                        element = elements.get(0);
+                                        if (element.hasAttr("src")) {
+                                            jsoupImageUrl = element.attr("src");
+                                            element.remove();
+                                            modals.get(i).description = document.toString();
+                                        }
+                                    }
+
+
+                                    if (jsoupImageUrl != null) {
+                                        //for eurogamer relative img
+                                        if (jsoupImageUrl.substring(0, 2).equals("//")) {
+                                            jsoupImageUrl = "http:" + jsoupImageUrl;
+                                        }
+
+                                        modals.get(i).content = jsoupImageUrl;
+
+                                    }
+                                }
+
+                                Elements iframeElements = document.getElementsByTag("iframe");
+
+                                if (iframeElements != null && iframeElements.size() > 0) {
+                                    for (Element iframeElement : iframeElements) {
+
+                                        if (iframeElement.hasAttr("src")) {
+                                            String iframeSrc = iframeElement.attr("src");
+                                            if (!iframeSrc.contains("http")) {
+                                                iframeSrc = BASE_URL + iframeSrc;
+                                                iframeElement.attr("src", iframeSrc);
+                                                modals.get(i).description = document.toString();
+                                                modals.get(i).description = document.toString();
+                                            }
+
+                                        }
+                                    }
+                                }
+
+
+                            }
+
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (refreshLayout.isRefreshing()) {
+                                        refreshLayout.setRefreshing(false);
+                                    }
+                                    loadRecycler(modals, null);
+                                }
+                            });
+
+
+                        } catch (XmlPullParserException e) {
+                            Log.d("tag", e.toString());
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setVisibility(View.GONE);
+                                    Toasty.error(getContext(), "Unable to get the news feed", Toast.LENGTH_SHORT, true).show();
+
+                                }
+                            });
+
+                        }
+                    }
+                } //function end
+            });
+        }
+
 
 
     }
@@ -345,7 +414,6 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
 
             case android.R.id.home:
@@ -354,6 +422,11 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
 
             case R.id.view:
+
+                if(gameNewsAdapter==null || gameNewsAdapter.getItemCount()==0){
+                    Toasty.info(getContext(),"waiting to load news").show();
+                    return true;
+                }
 
 
                 if (gameNewsAdapter!=null) {
@@ -398,21 +471,72 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        item.setChecked(true);
-        mSelectedId = item.getItemId();
-        mTitle = item.getTitle().toString();
-        selectDrawer(mSelectedId, mTitle);
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        changeNewsSource();
+        if(item.getItemId()==R.id.nav_add_source){
+            setUpDialog();
+        }else {
+            item.setChecked(true);
+            mSelectedId = item.getItemId();
+            mTitle = item.getTitle().toString();
+            selectDrawer(mSelectedId, mTitle);
+            changeNewsSource();
+        }
 
         return true;
     }
 
+    private void setUpDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setTitle("Add source");
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView= inflater.inflate(R.layout.dialog_news_source, null);
+        dialogBuilder.setView(dialogView);
+        final EditText title,url;
+        title = (EditText) dialogView.findViewById(R.id.title);
+        url = (EditText) dialogView.findViewById(R.id.url);
+        dialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if(title.getText().toString().trim().length()==0){
+                    Toaster.make(getContext(),"empty title");
+                }else if(!URLUtil.isValidUrl(url.getText().toString())){
+                    Toaster.make(getContext(),"invalid url");
+                }else {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            Number number = realm.where(NewsSourceDatabase.class).max(NewsSourceDatabase.ID);
+                            int id = number==null ? 0: number.intValue()+1;
+                            NewsSourceDatabase database = new NewsSourceDatabase(id,title.getText().toString(),url.getText().toString());
+                            realm.copyToRealm(database);
+                            Toaster.make(getContext(),"source added");
+                            setUpCustomNews();
+                        }
+                    });
+
+                }
+
+
+            }
+        });
+        final AlertDialog dialog = dialogBuilder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+
+            }
+        });
+        dialog.show();
+    }
+
     private void selectDrawer(int mselectedId, String toolbarTitle) {
 
-        switch (mselectedId) {
 
+
+        switch (mselectedId) {
 
             case R.id.nav_gamespot:
                 URL = "http://www.gamespot.com/feeds/news/";
@@ -512,7 +636,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
 
             case R.id.nav_kotaku:
-                URL = "http://feeds.gawker.com/kotaku/vip";
+                URL = "http://feeds.kinja.com/kotaku/vip";
                 BASE_URL = "http://kotaku.com";
 
                 break;
@@ -536,6 +660,13 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 URL = "http://www.giantbomb.com/feeds/new_releases/";
                 BASE_URL = "http://www.giantbomb.com/";
                 break;
+
+            default:
+                Toaster.make(getContext(),mselectedId+"");
+                NewsSourceDatabase database = realm.where(NewsSourceDatabase.class).equalTo(NewsSourceDatabase.ID,mselectedId).findFirst();
+                if(database!=null)
+                    URL = database.getUrl();
+                BASE_URL = "";
 
 
         }

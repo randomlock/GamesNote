@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="News">
+    <item
+        android:id="@+id/nav_new_source"
+        android:title="@string/custom_source"
+        app:showAsAction="always"
+        >
+        <menu>
+            <group android:checkableBehavior="single">
+
+            </group>
+        </menu>
+
+    </item>
+
+    <item android:title="@string/news">
         <menu>
             <group android:checkableBehavior="single"
 
@@ -9,14 +23,14 @@
 
                 <item
                     android:id="@+id/nav_dsogaming"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/dsogaming_icon"
                     android:title="@string/dsogaming">
 
                 </item>
 
                 <item
                     android:id="@+id/nav_eurogamer"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/eurogamer_icon"
                     android:title="@string/eurogamer">
 
                 </item>
@@ -24,14 +38,14 @@
 
                 <item
                     android:id="@+id/nav_gameinformer"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/gameinformer_icon"
                     android:title="@string/gameinformer">
 
                 </item>
 
                 <item
                     android:id="@+id/nav_gamespot"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/gamespot_icon"
                     android:title="@string/gamespot">
 
 
@@ -39,7 +53,7 @@
 
                 <item
                     android:id="@+id/nav_giantbomb"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/giantbomb_icon"
                     android:title="@string/giantbomb"
                     >
 
@@ -47,7 +61,7 @@
 
                 <item
                     android:id="@+id/nav_giantbomb_release"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/giantbomb_icon"
                     android:title="@string/giantbomb_release"
                     >
 
@@ -59,7 +73,6 @@
 
                 <item
                     android:id="@+id/nav_g4tv"
-                    android:icon="@mipmap/ic_launcher"
                     android:title="@string/g4tv">
 
                 </item>
@@ -68,7 +81,7 @@
                 <item
                     android:id="@+id/ign"
                     android:title="@string/ign"
-                    android:icon="@mipmap/ic_launcher">
+                    android:icon="@drawable/ign_icon">
 
                 </item>
 
@@ -76,11 +89,11 @@
                 <item
                     android:id="@+id/nav_kotaku"
                     android:title="@string/kotaku"
-                    android:icon="@mipmap/ic_launcher" />
+                    android:icon="@drawable/kotaku_icon" />
 
                 <item
                     android:id="@+id/nac_pc_gamer"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/pcgamer_icon"
                     android:title="@string/pcgamer">
 
                 </item>
@@ -88,19 +101,18 @@
 
                 <item
                     android:id="@+id/nav_pcworld"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/pcworld_icon"
                     android:title="@string/pcworld">
 
                 </item>
 
                 <item
                     android:id="@+id/nav_playstation4"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/playstaion4_icon"
                     android:title="@string/playstaion" />
 
                 <item
                     android:id="@+id/nav_purexbox"
-                    android:icon="@mipmap/ic_launcher"
                     android:title="@string/purexbox">
 
                 </item>
@@ -108,21 +120,21 @@
 
                 <item
                     android:id="@+id/toms_harware"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/toms_hardware_icon"
                     android:title="@string/tomshardware">
 
                 </item>
 
                 <item
                     android:id="@+id/nav_venturebeat"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/venturebeat_icon"
                     android:title="@string/venturebeat">
 
                 </item>
 
                 <item
                     android:id="@+id/nav_videogamer"
-                    android:icon="@mipmap/ic_launcher"
+                    android:icon="@drawable/videogamer_icon"
                     android:title="@string/videogamer">
 
                 </item>
@@ -135,7 +147,7 @@
 
     </item>
 
-    <item android:title="Reviews">
+    <item android:title="@string/reviews">
 
         <menu>
 
@@ -144,33 +156,33 @@
                 <item
                     android:id="@+id/nav_news_gameinformer"
                     android:title="@string/gameinformer"
-                    android:icon="@mipmap/ic_launcher" />
+                    android:icon="@drawable/gameinformer_icon" />
 
                 <item
                     android:id="@+id/nav_news_gamespot"
                     android:title="@string/gamespot"
-                    android:icon="@mipmap/ic_launcher" />
+                    android:icon="@drawable/gamespot_icon" />
 
                 <item
                     android:id="@+id/nav_news_giantbomb"
                     android:title="@string/giantbomb"
-                    android:icon="@mipmap/ic_launcher" />
+                    android:icon="@drawable/giantbomb_icon" />
 
                 <item
                     android:id="@+id/nav_news_ign"
                     android:title="@string/ign"
-                    android:icon="@mipmap/ic_launcher" />
+                    android:icon="@drawable/ign_icon" />
 
 
                 <item
                     android:id="@+id/nav_news_metaleater"
                     android:title="@string/metaleater"
-                    android:icon="@mipmap/ic_launcher" />
+                    android:icon="@drawable/metal_eater_icon" />
 
                 <item
                     android:id="@+id/nav_news_pcworld"
                     android:title="@string/pcworld"
-                    android:icon="@mipmap/ic_launcher" />
+                    android:icon="@drawable/pcworld_icon" />
 
 
             </group>
@@ -181,5 +193,11 @@
 
     </item>
 
+    <item android:id="@+id/nav_add_source"
+        android:icon="@drawable/ic_action_add"
+        android:title="@string/add_new_source" />
 
-</menu>
+
+
+
+    </menu>

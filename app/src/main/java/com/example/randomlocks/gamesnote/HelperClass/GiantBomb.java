@@ -1,6 +1,7 @@
 package com.example.randomlocks.gamesnote.HelperClass;
 
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import com.example.randomlocks.gamesnote.ExampleApplication;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterInterface;
@@ -18,6 +19,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -98,6 +100,10 @@ public class GiantBomb {
     }
 
     public static Request getRequest(String url, String tag) {
+
+        if(!URLUtil.isValidUrl(url))
+            return null;
+
         if (request == null) {
             request = new Request.Builder()
                     .url(url)
@@ -106,7 +112,6 @@ public class GiantBomb {
 
         } else if (!request.url().toString().equals(url)) {
             request = request.newBuilder().url(url).tag(tag).build();
-
         }
 
         return request;

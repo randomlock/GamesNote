@@ -56,11 +56,17 @@
                 android:id="@+id/errortext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No Result Found"
-                android:drawableTop="@drawable/ic_error_outline_white_48dp"
-                android:layout_gravity="center"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="12dp"
+                android:drawableTop="@drawable/ic_error"
+                android:text="@string/no_result_found"
+                android:drawablePadding="8dp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
+
 
 
         </FrameLayout>

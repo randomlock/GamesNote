@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-
+                app:contentInsetStartWithNavigation="0dp"
                 />
 
 
@@ -249,11 +249,11 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/SubTitleText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="GENDER"
+                        android:textAllCaps="true"
                         android:textColor="@color/primary_text_light" />
 
                     <TextView
@@ -305,9 +305,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="BIRTHDAY "
-                        android:textColor="@color/primary_text_light"
-                        style="@style/SubTitleText"
-                        />
+                        android:textAllCaps="true"
+                        android:textColor="@color/primary_text_light"/>
 
                     <TextView
                         android:id="@+id/birthday"
@@ -336,7 +335,8 @@
                         android:layout_weight="1"
                         android:text="FIRST APPEARANCE"
                         android:textColor="@color/primary_text_light"
-                        style="@style/SubTitleText" />
+                        android:textAllCaps="true"
+                        />
 
 
                     <TextView
@@ -362,7 +362,7 @@
                         android:layout_weight="1"
                         android:text="ALIAS"
                         android:textColor="@color/primary_text_light"
-                        style="@style/SubTitleText" />
+                        android:textAllCaps="true" />
 
 
                     <TextView
@@ -375,6 +375,7 @@
 
 
                 <View
+                    android:id="@+id/above_image_line"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="12dp"

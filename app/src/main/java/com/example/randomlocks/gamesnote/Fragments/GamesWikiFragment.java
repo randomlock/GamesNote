@@ -3,15 +3,21 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -20,11 +26,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
@@ -42,13 +50,16 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiListModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
+import com.example.randomlocks.gamesnote.Modal.SearchSuggestionModel;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
+import com.example.randomlocks.gamesnote.RealmDatabase.SearchHistoryDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +110,11 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     Realm realm;
     RealmAsyncTask realmAsyncTask;
     private int game_id;
+
+    RealmResults<SearchHistoryDatabase> search_results;
+    List<SearchSuggestionModel> search_list;
+    private String mLastQuery = "";
+
 
 
     public GamesWikiFragment() {
@@ -164,6 +180,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         DrawerLayout drawer = (DrawerLayout) actionBar.findViewById(R.id.drawer_layout);
         floatingSearchView.attachNavigationDrawerToMenuButton(drawer);
+        floatingSearchView.setShowMoveUpSuggestion(true);
         manager = new ConsistentGridLayoutManager(getContext(),spanCount);
 
         recyclerView.setLayoutManager(manager);
@@ -176,15 +193,65 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
         /**************************** HANDLING SEARCH ********************************/
 
+        if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES) {
+            floatingSearchView.setViewTextColor(Color.parseColor("#e9e9e9"));
+        }
 
         floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
-            public void onSearchTextChanged(String oldQuery, String newQuery) {
-                //change suggestion hints here
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+
+
+
+                if (!oldQuery.equals("") && newQuery.equals("")) {
+                    floatingSearchView.clearSuggestions();
+                } else {
+
+                    //this shows the top left circular progress
+                    //you can call it where ever you want, but
+                    //it makes sense to do it when loading something in
+                    //the background.
+
+                    //simulates a query call to a data source
+                    //with a new query.
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            search_results = SearchHistoryDatabase.search(realm,newQuery,SearchHistoryDatabase.GAME_WIKI, true);
+                            search_list = new ArrayList<>();
+                            int i=0;
+                            for(SearchHistoryDatabase search_result : search_results){
+                                search_list.add(new SearchSuggestionModel(search_result.getTitle()));
+                                if(++i > 5)
+                                    break;
+                            }
+
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            floatingSearchView.swapSuggestions(search_list);
+                        }
+                    });
+
+                }
             }
         });
 
+        floatingSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
 
+                //show suggestions when search bar gains focus (typically history suggestions)
+                floatingSearchView.swapSuggestions(SearchHistoryDatabase.getHistory(realm,SearchHistoryDatabase.GAME_WIKI,3));
+
+            }
+
+            @Override
+            public void onFocusCleared() {
+               // floatingSearchView.setSearchBarTitle(mLastQuery);
+            }
+        });
 
 
 
@@ -192,13 +259,32 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+                floatingSearchView.setSearchBarTitle(searchSuggestion.getBody());
+                performSearch(searchSuggestion.getBody(),false);
+
 
             }
 
             @Override
-            public void onSearchAction(String currentQuery) {
+            public void onSearchAction(final String currentQuery) {
 
                 if (currentQuery.trim().length() > 0) {
+                    mLastQuery = currentQuery;
+
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            SearchHistoryDatabase is_added_database = realm.where(SearchHistoryDatabase.class).equalTo(SearchHistoryDatabase.SEARCH_TYPE,SearchHistoryDatabase.GAME_WIKI)
+                                    .equalTo(SearchHistoryDatabase.TITLE,currentQuery).findFirst();
+                            if(is_added_database==null){
+                                SearchHistoryDatabase database = new SearchHistoryDatabase(SearchHistoryDatabase.GAME_WIKI,currentQuery);
+                                realm.copyToRealm(database);
+                            }else {
+                                is_added_database.setDate_added(new Date());
+                            }
+
+                        }
+                    });
                     performSearch(currentQuery,false);
                 }else {
                     Toasty.warning(getContext(),"no search text entered", Toast.LENGTH_SHORT,true).show();
@@ -224,7 +310,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                         final CharSequence[] items = {"Card+Platforms", "Card+Desc", "Image+Title"};
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle("Make your selection");
-                        builder.setSingleChoiceItems(items, viewType, new DialogInterface.OnClickListener() {
+                        builder.setSingleChoiceItems(items,viewType, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if(adapter!=null && adapter.getItemCount()>0){
@@ -557,7 +643,13 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                 }else {
 
                     if (response.body().results.isEmpty()) {
-                        Toaster.make(getContext(),"empty response");
+                        if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES) {
+                            Drawable drawable = ContextCompat.getDrawable(getContext(),R.drawable.ic_error);
+                            drawable = DrawableCompat.wrap(drawable);
+                            DrawableCompat.setTint(drawable, Color.WHITE);
+                            DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_ATOP);
+                            errorText.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+                        }
                         errorText.setVisibility(View.VISIBLE);
 
 

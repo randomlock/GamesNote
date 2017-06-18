@@ -15,6 +15,15 @@
 
     </style>
 
+    <style name="SearchView">
+        <item name="floatingSearch_backgroundColor">@color/cardColor</item>
+        <item name="floatingSearch_clearBtnColor">@color/floating_search_night_color</item>
+        <item name="floatingSearch_leftActionColor">@color/floating_search_night_color</item>
+        <item name="floatingSearch_menuItemIconColor">@color/floating_search_night_color</item>
+        <item name="floatingSearch_suggestionRightIconColor">@color/floating_search_night_color</item>
+        <item name="floatingSearch_actionMenuOverflowColor">@color/floating_search_night_color</item>
+    </style>
+
 
     <style name="popMenu" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:colorBackground">@color/black</item>
@@ -46,6 +55,5 @@
     </style>
 
 
-
-
+    <color name="floating_search_night_color">#e9e9e9</color>
 </resources>

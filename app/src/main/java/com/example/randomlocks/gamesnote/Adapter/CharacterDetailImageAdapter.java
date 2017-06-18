@@ -46,7 +46,7 @@ public class CharacterDetailImageAdapter extends RecyclerView.Adapter<CharacterD
 
         String imageUrl = imageUrls.get(position).mediumUrl;
         if (imageUrl != null && imageUrl.trim().length() > 0) {
-            Picasso.with(context).load(imageUrl).fit().placeholder(R.drawable.news_image_drawable).into(holder.imageView);
+            Picasso.with(context).load(imageUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(holder.imageView);
         }
     }
 

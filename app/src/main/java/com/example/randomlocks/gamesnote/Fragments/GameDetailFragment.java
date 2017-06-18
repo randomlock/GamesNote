@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.AppBarLayout;
@@ -26,11 +25,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -47,7 +47,6 @@ import com.example.randomlocks.gamesnote.Adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.AsyncTask.JsoupGames;
 import com.example.randomlocks.gamesnote.DialogFragment.AddToBottomFragment;
-import com.example.randomlocks.gamesnote.DialogFragment.FontOptionFragmentDELETE;
 import com.example.randomlocks.gamesnote.DialogFragment.ReviewListDialogFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
@@ -56,7 +55,6 @@ import com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomVideoView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.MyAnimation;
-import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
@@ -147,7 +145,8 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     ImageView appbarImage;
     TextView  review, userReview;
     TextView status , score , platform , hours;
-    TextView characters_heading,image_heading,related_video_heading,similar_game_heading;
+    TextView stats_heading,overview_heading,description_heading,characters_heading,image_heading,related_video_heading,similar_game_heading;
+    TextView description_open_in_internet;
     RelativeLayout relativeLayout;
     FloatingActionMenu floatingActionsMenu;
     FloatingActionButton replaying, planning, dropped, playing, completed;
@@ -170,6 +169,8 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     private int stopPosition;
     private DisplayMetrics metrics;
     private String video_url;
+    private int drawable_color;
+
     private RealmChangeListener statsCallback = new RealmChangeListener() {
         @Override
         public void onChange(Object element) {
@@ -427,6 +428,15 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
                 return;
 
+            case R.id.description_internet:
+                String str = "http://www.giantbomb.com/game/" + apiUrl;
+                CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
+
+                CustomTabActivityHelper.openCustomTab(
+                        getActivity(), customTabsIntent, Uri.parse(str), new WebViewFallback());
+
+                return;
+
 
 
         }
@@ -525,6 +535,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         apiUrl = str[str.length - 1];
         title = getArguments().getString(NAME);
         imageUrl = getArguments().getString(IMAGE_URL);
+        drawable_color = ContextCompat.getColor(getContext(),R.color.primary);
 
     }
 
@@ -616,21 +627,36 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         parentLayout = (LinearLayout) nestedScrollView.findViewById(R.id.parent_layout);
         statsCardView = (CardView) parentLayout.findViewById(R.id.stats_cardview);
+        stats_heading = (TextView) statsCardView.findViewById(R.id.stats_heading);
+        setTextViewDrawableColor(stats_heading,drawable_color);
         statsDetailView = (LinearLayout) statsCardView.findViewById(R.id.hide_parent_layout);
         toggleArrow = (ImageView) statsCardView.findViewById(R.id.stats_toggle);
         statsCardView.setOnClickListener(this);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         similar_game_heading = (TextView) nestedScrollView.findViewById(R.id.similar_game_heading);
+        setTextViewDrawableColor(similar_game_heading,drawable_color);
         characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
         characters_heading = (TextView) nestedScrollView.findViewById(R.id.character_heading);
+        setTextViewDrawableColor(characters_heading,drawable_color);
+        description_heading = (TextView) nestedScrollView.findViewById(R.id.description_heading);
+        description_open_in_internet = (TextView) nestedScrollView.findViewById(R.id.description_internet);
+        setTextViewDrawableColor(description_open_in_internet,drawable_color);
+        description_open_in_internet.setOnClickListener(this);
+        setTextViewDrawableColor(description_heading,drawable_color);
         description = (TextView) nestedScrollView.findViewById(R.id.description);
+        overview_heading = (TextView) nestedScrollView.findViewById(R.id.overview_heading);
+        setTextViewDrawableColor(overview_heading,drawable_color);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
         imageRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.image_recycler_view);
         image_heading = (TextView) nestedScrollView.findViewById(R.id.image_heading);
+        setTextViewDrawableColor(image_heading,drawable_color);
         videoRecyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.video_recycler_view);
         related_video_heading = (TextView) nestedScrollView.findViewById(R.id.video_heading);
+        setTextViewDrawableColor(related_video_heading,drawable_color);
         review = (TextView) nestedScrollView.findViewById(R.id.review);
+        setTextViewDrawableColor(review,drawable_color);
         userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
+        setTextViewDrawableColor(userReview,drawable_color);
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
 
      /*   if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
@@ -813,6 +839,15 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/" + apiUrl + "/"); */
 
     }
+    private void setTextViewDrawableColor(TextView textView, int color) {
+        for (Drawable drawable : textView.getCompoundDrawables()) {
+            if (drawable != null) {
+                drawable.setColorFilter(new PorterDuffColorFilter(drawable_color, PorterDuff.Mode.SRC_IN));
+            }
+        }
+    }
+
+
 
     private void runAsyncTask() {
 
@@ -1009,23 +1044,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             Element info = doc.getElementsByTag("p").first();
             if (info != null)
                 description.setText(info.text());
-            description.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    String str = "http://www.giantbomb.com/game/" + apiUrl;
-                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
-
-                    CustomTabActivityHelper.openCustomTab(
-                            getActivity(), customTabsIntent, Uri.parse(str), new WebViewFallback());
-
-                }
-            });
-
-
-        }else {
+            }else {
             description.setText("No available info");
-        }
+            }
 
 
                 /*   behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -1277,6 +1298,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
 
     }
+
+
+
 
     public interface CommunicationInterface {
         void onReviewClick(String apiUrl, String gameTitle, String imageUrl);

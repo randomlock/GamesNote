@@ -243,7 +243,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
 
     public void setCustomSpinner(final Spinner spinner, final String str) {
 
-        GameListDialog.CustomAdapter adapter = new GameListDialog.CustomAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item);
+        GameListDialog.CustomAdapter adapter = new GameListDialog.CustomAdapter(getContext(), android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
@@ -252,7 +252,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END);
+                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
                 ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
 
             }

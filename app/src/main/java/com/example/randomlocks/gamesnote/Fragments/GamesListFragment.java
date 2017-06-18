@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GamesListPagerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 
 import java.util.ArrayList;
@@ -35,7 +37,6 @@ public class GamesListFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     FragmentActivity fragmentActivity;
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
     GameListPagerAdapter adapter;
 
     public GamesListFragment() {
@@ -76,7 +77,6 @@ public class GamesListFragment extends Fragment {
 
         toolbar = (Toolbar) fragmentActivity.findViewById(R.id.my_toolbar);
         tabLayout = (TabLayout) fragmentActivity.findViewById(R.id.my_tablayout);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) fragmentActivity.findViewById(R.id.collapsing_toolbar_layout);
 
 
         viewPager = (ViewPager) fragmentActivity.findViewById(R.id.my_pager);
@@ -87,7 +87,6 @@ public class GamesListFragment extends Fragment {
                 getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.GameListFragment));
 
         adapter = new GameListPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
@@ -102,6 +101,13 @@ public class GamesListFragment extends Fragment {
 
     }
 
+    public void updateViewPager(){
+        if (viewPager!=null && viewPager.getAdapter()!=null) {
+            Toaster.make(getContext(),"notifydatasetchanged");
+            viewPager.getAdapter().notifyDataSetChanged();
+        }
+    }
+
 
     //viewpager adapter
 
@@ -113,13 +119,14 @@ public class GamesListFragment extends Fragment {
 
         GameListPagerAdapter(FragmentManager fm) {
             super(fm);
-            fragments = new ArrayList<>();
-            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.ALL_GAMES));
-            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.REPLAYING));
-            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.PLANNING));
-            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.DROPPED));
-            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.PLAYING));
-            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.COMPLETED));
+            fragments = new ArrayList<>(PAGE_COUNT);
+            boolean isSimple = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_LIST_VIEW,false,getContext());
+            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.ALL_GAMES,isSimple));
+            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.REPLAYING,isSimple));
+            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.PLANNING,isSimple));
+            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.DROPPED,isSimple));
+            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.PLAYING,isSimple));
+            fragments.add(GamesListPagerFragment.newInstance(GiantBomb.COMPLETED,isSimple));
 
         }
 

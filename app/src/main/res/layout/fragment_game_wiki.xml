@@ -4,13 +4,15 @@
     android:id="@+id/parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    >
 
 <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/wikibackground"
     >
 
 
@@ -19,7 +21,9 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        >
 
 
 
@@ -32,7 +36,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"/>
 
 
@@ -99,16 +102,20 @@
 
 
 
-            <TextView
-                android:id="@+id/errortext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No Result Found"
-                android:drawableTop="@drawable/ic_error"
-                android:layout_gravity="center|top"
-                android:textColor="?android:attr/textColorPrimary"
-                android:visibility="gone"
-                />
+        <TextView
+            android:id="@+id/errortext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="12dp"
+            android:drawableTop="@drawable/ic_error"
+            android:text="@string/no_result_found"
+            android:drawablePadding="8dp"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:visibility="gone"
+            />
 
 
 
@@ -126,6 +133,8 @@
 
  </android.support.design.widget.CoordinatorLayout>
 
+
+
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/floating_search_view"
         android:layout_width="match_parent"
@@ -140,6 +149,8 @@
         app:floatingSearch_close_search_on_keyboard_dismiss="true"
         app:floatingSearch_showVoiceInput="true"
         app:floatingSearch_menu="@menu/game_wiki_menu"
+        style="@style/SearchView"
         />
+
 
     </RelativeLayout>

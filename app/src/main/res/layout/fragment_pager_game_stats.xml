@@ -213,7 +213,13 @@
         android:animateLayoutChanges="true" />
 
 
-
+    <View
+        android:id="@+id/last_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/linecolor"
+        android:layout_below="@+id/updated_game_list"
+        android:layout_margin="12dp" />
 
 
 </RelativeLayout>

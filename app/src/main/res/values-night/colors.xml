@@ -6,6 +6,7 @@
     <color name="primary_text">#ddffffff</color>
     <color name="primary_text_light">#8aFFFFFF</color>
     <color name="secondary_text">#89ffffff</color>
+    <color name="linecolor">#C8E6C9</color>
     <color name="cardColor">#424242</color>
     <color name="black_semi_transparent">#B2FFFFFF</color>
     <color name="alpha_color">#c60b0b0b</color>

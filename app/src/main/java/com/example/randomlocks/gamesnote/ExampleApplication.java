@@ -33,7 +33,7 @@ public class ExampleApplication extends Application {
         super.onCreate();
         sInstance = this;
         Realm.init(this);
-        RealmConfiguration configuration = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().schemaVersion(13).build();
+        RealmConfiguration configuration = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().schemaVersion(14).build();
         Realm.setDefaultConfiguration(configuration);
 
         /* Initialize Leak canary */

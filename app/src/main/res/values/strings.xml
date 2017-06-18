@@ -42,7 +42,7 @@
     <string name="purexbox">pureXbox</string>
     <string name="metaleater">Metaleater</string>
     <string name="giantbombRelease">GiantBomb Game Release</string>
-    <string name="no_result_found">No Result Found</string>
+    <string name="no_result_found">No result found</string>
     <string name="list_fragment_title">Pick a game</string>
     <string name="characterwiki">Character Wiki</string>
     <string name="GameVideoFragment">Game Videos</string>
@@ -90,32 +90,17 @@
     </string-array>
 
     <string-array name="sort_filter">
-        <item>name</item>
-        <item>date added</item>
-        <item>date modified</item>
-        <item>score</item>
-        <item>start date</item>
-        <item>end date</item>
-        <item>gameplay hours</item>
-        <item>price</item>
+        <item>Name</item>
+        <item>Date added</item>
+        <item>Date modified</item>
+        <item>Score</item>
+        <item>Start date</item>
+        <item>End date</item>
+        <item>Gameplay hours</item>
+        <item>Price</item>
     </string-array>
 
-    <string-array name="Font_Option">
 
-        <item>Regular</item>
-        <item>Italic</item>
-        <item>Bold</item>
-        <item>Medium</item>
-        <item>Medium-italic</item>
-        <item>Black</item>
-        <item>Light</item>
-        <item>Light-italic</item>
-        <item>Thin</item>
-        <item>Thin-italic</item>
-        <item>Condensed regular</item>
-        <item>Condensed italic</item>
-
-    </string-array>
 
 
     <string-array name="profile_images">
@@ -284,6 +269,23 @@
     <string name="like">Like</string>
     <string name="watch_later">Watch later</string>
     <string name="statistics">Game Stats</string>
+    <string name="url">Url</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
+    <string name="update">Update</string>
+    <string name="image_url">Enter the image url</string>
+    <string name="news">News</string>
+    <string name="add_new_source">Add new source</string>
+    <string name="custom_source">My source</string>
+    <string name="no_games_added">No Games Added</string>
+    <string name="description">Description</string>
+    <string name="user_review">User review</string>
+    <string name="review">Review</string>
+    <string name="overview">Overview</string>
+    <string name="character">Character</string>
+    <string name="images">Images</string>
+    <string name="related_videos">Related videos</string>
+    <string name="similar_games">Similar games</string>
 
 
 </resources>

@@ -1,6 +1,5 @@
 package com.example.randomlocks.gamesnote.DialogFragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,9 +8,10 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -78,11 +78,11 @@ public class SearchFilterFragment extends DialogFragment {
         final AlertDialog dialog =  new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
                 .setCancelable(true)
                 .setTitle("Sort result")
-
-                .setSingleChoiceItems(getResources().getStringArray(array_id), which_one, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(array_id,which_one, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         which_one = which;
+
                     }
                 })
                 .setView(view)
@@ -106,13 +106,21 @@ public class SearchFilterFragment extends DialogFragment {
                         dismiss();
                     }
                 }).create();
-              /*  dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.black_white));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+
+            }
+        });
+        /*  dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialogInterface) {
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
                     }
                 });*/
-                return dialog;
+        return dialog;
     }
 
 

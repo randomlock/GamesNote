@@ -92,7 +92,6 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         platforms = getArguments().getParcelableArrayList(GiantBomb.PLATFORM);
-        LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_add_to_list, null);
         scoreSpinner = (Spinner) view.findViewById(R.id.score_spinner);
         platformSpinner = (Spinner) view.findViewById(R.id.platform_spinner);
