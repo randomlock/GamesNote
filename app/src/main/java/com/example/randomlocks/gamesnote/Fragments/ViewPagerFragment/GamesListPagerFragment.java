@@ -42,6 +42,8 @@ import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.Date;
@@ -73,6 +75,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     private boolean isSimple;
     private DividerItemDecoration itemDecoration;
     private ViewPager pager;
+
 
     public GamesListPagerFragment() {
     }
@@ -113,6 +116,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
             else
                 realmResult = realm.where(GameListDatabase.class).equalTo("status", status).findAllSorted(sort_option, Sort.DESCENDING);
         }
+
 
     }
 
@@ -275,6 +279,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.game_list_menu,menu);
         getSearchManager(getContext(),menu,false);
+
     }
 
     @Override

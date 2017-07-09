@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -28,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ import com.example.randomlocks.gamesnote.Modal.SearchSuggestionModel;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.SearchHistoryDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.WatchedVideoDatabase;
+import com.google.android.gms.cast.framework.CastContext;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,10 +109,11 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     RealmResults<SearchHistoryDatabase> search_results;
     List<SearchSuggestionModel> search_list;
 
-
     VideoPlayInterface videoPlayInterface;
     int video_id;
     int adapterPosition;
+
+
 
 
     public GameVideoPagerFragment() {
@@ -147,7 +151,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 }
             }
         });
-
 
 
     }
@@ -319,8 +322,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                         mDrawer.openDrawer(GravityCompat.END);
                         break;
 
-
                 }
+
 
             }
         });
@@ -870,6 +873,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
 
     }
+
 
 
 }

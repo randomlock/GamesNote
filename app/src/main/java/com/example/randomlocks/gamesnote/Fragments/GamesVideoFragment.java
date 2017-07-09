@@ -13,16 +13,24 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.MediaRouteButton;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoOtherPagerFragment;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoPagerFragment;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +44,10 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     AppBarLayout appBarLayout;
     FloatingSearchView floatingSearchView;
 
+    CastContext mCastContext;
+    MediaRouteButton mMediaRouteButton;
+
+
 
 
     public GamesVideoFragment() {
@@ -46,6 +58,9 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mCastContext = CastContext.getSharedInstance(getContext());
+
+
 
     }
 
@@ -59,6 +74,11 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mDrawer = (DrawerLayout) getActivity().findViewById(R.id.drawer);
@@ -66,8 +86,13 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
         viewPager = (ViewPager) mDrawer.findViewById(R.id.my_pager);
         appBarLayout = (AppBarLayout) mDrawer.findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(this);
+        mMediaRouteButton = (MediaRouteButton) mDrawer.findViewById(R.id.media_route_button);
+        CastButtonFactory.setUpMediaRouteButton(getActivity().getApplicationContext(), mMediaRouteButton);
         floatingSearchView = (FloatingSearchView) mDrawer.findViewById(R.id.floating_search_view);
-
+        floatingSearchView.inflateOverflowMenu(R.menu.game_video_menu);
+     /*  CastButtonFactory.setUpMediaRouteButton(getActivity().getApplicationContext(),
+                menu,
+                R.id.media_route_menu_item);*/
         /****DRAWER LAYOUT ***/
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

@@ -348,8 +348,8 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                     default:
                         break;
                 }
-
             }
+
         });
 
 

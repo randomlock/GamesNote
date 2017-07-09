@@ -286,6 +286,8 @@
     <string name="images">Images</string>
     <string name="related_videos">Related videos</string>
     <string name="similar_games">Similar games</string>
+    <string name="app_id">com.example.randomlocks.gamesnote</string>
+    <string name="media_title">cast video</string>
 
 
 </resources>

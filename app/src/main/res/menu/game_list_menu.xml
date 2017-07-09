@@ -10,6 +10,12 @@
         />
 
     <item
+        android:id="@+id/media_route_menu_item"
+        android:title="@string/media_title"
+        yourapp:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        yourapp:showAsAction="always"/>
+
+    <item
         android:id="@+id/filter"
         android:title="Filter Result"
         android:icon="@drawable/ic_sort_white"

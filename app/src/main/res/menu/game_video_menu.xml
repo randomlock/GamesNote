@@ -10,6 +10,8 @@
         android:icon="@drawable/ic_keyboard_arrow_left_white_24dp"
         app:showAsAction="ifRoom" />
 
+
+
     <item
         android:id="@+id/view"
         android:title="@string/compact_view"
