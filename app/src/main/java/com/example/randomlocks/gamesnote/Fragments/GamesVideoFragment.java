@@ -4,6 +4,7 @@ package com.example.randomlocks.gamesnote.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -14,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteButton;
-import android.support.v7.view.menu.MenuItemImpl;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,13 +24,14 @@ import android.view.ViewGroup;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoOtherPagerFragment;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GameVideoPagerFragment;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastState;
+import com.google.android.gms.cast.framework.CastStateListener;
+import com.google.android.gms.cast.framework.IntroductoryOverlay;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +48,9 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     CastContext mCastContext;
     MediaRouteButton mMediaRouteButton;
 
+    private IntroductoryOverlay mIntroductoryOverlay;
+    private CastStateListener mCastStateListener;
+
 
 
 
@@ -58,12 +62,59 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mCastStateListener = new CastStateListener() {
+            @Override
+            public void onCastStateChanged(int newState) {
+                if (newState != CastState.NO_DEVICES_AVAILABLE) {
+                    showIntroductoryOverlay();
+                }
+            }
+        };
+
+
         mCastContext = CastContext.getSharedInstance(getContext());
-
-
 
     }
 
+    private void showIntroductoryOverlay() {
+        if (mIntroductoryOverlay != null) {
+            mIntroductoryOverlay.remove();
+        }
+        if ((mMediaRouteButton != null) && mMediaRouteButton.getVisibility() == View.VISIBLE) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    mIntroductoryOverlay = new IntroductoryOverlay.Builder(
+                            getActivity(), mMediaRouteButton)
+                            .setTitleText("Introducing Cast")
+                            .setSingleTime()
+                            .setOnOverlayDismissedListener(
+                                    new IntroductoryOverlay.OnOverlayDismissedListener() {
+                                        @Override
+                                        public void onOverlayDismissed() {
+                                            mIntroductoryOverlay = null;
+                                        }
+                                    })
+                            .build();
+                    mIntroductoryOverlay.show();
+                }
+            });
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        mCastContext.addCastStateListener(mCastStateListener);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mCastContext.removeCastStateListener(mCastStateListener);
+        super.onPause();
+    }
 
 
     @Override
@@ -102,12 +153,15 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
             @Override
             public void onPageSelected(int position) {
+
                 if (position == 0) {
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                    floatingSearchView.setSearchFocusable(true);
                     floatingSearchView.inflateOverflowMenu(R.menu.game_video_menu);
                 } else {
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                     floatingSearchView.inflateOverflowMenu(R.menu.empty_menu);
+                    floatingSearchView.setSearchFocusable(false);
                 }
             }
 
@@ -187,4 +241,6 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
 
     }
+
+
 }

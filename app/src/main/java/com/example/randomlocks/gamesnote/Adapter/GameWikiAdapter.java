@@ -11,7 +11,6 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,22 +29,18 @@ import com.example.randomlocks.gamesnote.Activity.GameDetailActivity;
 import com.example.randomlocks.gamesnote.DialogFragment.CoverImageViewerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentGridLayoutManager;
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.GameWikiModal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
-import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 import io.realm.Realm;
-import io.realm.RealmList;
 
 /**
  * Created by randomlocks on 4/25/2016.
@@ -54,6 +49,7 @@ import io.realm.RealmList;
 //TODO fix popup speed database
 public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final String IMAGE_QUALITY_KEY = "image_preference";
     //variable for endless scroll
     private final int VIEW_TYPE_LOADING = -1;
     int viewType = 0;
@@ -64,23 +60,11 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Realm realm;
     private GameListDatabase database;
     private OnLoadMoreListener mOnLoadMoreListener;
-
     private boolean isLoading;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private DisplayMetrics displayMetrics;
-
-    private static final String IMAGE_QUALITY_KEY = "image_preference";
-
-
-    public interface OnPopupClickInterface{
-        void onRemove(GameWikiModal gameWikiModal);
-        void onAdd(GameWikiModal gameWikiModal,int addTypeId);
-    }
-
     private OnPopupClickInterface onPopupClickInterface;
-
-
 
     public GameWikiAdapter(List<GameWikiModal> list, int viewType, Context context, int lastPosition, RecyclerView recyclerView,Realm realm,OnPopupClickInterface onPopupClickInterface) {
         imageQuality = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(IMAGE_QUALITY_KEY,"1"));
@@ -135,8 +119,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-
-
     public void updateModal(List<GameWikiModal> list){
         this.list.remove(this.list.size() - 1);
         notifyItemRemoved(this.list.size());
@@ -170,7 +152,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -191,7 +172,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         return null;
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -308,6 +288,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             final GameWikiModal modal = list.get(holder.getAdapterPosition());
             MyViewHolder3 viewHolder = (MyViewHolder3) holder;
+            viewHolder.name.setText(modal.name);
 
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
@@ -353,6 +334,12 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
 
+    }
+
+    public interface OnPopupClickInterface {
+        void onRemove(GameWikiModal gameWikiModal);
+
+        void onAdd(GameWikiModal gameWikiModal, int addTypeId);
     }
 
      private class LoadingViewHolder extends RecyclerView.ViewHolder {
@@ -529,10 +516,8 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private class MyViewHolder2 extends RecyclerView.ViewHolder implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
-
         TextView title, description;
         ImageView imageView;
-        CardView cardView;
         ImageButton popupMenu;
         PopupMenu popup;
         GameWikiModal modal;
@@ -542,7 +527,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         MyViewHolder2(View itemView) {
             super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.cardView);
             title = (TextView) itemView.findViewById(R.id.title);
             description = (TextView) itemView.findViewById(R.id.description);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
@@ -566,7 +550,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             modal = list.get(getLayoutPosition());
             switch (view.getId()) {
 
-                case R.id.cardView:
+                case R.id.parent_layout:
                     Intent it = new Intent(context, GameDetailActivity.class);
                     it.putExtra("apiUrl", modal.apiDetailUrl);
                     it.putExtra("name", modal.name);
@@ -648,6 +632,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         ImageView imageView;
         ImageButton popupMenu;
+        TextView name;
         PopupMenu popup;
         GameWikiModal modal;
 
@@ -659,6 +644,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             imageView.getLayoutParams().height = (int) ((displayMetrics.widthPixels / 2)*1.4);
+            name = (TextView) itemView.findViewById(R.id.name);
             popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
 
             popupMenu.setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint

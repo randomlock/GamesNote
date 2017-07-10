@@ -10,5 +10,8 @@ import java.util.List;
 public class CharacterSearchModalList {
 
     @Expose
+    public int numberOfTotalResults;
+
+    @Expose
     public List<CharacterSearchModal> results;
 }

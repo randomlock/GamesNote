@@ -286,8 +286,16 @@
     <string name="images">Images</string>
     <string name="related_videos">Related videos</string>
     <string name="similar_games">Similar games</string>
-    <string name="app_id">com.example.randomlocks.gamesnote</string>
+    <string name="app_id">4F8B3483</string>
     <string name="media_title">cast video</string>
+    <string name="media_route_menu_title"><![CDATA[Play on&#8230;]]></string>
+
+    <string name="video_error_media_load_timeout">Media loading timed out</string>
+    <string name="video_error_server_unaccessible">Media server was not reachable</string>
+    <string name="video_error_unknown_error">Failed to load video</string>
+    <string name="error">Error</string>
+    <string name="transition_image">transition-image</string>
+    <string name="view_in_gallery">view in gallery</string>
 
 
 </resources>

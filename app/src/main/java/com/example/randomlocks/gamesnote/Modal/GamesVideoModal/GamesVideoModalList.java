@@ -12,26 +12,6 @@ import java.util.List;
  */
 public class GamesVideoModalList implements Parcelable {
 
-    @Expose
-    public List<GamesVideoModal> results;
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.results);
-    }
-
-    public GamesVideoModalList() {
-    }
-
-    protected GamesVideoModalList(Parcel in) {
-        this.results = in.createTypedArrayList(GamesVideoModal.CREATOR);
-    }
-
     public static final Parcelable.Creator<GamesVideoModalList> CREATOR = new Parcelable.Creator<GamesVideoModalList>() {
         @Override
         public GamesVideoModalList createFromParcel(Parcel source) {
@@ -43,4 +23,28 @@ public class GamesVideoModalList implements Parcelable {
             return new GamesVideoModalList[size];
         }
     };
+    @Expose
+    public int numberOfTotalResults;
+    @Expose
+    public List<GamesVideoModal> results;
+
+
+    public GamesVideoModalList() {
+    }
+
+    protected GamesVideoModalList(Parcel in) {
+        this.numberOfTotalResults = in.readInt();
+        this.results = in.createTypedArrayList(GamesVideoModal.CREATOR);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.numberOfTotalResults);
+        dest.writeTypedList(this.results);
+    }
 }

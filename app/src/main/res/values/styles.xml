@@ -13,8 +13,9 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
-
-
+    <style name="Theme.CastVideosDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimaryDark">@color/black</item>
+    </style>
 
 
     <style name="RootTheme" parent="@android:style/Theme.Holo.NoActionBar.Fullscreen"></style>

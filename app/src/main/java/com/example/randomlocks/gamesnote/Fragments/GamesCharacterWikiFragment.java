@@ -10,19 +10,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +36,6 @@ import com.example.randomlocks.gamesnote.Adapter.GameCharacterSearchAdapter;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Interface.GameCharacterSearchWikiInterface;
 import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
@@ -49,7 +44,6 @@ import com.example.randomlocks.gamesnote.Modal.CharacterSearchModal.CharacterSea
 import com.example.randomlocks.gamesnote.Modal.SearchSuggestionModel;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.SearchHistoryDatabase;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -317,9 +311,9 @@ public class GamesCharacterWikiFragment extends Fragment {
                 }
                 // coming to load more data
                 if(isLoadingMore){
-
-                    adapter.updateModal(response.body().results);
-
+                    CharacterSearchModalList listModal = response.body();
+                    adapter.updateModal(listModal.results);
+                    Toaster.makeSnackBar(coordinator, "Showing " + modals.size() + " of " + listModal.numberOfTotalResults + " characters");
                 }else {
 
                     if (response.body().results.isEmpty()) {
@@ -338,8 +332,11 @@ public class GamesCharacterWikiFragment extends Fragment {
                         //searching the data for first time
                         if(adapter==null){
                             Toaster.make(getContext(),"adapter is null");
-
-                            modals = response.body().results;
+                            CharacterSearchModalList listModal = response.body();
+                            modals = listModal.results;
+                            if (!modals.isEmpty()) {
+                                Toaster.makeSnackBar(coordinator, "Showing " + modals.size() + " of " + listModal.numberOfTotalResults + " characters");
+                            }
                             adapter = new GameCharacterSearchAdapter(modals, getContext(),recyclerView, new GameCharacterSearchAdapter.OnClickInterface() {
                                 @Override
                                 public void onItemClick(String apiUrl, String imageUrl, String name) {
@@ -349,7 +346,9 @@ public class GamesCharacterWikiFragment extends Fragment {
                             recyclerView.setAdapter(adapter);
 
                         }else {  //searching the data after first time
-                            modals = response.body().results;
+                            CharacterSearchModalList listModal = response.body();
+                            modals = listModal.results;
+                            Toaster.makeSnackBar(coordinator, "Showing " + modals.size() + " of " + listModal.numberOfTotalResults + " characters");
                             adapter.swap(modals);
                             Toaster.make(getContext(),"coming to swap"+modals.size());
 

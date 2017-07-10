@@ -3,7 +3,6 @@ package com.example.randomlocks.gamesnote.Adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.app.MediaRouteButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import com.example.randomlocks.gamesnote.Interface.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
 import com.flyco.labelview.LabelView;
-import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -213,6 +211,8 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     myHolder.isWatchLabel.setVisibility(View.VISIBLE);
 
+                } else {
+                    myHolder.isWatchLabel.setVisibility(View.GONE);
                 }
 
 

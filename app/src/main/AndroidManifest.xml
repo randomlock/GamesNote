@@ -59,6 +59,34 @@
         <activity android:name=".Activity.SettingsActivity"
             android:parentActivityName=".Activity.MainActivity"/>
 
+        <activity
+            android:name=".Activity.ExpandedControlsActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance"
+
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CastVideosDark">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.randomlocks.gamesnote.Activity.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".Activity.LocalPlayerActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+
+
+        </activity>
+
+
     </application>
 
 </manifest>

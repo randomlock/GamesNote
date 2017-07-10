@@ -18,9 +18,20 @@
         android:id="@+id/popup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="top|end"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_action_navigation_more_vert"
+        android:src="@drawable/ic_action_navigation_more_vert" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient"
+        android:gravity="center"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textColor="@color/white"
         />
 
 

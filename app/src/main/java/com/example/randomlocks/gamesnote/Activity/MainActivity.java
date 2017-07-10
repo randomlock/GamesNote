@@ -13,12 +13,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.DialogFragment.ImageUrlFragment;
@@ -28,7 +25,6 @@ import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
-import com.example.randomlocks.gamesnote.Fragments.SettingFragment;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.NewsDetailPagerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -36,6 +32,7 @@ import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodLeak.IMMLeaks;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
+import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
@@ -447,10 +444,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onVideoClick(String url, int id, int elapsed_time, int request_code) {
-        Intent intent = new Intent(this, VideoPlayerActivity.class);
+    public void onVideoClick(GamesVideoModal modal, String url, int id, int elapsed_time, int request_code) {
+        Intent intent = new Intent(this, LocalPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
         intent.putExtra(GiantBomb.SEEK_POSITION, elapsed_time);
+        intent.putExtra(GiantBomb.MODAL, modal);
         startActivityForResult(intent, request_code);
     }
 

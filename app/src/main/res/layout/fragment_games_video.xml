@@ -14,8 +14,8 @@
                    android:fitsSystemWindows="true">
 
 
-    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/root_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -66,17 +66,17 @@
 
 
             <android.support.design.widget.TabLayout
-                android:layout_below="@+id/my_toolbar"
                 android:id="@+id/my_tablayout"
-                android:background="@color/primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabMode="fixed"
-                app:tabTextColor="@color/tab_text"
-                app:tabSelectedTextColor="@color/tab_selected_text"
+                android:layout_below="@+id/my_toolbar"
+                android:background="@color/primary"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/accent"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/tab_selected_text"
                 app:tabTextAppearance="@style/TextAppearance.Design.Tab"
+                app:tabTextColor="@color/tab_text"
 
 
                 />
@@ -86,6 +86,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/wikibackground"
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
@@ -94,7 +95,7 @@
                 android:id="@+id/media_route_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:layout_gravity="end"
                 />
 
 
@@ -114,19 +115,21 @@
 
         <com.arlib.floatingsearchview.FloatingSearchView
             android:id="@+id/floating_search_view"
+            style="@style/SearchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:floatingSearch_dimBackground="true"
-            app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
-            app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
-            app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
-            app:floatingSearch_searchHint="Search videos..."
-            app:floatingSearch_suggestionsListAnimDuration="250"
-            app:floatingSearch_showSearchKey="true"
-            app:floatingSearch_leftActionMode="showHamburger"
             app:floatingSearch_close_search_on_keyboard_dismiss="true"
-            app:floatingSearch_showVoiceInput="true"
+            app:floatingSearch_dimBackground="true"
+            app:floatingSearch_leftActionMode="showHamburger"
             app:floatingSearch_menu="@menu/game_video_menu"
+            app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
+            app:floatingSearch_searchHint="Search videos..."
+            app:floatingSearch_showSearchKey="true"
+            app:floatingSearch_showVoiceInput="true"
+            app:floatingSearch_suggestionsListAnimDuration="250"
+
             />
 
 
@@ -166,9 +169,9 @@
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="end"
-        app:menu="@menu/video_type_menu"
-        android:layout_alignParentBottom="true">
+        app:menu="@menu/video_type_menu">
 
 
     </android.support.design.widget.NavigationView>

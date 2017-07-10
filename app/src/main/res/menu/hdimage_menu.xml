@@ -4,22 +4,22 @@
 
 
 <item
-    android:title="@string/share"
     android:id="@+id/share"
+    android:title="@string/share"
     app:showAsAction="collapseActionView"/>
     <item
-        android:title="@string/save"
         android:id="@+id/save"
+        android:title="@string/save"
         app:showAsAction="collapseActionView"/>
 
     <item
-        android:title="view in gallery"
         android:id="@+id/gallery"
+        android:title="@string/view_in_gallery"
         app:showAsAction="collapseActionView"/>
 
     <item
-        android:title="set as my profile photo"
         android:id="@+id/profile_image"
+        android:title="set as my navigation bar photo"
         app:showAsAction="collapseActionView"
         />
 

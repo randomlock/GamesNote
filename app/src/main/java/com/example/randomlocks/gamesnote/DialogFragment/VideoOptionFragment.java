@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.MediaRouteButton;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -20,8 +19,6 @@ import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
-import com.google.android.gms.cast.framework.CastButtonFactory;
-import com.google.android.gms.cast.framework.CastContext;
 
 /**
  * Created by randomlock on 3/13/2017.
@@ -42,8 +39,6 @@ public class VideoOptionFragment extends DialogFragment {
 
     int elapsed_time;
 
-    CastContext mCastContext;
-    MediaRouteButton mMediaRouteButton;
 
     public static VideoOptionFragment newInstance(GamesVideoModal modal, int elapsed_time) {
 
@@ -74,7 +69,6 @@ public class VideoOptionFragment extends DialogFragment {
         elapsed_time = getArguments().getInt(ELAPSED_TIME, 0);
         video_option = SharedPreference.getFromSharedPreferences(VIDEO_OPTION, 1, getContext());
         use_inbuilt = SharedPreference.getFromSharedPreferences(INBUILT_VIDEO, true, getContext());
-        mCastContext = CastContext.getSharedInstance(getContext());
 
     }
 
@@ -113,8 +107,6 @@ public class VideoOptionFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mMediaRouteButton = (MediaRouteButton) view.findViewById(R.id.media_route_button);
-        CastButtonFactory.setUpMediaRouteButton(getActivity().getApplicationContext(), mMediaRouteButton);
 
 
         video_spinner = (Spinner) view.findViewById(R.id.spinner);

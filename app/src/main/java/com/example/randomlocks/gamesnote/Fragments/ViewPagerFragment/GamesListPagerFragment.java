@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -19,7 +18,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,8 +40,6 @@ import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
-import com.google.android.gms.cast.framework.CastButtonFactory;
-import com.google.android.gms.cast.framework.CastContext;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.Date;
@@ -59,8 +55,8 @@ import io.realm.Sort;
 public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface, SearchManager.OnDismissListener, SearchManager.OnCancelListener {
 
     private static final String IS_SIMPLE = "is_view_simple" ;
-    private GamesListFragment parentFragment;
     private static final String STATUS = "total page";
+    private GamesListFragment parentFragment;
     private LinearLayoutManager manager;
     private FastScrollRecyclerView recyclerView;
     private GameListAdapter adapter = null;
@@ -229,7 +225,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                     });
                     dialog.show();
                 }
-            });
+            }, sort_option, isAscending);
             recyclerView.setAdapter(adapter);
         }
 
@@ -365,21 +361,23 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean onQueryTextChange(String query) {
         query = query.toLowerCase();
-        if (query.trim().length() >0) {
+        /*if (query.trim().length() >0) {
             if (adapter != null) {
                 adapter.getFilter().filter(query);
                 return true;
             }
         }
-
-
-        return false;
+        return false;*/
+        if (adapter != null && adapter.getFilter() != null) {
+            adapter.getFilter().filter(query);
+        }
+        return true;
     }
 
     @Override
@@ -394,7 +392,9 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
             }
             if(adapter!=null){
                 adapter.updateData(realmResult);
+                adapter.updateSortOption(getField(which), asc);
             }
+            // pager.getAdapter().notifyDataSetChanged();
         }
 
 

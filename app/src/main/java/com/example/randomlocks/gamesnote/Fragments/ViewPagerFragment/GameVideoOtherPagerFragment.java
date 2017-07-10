@@ -2,18 +2,24 @@ package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoOtherAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.VideoOptionFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
@@ -47,8 +53,8 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     int position;
     GameVideoOtherAdapter adapter;
     RealmResults<GamesVideoModal> listModals;
-    FloatingSearchView floatingSearchView;
     ConsistentLinearLayoutManager manager;
+    TextView errorText;
 
     VideoPlayInterface videoPlayInterface;
     HashMap<Integer, Integer> realmMap;
@@ -102,8 +108,9 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_games_video_pager,container,false);
 
-        floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        errorText = (TextView) view.findViewById(R.id.errortext);
+
       /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -141,7 +148,6 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
     }
 
     @Override
@@ -153,7 +159,17 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
 
     private void fillRecyclerView(RealmResults<GamesVideoModal> listModals) {
 
-        //TODO add error text for no video
+        if (listModals.isEmpty()) {
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_error);
+                drawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(drawable, Color.WHITE);
+                DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_ATOP);
+                errorText.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            }
+            errorText.setVisibility(View.VISIBLE);
+        } else
+            errorText.setVisibility(View.GONE);
 
         if (adapter == null) {
             adapter = new GameVideoOtherAdapter(getContext(), listModals, true, isReduced, realm, position, realmMap, new GameVideoOtherAdapter.OnClickInterface() {
@@ -195,7 +211,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
             case 0:
                 url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, position);
+                    videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, position);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 
@@ -206,7 +222,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
             case 1:
                 url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, position);
+                    videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, position);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 

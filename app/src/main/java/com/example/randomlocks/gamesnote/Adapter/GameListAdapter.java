@@ -37,9 +37,10 @@ import es.dmoral.toasty.Toasty;
 import io.realm.Case;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
-import io.realm.RealmList;
+import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by randomlocks on 3/19/2016.
@@ -57,8 +58,10 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     private int status;
     private boolean isSimple;
     private int last_position = -1;
+    private String sort_option;
+    private boolean isAscending;
 
-    public GameListAdapter(@NonNull Context context, Realm realm, @Nullable OrderedRealmCollection<GameListDatabase> data, boolean autoUpdate, int status, boolean isSimple, OnClickInterface mOnClickInterface) {
+    public GameListAdapter(@NonNull Context context, Realm realm, @Nullable OrderedRealmCollection<GameListDatabase> data, boolean autoUpdate, int status, boolean isSimple, OnClickInterface mOnClickInterface, String sort_option, boolean isAscending) {
         super(context, data, autoUpdate);
         this.context = context;
         this.mOnClickInterface = mOnClickInterface;
@@ -67,6 +70,8 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         model = data;
         this.status = status;
         this.isSimple = isSimple;
+        this.sort_option = sort_option;
+        this.isAscending = isAscending;
     }
 
     @Override
@@ -82,14 +87,34 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
 
     private void filterResults(String text) {
         text = text == null ? null : text.toLowerCase().trim();
-
         if(text == null || "".equals(text)) {
-            model = realm.where(GameListDatabase.class).equalTo("status",status).findAll();
+
+            if (isAscending) {
+                if (status == GiantBomb.ALL_GAMES)
+                    model = realm.where(GameListDatabase.class).findAllSorted(sort_option, Sort.ASCENDING);
+                else
+                    model = realm.where(GameListDatabase.class).equalTo("status", status).findAllSorted(sort_option, Sort.ASCENDING);
+            } else {
+                if (status == GiantBomb.ALL_GAMES)
+                    model = realm.where(GameListDatabase.class).findAllSorted(sort_option, Sort.DESCENDING);
+                else
+                    model = realm.where(GameListDatabase.class).equalTo("status", status).findAllSorted(sort_option, Sort.DESCENDING);
+            }
+
+
         } else {
-            model = realm.where(GameListDatabase.class)
-                    .equalTo("status",status)
-                    .contains("name", text, Case.INSENSITIVE)
-                    .findAll();
+            RealmQuery<GameListDatabase> results = realm.where(GameListDatabase.class).contains("name", text, Case.INSENSITIVE);
+            if (isAscending) {
+                if (status == GiantBomb.ALL_GAMES)
+                    model = results.findAllSorted(sort_option, Sort.ASCENDING);
+                else
+                    model = results.equalTo("status", status).findAllSorted(sort_option, Sort.ASCENDING);
+            } else {
+                if (status == GiantBomb.ALL_GAMES)
+                    model = results.findAllSorted(sort_option, Sort.DESCENDING);
+                else
+                    model = results.equalTo("status", status).findAllSorted(sort_option, Sort.DESCENDING);
+            }
         }
         updateData(model);
 
@@ -148,6 +173,11 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     public void onViewDetachedFromWindow(MyViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         ((MyViewHolder) holder).itemView.clearAnimation();
+    }
+
+    public void updateSortOption(String sort_option, boolean isAscending) {
+        this.sort_option = sort_option;
+        this.isAscending = isAscending;
     }
 
     public interface OnClickInterface {

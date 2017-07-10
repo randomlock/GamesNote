@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/wikibackground"
     >
 
 
@@ -14,9 +13,9 @@
 
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
 
 
@@ -26,8 +25,9 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:background="@color/wikibackground" />
+        android:layout_marginBottom="8dp"
+        android:background="@color/wikibackground"
+        android:scrollbars="vertical" />
 
 
 
@@ -36,9 +36,9 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:indicator="Pacman"
         android:layout_gravity="center|top"
         android:visibility="gone"
+        app:indicator="Pacman"
         app:indicator_color="@color/accent" />
 
 
@@ -48,12 +48,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:layout_marginTop="12dp"
+        android:drawablePadding="8dp"
         android:drawableTop="@drawable/ic_error"
         android:text="@string/no_result_found"
-        android:drawablePadding="8dp"
         android:textAllCaps="true"
-        android:textStyle="bold"
         android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold"
         android:visibility="gone"
         />
 

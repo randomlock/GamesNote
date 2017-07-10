@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
  */
 public class CharacterListModal {
 
+
     @Expose
     public CharacterModal results;
 

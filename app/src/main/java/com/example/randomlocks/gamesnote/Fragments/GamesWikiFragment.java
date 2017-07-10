@@ -20,19 +20,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.Adapter.GameWikiAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.SearchFilterFragment;
@@ -58,7 +53,6 @@ import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 import com.example.randomlocks.gamesnote.RealmDatabase.SearchHistoryDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -109,10 +103,9 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     String apiUrl;
     Realm realm;
     RealmAsyncTask realmAsyncTask;
-    private int game_id;
-
     RealmResults<SearchHistoryDatabase> search_results;
     List<SearchSuggestionModel> search_list;
+    private int game_id;
     private String mLastQuery = "";
 
 
@@ -261,7 +254,6 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 floatingSearchView.setSearchBarTitle(searchSuggestion.getBody());
                 performSearch(searchSuggestion.getBody(),false);
-
 
             }
 
@@ -423,7 +415,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
         }
         map.put(GiantBomb.OFFSET, "0");
-        String sort = sortValue(SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 4, context));
+        String sort = sortValue(SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 3, context));
         boolean asc = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING, true, context);
 
         if (!asc) {
@@ -637,9 +629,9 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                 }
                 // coming to load more data
                 if(isLoadingMore){
-
-                    adapter.updateModal(response.body().results);
-
+                    GameWikiListModal listModal = response.body();
+                    adapter.updateModal(listModal.results);
+                    Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " games");
                 }else {
 
                     if (response.body().results.isEmpty()) {
@@ -658,8 +650,11 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                         //searching the data for first time
                         if(adapter==null){
                             Toaster.make(getContext(),"adapter is null");
-
-                            listModals = response.body().results;
+                            GameWikiListModal listModal = response.body();
+                            listModals = listModal.results;
+                            if (!listModals.isEmpty()) {
+                                Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " games");
+                            }
                             adapter = new GameWikiAdapter(listModals, viewType, getContext(), recyclerView.getChildCount(), recyclerView, realm, new GameWikiAdapter.OnPopupClickInterface() {
                                 @Override
                                 public void onRemove(GameWikiModal gameWikiModal) {
@@ -674,10 +669,11 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                             recyclerView.setAdapter(adapter);
 
                         }else {  //searching the data after first time
-                            listModals = response.body().results;
+                            GameWikiListModal listModal = response.body();
+                            listModals = listModal.results;
+                            Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " games");
                             adapter.swap(listModals);
                             Toaster.make(getContext(),"coming to swap"+listModals.size());
-
                         }
 
 

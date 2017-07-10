@@ -11,7 +11,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -29,7 +28,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +52,8 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.SearchHistoryDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.WatchedVideoDatabase;
 import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.SessionManagerListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -112,6 +112,10 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     VideoPlayInterface videoPlayInterface;
     int video_id;
     int adapterPosition;
+
+    private CastContext mCastContext;
+    private CastSession mCastSession;
+    private SessionManagerListener<CastSession> mSessionManagerListener;
 
 
 
@@ -173,6 +177,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
         pacman = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
+        setupCastListener();
+
 
 
         /************* SWIPE TO REFRESH ************************/
@@ -349,6 +355,61 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
     }
 
+    private void setupCastListener() {
+        mSessionManagerListener = new SessionManagerListener<CastSession>() {
+
+            @Override
+            public void onSessionEnded(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionResumed(CastSession session, boolean wasSuspended) {
+                onApplicationConnected(session);
+            }
+
+            @Override
+            public void onSessionResumeFailed(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionStarted(CastSession session, String sessionId) {
+                onApplicationConnected(session);
+            }
+
+            @Override
+            public void onSessionStartFailed(CastSession session, int error) {
+                onApplicationDisconnected();
+            }
+
+            @Override
+            public void onSessionStarting(CastSession session) {
+            }
+
+            @Override
+            public void onSessionEnding(CastSession session) {
+            }
+
+            @Override
+            public void onSessionResuming(CastSession session, String sessionId) {
+            }
+
+            @Override
+            public void onSessionSuspended(CastSession session, int reason) {
+            }
+
+            private void onApplicationConnected(CastSession castSession) {
+                mCastSession = castSession;
+
+            }
+
+            private void onApplicationDisconnected() {
+
+            }
+        };
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -488,7 +549,9 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 }
                 if(isLoadingMore){
 
-                    adapter.updateModal(response.body().results);
+                    GamesVideoModalList listModal = response.body();
+                    adapter.updateModal(listModal.results);
+                    Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " characters");
 
                 }else {
 
@@ -508,14 +571,18 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                         //searching the data for first time
                         if(adapter==null){
 
-
-
-                            listModals = response.body().results;
+                            GamesVideoModalList listModal = response.body();
+                            listModals = listModal.results;
+                            if (!listModals.isEmpty()) {
+                                Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " characters");
+                            }
                             adapter = new GameVideoAdapter(listModals, getContext(), isReduced,realm,GameVideoPagerFragment.this,realmMap,recyclerView);
                             recyclerView.setAdapter(adapter);
 
                         }else {  //searching the data after first time
-                            listModals = response.body().results;
+                            GamesVideoModalList listModal = response.body();
+                            listModals = listModal.results;
+                            Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " characters");
                             adapter.swap(listModals);
 
                         }
@@ -780,7 +847,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             case 0:
                 url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, 0);
+                    videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, 0);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 
@@ -791,7 +858,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             case 1:
                 url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
                 if (use_inbuilt)
-                    videoPlayInterface.onVideoClick(url, modal.id, elapsed_time, 0);
+                    videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, 0);
                 else {
                     videoPlayInterface.onExternalPlayerVideoClick(url, modal.id);
 
@@ -847,11 +914,12 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 final int time_elapsed = data.getIntExtra(GiantBomb.SEEK_POSITION, 0);
-
                 if (time_elapsed > 0) {
+
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
+
                             WatchedVideoDatabase database = new WatchedVideoDatabase(video_id, time_elapsed);
                             realm.copyToRealmOrUpdate(database);
                             RealmResults<WatchedVideoDatabase> realmResults = realm.where(WatchedVideoDatabase.class).findAll();

@@ -1,5 +1,8 @@
 package com.example.randomlocks.gamesnote.HelperClass;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.webkit.URLUtil;
 
@@ -12,6 +15,7 @@ import com.example.randomlocks.gamesnote.Interface.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.Interface.GameWikiListInterface;
 import com.example.randomlocks.gamesnote.Interface.GamesVideosInterface;
 import com.example.randomlocks.gamesnote.Interface.UserReviewInterface;
+import com.example.randomlocks.gamesnote.R;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -19,7 +23,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
@@ -324,6 +327,35 @@ public class GiantBomb {
             gameDetailVideoInterface = getRetrofit().create(GameDetailVideoInterface.class);
         }
         return gameDetailVideoInterface;
+    }
+
+    public static void showErrorDialog(Context context, String errorString) {
+        new AlertDialog.Builder(context).setTitle(R.string.error)
+                .setMessage(errorString)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    public static String formatMillis(int millisec) {
+        int seconds = (int) (millisec / 1000);
+        int hours = seconds / (60 * 60);
+        seconds %= (60 * 60);
+        int minutes = seconds / 60;
+        seconds %= 60;
+
+        String time;
+        if (hours > 0) {
+            time = String.format("%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            time = String.format("%d:%02d", minutes, seconds);
+        }
+        return time;
     }
 
 
