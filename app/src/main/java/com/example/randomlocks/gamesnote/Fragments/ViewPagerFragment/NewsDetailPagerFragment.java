@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -133,10 +132,9 @@ public class NewsDetailPagerFragment extends Fragment {
 
         public static final String TITLE = "title";
         public static final String IMAGE_URL = "image_url";
-        private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
         public static final String LINK = "news_link";
         public static final String DESCRIPTION = "news_description";
-
+        private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
         String description;
         TextView title;
         VideoEnabledWebView webView;
@@ -322,6 +320,7 @@ public class NewsDetailPagerFragment extends Fragment {
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             super.onCreateOptionsMenu(menu,inflater);
+            inflater.inflate(R.menu.game_news_detail_menu, menu);
 
         }
 

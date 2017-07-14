@@ -37,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:scrollbars="none"
         app:itemTextAppearance="@style/Widget.Design.NavigationView"
         app:itemTextColor="@color/state_list"
         app:menu="@menu/navigation_menu"

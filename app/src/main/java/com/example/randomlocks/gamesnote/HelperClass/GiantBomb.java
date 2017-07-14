@@ -3,7 +3,9 @@ package com.example.randomlocks.gamesnote.HelperClass;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.webkit.URLUtil;
 
 import com.example.randomlocks.gamesnote.ExampleApplication;
@@ -356,6 +358,11 @@ public class GiantBomb {
             time = String.format("%d:%02d", minutes, seconds);
         }
         return time;
+    }
+
+    public static float dipToPixels(Context context, float dipValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
     }
 
 

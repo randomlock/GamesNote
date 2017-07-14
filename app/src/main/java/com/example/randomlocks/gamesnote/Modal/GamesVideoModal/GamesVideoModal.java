@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoModalMinimal;
 import com.google.gson.annotations.Expose;
 
 import io.realm.RealmObject;
@@ -15,6 +16,17 @@ import io.realm.annotations.PrimaryKey;
 public class GamesVideoModal extends RealmObject implements Parcelable {
 
 
+    public static final Parcelable.Creator<GamesVideoModal> CREATOR = new Parcelable.Creator<GamesVideoModal>() {
+        @Override
+        public GamesVideoModal createFromParcel(Parcel source) {
+            return new GamesVideoModal(source);
+        }
+
+        @Override
+        public GamesVideoModal[] newArray(int size) {
+            return new GamesVideoModal[size];
+        }
+    };
     @Expose
     public String deck;
     @Expose
@@ -38,13 +50,40 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     public String videoType;
     @Expose
     public String youtubeId;
-
-
-
     public boolean isFavorite = false;
     public boolean isWatchLater = false;
 
 
+    public GamesVideoModal(GameVideoModalMinimal modalMinimal) {
+        this.deck = "";
+        this.highUrl = modalMinimal.highUrl;
+        this.lowUrl = modalMinimal.lowUrl;
+        this.id = 4;
+        this.lengthSeconds = modalMinimal.lengthSeconds;
+        this.name = modalMinimal.name;
+        this.publishDate = "";
+        this.siteDetailUrl = modalMinimal.siteDetailUrl;
+        this.image = modalMinimal.image;
+        this.videoType = "";
+        this.youtubeId = modalMinimal.youtubeId;
+    }
+
+    public GamesVideoModal() {
+    }
+
+    protected GamesVideoModal(Parcel in) {
+        this.deck = in.readString();
+        this.highUrl = in.readString();
+        this.lowUrl = in.readString();
+        this.id = in.readInt();
+        this.lengthSeconds = in.readInt();
+        this.name = in.readString();
+        this.publishDate = in.readString();
+        this.siteDetailUrl = in.readString();
+        this.image = in.readParcelable(CharacterImage.class.getClassLoader());
+        this.videoType = in.readString();
+        this.youtubeId = in.readString();
+    }
 
     @Override
     public int describeContents() {
@@ -65,36 +104,6 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
         dest.writeString(this.videoType);
         dest.writeString(this.youtubeId);
     }
-
-    public GamesVideoModal() {
-    }
-
-    protected GamesVideoModal(Parcel in) {
-        this.deck = in.readString();
-        this.highUrl = in.readString();
-        this.lowUrl = in.readString();
-        this.id = in.readInt();
-        this.lengthSeconds = in.readInt();
-        this.name = in.readString();
-        this.publishDate = in.readString();
-        this.siteDetailUrl = in.readString();
-        this.image = in.readParcelable(CharacterImage.class.getClassLoader());
-        this.videoType = in.readString();
-        this.youtubeId = in.readString();
-    }
-
-    public static final Parcelable.Creator<GamesVideoModal> CREATOR = new Parcelable.Creator<GamesVideoModal>() {
-        @Override
-        public GamesVideoModal createFromParcel(Parcel source) {
-            return new GamesVideoModal(source);
-        }
-
-        @Override
-        public GamesVideoModal[] newArray(int size) {
-            return new GamesVideoModal[size];
-        }
-    };
-
 
     @Override
     public boolean equals(Object o) {

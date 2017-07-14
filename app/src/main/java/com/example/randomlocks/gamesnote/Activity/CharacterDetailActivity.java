@@ -1,19 +1,28 @@
 package com.example.randomlocks.gamesnote.Activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -54,8 +63,8 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     String apiUrl, imageUrl,title;
     ImageView coverImage;
     CircleImageView coverImage2;
-    TextView mSmallDescription, mBigDescription, mFirstAppearance, mAlias, mTitle;
-    RecyclerView recyclerview, imageRecyclerView;
+    TextView mSmallDescription, mFirstAppearance, mAlias, mTitle;
+    RecyclerView imageRecyclerView;
     LinearLayout parentLayout;
     GameCharacterInterface mGameCharacterInterface;
     Call<CharacterListModal> call;
@@ -87,6 +96,9 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         collapsingToolbarLayout.setTitle("");
         toolbar = (Toolbar) collapsingToolbarLayout.findViewById(R.id.my_toolbar);
         coverImage = (ImageView) collapsingToolbarLayout.findViewById(R.id.character_image);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        coverImage.getLayoutParams().height = metrics.heightPixels / 3;
+        coverImage.requestLayout();
         coverImage2 = (CircleImageView) coordinatorLayout.findViewById(R.id.character_image2);
         scrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
@@ -102,13 +114,11 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         mBirthDay = (TextView) parentLayout.findViewById(R.id.birthday);
         mSmallDescription = (TextView) parentLayout.findViewById(R.id.deck);
         imageRecyclerView = (RecyclerView) parentLayout.findViewById(R.id.image_recycler_view);
-        mBigDescription = (TextView) parentLayout.findViewById(R.id.description);
         mFirstAppearance = (TextView) parentLayout.findViewById(R.id.first_appearance);
         mAlias = (TextView) parentLayout.findViewById(R.id.alias);
         above_image_line = parentLayout.findViewById(R.id.above_image_line);
         image_heading = (TextView) parentLayout.findViewById(R.id.image_heading);
-        recyclerview = (RecyclerView) parentLayout.findViewById(R.id.recycler_view);
-        recyclerview.setNestedScrollingEnabled(false);
+
 
 
         setSupportActionBar(toolbar);
@@ -300,21 +310,14 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         }
         Document doc = null;
         if (characterDetailModal.description != null) {
-            doc = Jsoup.parse(characterDetailModal.description);
-            Elements info = doc.getElementsByTag("p");
-            if (info != null) {
-                StringBuilder builder = new StringBuilder();
-
-                for (Element element : info) {
-                    builder.append(element.text()).append("\n\n");
-                }
-                mBigDescription.setText(builder.toString());
-
-
-            }
+            fillDescription(characterDetailModal.description);
         }
 
 
+    }
+
+    private void fillDescription(String description) {
+        new ParseJsoup().execute(description);
     }
 
     @Override
@@ -423,4 +426,118 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         if(call!=null)
             call.cancel();
     }
+
+    private TextView getTextView(String text) {
+        TextView textView = new TextView(CharacterDetailActivity.this, null, R.style.SubTitleText);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        int margin = (int) GiantBomb.dipToPixels(CharacterDetailActivity.this, 12);
+        params.setMargins(margin, 0, margin, 0);
+        textView.setLayoutParams(params);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        textView.setTextColor(getTextColor());
+        textView.setLineSpacing(0, (float) 1.40);
+        textView.setText(text);
+        return textView;
+    }
+
+    private int getTextColor() {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = CharacterDetailActivity.this.getTheme();
+        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+        TypedArray arr =
+                CharacterDetailActivity.this.obtainStyledAttributes(typedValue.data, new int[]{
+                        android.R.attr.textColorPrimary});
+        int primaryColor = arr.getColor(0, -1);
+        arr.recycle();
+        return primaryColor;
+    }
+
+    private class ParseJsoup extends AsyncTask<String, String, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            String desc = params[0];
+
+            Document document = Jsoup.parse(desc);
+            if (document != null) {
+                Elements elements = document.select("*");
+
+                for (Element element : elements) {
+                    if (element.tagName().equals("p")) {
+                        publishProgress(element.text(), String.valueOf(true));
+                    } else if (element.tagName().equals("figure")) {
+                        Elements innerElements = element.getElementsByTag("img");
+                        if (innerElements != null) {
+                            Element innerElement = innerElements.first();
+                            if (innerElement.hasAttr("alt"))
+                                publishProgress(element.absUrl("data-img-src"), String.valueOf(false), innerElement.attr("alt"));
+                            else
+                                publishProgress(element.absUrl("data-img-src"), String.valueOf(false));
+                        } else {
+                            publishProgress(element.absUrl("data-img-src"), String.valueOf(false));
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            String result = values[0];
+            boolean isDescription = Boolean.parseBoolean(values[1]);
+            if (isDescription) {
+                parentLayout.addView(getTextView(result));
+            } else {
+                CardView cardView = new CardView(CharacterDetailActivity.this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.gravity = Gravity.CENTER;
+                int margin = (int) GiantBomb.dipToPixels(CharacterDetailActivity.this, 12);
+                params.setMargins(margin, margin, margin, margin);
+                cardView.setLayoutParams(params);
+                cardView.setRadius(GiantBomb.dipToPixels(CharacterDetailActivity.this, 4));
+                ImageView imageView = new ImageView(CharacterDetailActivity.this);
+                imageView.setLayoutParams(new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                imageView.setAdjustViewBounds(true);
+                if (!result.isEmpty()) {
+                    Picasso.with(CharacterDetailActivity.this).load(result).placeholder(R.drawable.news_image_drawable).into(imageView);
+                }
+                cardView.addView(imageView);
+                parentLayout.addView(cardView);
+
+                TextView textView;
+                if (values.length == 3 && !values[2].equals("No Caption Provided")) {
+                    textView = getTextView(values[2]);
+                    ((LinearLayout.LayoutParams) textView.getLayoutParams()).gravity = Gravity.CENTER;
+                    ((LinearLayout.LayoutParams) textView.getLayoutParams()).setMargins(margin, 0, margin, margin);
+                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD_ITALIC));
+                    textView.setGravity(Gravity.CENTER);
+
+                    parentLayout.addView(textView);
+
+                }
+
+
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            View view = new View(CharacterDetailActivity.this);
+            int height = (int) GiantBomb.dipToPixels(CharacterDetailActivity.this, getResources().getDimension(R.dimen.line));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+            int margin = (int) GiantBomb.dipToPixels(CharacterDetailActivity.this, 12);
+            params.setMargins(0, margin, 0, margin);
+            view.setLayoutParams(params);
+            view.setBackgroundColor(ContextCompat.getColor(CharacterDetailActivity.this, R.color.linecolor));
+            parentLayout.addView(view);
+        }
+    }
+
+
+
+
+
 }

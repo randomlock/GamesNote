@@ -2,22 +2,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/MyToolbar">
 
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="@color/primary"
-            android:theme="@style/MyToolbarLight" />
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/MyToolbar" />
 
 
     </android.support.design.widget.AppBarLayout>
@@ -28,17 +29,22 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-        <RelativeLayout
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="12dp">
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:transitionName="profile_image" />
+                android:src="@drawable/ic_review_user"
+                app:civ_border_color="@color/black_white"
+                app:civ_border_width="2dp" />
 
             <TextView
                 android:id="@+id/user_name"
@@ -50,10 +56,8 @@
                 android:layout_marginTop="12dp"
                 android:layout_toEndOf="@+id/profile_image"
                 android:layout_toRightOf="@+id/profile_image"
-                android:text="User Name"
                 android:textAppearance="@style/TitleText"
-                android:textStyle="bold"
-                android:transitionName="user_name" />
+                android:textColor="?android:attr/textColorPrimary" />
 
             <RatingBar
                 android:id="@+id/myRatingBar"
@@ -65,7 +69,6 @@
                 android:layout_alignParentRight="true"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:transitionName="myRatingBar"
 
                 />
 
@@ -77,35 +80,39 @@
                 android:layout_alignLeft="@+id/user_name"
                 android:layout_alignStart="@+id/user_name"
                 android:layout_below="@+id/user_name"
-                android:text="Date"
-                android:textAppearance="@style/SubTitleText"
-                android:transitionName="date" />
+                android:layout_marginTop="12dp"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <TextView
                 android:id="@+id/deck"
-                style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/profile_image"
+                android:layout_below="@+id/date"
                 android:layout_marginTop="12dp"
-                android:text="small description"
-                android:textStyle="italic"
-                android:transitionName="deck" />
+                android:textColor="?android:attr/textColorPrimary"
+
+                />
+
+            <LinearLayout
+                android:id="@+id/description_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/deck"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical">
+
+
+            </LinearLayout>
+
 
             <View
-                android:id="@+id/border"
+                android:id="@+id/view"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@id/deck"
+                android:layout_height="@dimen/line"
+                android:layout_below="@id/description_parent"
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="12dp"
-                android:background="@color/accent" />
-
-            <WebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/border" />
+                android:background="@color/linecolor" />
 
 
         </RelativeLayout>

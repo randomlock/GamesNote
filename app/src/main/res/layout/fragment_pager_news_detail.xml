@@ -18,20 +18,20 @@
             android:id="@+id/parent_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_gravity="fill_vertical"
-            android:descendantFocusability="blocksDescendants">
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
 
 
             <TextView
                 android:id="@+id/news_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:textColor="@color/primary_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/image_card"
@@ -54,7 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp" />
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="12dp" />
 
 
 
@@ -70,28 +71,33 @@
         android:id="@+id/floating_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        app:menu_icon="@drawable/fab_add"
-        app:menu_labels_position="left"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        app:layout_anchor="@id/scroll_view"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingActionMenuBehavior"
+        app:menu_backgroundColor="@color/lightaccent"
         app:menu_colorNormal="@color/accent"
         app:menu_colorPressed="@color/accent"
-        app:menu_openDirection="up"
-        app:menu_labels_colorPressed="@color/accent"
+        app:menu_icon="@drawable/fab_add"
         app:menu_labels_colorNormal="@color/primary"
-        app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingActionMenuBehavior"
-        app:layout_anchor="@id/scroll_view"
-        app:layout_anchorGravity="bottom|right|end">
+        app:menu_labels_colorPressed="@color/accent"
+        app:menu_labels_position="left"
+        app:menu_openDirection="up">
 
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/white"
-            app:fab_label="@string/share"
+            android:src="@drawable/ic_share"
+            app:fab_colorNormal="@color/accent"
             app:fab_colorPressed="@color/accent"
+            app:fab_label="@string/share"
+            app:fab_size="mini"
 
             />
 
@@ -99,11 +105,13 @@
             android:id="@+id/view_in_browser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_internet_white"
             android:tint="@color/primary"
             app:backgroundTint="@color/white"
-            app:fab_label="View in browser"
-            app:fab_colorNormal="@color/white"
+            app:fab_colorNormal="@color/accent"
             app:fab_colorPressed="@color/accent"
+            app:fab_label="View in browser"
+            app:fab_size="mini"
 
             />
 

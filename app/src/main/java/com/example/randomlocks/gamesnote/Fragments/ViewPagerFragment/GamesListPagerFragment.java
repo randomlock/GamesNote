@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -70,7 +69,6 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     private boolean isAscending ;
     private boolean isSimple;
     private DividerItemDecoration itemDecoration;
-    private ViewPager pager;
 
 
     public GamesListPagerFragment() {
@@ -90,7 +88,6 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         realm = Realm.getDefaultInstance();
-        Log.d("path",realm.getPath());
         status = getArguments().getInt(STATUS);
         setHasOptionsMenu(true);
         itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
@@ -118,12 +115,6 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
 
 
     @Nullable
@@ -131,7 +122,6 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pager_games_list, container, false);
         parentFragment = (GamesListFragment) getParentFragment();
-        pager = (ViewPager) getActivity().findViewById(R.id.my_pager);
         recyclerView = (FastScrollRecyclerView) view.findViewById(R.id.recycler_view);
 
         textView = (TextView) view.findViewById(R.id.errortext);
@@ -273,9 +263,10 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d("tag1", "oncreteoptionmenu");
         inflater.inflate(R.menu.game_list_menu,menu);
         getSearchManager(getContext(),menu,false);
-
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -310,16 +301,18 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                 }
 
 
-                if (recyclerView != null) {
+              /*  if (recyclerView != null) {
                     if (isSimple) {
                         recyclerView.addItemDecoration(itemDecoration);
                     } else {
                         recyclerView.removeItemDecoration(itemDecoration);
                     }
                 }
+                adapter.setSimple(isSimple);*/
 
+                /*Save the isSimple and update all viewpager item by calling notifyDatasetChanged()*/
                 SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_LIST_VIEW,isSimple,getContext());
-                adapter.setSimple(isSimple);
+                parentFragment.updateViewPager();
 
 
             }
@@ -385,7 +378,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         if(adapter==null || adapter.getItemCount()==0){
             Toaster.make(getContext(),"No game added");
         }else {
-            if (asc) {
+           /* if (asc) {
                 realmResult = realmResult.sort(getField(which),Sort.ASCENDING);
             }else {
                 realmResult = realmResult.sort(getField(which), Sort.DESCENDING);
@@ -393,8 +386,8 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
             if(adapter!=null){
                 adapter.updateData(realmResult);
                 adapter.updateSortOption(getField(which), asc);
-            }
-            // pager.getAdapter().notifyDataSetChanged();
+            }*/
+            parentFragment.updateViewPager();
         }
 
 

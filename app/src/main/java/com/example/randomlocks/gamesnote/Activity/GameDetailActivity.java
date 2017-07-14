@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.randomlocks.gamesnote.Fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
 
 public class GameDetailActivity extends AppCompatActivity implements GameDetailFragment.CommunicationInterface {
@@ -107,11 +108,17 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
     }
 
     @Override
-    public void onVideoClick(String url, boolean needRequest,int seek_position) {
+    public void onVideoClick(String url, boolean needRequest, int seek_position, GamesVideoModal modal) {
 
-        Intent intent = new Intent(this, VideoPlayerActivity.class);
+        /*Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
         intent.putExtra(GiantBomb.SEEK_POSITION,seek_position);
+        startActivityForResult(intent,1);*/
+
+        Intent intent = new Intent(this, LocalPlayerActivity.class);
+        intent.putExtra(GiantBomb.API_URL, url);
+        intent.putExtra(GiantBomb.SEEK_POSITION, seek_position);
+        intent.putExtra(GiantBomb.MODAL, modal);
         startActivityForResult(intent,1);
 
     }

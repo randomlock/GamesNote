@@ -1,28 +1,33 @@
 package com.example.randomlocks.gamesnote.Activity;
 
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
-import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
+import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
@@ -30,6 +35,11 @@ import com.example.randomlocks.gamesnote.Modal.GameReviewModal.GameReviewModal;
 import com.example.randomlocks.gamesnote.Modal.GameReviewModal.GameReviewModalList;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Picasso;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +56,6 @@ public class GameReviewActivity extends AppCompatActivity {
     Toolbar toolbar;
     RatingBar ratingBar;
     TextView deck, reviewer, publishDate, gameTitle;
-    WebView webView;
     GameReviewInterface gameReviewInterface = null;
     GameReviewModal modals = null;
     Map<String, String> map;
@@ -65,7 +74,6 @@ public class GameReviewActivity extends AppCompatActivity {
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.progressBar);
         parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);
         ratingBar = (RatingBar) coodinatorLayout.findViewById(R.id.myRatingBar);
-        webView = (WebView) coodinatorLayout.findViewById(R.id.webView);
         deck = (TextView) coodinatorLayout.findViewById(R.id.deck);
         reviewer = (TextView) coodinatorLayout.findViewById(R.id.reviewer);
         publishDate = (TextView) coodinatorLayout.findViewById(R.id.date);
@@ -135,7 +143,7 @@ public class GameReviewActivity extends AppCompatActivity {
     }
 
     private void fillData(final GameReviewModal modals) {
-
+        progressBar.setVisibility(View.GONE);
         if (modals.deck != null) {
             deck.setText(modals.deck);
         }
@@ -151,7 +159,7 @@ public class GameReviewActivity extends AppCompatActivity {
         }
 
         if (modals.description != null) {
-            StringBuilder builder = new StringBuilder(modals.description.length() + 100);
+         /*   StringBuilder builder = new StringBuilder(modals.description.length() + 100);
             String color;
             int night_mode = AppCompatDelegate.getDefaultNightMode();
             if (night_mode == AppCompatDelegate.MODE_NIGHT_YES)
@@ -179,10 +187,11 @@ public class GameReviewActivity extends AppCompatActivity {
                 }
             });
             webView.loadDataWithBaseURL("file:///android_asset/", builder.toString(), "text/html", "UTF-8", null);
-            webView.setBackgroundColor(Color.TRANSPARENT);
+            webView.setBackgroundColor(Color.TRANSPARENT);*/
 
 
-            // need to set harware layer for api>=21
+            new ParseJsoup().execute(modals.description);
+
 
         }
 
@@ -230,6 +239,115 @@ public class GameReviewActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelable(MODAL, modals);
 
+    }
+
+    private TextView getTextView(String text) {
+        TextView textView = new TextView(GameReviewActivity.this, null, R.style.SubTitleText);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        int margin = (int) GiantBomb.dipToPixels(GameReviewActivity.this, 12);
+        params.setMargins(margin, 0, margin, 0);
+        textView.setLayoutParams(params);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        textView.setTextColor(getTextColor());
+        textView.setLineSpacing(0, (float) 1.40);
+        textView.setText(text);
+        return textView;
+    }
+
+    private int getTextColor() {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = GameReviewActivity.this.getTheme();
+        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+        TypedArray arr =
+                GameReviewActivity.this.obtainStyledAttributes(typedValue.data, new int[]{
+                        android.R.attr.textColorPrimary});
+        int primaryColor = arr.getColor(0, -1);
+        arr.recycle();
+        return primaryColor;
+    }
+
+    private class ParseJsoup extends AsyncTask<String, String, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            String desc = params[0];
+
+            Document document = Jsoup.parse(desc);
+            if (document != null) {
+                Elements elements = document.select("*");
+
+                for (Element element : elements) {
+                    if (element.tagName().equals("p")) {
+                        publishProgress(element.text(), String.valueOf(true));
+                    } else if (element.tagName().equals("figure")) {
+                        Elements innerElements = element.getElementsByTag("img");
+                        if (innerElements != null) {
+                            Element innerElement = innerElements.first();
+                            if (innerElement.hasAttr("alt"))
+                                publishProgress(element.absUrl("data-img-src"), String.valueOf(false), innerElement.attr("alt"));
+                            else
+                                publishProgress(element.absUrl("data-img-src"), String.valueOf(false));
+                        } else {
+                            publishProgress(element.absUrl("data-img-src"), String.valueOf(false));
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            String result = values[0];
+            boolean isDescription = Boolean.parseBoolean(values[1]);
+            if (isDescription) {
+                parentLinearLayout.addView(getTextView(result));
+            } else {
+                CardView cardView = new CardView(GameReviewActivity.this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.gravity = Gravity.CENTER;
+                int margin = (int) GiantBomb.dipToPixels(GameReviewActivity.this, 12);
+                params.setMargins(margin, margin, margin, margin);
+                cardView.setLayoutParams(params);
+                cardView.setRadius(GiantBomb.dipToPixels(GameReviewActivity.this, 4));
+                ImageView imageView = new ImageView(GameReviewActivity.this);
+                imageView.setLayoutParams(new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                imageView.setAdjustViewBounds(true);
+                if (!result.isEmpty()) {
+                    Picasso.with(GameReviewActivity.this).load(result).placeholder(R.drawable.news_image_drawable).into(imageView);
+                }
+                cardView.addView(imageView);
+                parentLinearLayout.addView(cardView);
+
+                TextView textView;
+                if (values.length == 3 && !values[2].equals("No Caption Provided")) {
+                    textView = getTextView(values[2]);
+                    ((LinearLayout.LayoutParams) textView.getLayoutParams()).gravity = Gravity.CENTER;
+                    ((LinearLayout.LayoutParams) textView.getLayoutParams()).setMargins(margin, 0, margin, margin);
+                    textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD_ITALIC));
+                    textView.setGravity(Gravity.CENTER);
+
+                    parentLinearLayout.addView(textView);
+
+                }
+
+
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            View view = new View(GameReviewActivity.this);
+            int height = (int) GiantBomb.dipToPixels(GameReviewActivity.this, getResources().getDimension(R.dimen.line));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+            int margin = (int) GiantBomb.dipToPixels(GameReviewActivity.this, 12);
+            params.setMargins(0, margin, 0, margin);
+            view.setLayoutParams(params);
+            view.setBackgroundColor(ContextCompat.getColor(GameReviewActivity.this, R.color.linecolor));
+            parentLinearLayout.addView(view);
+        }
     }
 
 

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:padding="12dp">
+    android:layout_margin="6dp"
+    android:background="?attr/selectableItemBackground"
+    android:padding="6dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
-        android:transitionName="profile_image"
-
+        android:src="@drawable/ic_review_user"
+        app:civ_border_color="@color/black_white"
+        app:civ_border_width="2dp"
         />
 
     <TextView
@@ -25,11 +27,8 @@
         android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/profile_image"
         android:layout_toRightOf="@+id/profile_image"
-        android:text="User Name"
         android:textAppearance="@style/TitleText"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textStyle="bold"
-        android:transitionName="user_name" />
+        android:textColor="?android:attr/textColorPrimary" />
 
     <RatingBar
         android:id="@+id/myRatingBar"
@@ -41,7 +40,6 @@
         android:layout_alignParentRight="true"
         android:isIndicator="true"
         android:numStars="5"
-        android:transitionName="myRatingBar"
 
         />
 
@@ -54,19 +52,16 @@
         android:layout_alignStart="@+id/user_name"
         android:layout_below="@+id/user_name"
         android:layout_marginTop="12dp"
-        android:text="Date"
-        android:textAppearance="@style/SubTitleText"
-        android:transitionName="date" />
+        android:textColor="?android:attr/textColorPrimary" />
 
     <TextView
         android:id="@+id/deck"
-        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date"
         android:layout_marginTop="12dp"
-        android:text="small description"
-        android:transitionName="deck" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/description"
@@ -76,9 +71,12 @@
         android:layout_below="@+id/deck"
         android:layout_marginTop="24dp"
         android:ellipsize="end"
+        android:lineSpacingMultiplier="1.4"
         android:maxLines="5"
-        android:text="Large description"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="14sp"
+
+        />
 
 
 </RelativeLayout>

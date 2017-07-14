@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
@@ -20,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,10 +29,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -69,12 +69,14 @@ import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoMinimal;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoModalMinimal;
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
+import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -117,6 +119,11 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     private static final String GAME_CHARACTER = "game_detail_character" ;
     private static final String  GAME_SIMILAR = "game_detail_similar";
     private static final String GAME_ID = "game_id" ;
+    private static final String IMAGE_QUALITY_KEY = "video_preference";
+    private static final int LOW_VIDEO_URL = 0;
+    private static final int HIGH_VIDEO_URL = 1;
+    private static final int OPEN_IN_BROWSER = 2;
+    private static final int OPEN_IN_YOUTUBE = 3;
     Realm realm;
     int list_category;
     int game_id;
@@ -126,6 +133,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     Map<String, String> map = null;
     Map<String,String> videoMap;
     GameDetailModal gameDetailModal = null;
+    GamesVideoModal videoModal;
     CollapsingToolbarLayout toolbarLayout;
     AppBarLayout appBarLayout;
     RecyclerView recyclerView, similarGameRecycleView, characterRecycleView, imageRecycleView, videoRecyclerView;
@@ -135,7 +143,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     List<CharacterGamesImage> characterImage = null, similarGameImage = null;
     List<GameWikiPlatform> platforms = null;
     boolean isAdded=false;
-
     CoordinatorLayout coordinatorLayout;
     SimilarGameAdapter similarGameAdapter;
     GameDetailCharacterAdapter characterAdapter;
@@ -157,9 +164,8 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     LinearLayout statsDetailView;
     GameListDatabase statsDatabase;
     ImageView toggleArrow;
-    View mDimmerView;
+    View videoDim;
     Matrix matrix=new Matrix();
-
     GameDetailVideoInterface videoInterface;
     CustomVideoView videoView;
     CustomMediaController media_Controller;
@@ -170,7 +176,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     private DisplayMetrics metrics;
     private String video_url;
     private int drawable_color;
-
+    private int videoType;
     private RealmChangeListener statsCallback = new RealmChangeListener() {
         @Override
         public void onChange(Object element) {
@@ -223,7 +229,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         if (videoMap==null) {
             videoMap = new HashMap<>();
             videoMap.put(GiantBomb.KEY, GiantBomb.API_KEY);
-            String field_list = "high_url,low_url";
+            String field_list = "site_detail_url,youtube_id,high_url,low_url,length_seconds,name,image";
             videoMap.put(GiantBomb.FIELD_LIST, field_list);
             videoMap.put(GiantBomb.FORMAT, "JSON");
         }
@@ -235,132 +241,86 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         videoInterface.getResult(videoUrl,videoMap).enqueue(new Callback<GameVideoMinimal>() {
             @Override
             public void onResponse(Call<GameVideoMinimal> call, Response<GameVideoMinimal> response) {
-                GameVideoModalMinimal videoModal = response.body().results;
-                video_url = videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
-
-                if(getResources().getConfiguration().orientation==Configuration.ORIENTATION_LANDSCAPE){
-                    mCommunicationInterface.onVideoClick(video_url,false,0);
-                    return;
+                GameVideoModalMinimal minimalVideoModal = response.body().results;
+                videoModal = new GamesVideoModal(minimalVideoModal);
+                if (videoType == LOW_VIDEO_URL || videoType == HIGH_VIDEO_URL) {
+                    setUpVideoView();
+                } else if (videoType == OPEN_IN_YOUTUBE) {
+                    if (videoModal.youtubeId != null) {
+                        Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(), GiantBomb.YOUTUBE_API_KEY, videoModal.youtubeId, 0, true, false);
+                        startActivity(intent);
+                    } else {
+                        Toasty.error(getContext(), "Not available on youtube").show();
+                        setUpVideoView();
+                    }
+                } else if (videoType == OPEN_IN_BROWSER) {
+                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).addDefaultShareMenuItem().build();
+                    CustomTabActivityHelper.openCustomTab(
+                            getActivity(), customTabsIntent, Uri.parse(videoModal.siteDetailUrl), new WebViewFallback());
                 }
+
+            }
+
+            @Override
+            public void onFailure(Call<GameVideoMinimal> call, Throwable t) {
+                Toaster.makeSnackBar(coordinatorLayout, "error cannot play");
+            }
+        });
+
+    }
+
+    private void setUpVideoView() {
+        video_url = videoType == LOW_VIDEO_URL ? videoModal.lowUrl : videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mCommunicationInterface.onVideoClick(video_url, false, 0, videoModal);
+            return;
+        }
 /*
                 if (videoView==null) {
 */
-                    videoView = (CustomVideoView) toolbarLayout.findViewById(R.id.play_video_texture);
-                    final View videoDim =  nestedScrollView.findViewById(R.id.video_dimmer_view);
-                    media_Controller = new CustomMediaController(getContext(),false);
+        videoView = (CustomVideoView) toolbarLayout.findViewById(R.id.play_video_texture);
+        videoDim = nestedScrollView.findViewById(R.id.video_dimmer_view);
+        media_Controller = new CustomMediaController(getContext(), false);
 
 
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) videoView.getLayoutParams();
-                    params.width =  metrics.widthPixels;
-                    params.height = metrics.heightPixels / 3;
-                    params.leftMargin = 0;
-                    params.rightMargin = 0;
-                    videoView.setLayoutParams(params);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) videoView.getLayoutParams();
+        params.width = metrics.widthPixels;
+        params.height = metrics.heightPixels / 3;
+        params.leftMargin = 0;
+        params.rightMargin = 0;
+        videoView.setLayoutParams(params);
 
-                    media_Controller.setAnchorView(videoView);
-                    media_Controller.setPrevNextListeners(new View.OnClickListener() {
-                        //for next video
-                        @Override
-                        public void onClick(View view) {
-                            if (current_video_pos+1 < gameDetailModal.videos.size()) {
-                                getInit(gameDetailModal.videos.get(++current_video_pos));
-                            }else {
-                                Toasty.warning(getContext(),"no next video", Toast.LENGTH_SHORT,true).show();
-
-
-                            }
-                        }
-                    }, //for prev video
-                            new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if(current_video_pos>0){
-                                getInit(gameDetailModal.videos.get(--current_video_pos));
-                            }else {
-                                Toasty.warning(getContext(),"no previous video", Toast.LENGTH_SHORT,true).show();
-                            }
-                        }
-                            });
-                videoView.setMediaController(media_Controller);
-                videoView.setVideoPath(video_url);
-                videoView.requestFocus();
-                videoView.start();
+        media_Controller.setAnchorView(videoView);
+        media_Controller.setPrevNextListeners(new View.OnClickListener() {
+                                                  //for next video
+                                                  @Override
+                                                  public void onClick(View view) {
+                                                      if (current_video_pos + 1 < gameDetailModal.videos.size()) {
+                                                          getInit(gameDetailModal.videos.get(++current_video_pos));
+                                                      } else {
+                                                          Toasty.warning(getContext(), "no next video", Toast.LENGTH_SHORT, true).show();
 
 
-                videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                                      }
+                                                  }
+                                              }, //for prev video
+                new View.OnClickListener() {
                     @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                            @Override
-                            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                                if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
-                                    videoProgress.setVisibility(View.VISIBLE);
-                                if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
-                                    videoProgress.setVisibility(View.GONE);
-                                return false;
-                            }
-                        });
+                    public void onClick(View view) {
+                        if (current_video_pos > 0) {
+                            getInit(gameDetailModal.videos.get(--current_video_pos));
+                        } else {
+                            Toasty.warning(getContext(), "no previous video", Toast.LENGTH_SHORT, true).show();
+                        }
                     }
                 });
-                videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(MediaPlayer mp, int what, int extra) {
-                        videoProgress.setVisibility(View.GONE);
-                        return false;
-                    }
-                });
-
-
-                videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                        public void onCompletion(MediaPlayer mediaPlayer) {
-                            animateToolbar();
-                        }
-                    });
-
-                    videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
-                        @Override
-                        public void onPlay() {
-                            animateToolbar();
-                        }
-
-                        @Override
-                        public void onPause() {
-                            animateToolbar();
-                        }
-                    });
-
-
-                    media_Controller.setListener(new CustomMediaController.OnMediaControllerInteractionListener() {
-                        @Override
-                        public void onRequestFullScreen() {
-                            int seek_position = videoView.getCurrentPosition();
-                           mCommunicationInterface.onVideoClick(video_url,false,seek_position);
-                        }
-
-                        @Override
-                        public void onRequestDimmerView() {
-                            if (videoDim.getAlpha()==0) {
-                                videoDim.animate().alpha(1).withEndAction(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        floatingActionsMenu.hideMenuButton(true);
-
-                                    }
-                                });
-                                //setBackgroundDimming(videoDim,true);
-                            }else {
-                                videoDim.animate().alpha(0).withEndAction(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        floatingActionsMenu.showMenuButton(true);
-
-                                    }
-                                });
-                                //setBackgroundDimming(videoDim,false);
-                            }
-                        }
-                    });
+        videoView.setMediaController(media_Controller);
+        videoView.setVideoPath(video_url);
+        videoView.requestFocus();
+        videoView.start();
+        videoProgress.setVisibility(View.VISIBLE);
+        setVideoListener();
                /* }else {
                     videoView.stopPlayback();
                     videoView.setVideoPath(videoUrl);
@@ -368,16 +328,84 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                     videoProgress.setVisibility(View.GONE);
 
                 }*/
+    }
 
-
-            }
-
+    private void setVideoListener() {
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onFailure(Call<GameVideoMinimal> call, Throwable t) {
-                Toaster.makeSnackBar(coordinatorLayout,"error cannot play");
+            public void onPrepared(MediaPlayer mp) {
+                videoProgress.setVisibility(View.GONE);
+                mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                    @Override
+                    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
+                            videoProgress.setVisibility(View.VISIBLE);
+                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
+                            videoProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                });
+            }
+        });
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                videoProgress.setVisibility(View.GONE);
+                return false;
             }
         });
 
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                animateToolbar();
+            }
+        });
+
+        videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
+            @Override
+            public void onPlay() {
+                animateToolbar();
+            }
+
+            @Override
+            public void onPause() {
+                animateToolbar();
+            }
+        });
+
+
+        media_Controller.setListener(new CustomMediaController.OnMediaControllerInteractionListener() {
+            @Override
+            public void onRequestFullScreen() {
+                int seek_position = videoView.getCurrentPosition();
+                mCommunicationInterface.onVideoClick(video_url, false, seek_position, videoModal);
+            }
+
+            @Override
+            public void onRequestDimmerView() {
+                if (videoDim.getAlpha() == 0) {
+                    videoDim.animate().alpha(1).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            floatingActionsMenu.hideMenuButton(true);
+
+                        }
+                    });
+                    //setBackgroundDimming(videoDim,true);
+                } else {
+                    videoDim.animate().alpha(0).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            floatingActionsMenu.showMenuButton(true);
+
+                        }
+                    });
+                    //setBackgroundDimming(videoDim,false);
+                }
+            }
+        });
     }
 
     public void animateToolbar(){
@@ -536,6 +564,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         title = getArguments().getString(NAME);
         imageUrl = getArguments().getString(IMAGE_URL);
         drawable_color = ContextCompat.getColor(getContext(),R.color.primary);
+        videoType = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString(IMAGE_QUALITY_KEY, "1"));
 
     }
 
@@ -554,27 +583,14 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         super.onConfigurationChanged(newConfig);
         if(videoView!=null && videoView.isPlaying()){
             if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-                mCommunicationInterface.onVideoClick(video_url,false,videoView.getCurrentPosition());
+                mCommunicationInterface.onVideoClick(video_url, false, videoView.getCurrentPosition(), videoModal);
             }
         }
 
 
     }
 
-    private void setBackgroundDimming(final View view, boolean dimmed) {
-        final float targetAlpha = dimmed ? 1f : 0;
-        final int endVisibility = dimmed ? View.VISIBLE : View.GONE;
-        view.setVisibility(View.VISIBLE);
-        view.animate()
-                .alpha(targetAlpha)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.setVisibility(endVisibility);
-                    }
-                })
-                .start();
-    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -583,7 +599,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
         /************************************** FindViewById *********************************/
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
-        mDimmerView = coordinatorLayout.findViewById(R.id.dimmer_view);
         floatingActionsMenu = (FloatingActionMenu) coordinatorLayout.findViewById(R.id.floating_menu);
         coordinatorLayout.findViewById(R.id.replaying).setOnClickListener(this);
         coordinatorLayout.findViewById(R.id.planning).setOnClickListener(this);
@@ -614,9 +629,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                     appbarImage.setVisibility(View.INVISIBLE);
                     playViewButton.setVisibility(View.GONE);
                     getInit(gameDetailModal.videos.get(0));
-
-
-
                 }
 
 
@@ -631,6 +643,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         setTextViewDrawableColor(stats_heading,drawable_color);
         statsDetailView = (LinearLayout) statsCardView.findViewById(R.id.hide_parent_layout);
         toggleArrow = (ImageView) statsCardView.findViewById(R.id.stats_toggle);
+        toggleArrow.setColorFilter(ContextCompat.getColor(getContext(), R.color.primary));
         statsCardView.setOnClickListener(this);
         similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
         similar_game_heading = (TextView) nestedScrollView.findViewById(R.id.similar_game_heading);
@@ -668,21 +681,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         recyclerView.setNestedScrollingEnabled(false);
         characterRecycleView.setNestedScrollingEnabled(false);
         similarGameRecycleView.setNestedScrollingEnabled(false);
-
-        floatingActionsMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                setBackgroundDimming(mDimmerView,opened);
-
-            }
-        });
-
-        mDimmerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                floatingActionsMenu.close(true);
-            }
-        });
 
 
         /************************** APPBARLATOUT ********************************/
@@ -1307,7 +1305,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
         void onUserReviewClick(String apiUrl, String gameTitle, String imageUrl);
 
-        void onVideoClick(String url, boolean needRequest, int seek_position);
+        void onVideoClick(String url, boolean needRequest, int seek_position, GamesVideoModal modal);
 
     }
 

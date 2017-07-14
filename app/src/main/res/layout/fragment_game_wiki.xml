@@ -8,21 +8,18 @@
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_coordinator"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/wikibackground"
-    >
-
-
-
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
+        android:id="@+id/root_coordinator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        >
+        android:layout_height="match_parent"
+        android:background="@color/wikibackground">
+
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:elevation="0dp">
 
 
 
@@ -38,93 +35,63 @@
                 app:layout_scrollFlags="scroll|enterAlways"/>
 
 
+        </android.support.design.widget.AppBarLayout>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </android.support.design.widget.AppBarLayout>
-
-
-
-
-
-
-
-    <FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    >
-
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
-
-            <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/leftmargin"
-            android:background="@color/wikibackground"
-                android:scrollbars="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
-
-        </android.support.v7.widget.RecyclerView>
-
-        </LinearLayout>
-        <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone"
-            app:indicator="Pacman"
-            app:indicator_color="@color/accent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/leftmargin"
+                    android:background="@color/wikibackground"
+                    android:scrollbars="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/errortext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="12dp"
-            android:drawablePadding="8dp"
-            android:drawableTop="@drawable/ic_error"
-            android:text="@string/no_result_found"
-            android:textAllCaps="true"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
-            android:visibility="gone"
-            />
+                </android.support.v7.widget.RecyclerView>
 
+            </LinearLayout>
 
-    </FrameLayout>
-
-
-
-
-
+            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                app:indicator="Pacman"
+                app:indicator_color="@color/accent" />
 
 
- </android.support.design.widget.CoordinatorLayout>
+            <TextView
+                android:id="@+id/errortext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="12dp"
+                android:drawablePadding="8dp"
+                android:drawableTop="@drawable/ic_error"
+                android:text="@string/no_result_found"
+                android:textAllCaps="true"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+
+        </FrameLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>
 
 
 
@@ -134,6 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:floatingSearch_close_search_on_keyboard_dismiss="true"
+        app:floatingSearch_dismissFocusOnItemSelection="true"
         app:floatingSearch_leftActionMode="showHamburger"
         app:floatingSearch_menu="@menu/game_wiki_menu"
         app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
@@ -146,4 +114,4 @@
         />
 
 
-    </RelativeLayout>
+</RelativeLayout>

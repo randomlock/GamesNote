@@ -6,20 +6,29 @@
     <PreferenceCategory android:title="General">
 
         <SwitchPreferenceCompat
+            android:defaultValue="false"
             android:key="dark_theme_preference"
-            android:title="Night mode"
             android:summary="Allow dark theme"
-            android:defaultValue="false" />
+            android:title="Night mode" />
 
         <ListPreference
-            android:key="image_preference"
-            android:title="Images quality"
-            android:summary="Image quality when searching game or character"
             android:dialogTitle="Choose quality"
             android:entries="@array/entries_list_preference"
             android:entryValues="@array/entryvalues_list_preference"
+            android:key="image_preference"
+            android:summary="Image quality when searching game or character"
+            android:title="Images quality"
             app:defaultValue="1"
             />
+
+        <ListPreference
+            android:dialogTitle="Choose quality"
+            android:entries="@array/video_entries_list_preference"
+            android:entryValues="@array/video_entries_values_list_preference"
+            android:key="video_preference"
+            android:summary="Video quality when browsing game wiki"
+            android:title="Video quality"
+            app:defaultValue="1" />
 
 
     </PreferenceCategory>
@@ -60,18 +69,18 @@
 
 
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:key="stats_animation_preference"
-            android:title="Animation"
             android:summary="Disable bar/chart animations for smooth loading"
-            android:defaultValue="true" />
+            android:title="Animation" />
 
         <ListPreference
-            android:key="stat_data_preference"
-            android:title="Data size"
-            android:summary="Total no of bars(data) shown in a bar chart"
             android:dialogTitle="Choose number"
             android:entries="@array/stat_list_preference"
             android:entryValues="@array/stat_list_preference"
+            android:key="stat_data_preference"
+            android:summary="Total no of bars(data) shown in a bar chart"
+            android:title="Data size"
             app:defaultValue="10"
             />
 

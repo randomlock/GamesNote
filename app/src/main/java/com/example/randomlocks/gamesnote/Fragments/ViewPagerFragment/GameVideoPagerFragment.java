@@ -551,7 +551,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
                     GamesVideoModalList listModal = response.body();
                     adapter.updateModal(listModal.results);
-                    Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " characters");
+                    Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " videos");
 
                 }else {
 

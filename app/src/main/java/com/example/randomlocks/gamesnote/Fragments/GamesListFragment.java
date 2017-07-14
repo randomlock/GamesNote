@@ -2,12 +2,14 @@ package com.example.randomlocks.gamesnote.Fragments;
 
 
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -48,7 +50,6 @@ public class GamesListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentActivity = getActivity();
-        setHasOptionsMenu(true);
 
 
     }
@@ -69,16 +70,11 @@ public class GamesListFragment extends Fragment {
     }
 
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
         toolbar = (Toolbar) fragmentActivity.findViewById(R.id.my_toolbar);
         tabLayout = (TabLayout) fragmentActivity.findViewById(R.id.my_tablayout);
-
-
         viewPager = (ViewPager) fragmentActivity.findViewById(R.id.my_pager);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,6 +88,13 @@ public class GamesListFragment extends Fragment {
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(6);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnAdapterChangeListener(new ViewPager.OnAdapterChangeListener() {
+            @Override
+            public void onAdapterChanged(@NonNull ViewPager viewPager, @Nullable PagerAdapter oldAdapter, @Nullable PagerAdapter newAdapter) {
+
+
+            }
+        });
 
 
         //  if (savedInstanceState!=null) {
@@ -101,10 +104,13 @@ public class GamesListFragment extends Fragment {
 
     }
 
+
     public void updateViewPager(){
         if (viewPager!=null && viewPager.getAdapter()!=null) {
             Toaster.make(getContext(),"notifydatasetchanged");
+
             viewPager.getAdapter().notifyDataSetChanged();
+
         }
     }
 

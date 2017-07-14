@@ -236,6 +236,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
             case PAUSED:
                 switch (mLocation) {
                     case LOCAL:
+                        mProgressBar.setVisibility(View.VISIBLE);
                         mVideoView.start();
                         Log.d(TAG, "Playing locally...");
                         mPlaybackState = PlaybackState.PLAYING;
@@ -259,6 +260,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
             case IDLE:
                 switch (mLocation) {
                     case LOCAL:
+                        mProgressBar.setVisibility(View.VISIBLE);
                         mVideoView.setVideoURI(Uri.parse(mVideoUrl));
                         mVideoView.seekTo(getIntent().getIntExtra(GiantBomb.SEEK_POSITION, 0));
                         mVideoView.start();
@@ -459,7 +461,7 @@ public class LocalPlayerActivity extends AppCompatActivity {
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
                 mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                     @Override
                     public boolean onInfo(MediaPlayer mp, int what, int extra) {

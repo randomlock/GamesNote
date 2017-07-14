@@ -13,7 +13,6 @@ import com.example.randomlocks.gamesnote.Activity.UserReviewDetailActivity;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.Modal.UserReviewModal.UserReviewModal;
 import com.example.randomlocks.gamesnote.R;
-import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,11 +20,8 @@ import org.jsoup.nodes.Element;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.R.attr.max;
 
 /**
  * Created by randomlocks on 7/10/2016.
@@ -35,13 +31,11 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.My
     Context context;
     List<UserReviewModal> userReviewModals;
     Random random;
-    String arr[];
 
     public UserReviewAdapter(List<UserReviewModal> userReviewModals, Context context) {
         this.userReviewModals = userReviewModals;
         this.context = context;
         random = new Random();
-        arr = context.getResources().getStringArray(R.array.profile_images);
     }
 
 
@@ -76,11 +70,7 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.My
             }
         }
 
-        int randomNum = random.nextInt(31);
 
-        if (arr[randomNum]!=null) {
-            Picasso.with(context).load(arr[randomNum]).fit().centerCrop().into(holder.circleImageView);
-        }
 
 
     }

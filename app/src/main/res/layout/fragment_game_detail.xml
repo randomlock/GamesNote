@@ -41,7 +41,7 @@
                     android:id="@+id/play_video_texture"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
+                    android:fitsSystemWindows="true"
                     />
 
 
@@ -79,8 +79,8 @@
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
                 app:contentInsetStartWithNavigation="0dp"
+                app:layout_collapseMode="pin"
 
                 />
 
@@ -121,10 +121,10 @@
             android:id="@+id/parent_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="6dp"
             android:animateLayoutChanges="true"
             android:orientation="vertical"
             android:visibility="invisible"
-            android:layout_margin="6dp"
             >
 
 
@@ -144,7 +144,7 @@
                 android:animateLayoutChanges="true"
                 app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="4dp"
-                app:elevation="14dp"
+                app:elevation="4dp"
                 >
 
 
@@ -189,7 +189,7 @@
                 android:layout_marginTop="6dp"
                 app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="4dp"
-                app:elevation="14dp">
+                app:elevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -238,7 +238,7 @@
                 android:layout_marginTop="6dp"
                 app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="4dp"
-                app:elevation="14dp"
+                app:elevation="4dp"
 
                 >
 
@@ -264,9 +264,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:drawableRight="@drawable/ic_open_in_browser"
-                        android:drawableEnd="@drawable/ic_open_in_browser"
                         android:layout_margin="2dp"
+                        android:drawableEnd="@drawable/ic_open_in_browser"
+                        android:drawableRight="@drawable/ic_open_in_browser"
                         android:foreground="?selectableItemBackgroundBorderless"
                         />
 
@@ -445,26 +445,22 @@
     </com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView>
 
 
-    <View
-        android:id="@+id/dimmer_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0"
-        android:background="#e0ffffff"
-        android:visibility="gone"
-         />
+
 
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/floating_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
         app:layout_anchor="@id/scroll_view"
         app:layout_anchorGravity="bottom|right|end"
         app:layout_behavior="com.example.randomlocks.gamesnote.HelperClass.FloatingActionMenuBehavior"
+        app:menu_backgroundColor="@color/lightaccent"
         app:menu_colorNormal="@color/accent"
         app:menu_colorPressed="@color/accent"
         app:menu_fab_hide_animation="@anim/fab_scale_down"
@@ -481,7 +477,8 @@
             android:id="@+id/completed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/fab_1"
+            android:src="@drawable/ic_completed"
+            app:fab_colorNormal="@color/accent"
             app:fab_colorPressed="@color/accent"
             app:fab_label="Completed"
             app:fab_size="mini"
@@ -491,7 +488,8 @@
             android:id="@+id/playing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/fab_2"
+            android:src="@drawable/ic_playing"
+            app:fab_colorNormal="@color/accent"
             app:fab_colorPressed="@color/accent"
             app:fab_label="Playing"
             app:fab_size="mini"
@@ -503,7 +501,8 @@
             android:id="@+id/dropped"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/fab_3"
+            android:src="@drawable/ic_dropped"
+            app:fab_colorNormal="@color/accent"
             app:fab_colorPressed="@color/accent"
             app:fab_label="Dropped"
             app:fab_size="mini"
@@ -514,7 +513,8 @@
             android:id="@+id/planning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/fab_4"
+            android:src="@drawable/ic_planning"
+            app:fab_colorNormal="@color/accent"
             app:fab_colorPressed="@color/accent"
             app:fab_label="Planning"
             app:fab_size="mini"
@@ -526,7 +526,8 @@
             android:id="@+id/replaying"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/fab_5"
+            android:src="@drawable/ic_replaying"
+            app:fab_colorNormal="@color/accent"
             app:fab_colorPressed="@color/accent"
             app:fab_label="Replaying"
             app:fab_size="mini"
