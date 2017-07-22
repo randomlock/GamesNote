@@ -181,14 +181,14 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.title.setText(modal.name);
 
 
+            String url = null;
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                String url = imageQuality==0 ? modal.image.thumbUrl : modal.image.smallUrl;
-                Picasso.with(context).load(url).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
-            }else {
-                viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
+                url = imageQuality == 0 ? modal.image.thumbUrl : modal.image.smallUrl;
             }
+            Picasso.with(context).load(url).fit().centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(viewHolder.imageView);
+
 
             String date_time = modal.originalReleaseDate;
             String date[];
@@ -267,13 +267,13 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder.description.setText(R.string.no_description);
 
 
+            String url = null;
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
-            }else {
-                viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
+                url = imageQuality == 0 ? modal.image.thumbUrl : modal.image.smallUrl;
             }
+            Picasso.with(context).load(url).fit().centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(viewHolder.imageView);
 
 
             /*********************ANIMATION*********************/
@@ -290,13 +290,13 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             MyViewHolder3 viewHolder = (MyViewHolder3) holder;
             viewHolder.name.setText(modal.name);
 
+            String url = null;
             if (modal.image != null) {
                 viewHolder.imageView.setTag(R.string.smallImageUrl, modal.image.smallUrl);
                 viewHolder.imageView.setTag(R.string.mediumImageUrl, modal.image.mediumUrl);
-                Picasso.with(context).load(modal.image.smallUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).into(viewHolder.imageView);
-            }else {
-                viewHolder.imageView.setImageResource(R.drawable.news_image_drawable);
+                url = imageQuality == 0 ? modal.image.thumbUrl : modal.image.smallUrl;
             }
+            Picasso.with(context).load(url).fit().centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(viewHolder.imageView);
 
 
             /*********************ANIMATION*********************/

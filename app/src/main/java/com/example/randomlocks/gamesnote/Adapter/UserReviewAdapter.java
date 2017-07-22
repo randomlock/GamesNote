@@ -3,6 +3,7 @@ package com.example.randomlocks.gamesnote.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,8 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.My
         }
         if (userReviewModal.dateAdded != null) {
             String[] date = userReviewModal.dateAdded.split(" ");
-            holder.date.setText(date[0]);
+            String str = "<b> Publish date : </b> " + date[0];
+            holder.date.setText(Html.fromHtml(str));
         }
         if (userReviewModal.deck != null) {
             holder.smallDescription.setText(userReviewModal.deck);

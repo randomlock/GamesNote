@@ -11,7 +11,8 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,6 +28,7 @@
                 android:id="@+id/news_heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:textColor="@color/primary_text"
@@ -37,7 +39,9 @@
                 android:id="@+id/image_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 app:cardBackgroundColor="@color/cardColor"
                 app:cardCornerRadius="3dp"
                 app:cardElevation="4dp">
@@ -55,7 +59,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginTop="12dp" />
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
 
 
 

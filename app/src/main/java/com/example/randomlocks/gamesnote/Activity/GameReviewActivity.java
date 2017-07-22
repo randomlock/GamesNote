@@ -85,6 +85,7 @@ public class GameReviewActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(gameTitle + "review");
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -159,40 +160,7 @@ public class GameReviewActivity extends AppCompatActivity {
         }
 
         if (modals.description != null) {
-         /*   StringBuilder builder = new StringBuilder(modals.description.length() + 100);
-            String color;
-            int night_mode = AppCompatDelegate.getDefaultNightMode();
-            if (night_mode == AppCompatDelegate.MODE_NIGHT_YES)
-                color = "white";
-            else
-                color = "black";
-
-            builder.append("<HTML><HEAD><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\">");
-            builder.append(modals.description);
-            builder.append("</body></HTML>");
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    if (modals.siteDetailUrl != null) {
-                        runBrowser(modals.siteDetailUrl);
-                    }
-
-                    return true;
-                }
-
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    parentLinearLayout.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
-            webView.loadDataWithBaseURL("file:///android_asset/", builder.toString(), "text/html", "UTF-8", null);
-            webView.setBackgroundColor(Color.TRANSPARENT);*/
-
-
             new ParseJsoup().execute(modals.description);
-
-
         }
 
 

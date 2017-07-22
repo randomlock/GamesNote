@@ -285,7 +285,7 @@
     <string name="like">Like</string>
     <string name="watch_later">Watch later</string>
     <string name="statistics">Game Stats</string>
-    <string name="url">Url</string>
+    <string name="url">Url.Note : the url should end with .xml</string>
     <string name="cancel">Cancel</string>
     <string name="remove">Remove</string>
     <string name="update">Update</string>
@@ -312,6 +312,12 @@
     <string name="error">Error</string>
     <string name="transition_image">transition-image</string>
     <string name="view_in_gallery">view in gallery</string>
+    <string name="game_title">Game title</string>
+    <string name="summary">Summary</string>
+    <string name="reviewer">Reviewer :</string>
+    <string name="publish_date">Publish date :</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="smart_view">Smart view</string>
 
 
 </resources>

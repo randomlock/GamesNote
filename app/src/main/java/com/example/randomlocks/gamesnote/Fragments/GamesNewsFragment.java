@@ -23,6 +23,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -126,6 +127,14 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         mDrawer = (DrawerLayout) getView().findViewById(R.id.drawer);
         mNavigation = (NavigationView) mDrawer.findViewById(R.id.navigation);
         mNavigation.setItemIconTintList(null);
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            Menu menu = mNavigation.getMenu();
+            Drawable drawable = menu.findItem(R.id.nav_add_source).getIcon();
+            if (drawable != null) {
+                drawable.mutate();
+                drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            }
+        }
         setUpCustomNews();
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.coordinator);
         refreshLayout = (SwipeRefreshLayout) coordinatorLayout.findViewById(R.id.swipeContainer);
@@ -166,20 +175,16 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
         if (savedInstanceState != null) {
             modals = savedInstanceState.getParcelableArrayList(MODAL);
-            loadRecycler(modals, savedInstanceState.getParcelable(SCROLL_POSITION));
+            if (modals != null) {
+                loadRecycler(modals, savedInstanceState.getParcelable(SCROLL_POSITION));
+            } else {
+                runModel();
+            }
         } else {
             if (modals == null) {
 
+                runModel();
 
-                progressBar.setVisibility(View.VISIBLE);
-
-
-                try {
-                    runOkHttp();
-                } catch (IOException e) {
-                    Toasty.error(getContext(),"connectivity problem", Toast.LENGTH_SHORT,true).show();
-
-                }
             } else {
                 loadRecycler(modals, null);
             }
@@ -187,6 +192,19 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
         mNavigation.setNavigationItemSelectedListener(this);
 
+
+    }
+
+    private void runModel() {
+        progressBar.setVisibility(View.VISIBLE);
+
+
+        try {
+            runOkHttp();
+        } catch (IOException e) {
+            Toasty.error(getContext(), "connectivity problem", Toast.LENGTH_SHORT, true).show();
+
+        }
 
     }
 
@@ -389,13 +407,15 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+        MenuItem menuItem = menu.findItem(R.id.view);
+
         if (isReduced) {
-            menu.getItem(0).setTitle(getString(R.string.reduce_view));
-            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_gamelist_white);
+            menuItem.setTitle(getString(R.string.reduce_view));
+            menuItem.setIcon(R.drawable.ic_gamelist_white);
 
         } else {
-            menu.getItem(0).setTitle(getString(R.string.compact_view));
-            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_compat_white);
+            menuItem.setTitle(getString(R.string.compact_view));
+            menuItem.setIcon(R.drawable.ic_compat_white);
 
         }
 
@@ -548,11 +568,6 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 BASE_URL = "http://www.eurogamer.net";
                 break;
 
-            case R.id.nav_g4tv:
-                URL = "http://feeds.g4tv.com/g4tv/thefeed?format=xml";
-                BASE_URL = "http://g4tv.com";
-
-                break;
 
             case R.id.nav_gameinformer:
                 URL = "https://www.gameinformer.com/b/mainfeed.aspx?Tags=news";
@@ -561,7 +576,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                 break;
 
             case R.id.nav_videogamer:
-                URL = "http://feeds.videogamer.com/rss/news.xml";
+                URL = "https://www.videogamer.com/rss/allupdates.xml";
                 BASE_URL = "http://www.videogamer.com";
 
                 break;
@@ -597,11 +612,6 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
 
                 break;
 
-            case R.id.nav_purexbox:
-                URL = "http://www.purexbox.com/feeds/news";
-                BASE_URL = "http://www.purexbox.com";
-
-                break;
 
             case R.id.nav_news_gamespot:
                 URL = "http://www.gamespot.com/feeds/reviews/";

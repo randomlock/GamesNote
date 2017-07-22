@@ -51,11 +51,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/profile_image"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="12dp"
                 android:layout_toEndOf="@+id/profile_image"
+                android:layout_toLeftOf="@+id/myRatingBar"
                 android:layout_toRightOf="@+id/profile_image"
+                android:layout_toStartOf="@id/myRatingBar"
                 android:textAppearance="@style/TitleText"
                 android:textColor="?android:attr/textColorPrimary" />
 
@@ -64,12 +65,11 @@
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/date"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="12dp"
                 android:isIndicator="true"
                 android:numStars="5"
-
                 />
 
 
@@ -77,10 +77,10 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/user_name"
-                android:layout_alignStart="@+id/user_name"
-                android:layout_below="@+id/user_name"
-                android:layout_marginTop="12dp"
+                android:layout_alignLeft="@+id/profile_image"
+                android:layout_alignStart="@+id/profile_image"
+                android:layout_below="@+id/profile_image"
+                android:layout_marginTop="24dp"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <TextView
@@ -90,7 +90,7 @@
                 android:layout_below="@+id/date"
                 android:layout_marginTop="12dp"
                 android:textColor="?android:attr/textColorPrimary"
-
+                android:textStyle="bold"
                 />
 
             <LinearLayout
@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/deck"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical">
 
 

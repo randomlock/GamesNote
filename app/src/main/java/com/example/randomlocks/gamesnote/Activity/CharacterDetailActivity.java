@@ -431,7 +431,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         TextView textView = new TextView(CharacterDetailActivity.this, null, R.style.SubTitleText);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         int margin = (int) GiantBomb.dipToPixels(CharacterDetailActivity.this, 12);
-        params.setMargins(margin, 0, margin, 0);
+        params.setMargins(margin, margin, margin, 0);
         textView.setLayoutParams(params);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         textView.setTextColor(getTextColor());

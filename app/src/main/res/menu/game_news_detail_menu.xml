@@ -5,8 +5,15 @@
     <item
         android:id="@+id/internet"
         android:icon="@drawable/ic_internet_white"
-        android:title="Open in browser"
-        app:showAsAction="always" />
+        android:title="@string/open_in_browser"
+        app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/checkable_menu"
+        android:checkable="true"
+        android:title="@string/smart_view"
+        app:showAsAction="never" />
 
 
 </menu>

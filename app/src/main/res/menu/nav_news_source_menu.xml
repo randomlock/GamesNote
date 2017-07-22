@@ -69,27 +69,18 @@
 
 
 
-
-
-                <item
-                    android:id="@+id/nav_g4tv"
-                    android:title="@string/g4tv">
-
-                </item>
-
-
                 <item
                     android:id="@+id/ign"
-                    android:title="@string/ign"
-                    android:icon="@drawable/ign_icon">
+                    android:icon="@drawable/ign_icon"
+                    android:title="@string/ign">
 
                 </item>
 
 
                 <item
                     android:id="@+id/nav_kotaku"
-                    android:title="@string/kotaku"
-                    android:icon="@drawable/kotaku_icon" />
+                    android:icon="@drawable/kotaku_icon"
+                    android:title="@string/kotaku" />
 
                 <item
                     android:id="@+id/nac_pc_gamer"
@@ -110,12 +101,6 @@
                     android:id="@+id/nav_playstation4"
                     android:icon="@drawable/playstaion4_icon"
                     android:title="@string/playstaion" />
-
-                <item
-                    android:id="@+id/nav_purexbox"
-                    android:title="@string/purexbox">
-
-                </item>
 
 
                 <item
@@ -155,34 +140,34 @@
 
                 <item
                     android:id="@+id/nav_news_gameinformer"
-                    android:title="@string/gameinformer"
-                    android:icon="@drawable/gameinformer_icon" />
+                    android:icon="@drawable/gameinformer_icon"
+                    android:title="@string/gameinformer" />
 
                 <item
                     android:id="@+id/nav_news_gamespot"
-                    android:title="@string/gamespot"
-                    android:icon="@drawable/gamespot_icon" />
+                    android:icon="@drawable/gamespot_icon"
+                    android:title="@string/gamespot" />
 
                 <item
                     android:id="@+id/nav_news_giantbomb"
-                    android:title="@string/giantbomb"
-                    android:icon="@drawable/giantbomb_icon" />
+                    android:icon="@drawable/giantbomb_icon"
+                    android:title="@string/giantbomb" />
 
                 <item
                     android:id="@+id/nav_news_ign"
-                    android:title="@string/ign"
-                    android:icon="@drawable/ign_icon" />
+                    android:icon="@drawable/ign_icon"
+                    android:title="@string/ign" />
 
 
                 <item
                     android:id="@+id/nav_news_metaleater"
-                    android:title="@string/metaleater"
-                    android:icon="@drawable/metal_eater_icon" />
+                    android:icon="@drawable/metal_eater_icon"
+                    android:title="@string/metaleater" />
 
                 <item
                     android:id="@+id/nav_news_pcworld"
-                    android:title="@string/pcworld"
-                    android:icon="@drawable/pcworld_icon" />
+                    android:icon="@drawable/pcworld_icon"
+                    android:title="@string/pcworld" />
 
 
             </group>

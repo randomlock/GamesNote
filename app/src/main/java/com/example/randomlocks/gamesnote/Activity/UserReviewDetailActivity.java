@@ -10,6 +10,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -58,39 +59,39 @@ public class UserReviewDetailActivity extends AppCompatActivity {
         descriptionLayout = (LinearLayout) findViewById(R.id.description_parent);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(modal.reviewer + "'s review");
 
         if (savedInstanceState != null) {
             modal = savedInstanceState.getParcelable(GiantBomb.MODAL);
-            if (modal != null)
-            fillDescription(modal.description);
+        }
+        fillData(modal);
 
-        } else {
+    }
 
-            if (modal != null) {
-                if (modal.reviewer != null) {
-                    user_name.setText(modal.reviewer);
-                }
-                if (modal.score >= 0) {
-                    ratingBar.setRating(modal.score);
-                }
-                String dateArray[];
-                if (modal.dateAdded != null) {
-                    dateArray = modal.dateAdded.split(" ");
-                    date.setText(dateArray[0]);
-
-                }
-                if (modal.deck != null) {
-                    deck.setText(modal.deck);
-                }
-
-                fillDescription(modal.description);
+    private void fillData(UserReviewModal modal) {
+        if (modal != null) {
+            if (modal.reviewer != null) {
+                user_name.setText(modal.reviewer);
+            }
+            if (modal.score >= 0) {
+                ratingBar.setRating(modal.score);
+            }
+            String dateArray[];
+            if (modal.dateAdded != null) {
+                dateArray = modal.dateAdded.split(" ");
+                String str = "<b> Publish date : </b> " + dateArray[0];
+                date.setText(Html.fromHtml(str));
 
             }
+            if (modal.deck != null) {
+                deck.setText(modal.deck);
+            }
 
+            if (modal.description != null) {
+                fillDescription(modal.description);
+            }
 
         }
-
-
     }
 
     private void fillDescription(String desc) {
@@ -202,7 +203,7 @@ public class UserReviewDetailActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.gravity = Gravity.CENTER;
                 int margin = (int) GiantBomb.dipToPixels(UserReviewDetailActivity.this, 12);
-                params.setMargins(margin, margin, margin, margin);
+                params.setMargins(margin, 0, margin, margin);
                 cardView.setLayoutParams(params);
                 cardView.setRadius(GiantBomb.dipToPixels(UserReviewDetailActivity.this, 4));
                 ImageView imageView = new ImageView(UserReviewDetailActivity.this);

@@ -119,13 +119,12 @@ public class GamesListFragment extends Fragment {
 
     private class GameListPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int PAGE_COUNT = 6;
         private String pageTitle[] = {"All","Replaying", "Planning", "dropped", "playing", "completed"};
         private ArrayList<Fragment> fragments;
 
         GameListPagerAdapter(FragmentManager fm) {
             super(fm);
-            fragments = new ArrayList<>(PAGE_COUNT);
+            fragments = new ArrayList<>(pageTitle.length);
             boolean isSimple = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_LIST_VIEW,false,getContext());
             fragments.add(GamesListPagerFragment.newInstance(GiantBomb.ALL_GAMES,isSimple));
             fragments.add(GamesListPagerFragment.newInstance(GiantBomb.REPLAYING,isSimple));
@@ -143,7 +142,7 @@ public class GamesListFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageTitle.length;
         }
 
 

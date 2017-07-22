@@ -25,11 +25,10 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
 
     private static final int SIMPLE_VIEW_TYPE = 0;
     private static final int CARD_VIEW_TYPE = 1;
-
-    private List<NewsModal> modals;
     Context context;
-    private boolean isSimple;
     Calendar calendar = Calendar.getInstance();
+    private List<NewsModal> modals;
+    private boolean isSimple;
 
     public GameNewsAdapter(List<NewsModal> modals, Context context, boolean isSimple) {
         this.modals = modals;
@@ -67,21 +66,22 @@ public class GameNewsAdapter extends RecyclerView.Adapter<GameNewsAdapter.MyNews
             if (newsModal.title != null) {
                 holder.heading.setText(newsModal.title);
             }
-            if (newsModal.content != null) {
+
                 if (isSimple) {
                     holder.cardView.setVisibility(View.VISIBLE);
                 } else {
                     holder.image.setVisibility(View.VISIBLE);
                 }
-                Picasso.with(context).load(newsModal.content).fit().centerCrop().into(holder.image);
-            } else {
+            Picasso.with(context).load(newsModal.content).fit().centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(holder.image);
+               /* else {
                 if (isSimple) {
                     holder.cardView.setVisibility(View.VISIBLE);
                 } else {
                     holder.image.setVisibility(View.VISIBLE);
                 }
+                Picasso.with(context).cancelRequest(holder.image);
                 holder.image.setBackgroundResource(R.drawable.news_image_drawable);
-            }
+            }*/
             if (newsModal.pubDate!=null) {
                 String dateArray[] = newsModal.pubDate.split(" ");
 

@@ -248,12 +248,15 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+        MenuItem menuItem = menu.findItem(R.id.view);
+
         if (isSimple) {
-            menu.getItem(menu.size()-1).setTitle(getString(R.string.reduce_list_view));
-            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_gamelist_white);
+            menuItem.setTitle(getString(R.string.reduce_view));
+            menuItem.setIcon(R.drawable.ic_gamelist_white);
+
         } else {
-            menu.getItem(menu.size()-1).setTitle(getString(R.string.compact_list_view));
-            menu.getItem(menu.size()-1).setIcon(R.drawable.ic_compat_white);
+            menuItem.setTitle(getString(R.string.compact_view));
+            menuItem.setIcon(R.drawable.ic_compat_white);
 
         }
 

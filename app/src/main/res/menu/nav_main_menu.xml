@@ -8,7 +8,7 @@
     <group android:checkableBehavior="single">
 
         <item android:id="@+id/nav_mylist"
-            android:icon="@drawable/ic_gamelist"
+            android:icon="@drawable/ic_nav_game_list"
             android:title="@string/List" />
 
 
