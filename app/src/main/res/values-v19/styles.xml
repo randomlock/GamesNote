@@ -6,14 +6,7 @@
 
     </style>
 
-    <style name="MyToolbarLight" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="searchViewStyle">@style/searchStyle</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="popupTheme">@style/popMenu</item>
 
-
-    </style>
 
 
     <style name="CollapsingToolbarLayoutExpandedTextStyle" parent="AppTheme">

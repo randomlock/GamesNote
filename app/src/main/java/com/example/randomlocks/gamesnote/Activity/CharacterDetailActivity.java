@@ -154,6 +154,9 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                         coverImage2.animate().setDuration(400).alpha(1);
                     }
                 }
+                if (verticalOffset > 0) {
+                    coverImage2.setTranslationY(verticalOffset);
+                }
             }
 
         });
@@ -161,7 +164,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
         if (imageUrl != null && imageUrl.trim().length() > 0) {
             Picasso.with(this).load(imageUrl).fit().centerCrop().into(coverImage);
-            Picasso.with(this).load(imageUrl).fit().centerCrop().into(coverImage2);
+            Picasso.with(this).load(imageUrl).fit().centerInside().into(coverImage2);
         }
 
         /* Picasso.with(this).load(imageUrl).into(new Target() {
@@ -266,7 +269,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
         if (imageUrl == null && characterDetailModal.image != null) {
             Picasso.with(this).load(characterDetailModal.image.mediumUrl).fit().centerCrop().into(coverImage);
-            Picasso.with(this).load(characterDetailModal.image.thumbUrl).fit().centerCrop().into(coverImage2);
+            Picasso.with(this).load(characterDetailModal.image.thumbUrl).fit().centerInside().into(coverImage2);
         }
 
         mGender.setText(getGender(characterDetailModal.gender));
@@ -276,6 +279,8 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             mEnemies.setOnClickListener(this);
             mEnemiesTitle.setOnClickListener(this);
 
+        } else {
+            mFriends.setText("-");
         }
 
         if (characterDetailModal.friends != null) {
@@ -284,6 +289,8 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             mFriends.setOnClickListener(this);
             mFriendsTitle.setOnClickListener(this);
 
+        } else {
+            mFriends.setText("-");
         }
 
         if (characterDetailModal.games != null) {
@@ -291,22 +298,30 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             mTotalGames.setText(String.valueOf(characterDetailModal.games.size()));
             mTotalGames.setOnClickListener(this);
             mTotalGamesTitle.setOnClickListener(this);
-
+        } else {
+            mFriends.setText("-");
         }
         if (characterDetailModal.birthday != null) {
             mBirthDay.setText(characterDetailModal.birthday);
+        } else {
+            mBirthDay.setText("-");
         }
         String description = null;
         if (characterDetailModal.deck != null) {
             description = "\"" + characterDetailModal.deck + "\"";
             mSmallDescription.setText(description);
-
+        } else {
+            mSmallDescription.setText("No info");
         }
         if (characterDetailModal.firstAppearedInGame != null) {
             mFirstAppearance.setText(characterDetailModal.firstAppearedInGame.name);
+        } else {
+            mFirstAppearance.setText("-");
         }
         if (characterDetailModal.aliases != null) {
             mAlias.setText(characterDetailModal.aliases);
+        } else {
+            mFirstAppearance.setText("-");
         }
         Document doc = null;
         if (characterDetailModal.description != null) {

@@ -3,7 +3,9 @@ package com.example.randomlocks.gamesnote.Activity;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -85,7 +87,8 @@ public class GameReviewActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(gameTitle + "review");
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(gameTitle.getText().toString() + " review");
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -167,8 +170,18 @@ public class GameReviewActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Drawable drawable = menu.findItem(R.id.internet).getIcon();
+        if (drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.game_news_detail_menu, menu);
+        getMenuInflater().inflate(R.menu.game_review_menu, menu);
         return true;
     }
 

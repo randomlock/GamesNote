@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.GamesListPagerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 
 import java.util.ArrayList;
@@ -86,7 +85,6 @@ public class GamesListFragment extends Fragment {
 
         adapter = new GameListPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(6);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnAdapterChangeListener(new ViewPager.OnAdapterChangeListener() {
             @Override
@@ -107,10 +105,23 @@ public class GamesListFragment extends Fragment {
 
     public void updateViewPager(){
         if (viewPager!=null && viewPager.getAdapter()!=null) {
-            Toaster.make(getContext(),"notifydatasetchanged");
-
             viewPager.getAdapter().notifyDataSetChanged();
 
+        }
+    }
+
+    public void updateViewpagerFragment(boolean isSimple) {
+        int pos = viewPager.getCurrentItem();
+        // if first or last fragment then update only the adjacent right fragment and
+        // left fragment respectively
+        if (pos == 0) {
+            ((GamesListPagerFragment) adapter.getItem(pos + 1)).updateAdapter(isSimple);
+        } else if (pos == viewPager.getAdapter().getCount() - 1) {
+            ((GamesListPagerFragment) adapter.getItem(pos - 1)).updateAdapter(isSimple);
+        } else {
+            //update left and right fragment
+            ((GamesListPagerFragment) adapter.getItem(pos - 1)).updateAdapter(isSimple);
+            ((GamesListPagerFragment) adapter.getItem(pos + 1)).updateAdapter(isSimple);
         }
     }
 

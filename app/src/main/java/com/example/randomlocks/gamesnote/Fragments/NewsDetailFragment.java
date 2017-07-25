@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
+package com.example.randomlocks.gamesnote.Fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.NewsDetailPagerFragment;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.PagerZoomOutSlideAnimation;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
@@ -74,8 +75,18 @@ public class NewsDetailFragment extends Fragment {
         }
         viewPager.setAdapter(new NewsDetailPagerAdapter(getChildFragmentManager(), modalList));
         viewPager.setPageTransformer(false, new PagerZoomOutSlideAnimation());
-        viewPager.setCurrentItem(position, true);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(position, true);
+            }
+        });
+      /*  new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(position);
+            }
+        });*/
     }
 
 

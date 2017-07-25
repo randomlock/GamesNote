@@ -11,6 +11,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -179,7 +180,6 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final GameWikiModal modal = list.get(holder.getAdapterPosition());
             MyViewHolder1 viewHolder = (MyViewHolder1) holder;
             viewHolder.title.setText(modal.name);
-
 
             String url = null;
             if (modal.image != null) {
@@ -375,6 +375,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             platform2 = (Button) itemView.findViewById(R.id.platform2);
             platform3 = (Button) itemView.findViewById(R.id.platform3);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            Log.d("tag1", "height is" + itemView.getHeight());
             popupMenu = (ImageButton) itemView.findViewById(R.id.popup);
             int mode = AppCompatDelegate.getDefaultNightMode();
             if(mode==AppCompatDelegate.MODE_NIGHT_YES)

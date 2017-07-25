@@ -112,6 +112,7 @@ public class VideoOptionFragment extends DialogFragment {
         video_spinner = (Spinner) view.findViewById(R.id.spinner);
         inbuilt_player_checkbox = (CheckBox) view.findViewById(R.id.checkbox);
         elapsed_time_checkbox = (CheckBox) view.findViewById(R.id.resume_checkbox);
+        elapsed_time_checkbox.setVisibility(elapsed_time > 0 ? View.VISIBLE : View.INVISIBLE);
 
         inbuilt_player_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

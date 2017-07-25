@@ -2,7 +2,6 @@
 
 
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,22 +12,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
-    android:orientation="vertical"
-    android:descendantFocusability="blocksDescendants">
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <TextView
+        style="@style/cardview_textstyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/cardview_textstyle"
-        android:text="Top 5 developer"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="6dp"
         android:layout_toLeftOf="@+id/textView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
+        android:layout_toStartOf="@+id/textView"
+        android:text="@string/top_5_developer"
         />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="6dp"
-            android:text="No of games" />
+            android:text="@string/no_of_games" />
 
 
     </RelativeLayout>
@@ -57,16 +57,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
     <TextView
+        style="@style/cardview_textstyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/cardview_textstyle"
-        android:text="Developer stats"
         android:layout_marginTop="6dp"
+        android:text="@string/developer_stats"
         />
 
 
@@ -81,8 +81,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
 
@@ -92,14 +92,15 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/cardview_textstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/cardview_textstyle"
-            android:text="Top 5 publisher"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="6dp"
             android:layout_toLeftOf="@+id/textView1"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@+id/textView1"
+            android:text="@string/top_5_publisher"
             />
 
         <TextView
@@ -110,7 +111,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="6dp"
-            android:text="No of games" />
+            android:text="@string/no_of_games" />
 
 
     </RelativeLayout>
@@ -128,15 +129,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
     <TextView
+        style="@style/cardview_textstyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/cardview_textstyle"
-        android:text="Publisher stats"
         android:layout_marginTop="6dp"
+        android:text="@string/publisher_stats"
         />
 
 
@@ -151,8 +152,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
 
@@ -164,14 +165,15 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/cardview_textstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/cardview_textstyle"
-            android:text="Top 5 theme"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="6dp"
             android:layout_toLeftOf="@+id/textView2"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@+id/textView2"
+            android:text="@string/top_5_theme"
             />
 
         <TextView
@@ -182,7 +184,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="6dp"
-            android:text="No of games" />
+            android:text="@string/no_of_games" />
 
 
     </RelativeLayout>
@@ -200,16 +202,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
     <TextView
+        style="@style/cardview_textstyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/cardview_textstyle"
-        android:text="Theme stats"
         android:layout_marginTop="6dp"
+        android:text="@string/theme_stats"
         />
 
 
@@ -224,8 +226,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
 
@@ -235,14 +237,15 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/cardview_textstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/cardview_textstyle"
-            android:text="Top 5 franchise"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="6dp"
             android:layout_toLeftOf="@+id/textView3"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@+id/textView3"
+            android:text="@string/top_5_franchise"
             />
 
         <TextView
@@ -253,7 +256,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="6dp"
-            android:text="No of games" />
+            android:text="@string/no_of_games" />
 
 
     </RelativeLayout>
@@ -271,15 +274,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
     <TextView
+        style="@style/cardview_textstyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/cardview_textstyle"
-        android:text="Franchise stats"
         android:layout_marginTop="6dp"
+        android:text="@string/franchise_stats"
         />
 
 
@@ -294,8 +297,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
 
@@ -306,14 +309,15 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/cardview_textstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/cardview_textstyle"
-            android:text="Top 5 genre"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="6dp"
             android:layout_toLeftOf="@+id/textView4"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@+id/textView4"
+            android:text="@string/top_5_genre"
             />
 
         <TextView
@@ -324,7 +328,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="6dp"
-            android:text="No of games" />
+            android:text="@string/no_of_games" />
 
 
     </RelativeLayout>
@@ -342,16 +346,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
     <TextView
+        style="@style/cardview_textstyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/cardview_textstyle"
-        android:text="Genre stats"
         android:layout_marginTop="6dp"
+        android:text="@string/genre_stats"
         />
 
 
@@ -366,8 +370,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
 
@@ -376,14 +380,15 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/cardview_textstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/cardview_textstyle"
-            android:text="Top 5 recommended games"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="6dp"
             android:layout_toLeftOf="@+id/textView5"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@+id/textView5"
+            android:text="@string/top_5_recommended_games"
             />
 
         <TextView
@@ -394,7 +399,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="6dp"
-            android:text="No of games" />
+            android:text="@string/no_of_games" />
 
 
     </RelativeLayout>
@@ -412,15 +417,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
     <TextView
+        style="@style/cardview_textstyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/cardview_textstyle"
-        android:text="Recommended game stats"
         android:layout_marginTop="6dp"
+        android:text="@string/recommended_game_stats"
         />
 
 
@@ -435,8 +440,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/linecolor"
-        android:layout_margin="12dp" />
+        android:layout_margin="12dp"
+        android:background="@color/linecolor" />
 
 
 

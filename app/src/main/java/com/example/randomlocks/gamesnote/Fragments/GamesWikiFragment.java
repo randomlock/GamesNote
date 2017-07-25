@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -223,7 +224,12 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-                            floatingSearchView.swapSuggestions(search_list);
+                            if (search_list.size() == 1 && search_list.get(0).getBody().equals(newQuery)) {
+                                floatingSearchView.clearSuggestions();
+                                floatingSearchView.clearSearchFocus();
+                            } else {
+                                floatingSearchView.swapSuggestions(search_list);
+                            }
                         }
                     });
 
@@ -624,6 +630,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         call.enqueue(new Callback<GameWikiListModal>() {
             @Override
             public void onResponse(Call<GameWikiListModal> call, Response<GameWikiListModal> response) {
+                Log.d("tag1", "onresponse");
                 if (progressBar.getVisibility() == View.VISIBLE) {
                     progressBar.setVisibility(View.GONE);
                 }
@@ -706,9 +713,9 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
             @Override
             public void onFailure(Call<GameWikiListModal> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
 
                 if (!call.isCanceled()) {
+                    progressBar.setVisibility(View.GONE);
                     Toaster.makeSnackBar(coordinatorLayout, "Connectivity Problem", "RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

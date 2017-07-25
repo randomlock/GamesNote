@@ -25,7 +25,7 @@ import com.example.randomlocks.gamesnote.Fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment;
-import com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment.NewsDetailFragment;
+import com.example.randomlocks.gamesnote.Fragments.NewsDetailFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoFrameLayout;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;

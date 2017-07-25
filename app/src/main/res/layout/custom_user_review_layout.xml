@@ -65,11 +65,10 @@
 
     <TextView
         android:id="@+id/description"
-        style="@style/SubTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/deck"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.4"
         android:maxLines="5"

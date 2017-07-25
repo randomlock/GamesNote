@@ -52,6 +52,7 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     public String youtubeId;
     public boolean isFavorite = false;
     public boolean isWatchLater = false;
+    public boolean isWatched = false;
 
 
     public GamesVideoModal(GameVideoModalMinimal modalMinimal) {

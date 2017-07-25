@@ -9,8 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -25,6 +29,7 @@ public class SearchFilterFragment extends DialogFragment {
 
     boolean isAscending;
     CheckBox checkbox;
+    Spinner spinner;
     View view;
     SearchFilterInterface searchFilterInterface = null;
     int which_one;
@@ -56,10 +61,10 @@ public class SearchFilterFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         array_id = getArguments().getInt(GiantBomb.ARRAY);
         if (array_id==R.array.search_filter) {
-            which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 4, getContext());
+            which_one = SharedPreference.getFromSharedPreferences(GiantBomb.WHICH, 3, getContext());
             isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.ASCENDING, true, getContext());
         }else {
-            which_one = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_WHICH,1,getContext());
+            which_one = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_WHICH, 0, getContext());
             isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_ASCENDING,true,getContext());
         }
     }
@@ -69,7 +74,19 @@ public class SearchFilterFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         view = getActivity().getLayoutInflater().inflate(R.layout.search_option_layout,null);
+        spinner = (Spinner) view.findViewById(R.id.spinner);
+        setSpinner(spinner, array_id);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                which_one = position;
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         checkbox = (CheckBox) view.findViewById(R.id.checkbox);
         checkbox.setChecked(!isAscending);
 
@@ -78,13 +95,13 @@ public class SearchFilterFragment extends DialogFragment {
         final AlertDialog dialog =  new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
                 .setCancelable(true)
                 .setTitle("Sort result")
-                .setSingleChoiceItems(array_id,which_one, new DialogInterface.OnClickListener() {
+               /* .setSingleChoiceItems(array_id,which_one, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         which_one = which;
 
                     }
-                })
+                })*/
                 .setView(view)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -123,13 +140,34 @@ public class SearchFilterFragment extends DialogFragment {
         return dialog;
     }
 
+    void setSpinner(final Spinner spinner, @ArrayRes final int array_id) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                array_id, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setSelection(which_one, true);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+                // gameListDatabase.setPlatform(spinner.getItemAtPosition(i).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
 
     public interface SearchFilterInterface {
 
         void onSelect(int which, boolean asc);
     }
-
-
 
 
 }

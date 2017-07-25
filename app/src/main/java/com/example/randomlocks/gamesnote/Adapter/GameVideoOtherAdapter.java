@@ -63,8 +63,10 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
     }
 
     public void setSimple(boolean simple) {
-        isSimple = simple;
-        notifyItemRangeChanged(0, getItemCount());
+        if (isSimple != simple) {
+            isSimple = simple;
+            notifyItemRangeChanged(0, getItemCount());
+        }
     }
 
     public void updateModal(int position, HashMap<Integer, Integer> realmMap) {
@@ -136,11 +138,20 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
 
                 holder.isWatchLabel.setVisibility(View.VISIBLE);
 
+            } else {
+                holder.isWatchLabel.setVisibility(View.GONE);
             }
 
         }
 
 
+    }
+
+    public void updateModal(HashMap<Integer, Integer> realmMap) {
+        if (!this.realmMap.equals(realmMap)) {
+            this.realmMap = realmMap;
+            notifyItemRangeChanged(0, getItemCount());
+        }
     }
 
 

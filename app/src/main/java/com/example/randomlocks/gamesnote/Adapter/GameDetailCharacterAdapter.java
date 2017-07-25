@@ -1,7 +1,6 @@
 package com.example.randomlocks.gamesnote.Adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,11 +39,6 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
     }
 
-    public interface OnClickInterface {
-        void onItemClick(String apiUrl, String image);
-    }
-
-
     public void setImages(List<CharacterGamesImage> images) {
         this.images = images;
         notifyItemRangeChanged(0,getItemCount());
@@ -69,7 +63,7 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
         if (images != null) {
             holder.image.setTag(images.get(position));
-            Picasso.with(context).load(images.get(position).imageUrl).fit().error(R.drawable.news_image_drawable).into(holder.image);
+            Picasso.with(context).load(images.get(position).imageUrl).fit().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(holder.image);
         } else {
             holder.image.setImageResource(R.drawable.news_image_drawable);
         }
@@ -77,6 +71,9 @@ public class GameDetailCharacterAdapter extends RecyclerView.Adapter<GameDetailC
 
     }
 
+    public interface OnClickInterface {
+        void onItemClick(String apiUrl, String image);
+    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 

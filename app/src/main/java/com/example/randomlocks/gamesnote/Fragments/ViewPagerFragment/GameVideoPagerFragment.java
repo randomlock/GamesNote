@@ -22,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +36,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.Adapter.GameVideoAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.VideoOptionFragment;
+import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
@@ -112,7 +114,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     VideoPlayInterface videoPlayInterface;
     int video_id;
     int adapterPosition;
-
+    GamesVideoFragment parentFragment;
     private CastContext mCastContext;
     private CastSession mCastSession;
     private SessionManagerListener<CastSession> mSessionManagerListener;
@@ -169,6 +171,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        parentFragment = (GamesVideoFragment) getParentFragment();
         mDrawer = (DrawerLayout) getActivity().findViewById(R.id.drawer);
         mNavigation = (NavigationView) getActivity().findViewById(R.id.navigation);
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.root_coordinator);
@@ -297,14 +300,14 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                         }
 
 
-                        if (item.getTitle().equals(getString(R.string.compact_view))) {
+                        if (item.getTitle().equals(getString(R.string.card_view))) {
                             isReduced = false;
-                            item.setTitle(getString(R.string.reduce_view));
-                            item.setIcon(R.drawable.ic_view_compact_white_24dp);
+                            item.setTitle(getString(R.string.list_view));
+                            item.setIcon(R.drawable.ic_gamelist_white);
 
                         } else {
-                            item.setTitle(getString(R.string.compact_view));
-                            item.setIcon(R.drawable.ic_gamelist);
+                            item.setTitle(getString(R.string.card_view));
+                            item.setIcon(R.drawable.ic_compat_white);
                             isReduced = true;
                         }
 
@@ -317,9 +320,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
 
                         if (adapter != null) {
-                            adapter.setSimple(isReduced);
-
-
+                            SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_VIEW, isReduced, getContext());
+                            parentFragment.updateViewPager();
                         }
 
                         break;
@@ -337,14 +339,17 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
 
         if (savedInstanceState != null) {
+            Log.d("tag1", "onsaveinstance");
             listModals = savedInstanceState.getParcelableArrayList(MODAL);
             if(listModals!=null)
                 fillRecyclerView(listModals, savedInstanceState.getParcelable(SCROLL_POSITION));
             else
                 performSearch(savedInstanceState.getString(SEARCH_QUERY),false);
         } else if (listModals != null) {
+            Log.d("tag1", "not null");
             fillRecyclerView(listModals, null);
         } else {
+            Log.d("tag1", "perform searc");
             performSearch("",true);
         }
 
@@ -635,6 +640,9 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
         if(adapter==null){
             adapter = new GameVideoAdapter(listModals, getContext(), isReduced,realm,GameVideoPagerFragment.this,realmMap,recyclerView);
+        } else {
+            adapter.setSimple(isReduced);
+            adapter.updateModal(realmMap);
         }
         if (recyclerView.getAdapter() == null) {
             recyclerView.setAdapter(adapter);
@@ -734,7 +742,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         super.onPause();
         Context context = getContext();
         if (context != null) {
-            SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_VIEW, isReduced, context);
             SharedPreference.saveToSharedPreference(VIDEO_KEY, mSelectedId, context);
             SharedPreference.saveToSharedPreference(VIDEO_TITLE, mTitle, context);
         }
@@ -919,7 +926,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-
                             WatchedVideoDatabase database = new WatchedVideoDatabase(video_id, time_elapsed);
                             realm.copyToRealmOrUpdate(database);
                             RealmResults<WatchedVideoDatabase> realmResults = realm.where(WatchedVideoDatabase.class).findAll();
@@ -930,7 +936,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-                            adapter.updateModal(adapterPosition, realmMap);
+                            parentFragment.updateViewPager();
+                            //  adapter.updateModal(adapterPosition, realmMap);
                         }
                     });
                 }

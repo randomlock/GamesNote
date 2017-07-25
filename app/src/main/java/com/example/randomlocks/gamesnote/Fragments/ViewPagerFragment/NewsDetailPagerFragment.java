@@ -40,6 +40,7 @@ import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.VideoEnabledW
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
+import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -52,7 +53,7 @@ import org.jsoup.select.Elements;
  * Created by randomlock on 7/21/2017.
  */
 
-public class NewsDetailPagerFragment extends Fragment {
+public class NewsDetailPagerFragment extends Fragment implements View.OnClickListener {
 
 
     public static final String TITLE = "title";
@@ -61,7 +62,6 @@ public class NewsDetailPagerFragment extends Fragment {
     public static final String DESCRIPTION = "news_description";
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private static String SMART_VIEW = "smart_view";
-    String description;
     TextView title;
     VideoEnabledWebView webView;
     VideoEnabledWebChromeClient webChromeClient;
@@ -73,6 +73,7 @@ public class NewsDetailPagerFragment extends Fragment {
     ViewGroup videoLayout;
     View loadingView;
     boolean isSmartView;
+    FloatingActionMenu floatingActionMenu;
 
     public NewsDetailPagerFragment() {
         // Required empty public constructor
@@ -91,9 +92,10 @@ public class NewsDetailPagerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("tag1", "oncreate");
         setHasOptionsMenu(true);
+        newsModal = getArguments().getParcelable(GiantBomb.MODAL);
         isSmartView = SharedPreference.getFromSharedPreferences(SMART_VIEW, true, getContext());
-        Toaster.make(getContext(), isSmartView + "");
     }
 
 
@@ -102,18 +104,14 @@ public class NewsDetailPagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pager_news_detail, container, false);
-        newsModal = getArguments().getParcelable(GiantBomb.MODAL);
-        if (newsModal != null) {
-            description = newsModal.description;
-        }
+        floatingActionMenu = (FloatingActionMenu) view.findViewById(R.id.floating_menu);
+        floatingActionMenu.findViewById(R.id.share).setOnClickListener(this);
+        floatingActionMenu.findViewById(R.id.view_in_browser).setOnClickListener(this);
         parentLayout = (LinearLayout) view.findViewById(R.id.parent_layout);
         title = (TextView) parentLayout.findViewById(R.id.news_heading);
         cardView = (CardView) parentLayout.findViewById(R.id.image_card);
         titleImage = (ImageView) parentLayout.findViewById(R.id.appbar_image);
-
-
         if (newsModal.content != null) {
-            Toaster.make(getContext(), "hello");
             Picasso.with(getContext()).load(newsModal.content).into(titleImage, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -138,7 +136,6 @@ public class NewsDetailPagerFragment extends Fragment {
             if (isSmartView) {
                 new ParseJsoup().execute(newsModal.description);
             } else {
-                webView.setVisibility(View.VISIBLE);
                 setUpWebView();
             }
         }
@@ -153,6 +150,8 @@ public class NewsDetailPagerFragment extends Fragment {
     }
 
     private void setUpWebView() {
+        webView = (VideoEnabledWebView) parentLayout.findViewById(R.id.web_view);
+        webView.setVisibility(View.VISIBLE);
         videoLayout = (ViewGroup) getActivity().findViewById(R.id.videoLayout); // Your own view, read class comments
         loadingView = getActivity().getLayoutInflater().inflate(R.layout.view_loading_video, null); // Your own view, read class comments
         webView = (VideoEnabledWebView) parentLayout.findViewById(R.id.web_view);
@@ -178,7 +177,7 @@ public class NewsDetailPagerFragment extends Fragment {
         });
         StringBuilder builder = null;
         String color;
-        builder = new StringBuilder(description.length() + 100);
+        builder = new StringBuilder(newsModal.description.length() + 100);
         int night_mode = AppCompatDelegate.getDefaultNightMode();
         if (night_mode == AppCompatDelegate.MODE_NIGHT_YES) {
             color = "white";
@@ -186,7 +185,7 @@ public class NewsDetailPagerFragment extends Fragment {
             color = "black";
 
         builder.append("<HTML><HEAD><meta name=viewport content=target-densitydpi=medium-dpi, width=device-width/><script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script><LINK href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body style=\"color:").append(color).append(";\"max-width: 100%;>");
-        builder.append(description);
+        builder.append(newsModal.description);
         builder.append("</body></HTML>");
         webView.loadDataWithBaseURL("file:///android_asset/.", builder.toString(), "text/html", "UTF-8", null);
         webView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.webviewbackground));
@@ -251,6 +250,7 @@ public class NewsDetailPagerFragment extends Fragment {
                 item.setChecked(isSmartView);
                 String str = isSmartView ? "enabled" : "disabled";
                 Toaster.make(getContext(), "Smart view wil be " + str + " after going back");
+                SharedPreference.saveToSharedPreference(SMART_VIEW, isSmartView, getContext());
                 return true;
 
 
@@ -273,7 +273,6 @@ public class NewsDetailPagerFragment extends Fragment {
         if (webView != null) {
             webView.onPause();
         }
-        SharedPreference.saveToSharedPreference(SMART_VIEW, isSmartView, getContext());
     }
 
     @Override
@@ -289,7 +288,7 @@ public class NewsDetailPagerFragment extends Fragment {
             Log.d("tag1", "null");
         else
             Log.d("tag1", "not null");
-        TextView textView = new TextView(getActivity(), null, R.style.SubTitleText);
+        TextView textView = new TextView(getContext(), null, R.style.SubTitleText);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         int margin = (int) GiantBomb.dipToPixels(getContext(), 12);
         params.setMargins(margin, 0, margin, 0);
@@ -313,7 +312,19 @@ public class NewsDetailPagerFragment extends Fragment {
         return primaryColor;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.share:
+                break;
+            case R.id.view_in_browser:
+                runBrowser(newsModal.link);
+        }
+    }
+
     private class ParseJsoup extends AsyncTask<String, String, Void> {
+
+        int i = 0;
 
         @Override
         protected Void doInBackground(String... params) {
@@ -324,18 +335,13 @@ public class NewsDetailPagerFragment extends Fragment {
                 Elements elements = document.select("*");
 
                 for (Element element : elements) {
+
                     if (element.tagName().equals("p")) {
+                        i++;
                         publishProgress(element.text(), String.valueOf(true));
-                    } else if (element.tagName().equals("figure")) {
-                        Elements innerElements = element.getElementsByTag("img");
-                        if (innerElements != null) {
-                            Element innerElement = innerElements.first();
-                            if (innerElement.hasAttr("alt"))
-                                publishProgress(element.absUrl("data-img-src"), String.valueOf(false), innerElement.attr("alt"));
-                            else
-                                publishProgress(element.absUrl("data-img-src"), String.valueOf(false));
-                        } else {
-                            publishProgress(element.absUrl("data-img-src"), String.valueOf(false));
+                    } else if (element.tagName().equals("figure") || element.tagName().equals("img")) {
+                        if (element.hasAttr("src")) {
+                            publishProgress(element.absUrl("src"), String.valueOf(false));
                         }
                     }
                 }

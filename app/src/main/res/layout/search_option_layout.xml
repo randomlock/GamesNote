@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="20dp"
 
-    >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="?dialogPreferredPadding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="?dialogPreferredPadding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_by"
+            android:textColor="@color/black_white" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
     <CheckBox android:id="@+id/checkbox"
@@ -13,13 +32,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@android:color/transparent"
-        android:drawablePadding="20dp"
+        android:drawablePadding="12dp"
         android:drawableStart="@android:color/transparent"
-        android:text="Descending"
+        android:text="@string/descending"
         android:textColor="@color/black_white"
         />
+</LinearLayout>
 
-
-</FrameLayout>
 
 

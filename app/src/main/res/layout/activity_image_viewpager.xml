@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-<FrameLayout android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    android:orientation="vertical">
 
 
 
 
-    <com.example.randomlocks.gamesnote.HelperClass.CustomView.PhotoViewPager
+    <com.example.randomlocks.gamesnote.HelperClass.CustomView.PhotoViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionName="@string/transition_viewpager"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
+        android:transitionName="@string/transition_viewpager" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        app:theme="@style/MyToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_toolbar_translucent"
-        android:theme="@style/MyToolbar"
         />
 
 

@@ -192,6 +192,7 @@ public class GamesCharacterWikiFragment extends Fragment {
                         @Override
                         public void execute(Realm realm) {
                             search_results = SearchHistoryDatabase.search(realm,newQuery,SearchHistoryDatabase.CHARACTER_WIKI, true);
+
                             search_list = new ArrayList<>();
                             int i=0;
                             for(SearchHistoryDatabase search_result : search_results){
@@ -204,7 +205,12 @@ public class GamesCharacterWikiFragment extends Fragment {
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-                            floatingSearchView.swapSuggestions(search_list);
+                            if (search_list.size() == 1 && search_list.get(0).getBody().equals(newQuery)) {
+                                floatingSearchView.clearSuggestions();
+                                floatingSearchView.clearSearchFocus();
+                            } else {
+                                floatingSearchView.swapSuggestions(search_list);
+                            }
                         }
                     });
 
@@ -386,9 +392,9 @@ public class GamesCharacterWikiFragment extends Fragment {
 
             @Override
             public void onFailure(Call<CharacterSearchModalList> call, Throwable t) {
-                pacman.setVisibility(View.GONE);
 
                 if (!call.isCanceled()) {
+                    pacman.setVisibility(View.GONE);
                     Toaster.makeSnackBar(coordinator, "Connectivity Problem", "RETRY", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

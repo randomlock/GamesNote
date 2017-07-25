@@ -172,6 +172,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     View playViewButton;
     ProgressBar videoProgress;
     int current_video_pos = 0;
+    GameDetailVideo showcase_video = null;
     private int stopPosition;
     private DisplayMetrics metrics;
     private String video_url;
@@ -206,7 +207,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
     };
 
-
     public GameDetailFragment() {
         // Required empty public constructor
 
@@ -223,336 +223,11 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         return fragment;
     }
 
-    public void getInit(final GameDetailVideo gameDetailVideo) {
-        videoProgress = (ProgressBar) toolbarLayout.findViewById(R.id.video_progress);
-        //geting video url from the api
-        if (videoMap==null) {
-            videoMap = new HashMap<>();
-            videoMap.put(GiantBomb.KEY, GiantBomb.API_KEY);
-            String field_list = "site_detail_url,youtube_id,high_url,low_url,length_seconds,name,image";
-            videoMap.put(GiantBomb.FIELD_LIST, field_list);
-            videoMap.put(GiantBomb.FORMAT, "JSON");
-        }
-
-        String path = gameDetailVideo.apiDetailUrl;
-        String str[] = path.split("/");
-        final String videoUrl = str[str.length - 1];
-        videoInterface = GiantBomb.createGameDetailVideoService();
-        videoInterface.getResult(videoUrl,videoMap).enqueue(new Callback<GameVideoMinimal>() {
-            @Override
-            public void onResponse(Call<GameVideoMinimal> call, Response<GameVideoMinimal> response) {
-                GameVideoModalMinimal minimalVideoModal = response.body().results;
-                videoModal = new GamesVideoModal(minimalVideoModal);
-                if (videoType == LOW_VIDEO_URL || videoType == HIGH_VIDEO_URL) {
-                    setUpVideoView();
-                } else if (videoType == OPEN_IN_YOUTUBE) {
-                    if (videoModal.youtubeId != null) {
-                        Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(), GiantBomb.YOUTUBE_API_KEY, videoModal.youtubeId, 0, true, false);
-                        startActivity(intent);
-                    } else {
-                        Toasty.error(getContext(), "Not available on youtube").show();
-                        setUpVideoView();
-                    }
-                } else if (videoType == OPEN_IN_BROWSER) {
-                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).addDefaultShareMenuItem().build();
-                    CustomTabActivityHelper.openCustomTab(
-                            getActivity(), customTabsIntent, Uri.parse(videoModal.siteDetailUrl), new WebViewFallback());
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<GameVideoMinimal> call, Throwable t) {
-                Toaster.makeSnackBar(coordinatorLayout, "error cannot play");
-            }
-        });
-
-    }
-
-    private void setUpVideoView() {
-        video_url = videoType == LOW_VIDEO_URL ? videoModal.lowUrl : videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mCommunicationInterface.onVideoClick(video_url, false, 0, videoModal);
-            return;
-        }
-/*
-                if (videoView==null) {
-*/
-        videoView = (CustomVideoView) toolbarLayout.findViewById(R.id.play_video_texture);
-        videoDim = nestedScrollView.findViewById(R.id.video_dimmer_view);
-        media_Controller = new CustomMediaController(getContext(), false);
-
-
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) videoView.getLayoutParams();
-        params.width = metrics.widthPixels;
-        params.height = metrics.heightPixels / 3;
-        params.leftMargin = 0;
-        params.rightMargin = 0;
-        videoView.setLayoutParams(params);
-
-        media_Controller.setAnchorView(videoView);
-        media_Controller.setPrevNextListeners(new View.OnClickListener() {
-                                                  //for next video
-                                                  @Override
-                                                  public void onClick(View view) {
-                                                      if (current_video_pos + 1 < gameDetailModal.videos.size()) {
-                                                          getInit(gameDetailModal.videos.get(++current_video_pos));
-                                                      } else {
-                                                          Toasty.warning(getContext(), "no next video", Toast.LENGTH_SHORT, true).show();
-
-
-                                                      }
-                                                  }
-                                              }, //for prev video
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (current_video_pos > 0) {
-                            getInit(gameDetailModal.videos.get(--current_video_pos));
-                        } else {
-                            Toasty.warning(getContext(), "no previous video", Toast.LENGTH_SHORT, true).show();
-                        }
-                    }
-                });
-        videoView.setMediaController(media_Controller);
-        videoView.setVideoPath(video_url);
-        videoView.requestFocus();
-        videoView.start();
-        videoProgress.setVisibility(View.VISIBLE);
-        setVideoListener();
-               /* }else {
-                    videoView.stopPlayback();
-                    videoView.setVideoPath(videoUrl);
-                    videoView.start();
-                    videoProgress.setVisibility(View.GONE);
-
-                }*/
-    }
-
-    private void setVideoListener() {
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                videoProgress.setVisibility(View.GONE);
-                mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                    @Override
-                    public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
-                            videoProgress.setVisibility(View.VISIBLE);
-                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
-                            videoProgress.setVisibility(View.GONE);
-                        return false;
-                    }
-                });
-            }
-        });
-        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                videoProgress.setVisibility(View.GONE);
-                return false;
-            }
-        });
-
-
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                animateToolbar();
-            }
-        });
-
-        videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
-            @Override
-            public void onPlay() {
-                animateToolbar();
-            }
-
-            @Override
-            public void onPause() {
-                animateToolbar();
-            }
-        });
-
-
-        media_Controller.setListener(new CustomMediaController.OnMediaControllerInteractionListener() {
-            @Override
-            public void onRequestFullScreen() {
-                int seek_position = videoView.getCurrentPosition();
-                mCommunicationInterface.onVideoClick(video_url, false, seek_position, videoModal);
-            }
-
-            @Override
-            public void onRequestDimmerView() {
-                if (videoDim.getAlpha() == 0) {
-                    videoDim.animate().alpha(1).withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            floatingActionsMenu.hideMenuButton(true);
-
-                        }
-                    });
-                    //setBackgroundDimming(videoDim,true);
-                } else {
-                    videoDim.animate().alpha(0).withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            floatingActionsMenu.showMenuButton(true);
-
-                        }
-                    });
-                    //setBackgroundDimming(videoDim,false);
-                }
-            }
-        });
-    }
-
-    public void animateToolbar(){
-        float alpha = toolbar.getAlpha();
-        if (alpha == 1) {
-            toolbar.animate().alpha(0).setDuration(200);
-        } else {
-            toolbar.animate().alpha(1).setDuration(200);
-
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        floatingActionsMenu.close(true);
-
-        switch (v.getId()) {
-
-            case R.id.replaying:
-                list_category = GiantBomb.REPLAYING;
-                break;
-            case R.id.planning:
-                list_category = GiantBomb.PLANNING;
-                break;
-            case R.id.dropped:
-                list_category = GiantBomb.DROPPED;
-                break;
-            case R.id.playing:
-                list_category = GiantBomb.PLAYING;
-                break;
-            case R.id.completed:
-                list_category = GiantBomb.COMPLETED;
-                break;
-
-            case R.id.stats_cardview :
-                if(statsDetailView.getVisibility()==View.VISIBLE){
-                    MyAnimation.collapse(statsDetailView,getContext());
-                    matrix.postRotate((float) 180, toggleArrow.getWidth()/2, toggleArrow.getHeight()/2);
-                    toggleArrow.setImageMatrix(matrix);
-                }
-                else{
-                    MyAnimation.expand(statsDetailView,getContext());
-                    matrix.postRotate((float) 180, toggleArrow.getWidth()/2, toggleArrow.getHeight()/2);
-                    toggleArrow.setImageMatrix(matrix);
-                }
-
-
-                return;
-
-            case R.id.description_internet:
-                String str = "http://www.giantbomb.com/game/" + apiUrl;
-                CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
-
-                CustomTabActivityHelper.openCustomTab(
-                        getActivity(), customTabsIntent, Uri.parse(str), new WebViewFallback());
-
-                return;
-
-
-
-        }
-
-        if (gameDetailModal != null) {
-            BottomSheetDialogFragment addToBottomFragment = AddToBottomFragment.newInstance(platforms);
-            addToBottomFragment.setTargetFragment(this, 0);
-            Toaster.make(getContext(),"hello");
-            addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
-        } else {
-            Toaster.makeSnackBar(coordinatorLayout,"waiting to load data");
-        }
-
-    }
-
-    //When adding game to the list
-    @Override
-    public void onAdd(int score, String startDate, String endDate, String platform) {
-
-        RealmList<GameWikiPlatform> realmPlatformList = new RealmList<>();
-        for(GameWikiPlatform p : platforms)
-            realmPlatformList.add(p);
-        final GameListDatabase gameListDatabase = new GameListDatabase(game_id,apiUrl,title,imageUrl,list_category,score,startDate,endDate,platform,realmPlatformList);
-        //adding developer
-
-
-
-
-
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.insertOrUpdate(gameListDatabase);
-                if (!isAdded) {
-                    updateGameDetail(gameDetailModal.developers, GameDetailDatabase.DEVELOPER_TYPE,realm);
-                    updateGameDetail(gameDetailModal.publishers, GameDetailDatabase.PUBLISHER_TYPE,realm);
-                    updateGameDetail(gameDetailModal.themes, GameDetailDatabase.THEME_TYPE,realm);
-                    updateGameDetail(gameDetailModal.franchises, GameDetailDatabase.FRANCHISE_TYPE,realm);
-                    updateGameDetail(gameDetailModal.genres, GameDetailDatabase.GENRE_TYPE,realm);
-                    updateGameDetail(gameDetailModal.similarGames, GameDetailDatabase.SIMILAR_GAME_TYPE,realm);
-
-
-
-                }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                Toasty.success(getContext(),"Game added", Toast.LENGTH_SHORT,true).show();
-
-            }
-        });
-    }
-
-    private void updateGameDetail(List<GameDetailIInnerJson> gameDetailDatabase, int type,Realm realm) {
-
-        if (gameDetailDatabase!=null) {
-            //already added in database . Here we just update the game list
-            for(GameDetailIInnerJson gameDatabase : gameDetailDatabase){
-                GameDetailDatabase gameDeveloperDatabase = realm.where(GameDetailDatabase.class)
-                        .equalTo(GameDetailDatabase.TYPE,type)
-                        .equalTo(GameDetailDatabase.NAME,gameDatabase.name).findFirst();
-                if(gameDeveloperDatabase!=null){
-                    gameDeveloperDatabase.getGames_id().add(new RealmInteger(game_id));
-                    gameDeveloperDatabase.setCount(gameDeveloperDatabase.getCount()+1);
-                }else {
-                    //adding for the first time
-                    RealmList<RealmInteger> games_id = new RealmList<RealmInteger>();
-                    games_id.add(new RealmInteger(game_id));
-                    int auto_increment_x=0;
-                    Number number = realm.where(GameDetailDatabase.class).equalTo(GameDetailDatabase.TYPE,type).max(GameDetailDatabase.AUTO_INCREMENT_X_VALUE);
-                    if(number!=null)
-                        auto_increment_x = number.intValue()+1;
-                    gameDeveloperDatabase = new GameDetailDatabase(type,gameDatabase.name,1,auto_increment_x,games_id);
-                    realm.insertOrUpdate(gameDeveloperDatabase);
-                }
-            }
-        }
-
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mCommunicationInterface = (CommunicationInterface) getActivity();
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -590,8 +265,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
     }
 
-
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -628,7 +301,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                 } else {
                     appbarImage.setVisibility(View.INVISIBLE);
                     playViewButton.setVisibility(View.GONE);
-                    getInit(gameDetailModal.videos.get(0));
+                    getInit(showcase_video);
                 }
 
 
@@ -837,6 +510,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/game/" + apiUrl + "/"); */
 
     }
+
     private void setTextViewDrawableColor(TextView textView, int color) {
         for (Drawable drawable : textView.getCompoundDrawables()) {
             if (drawable != null) {
@@ -844,8 +518,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             }
         }
     }
-
-
 
     private void runAsyncTask() {
 
@@ -886,8 +558,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
 
     }
-
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -949,6 +619,10 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         //Toaster.make(getContext(),platforms.size()+"5");
         List<CharacterImage> image = gameDetailModal.images;
         List<GameDetailVideo> videos = gameDetailModal.videos;
+        if (videos != null && !videos.isEmpty()) {
+            showcase_video = videos.remove(0);
+        }
+
 
         if(gameDetailModal.characters==null||gameDetailModal.characters.isEmpty())
             characters_heading.setVisibility(View.GONE);
@@ -1199,7 +873,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         }
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -1237,10 +910,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         return builder.toString();
 
     }
-
-
-
-
 
     @Override
     public void onDetach() {
@@ -1297,8 +966,337 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
     }
 
+    /*private DemoPlayer.RendererBuilder getRendererBuilder() {
+        String userAgent = Util.getUserAgent(getContext(), "ExoPlayerDemo");
+        return new ExtractorRendererBuilder(getContext(), userAgent, Uri.parse("http://v.giantbomb.com/2016/07/28/vf_giantbomb_bestof_103_1800.mp4?api_key=b3" +
+                "18d66445bfc79e6d74a65fe52744b45b345948&format=JSON"));
+
+    }*/
+
+    public void getInit(final GameDetailVideo gameDetailVideo) {
+        videoProgress = (ProgressBar) toolbarLayout.findViewById(R.id.video_progress);
+        //geting video url from the api
+        if (videoMap == null) {
+            videoMap = new HashMap<>();
+            videoMap.put(GiantBomb.KEY, GiantBomb.API_KEY);
+            String field_list = "site_detail_url,youtube_id,high_url,low_url,length_seconds,name,image";
+            videoMap.put(GiantBomb.FIELD_LIST, field_list);
+            videoMap.put(GiantBomb.FORMAT, "JSON");
+        }
+
+        String path = gameDetailVideo.apiDetailUrl;
+        String str[] = path.split("/");
+        final String videoUrl = str[str.length - 1];
+        videoInterface = GiantBomb.createGameDetailVideoService();
+        videoInterface.getResult(videoUrl, videoMap).enqueue(new Callback<GameVideoMinimal>() {
+            @Override
+            public void onResponse(Call<GameVideoMinimal> call, Response<GameVideoMinimal> response) {
+                GameVideoModalMinimal minimalVideoModal = response.body().results;
+                videoModal = new GamesVideoModal(minimalVideoModal);
+                if (videoType == LOW_VIDEO_URL || videoType == HIGH_VIDEO_URL) {
+                    setUpVideoView();
+                } else if (videoType == OPEN_IN_YOUTUBE) {
+                    if (videoModal.youtubeId != null) {
+                        Intent intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(), GiantBomb.YOUTUBE_API_KEY, videoModal.youtubeId, 0, true, false);
+                        startActivity(intent);
+                    } else {
+                        Toasty.error(getContext(), "Not available on youtube").show();
+                        setUpVideoView();
+                    }
+                } else if (videoType == OPEN_IN_BROWSER) {
+                    CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).addDefaultShareMenuItem().build();
+                    CustomTabActivityHelper.openCustomTab(
+                            getActivity(), customTabsIntent, Uri.parse(videoModal.siteDetailUrl), new WebViewFallback());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<GameVideoMinimal> call, Throwable t) {
+                Toaster.makeSnackBar(coordinatorLayout, "error cannot play");
+            }
+        });
+
+    }
+
+    private void setUpVideoView() {
+        video_url = videoType == LOW_VIDEO_URL ? videoModal.lowUrl : videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mCommunicationInterface.onVideoClick(video_url, false, 0, videoModal);
+            return;
+        }
+/*
+                if (videoView==null) {
+*/
+        videoView = (CustomVideoView) toolbarLayout.findViewById(R.id.play_video_texture);
+        videoDim = nestedScrollView.findViewById(R.id.video_dimmer_view);
+        media_Controller = new CustomMediaController(getContext(), false);
 
 
+     /*   RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) videoView.getLayoutParams();
+        params.width = metrics.widthPixels;
+        params.height = metrics.heightPixels / 3;
+        params.leftMargin = 0;
+        params.rightMargin = 0;
+        videoView.setLayoutParams(params);*/
+
+        relativeLayout = (RelativeLayout) coordinatorLayout.findViewById(R.id.parent_video);
+        relativeLayout.getLayoutParams().height = metrics.heightPixels / 3;
+
+
+        media_Controller.setAnchorView(videoView);
+        media_Controller.setPrevNextListeners(new View.OnClickListener() {
+                                                  //for next video
+                                                  @Override
+                                                  public void onClick(View view) {
+                                                      if (current_video_pos + 1 < gameDetailModal.videos.size()) {
+                                                          getInit(gameDetailModal.videos.get(++current_video_pos));
+                                                      } else {
+                                                          Toasty.warning(getContext(), "no next video", Toast.LENGTH_SHORT, true).show();
+
+
+                                                      }
+                                                  }
+                                              }, //for prev video
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (current_video_pos > 0) {
+                            getInit(gameDetailModal.videos.get(--current_video_pos));
+                        } else {
+                            Toasty.warning(getContext(), "no previous video", Toast.LENGTH_SHORT, true).show();
+                        }
+                    }
+                });
+        videoView.setMediaController(media_Controller);
+        videoView.setVideoPath(video_url);
+        videoView.requestFocus();
+        videoView.start();
+        videoProgress.setVisibility(View.VISIBLE);
+        setVideoListener();
+               /* }else {
+                    videoView.stopPlayback();
+                    videoView.setVideoPath(videoUrl);
+                    videoView.start();
+                    videoProgress.setVisibility(View.GONE);
+
+                }*/
+    }
+
+    private void setVideoListener() {
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                videoProgress.setVisibility(View.GONE);
+                mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                    @Override
+                    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
+                            videoProgress.setVisibility(View.VISIBLE);
+                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
+                            videoProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                });
+            }
+        });
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                videoProgress.setVisibility(View.GONE);
+                return false;
+            }
+        });
+
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.setDisplay(null);
+                mediaPlayer.reset();
+                mediaPlayer.setDisplay(videoView.getHolder());
+            }
+        });
+
+        videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
+            @Override
+            public void onPlay() {
+                animateToolbar();
+            }
+
+            @Override
+            public void onPause() {
+                animateToolbar();
+            }
+        });
+
+
+        media_Controller.setListener(new CustomMediaController.OnMediaControllerInteractionListener() {
+            @Override
+            public void onRequestFullScreen() {
+                int seek_position = videoView.getCurrentPosition();
+                mCommunicationInterface.onVideoClick(video_url, false, seek_position, videoModal);
+            }
+
+            @Override
+            public void onRequestDimmerView() {
+                if (videoDim.getAlpha() == 0) {
+                    videoDim.animate().alpha(1).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            floatingActionsMenu.hideMenuButton(true);
+
+                        }
+                    });
+                    //setBackgroundDimming(videoDim,true);
+                } else {
+                    videoDim.animate().alpha(0).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            floatingActionsMenu.showMenuButton(true);
+
+                        }
+                    });
+                    //setBackgroundDimming(videoDim,false);
+                }
+            }
+        });
+    }
+
+    public void animateToolbar() {
+        float alpha = toolbar.getAlpha();
+        if (alpha == 1) {
+            toolbar.animate().alpha(0).setDuration(200);
+        } else {
+            toolbar.animate().alpha(1).setDuration(200);
+
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (floatingActionsMenu.isOpened()) {
+            floatingActionsMenu.close(true);
+        }
+
+        switch (v.getId()) {
+
+            case R.id.replaying:
+                list_category = GiantBomb.REPLAYING;
+                break;
+            case R.id.planning:
+                list_category = GiantBomb.PLANNING;
+                break;
+            case R.id.dropped:
+                list_category = GiantBomb.DROPPED;
+                break;
+            case R.id.playing:
+                list_category = GiantBomb.PLAYING;
+                break;
+            case R.id.completed:
+                list_category = GiantBomb.COMPLETED;
+                break;
+
+            case R.id.stats_cardview:
+                if (statsDetailView.getVisibility() == View.VISIBLE) {
+                    MyAnimation.collapse(statsDetailView, getContext());
+                    matrix.postRotate((float) 180, toggleArrow.getWidth() / 2, toggleArrow.getHeight() / 2);
+                    toggleArrow.setImageMatrix(matrix);
+                } else {
+                    MyAnimation.expand(statsDetailView, getContext());
+                    matrix.postRotate((float) 180, toggleArrow.getWidth() / 2, toggleArrow.getHeight() / 2);
+                    toggleArrow.setImageMatrix(matrix);
+                }
+
+
+                return;
+
+            case R.id.description_internet:
+                String str = "http://www.giantbomb.com/game/" + apiUrl;
+                CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).build();
+
+                CustomTabActivityHelper.openCustomTab(
+                        getActivity(), customTabsIntent, Uri.parse(str), new WebViewFallback());
+
+                return;
+
+
+        }
+
+        if (gameDetailModal != null) {
+            BottomSheetDialogFragment addToBottomFragment = AddToBottomFragment.newInstance(platforms);
+            addToBottomFragment.setTargetFragment(this, 0);
+            Toaster.make(getContext(), "hello");
+            addToBottomFragment.show(getActivity().getSupportFragmentManager(), "addto");
+        } else {
+            Toaster.makeSnackBar(coordinatorLayout, "waiting to load data");
+        }
+
+    }
+
+    //When adding game to the list
+    @Override
+    public void onAdd(int score, String startDate, String endDate, String platform) {
+
+        RealmList<GameWikiPlatform> realmPlatformList = new RealmList<>();
+        for (GameWikiPlatform p : platforms)
+            realmPlatformList.add(p);
+        final GameListDatabase gameListDatabase = new GameListDatabase(game_id, apiUrl, title, imageUrl, list_category, score, startDate, endDate, platform, realmPlatformList);
+        //adding developer
+
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(gameListDatabase);
+                if (!isAdded) {
+                    updateGameDetail(gameDetailModal.developers, GameDetailDatabase.DEVELOPER_TYPE, realm);
+                    updateGameDetail(gameDetailModal.publishers, GameDetailDatabase.PUBLISHER_TYPE, realm);
+                    updateGameDetail(gameDetailModal.themes, GameDetailDatabase.THEME_TYPE, realm);
+                    updateGameDetail(gameDetailModal.franchises, GameDetailDatabase.FRANCHISE_TYPE, realm);
+                    updateGameDetail(gameDetailModal.genres, GameDetailDatabase.GENRE_TYPE, realm);
+                    updateGameDetail(gameDetailModal.similarGames, GameDetailDatabase.SIMILAR_GAME_TYPE, realm);
+
+
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toasty.success(getContext(), "Game added", Toast.LENGTH_SHORT, true).show();
+
+            }
+        });
+    }
+
+    private void updateGameDetail(List<GameDetailIInnerJson> gameDetailDatabase, int type, Realm realm) {
+
+        if (gameDetailDatabase != null) {
+            //already added in database . Here we just update the game list
+            for (GameDetailIInnerJson gameDatabase : gameDetailDatabase) {
+                GameDetailDatabase gameDeveloperDatabase = realm.where(GameDetailDatabase.class)
+                        .equalTo(GameDetailDatabase.TYPE, type)
+                        .equalTo(GameDetailDatabase.NAME, gameDatabase.name).findFirst();
+                if (gameDeveloperDatabase != null) {
+                    gameDeveloperDatabase.getGames_id().add(new RealmInteger(game_id));
+                    gameDeveloperDatabase.setCount(gameDeveloperDatabase.getCount() + 1);
+                } else {
+                    //adding for the first time
+                    RealmList<RealmInteger> games_id = new RealmList<RealmInteger>();
+                    games_id.add(new RealmInteger(game_id));
+                    int auto_increment_x = 0;
+                    Number number = realm.where(GameDetailDatabase.class).equalTo(GameDetailDatabase.TYPE, type).max(GameDetailDatabase.AUTO_INCREMENT_X_VALUE);
+                    if (number != null)
+                        auto_increment_x = number.intValue() + 1;
+                    gameDeveloperDatabase = new GameDetailDatabase(type, gameDatabase.name, 1, auto_increment_x, games_id);
+                    realm.insertOrUpdate(gameDeveloperDatabase);
+                }
+            }
+        }
+
+    }
 
     public interface CommunicationInterface {
         void onReviewClick(String apiUrl, String gameTitle, String imageUrl);
@@ -1308,14 +1306,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         void onVideoClick(String url, boolean needRequest, int seek_position, GamesVideoModal modal);
 
     }
-
-    /*private DemoPlayer.RendererBuilder getRendererBuilder() {
-        String userAgent = Util.getUserAgent(getContext(), "ExoPlayerDemo");
-        return new ExtractorRendererBuilder(getContext(), userAgent, Uri.parse("http://v.giantbomb.com/2016/07/28/vf_giantbomb_bestof_103_1800.mp4?api_key=b3" +
-                "18d66445bfc79e6d74a65fe52744b45b345948&format=JSON"));
-
-    }*/
-
 
 
 

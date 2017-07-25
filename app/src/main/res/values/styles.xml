@@ -46,10 +46,9 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="MyToolbarLight" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:textColorPrimary">@color/white</item>
+    <style name="MyToolbarLight" parent="Theme.AppCompat.Light">
+        o
         <item name="searchViewStyle">@style/searchStyle</item>
-        <item name="colorControlNormal">@color/white</item>
         <item name="popupTheme">@style/popMenu</item>
 
 

@@ -103,40 +103,7 @@
 
 
 
-    <string-array name="profile_images">
-        <item>http://vignette2.wikia.nocookie.net/bleachfanfiction/images/5/5a/Sexy-character-game-girl.jpg/revision/latest?cb=20121222192302</item>
-        <item>http://vignette2.wikia.nocookie.net/yoville/images/a/a0/YoWorld_game_character.png/revision/latest?cb=20140930160906</item>
-        <item>http://wallpaperpixel.com/thumbnail/71/65/max-payne-3-game-character-thumbnail.jpg</item>
-        <item>http://vignette4.wikia.nocookie.net/fighting-games/images/f/fa/Street-Fighter-Alpha-3-Game-Character-Official-Artwork-Render-Ryu-3.jpg/revision/latest?cb=20140115135340</item>
-        <item>http://wallpaperpixel.com/thumbnail/05/76/video-game-prototype-2-character-thumbnail.jpg</item>
-        <item>https://uploads.disquscdn.com/images/69d5f290a1aebcf6a4d400300dee4bc722b5d273d95e28ea1099718f90fad094.jpg</item>
-        <item>http://wallpaperpixel.com/thumbnail/12/78/resident-evil-5-woman-character-thumbnail.jpg</item>
-        <item>http://images.withthewill.net/appmon_3ds_girl_august22_2016.jpg</item>
-        <item>http://img2.wikia.nocookie.net/__cb20140528023805/watchdogscombined/images/a/a0/Watch_Dogs_Maurice_Vega.png</item>
-        <item>http://1.bp.blogspot.com/-XK7aRvyMFeo/UZzhpOEyLGI/AAAAAAAAUo0/0vt6wQN_3Wc/s1600/Domino_render_red_02_ForUpl-large.png</item>
-        <item>http://img2.rnkr-static.com/user_node_img/3680/73586219/870/lucy-heartfilia-u26.jpg</item>
-        <item>http://img1.rnkr-static.com/list_img_v2/10536/2070536/C480/anime-characters-with-blue-hair.jpg</item>
-        <item>http://s.orzzzz.com/news/5a/f9//5667c88100a13.jpg</item>
-        <item>https://i.ytimg.com/vi/GTqawiOnDA0/maxresdefault.jpg</item>
-        <item>https://i.stack.imgur.com/jfpt0.jpg</item>
-        <item>http://cdn.playbuzz.com/cdn/7c09f435-5177-413c-823f-b618ffc9d523/55202932-ae8c-49e1-a316-bf08eae9c239.jpg</item>
-        <item>http://assets1.ignimgs.com/2014/02/04/top25anime0204141280jpg-8eff3c_1280w.jpg</item>
-        <item>http://bodminmagazine.com/wp-content/uploads/2015/04/What-Hair-Colors-Of-Anime-Characters-Really-Mean.jpg</item>
-        <item>http://i2.wp.com/haruhichan.com/wpblog/wp-content/uploads/10000-Anime-Fans-Voted-for-Female-Supporting-Characters-They-Would-like-to-See-as-the-Protagonist-haruhichan.com-Charlotte-Dunois-Infinite-Stratos.gif?resize=500%2C281</item>
-        <item>https://myanimelist.cdn-dena.com/s/common/uploaded_files/1464488804-6b3957eda9d67fe0a2aadab60287fd7e.jpeg</item>
-        <item>https://justicesoultuna.files.wordpress.com/2013/11/lp0nbsd.jpg</item>
-        <item>http://s15.postimg.org/j1whe1xgr/Azusa.jpg</item>
-        <item>http://img1.rnkr-static.com/list_img_v2/10544/2070544/C480/anime-characters-with-black-eyes.jpg</item>
-        <item>https://myanimelist.cdn-dena.com/s/common/uploaded_files/1464488821-3a9ca76a644084d49e92479db48b3400.jpeg</item>
-        <item>http://images.askmen.com/entertainment/galleries/most-badass-videogame-characters-138369045626.jpg</item>
-        <item>https://i.ytimg.com/vi/VJDDq-zkGwo/maxresdefault.jpg</item>
-        <item>http://2.media.collegehumor.cvcdn.com/96/40/47a19991c45d8c36a9913f7f17e09f47-jill-valentine.jpg</item>
-        <item>http://img2.rnkr-static.com/list_img_v2/4388/344388/870/the-most-badass-video-game-heroes-of-all-time-u2.jpg</item>
-        <item>http://img-cdn.herbeauty.co/wp-content/uploads/2016/02/most_badass_female_video_game_characters_ever_03.jpg</item>
-        <item>http://cdn3-www.craveonline.com/assets/uploads/2011/08/file_173411_0_FemShep_Wallpaper_banner.jpg</item>
-        <item>http://0.media.collegehumor.cvcdn.com/46/21/dec5fc6f5cc72f5a95fb9fb59a6d16a0-ellie.jpg</item>
 
-    </string-array>
 
 
     <string-array name="score">
@@ -291,7 +258,7 @@
     <string name="update">Update</string>
     <string name="image_url">Enter the image url</string>
     <string name="news">News</string>
-    <string name="add_new_source">Add new source</string>
+    <string name="add_new_source">Add news source</string>
     <string name="custom_source">My source</string>
     <string name="no_games_added">No Games Added</string>
     <string name="description">Description</string>
@@ -318,6 +285,31 @@
     <string name="publish_date">Publish date :</string>
     <string name="open_in_browser">Open in browser</string>
     <string name="smart_view">Smart view</string>
+    <string name="card_view">card view</string>
+    <string name="PLATFORM">PLATFORM</string>
+    <string name="descending">Descending</string>
+    <string name="sort_by">Sort by :</string>
+    <string name="gender">GENDER</string>
+    <string name="birthday">BIRTHDAY</string>
+    <string name="first_appearance">FIRST APPEARANCE</string>
+    <string name="alias">ALIAS</string>
+    <string name="friends">FRIENDS</string>
+    <string name="enemies">ENEMIES</string>
+    <string name="games">GAMES</string>
+    <string name="detail_description">Detail Description</string>
+    <string name="top_5_developer">Top 5 developer</string>
+    <string name="no_of_games">No of games</string>
+    <string name="developer_stats">Developer stats</string>
+    <string name="top_5_publisher">Top 5 publisher</string>
+    <string name="publisher_stats">Publisher stats</string>
+    <string name="top_5_theme">Top 5 theme</string>
+    <string name="theme_stats">Theme stats</string>
+    <string name="top_5_franchise">Top 5 franchise</string>
+    <string name="franchise_stats">Franchise stats</string>
+    <string name="top_5_genre">Top 5 genre</string>
+    <string name="genre_stats">Genre stats</string>
+    <string name="top_5_recommended_games">Top 5 recommended games</string>
+    <string name="recommended_game_stats">Recommended game stats</string>
 
 
 </resources>

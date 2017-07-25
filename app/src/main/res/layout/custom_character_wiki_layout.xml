@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
@@ -12,6 +13,7 @@
         android:layout_width="75dp"
         android:layout_height="112dp"
         android:layout_centerVertical="true"
+        android:clickable="true"
         />
 
 
@@ -22,21 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:layout_toEndOf="@+id/imageView"
-        android:layout_toLeftOf="@+id/popup"
         android:layout_toRightOf="@+id/imageView"
-        android:layout_toStartOf="@+id/popup"
         android:ellipsize="end"
         android:maxLines="2"
-        />
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/title"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView"
-        android:background="@color/linecolor"
         />
 
 
@@ -59,5 +49,3 @@
 
 
 </RelativeLayout>
-
-

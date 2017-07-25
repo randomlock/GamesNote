@@ -107,7 +107,7 @@ public class UserReviewDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.game_news_detail_menu, menu);
+        getMenuInflater().inflate(R.menu.game_review_menu, menu);
         return true;
     }
 
@@ -203,7 +203,7 @@ public class UserReviewDetailActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.gravity = Gravity.CENTER;
                 int margin = (int) GiantBomb.dipToPixels(UserReviewDetailActivity.this, 12);
-                params.setMargins(margin, 0, margin, margin);
+                params.setMargins(margin, margin, margin, margin);
                 cardView.setLayoutParams(params);
                 cardView.setRadius(GiantBomb.dipToPixels(UserReviewDetailActivity.this, 4));
                 ImageView imageView = new ImageView(UserReviewDetailActivity.this);

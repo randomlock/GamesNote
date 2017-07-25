@@ -80,8 +80,18 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void setSimple(boolean simple) {
-        this.viewType = simple ? SIMPLE_VIEW_TYPE : CARD_VIEW_TYPE;
-        notifyItemRangeChanged(0,getItemCount());
+        int viewType = simple ? SIMPLE_VIEW_TYPE : CARD_VIEW_TYPE;
+        if (this.viewType != viewType) {
+            this.viewType = viewType;
+            notifyItemRangeChanged(0, getItemCount());
+        }
+    }
+
+    public void updateModal(HashMap<Integer, Integer> realmMap) {
+        if (!this.hashResults.equals(realmMap)) {
+            this.hashResults = realmMap;
+            notifyItemRangeChanged(0, getItemCount());
+        }
     }
 
     public void swap(List<GamesVideoModal> newModals) {

@@ -24,6 +24,13 @@
         <item name="floatingSearch_actionMenuOverflowColor">@color/floating_search_night_color</item>
     </style>
 
+    <style name="MyToolbarLight" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="searchViewStyle">@style/searchStyle</item>
+        <item name="popupTheme">@style/popMenu</item>
+
+
+    </style>
+
 
     <style name="popMenu" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:colorBackground">@color/black</item>

@@ -15,6 +15,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameVideoOtherAdapter;
 import com.example.randomlocks.gamesnote.DialogFragment.VideoOptionFragment;
+import com.example.randomlocks.gamesnote.Fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
@@ -59,6 +61,8 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     VideoPlayInterface videoPlayInterface;
     HashMap<Integer, Integer> realmMap;
 
+    GamesVideoFragment parentFragment;
+
     int video_id;
     int adapterPosition;
 
@@ -84,6 +88,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("tag1", "oncreate");
         setHasOptionsMenu(true);
         position = getArguments().getInt(GiantBomb.POSITION);
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_VIEW, false, getContext());
@@ -107,7 +112,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_games_video_pager,container,false);
-
+        parentFragment = (GamesVideoFragment) getParentFragment();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         errorText = (TextView) view.findViewById(R.id.errortext);
 
@@ -156,6 +161,12 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         videoPlayInterface = (VideoPlayInterface) getActivity();
     }
 
+    public void updateAdapter() {
+        if (recyclerView != null && adapter != null) {
+            adapter.setSimple(isReduced);
+        }
+    }
+
 
     private void fillRecyclerView(RealmResults<GamesVideoModal> listModals) {
 
@@ -183,6 +194,9 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
                     videoOptionFragment.show(getActivity().getSupportFragmentManager(), "video_option_fragment");
                 }
             });
+        } else {
+            adapter.setSimple(isReduced);
+            adapter.updateModal(realmMap);
         }
 
         if(recyclerView.getLayoutManager()==null){

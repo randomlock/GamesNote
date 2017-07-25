@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.randomlocks.gamesnote.Interface.GameDetailVideoInterface;
 import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage;
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameDetailVideo;
 import com.example.randomlocks.gamesnote.R;
@@ -36,11 +35,6 @@ public class GameDetailVideoCharacter extends RecyclerView.Adapter<GameDetailVid
         this.gameDetailVideoInterface = gameDetailVideoInterface;
     }
 
-    public static interface GameDetailVideoInterface{
-        void onClickVideo(GameDetailVideo video,int next_video_pos);
-    }
-
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -53,10 +47,10 @@ public class GameDetailVideoCharacter extends RecyclerView.Adapter<GameDetailVid
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         if (totalImageSize - position - 1 >= 0) {
-            Picasso.with(context).load(image.get(totalImageSize - 1 - position).mediumUrl).fit().centerCrop().into(holder.imageView);
+            Picasso.with(context).load(image.get(totalImageSize - 1 - position).mediumUrl).fit().centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.news_image_drawable).into(holder.imageView);
         }
 
-        holder.textView.setText(videos.get(position+1).name);
+        holder.textView.setText(videos.get(position).name);
 
 
     }
@@ -64,6 +58,10 @@ public class GameDetailVideoCharacter extends RecyclerView.Adapter<GameDetailVid
     @Override
     public int getItemCount() {
         return videos.size()-1;
+    }
+
+    public static interface GameDetailVideoInterface {
+        void onClickVideo(GameDetailVideo video, int next_video_pos);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

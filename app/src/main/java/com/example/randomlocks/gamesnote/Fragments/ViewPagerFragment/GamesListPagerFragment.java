@@ -90,12 +90,13 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         realm = Realm.getDefaultInstance();
         status = getArguments().getInt(STATUS);
         setHasOptionsMenu(true);
+        Log.d("tag1", "oncreate");
         itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
 
         int index = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_WHICH,1,getContext());
         sort_option = getField(index);
         isAscending = SharedPreference.getFromSharedPreferences(GiantBomb.SORT_ASCENDING,true,getContext());
-        isSimple = getArguments().getBoolean(IS_SIMPLE);
+        isSimple = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_LIST_VIEW, false, getContext());
 
 
         if (isAscending) {
@@ -120,6 +121,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("tag1", "oncreateview");
         View view = inflater.inflate(R.layout.fragment_pager_games_list, container, false);
         parentFragment = (GamesListFragment) getParentFragment();
         recyclerView = (FastScrollRecyclerView) view.findViewById(R.id.recycler_view);
@@ -251,12 +253,12 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         MenuItem menuItem = menu.findItem(R.id.view);
 
         if (isSimple) {
-            menuItem.setTitle(getString(R.string.reduce_view));
-            menuItem.setIcon(R.drawable.ic_gamelist_white);
+            menuItem.setTitle(getString(R.string.card_view));
+            menuItem.setIcon(R.drawable.ic_compat_white);
 
         } else {
-            menuItem.setTitle(getString(R.string.compact_view));
-            menuItem.setIcon(R.drawable.ic_compat_white);
+            menuItem.setTitle(getString(R.string.list_view));
+            menuItem.setIcon(R.drawable.ic_gamelist_white);
 
         }
 
@@ -266,10 +268,9 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.d("tag1", "oncreteoptionmenu");
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.game_list_menu,menu);
         getSearchManager(getContext(),menu,false);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -292,38 +293,40 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
             }
 
             if (adapter!=null) {
-                if (item.getTitle().equals(getString(R.string.compact_list_view))) {
-                    isSimple = true;
-                    item.setTitle(getString(R.string.reduce_list_view));
+                if (item.getTitle().equals(getString(R.string.card_view))) {
+                    isSimple = false;
+                    item.setTitle(getString(R.string.list_view));
                     item.setIcon(R.drawable.ic_gamelist_white);
 
                 } else {
-                    item.setTitle(getString(R.string.compact_list_view));
-                    isSimple = false;
+                    item.setTitle(getString(R.string.card_view));
+                    isSimple = true;
                     item.setIcon(R.drawable.ic_compat_white);
                 }
 
 
-              /*  if (recyclerView != null) {
+                if (recyclerView != null) {
                     if (isSimple) {
                         recyclerView.addItemDecoration(itemDecoration);
                     } else {
                         recyclerView.removeItemDecoration(itemDecoration);
                     }
                 }
-                adapter.setSimple(isSimple);*/
+                adapter.setSimple(isSimple);
 
                 /*Save the isSimple and update all viewpager item by calling notifyDatasetChanged()*/
                 SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_LIST_VIEW,isSimple,getContext());
-                parentFragment.updateViewPager();
-
-
+                parentFragment.updateViewpagerFragment(isSimple);
             }
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateViewpager() {
+        parentFragment.updateViewPager();
     }
 
     public void getSearchManager(final Context context, Menu menu, boolean isDefaultIconified) {
@@ -344,6 +347,11 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("tag1", "onresume" + status);
+    }
 
     @Override
     public void onDestroyView() {
@@ -441,5 +449,11 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     @Override
     public void onCancel() {
 
+    }
+
+    public void updateAdapter(boolean isSimple) {
+        if (adapter != null) {
+            adapter.setSimple(isSimple);
+        }
     }
 }

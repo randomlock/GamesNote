@@ -10,7 +10,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -47,7 +47,7 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
     CastContext mCastContext;
     MediaRouteButton mMediaRouteButton;
-
+    int viewpager_number;
     private IntroductoryOverlay mIntroductoryOverlay;
     private CastStateListener mCastStateListener;
 
@@ -148,7 +148,7 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                viewpager_number = position;
             }
 
             @Override
@@ -185,12 +185,13 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
 
         /************* SETTING Viewpager *****************/
-        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(new GameVideoPagerAdapter(getChildFragmentManager(), getContext()));
-
+        viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
 
+
     }
+
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -206,10 +207,17 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
     }
 
-   private static class GameVideoPagerAdapter extends FragmentPagerAdapter {
+    public void updateViewPager() {
+        if (viewPager != null && viewPager.getAdapter() != null) {
+            viewPager.getAdapter().notifyDataSetChanged();
+        }
+    }
+
+
+    private static class GameVideoPagerAdapter extends FragmentStatePagerAdapter {
 
         final int PAGE_COUNT = 3;
-        String pageTitle[] = {"Videos", "Favorite", "Watch later"};
+        String pageTitle[] = {"Videos", "Liked", "Watch later"};
         ArrayList<Fragment> fragments;
        private Context context;
 
@@ -236,6 +244,11 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
         @Override
         public CharSequence getPageTitle(int position) {
             return pageTitle[position];
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
         }
 
 

@@ -235,6 +235,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
                                     mSelectedId = R.id.nav_kotaku;
                                     mNavigation.setCheckedItem(mSelectedId);
                                     selectDrawer(mSelectedId,mTitle);
+                                    runModel();
                                 }else { //just update the view
                                     result.deleteFromRealm();
                                     setUpCustomNews();

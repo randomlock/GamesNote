@@ -6,12 +6,10 @@
 
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/alpha_color">
-
-
+        android:background="@color/alpha_color"
+        app:theme="@style/MyToolbarLight">
 
 
 
@@ -19,13 +17,11 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/MyToolbarLight"
             app:layout_collapseMode="pin" />
 
 
-
-
     </android.support.design.widget.AppBarLayout>
+
 
 
     <android.support.v4.widget.NestedScrollView
@@ -37,6 +33,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/alpha_color"
             >
 
 
@@ -44,7 +41,6 @@
                 android:id="@+id/parent_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/alpha_color"
                 android:orientation="vertical"
                 >
 
@@ -127,11 +123,12 @@
 
                     <TextView
                         android:id="@+id/reviewer_field"
+                        style="@style/cardview_textstyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="0dp"
                         android:text="@string/reviewer"
-                        android:textAllCaps="true"
-                        android:textColor="@color/primary_text_light"
+                        android:textColor="?android:textColorPrimary"
                         />
 
                     <TextView
@@ -149,13 +146,14 @@
 
                     <TextView
                         android:id="@+id/date_field"
+                        style="@style/cardview_textstyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/reviewer_field"
                         android:layout_marginTop="12dp"
+                        android:padding="0dp"
                         android:text="@string/publish_date"
-                        android:textAllCaps="true"
-                        android:textColor="@color/primary_text_light"
+                        android:textColor="?android:textColorPrimary"
                         />
 
                     <TextView

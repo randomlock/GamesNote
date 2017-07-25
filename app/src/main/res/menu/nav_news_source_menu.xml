@@ -7,6 +7,8 @@
         android:title="@string/custom_source"
         app:showAsAction="always"
         >
+
+
         <menu>
             <group android:checkableBehavior="single">
 
@@ -14,6 +16,12 @@
         </menu>
 
     </item>
+
+    <item
+        android:id="@+id/nav_add_source"
+        android:icon="@drawable/ic_action_add"
+        android:title="@string/add_new_source" />
+
 
     <item android:title="@string/news">
         <menu>
@@ -178,9 +186,6 @@
 
     </item>
 
-    <item android:id="@+id/nav_add_source"
-        android:icon="@drawable/ic_action_add"
-        android:title="@string/add_new_source" />
 
 
 
