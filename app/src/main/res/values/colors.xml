@@ -25,7 +25,7 @@
     <color name="alpha_color">#c6efe8e8</color>
     <color name="wikibackground">#EAEAEA</color>
     <color name="webviewbackground">@android:color/transparent</color>
-    <color name="primary_character">#263238</color>
+    <color name="primary_character">#37474F</color>
     <color name="worst">#D32F2F</color>
     <color name="very_poor">#C2185B</color>
     <color name="poor">#7B1FA2</color>

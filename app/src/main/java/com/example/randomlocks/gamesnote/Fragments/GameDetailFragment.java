@@ -1086,9 +1086,11 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
     private void setVideoListener() {
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
             @Override
             public void onPrepared(MediaPlayer mp) {
                 videoProgress.setVisibility(View.GONE);
+                animateToolbar(true);
                 mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
                     @Override
                     public boolean onInfo(MediaPlayer mp, int what, int extra) {
@@ -1105,6 +1107,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 videoProgress.setVisibility(View.GONE);
+                animateToolbar(true);
                 return false;
             }
         });
@@ -1115,6 +1118,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             public void onCompletion(MediaPlayer mediaPlayer) {
                 mediaPlayer.setDisplay(null);
                 mediaPlayer.reset();
+                animateToolbar(true);
                 mediaPlayer.setDisplay(videoView.getHolder());
             }
         });
@@ -1122,12 +1126,12 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
             @Override
             public void onPlay() {
-                animateToolbar();
+                animateToolbar(false);
             }
 
             @Override
             public void onPause() {
-                animateToolbar();
+                animateToolbar(true);
             }
         });
 
@@ -1164,9 +1168,8 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         });
     }
 
-    public void animateToolbar() {
-        float alpha = toolbar.getAlpha();
-        if (alpha == 1) {
+    public void animateToolbar(boolean shouldHide) {
+        if (shouldHide) {
             toolbar.animate().alpha(0).setDuration(200);
         } else {
             toolbar.animate().alpha(1).setDuration(200);

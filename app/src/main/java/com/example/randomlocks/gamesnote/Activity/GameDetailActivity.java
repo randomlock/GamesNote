@@ -109,13 +109,7 @@ public class GameDetailActivity extends AppCompatActivity implements GameDetailF
 
     @Override
     public void onVideoClick(String url, boolean needRequest, int seek_position, GamesVideoModal modal) {
-
-        /*Intent intent = new Intent(this, VideoPlayerActivity.class);
-        intent.putExtra(GiantBomb.API_URL, url);
-        intent.putExtra(GiantBomb.SEEK_POSITION,seek_position);
-        startActivityForResult(intent,1);*/
-
-        Intent intent = new Intent(this, LocalPlayerActivity.class);
+        Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
         intent.putExtra(GiantBomb.SEEK_POSITION, seek_position);
         intent.putExtra(GiantBomb.MODAL, modal);

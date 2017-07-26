@@ -151,7 +151,6 @@ public class SearchFilterFragment extends DialogFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
-                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
                 // gameListDatabase.setPlatform(spinner.getItemAtPosition(i).toString());
             }
 

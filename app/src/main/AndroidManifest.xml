@@ -52,10 +52,6 @@
             android:name=".Activity.CharacterDetailActivity"
             android:configChanges="keyboard|keyboardHidden" />
         <activity android:name=".Activity.CharacterFriendEnemyActivity" />
-        <activity android:name=".Activity.VideoPlayerActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity android:name=".Activity.SettingsActivity"
             android:parentActivityName=".Activity.MainActivity"/>
 
@@ -75,7 +71,7 @@
         </activity>
 
         <activity
-            android:name=".Activity.LocalPlayerActivity"
+            android:name=".Activity.VideoPlayerActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">

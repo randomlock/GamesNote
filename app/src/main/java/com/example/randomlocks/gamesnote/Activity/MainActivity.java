@@ -445,7 +445,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onVideoClick(GamesVideoModal modal, String url, int id, int elapsed_time, int request_code) {
-        Intent intent = new Intent(this, LocalPlayerActivity.class);
+        Intent intent = new Intent(this, VideoPlayerActivity.class);
         intent.putExtra(GiantBomb.API_URL, url);
         intent.putExtra(GiantBomb.SEEK_POSITION, elapsed_time);
         intent.putExtra(GiantBomb.MODAL, modal);
