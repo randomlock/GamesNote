@@ -1022,7 +1022,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     private void setUpVideoView() {
         video_url = videoType == LOW_VIDEO_URL ? videoModal.lowUrl : videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (getResources() != null && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mCommunicationInterface.onVideoClick(video_url, false, 0, videoModal);
             return;
         }
@@ -1107,7 +1107,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 videoProgress.setVisibility(View.GONE);
-                animateToolbar(true);
+                animateToolbar(false);
                 return false;
             }
         });
@@ -1118,7 +1118,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             public void onCompletion(MediaPlayer mediaPlayer) {
                 mediaPlayer.setDisplay(null);
                 mediaPlayer.reset();
-                animateToolbar(true);
+                animateToolbar(false);
                 mediaPlayer.setDisplay(videoView.getHolder());
             }
         });
@@ -1126,12 +1126,12 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
             @Override
             public void onPlay() {
-                animateToolbar(false);
+                animateToolbar(true);
             }
 
             @Override
             public void onPause() {
-                animateToolbar(true);
+                animateToolbar(false);
             }
         });
 

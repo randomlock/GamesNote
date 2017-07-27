@@ -32,6 +32,9 @@ import com.example.randomlocks.gamesnote.RealmDatabase.RealmInteger;
 import com.flyco.labelview.LabelView;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import at.grabner.circleprogress.CircleProgressView;
 import es.dmoral.toasty.Toasty;
 import io.realm.Case;
@@ -51,6 +54,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
     private static final int SIMPLE_VIEW_TYPE = 0;
     private static final int CARD_VIEW_TYPE = 1;
     Context context;
+    Map<Integer, Boolean> shouldAnimateMap;
     private int[] rainbow;
     private OnClickInterface mOnClickInterface;
     private Realm realm;
@@ -72,6 +76,14 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         this.isSimple = isSimple;
         this.sort_option = sort_option;
         this.isAscending = isAscending;
+        fillMap();
+    }
+
+    private void fillMap() {
+        shouldAnimateMap = new HashMap<>(model.size());
+        for (int i = 0; i < model.size(); i++) {
+            shouldAnimateMap.put(i, true);
+        }
     }
 
     @Override
@@ -141,8 +153,12 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
             holder.image.setImageResource(R.drawable.news_image_drawable);
         }
         holder.title.setText(listDatabase.getName());
-
-        holder.scoreView.setValue(listDatabase.getScore());
+        if (shouldAnimateMap.get(position)) {
+            shouldAnimateMap.put(position, Boolean.FALSE);
+            holder.scoreView.setValueAnimated(listDatabase.getScore());
+        } else {
+            holder.scoreView.setValue(listDatabase.getScore());
+        }
         holder.scoreView.setBarColor(rainbow[listDatabase.getScore()/10]);
 
 
@@ -245,7 +261,7 @@ public class GameListAdapter extends RealmRecyclerViewAdapter<GameListDatabase, 
         public void onClick(View view) {
             gameListDatabase = getItem(getAdapterPosition());
             if(view.getId()==R.id.score_view){
-
+                shouldAnimateMap.put(getAdapterPosition(), true);
                 mOnClickInterface.onScoreClick(gameListDatabase.getGame_id(), gameListDatabase.getScore(), getAdapterPosition());
             }else  if(view.getId()==R.id.popup){
 

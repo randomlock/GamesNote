@@ -92,6 +92,14 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         setHasOptionsMenu(true);
         position = getArguments().getInt(GiantBomb.POSITION);
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_VIEW, false, getContext());
+
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_games_video_pager, container, false);
         realm = Realm.getDefaultInstance();
         realmMap = new HashMap<>();
         realm.executeTransaction(new Realm.Transaction() {
@@ -104,14 +112,6 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
             }
         });
 
-
-    }
-
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_games_video_pager,container,false);
         parentFragment = (GamesVideoFragment) getParentFragment();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         errorText = (TextView) view.findViewById(R.id.errortext);
@@ -132,17 +132,16 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
 
 
-        if (listModals != null) {
-            fillRecyclerView(listModals);
-        } else {
+
             if (position == LIKE_TYPE) {
                 listModals = realm.where(GamesVideoModal.class).equalTo("isFavorite", true).findAll();
+                Log.d("Tag1", "onlike modal");
             } else {
                 listModals = realm.where(GamesVideoModal.class).equalTo("isWatchLater", true).findAll();
             }
             fillRecyclerView(listModals);
 
-        }
+
 
 
 
@@ -182,8 +181,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         } else
             errorText.setVisibility(View.GONE);
 
-        if (adapter == null) {
-            adapter = new GameVideoOtherAdapter(getContext(), listModals, true, isReduced, realm, position, realmMap, new GameVideoOtherAdapter.OnClickInterface() {
+        adapter = new GameVideoOtherAdapter(getContext(), listModals, true, isReduced, realm, position, realmMap, new GameVideoOtherAdapter.OnClickInterface() {
                 @Override
                 public void onVideoClick(GamesVideoModal modal, int position, int elapsed_time) {
                     adapterPosition = position;
@@ -194,10 +192,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
                     videoOptionFragment.show(getActivity().getSupportFragmentManager(), "video_option_fragment");
                 }
             });
-        } else {
-            adapter.setSimple(isReduced);
-            adapter.updateModal(realmMap);
-        }
+
 
         if(recyclerView.getLayoutManager()==null){
             recyclerView.setLayoutManager(manager);
@@ -213,7 +208,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (!realm.isClosed()) {
+        if (realm != null && !realm.isClosed()) {
             realm.close();
         }
     }

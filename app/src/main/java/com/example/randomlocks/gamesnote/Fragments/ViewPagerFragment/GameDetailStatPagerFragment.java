@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.Adapter.GameStatsAdapter;
-import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameDetailDatabase;
 import com.github.mikephil.charting.animation.Easing;
@@ -48,8 +47,8 @@ import io.realm.Sort;
 public class GameDetailStatPagerFragment extends Fragment implements NestedScrollView.OnScrollChangeListener{
 
 
-    private Realm realm;
-    private RealmResults<GameDetailDatabase> result;
+    private static final String ANIMATION_KEY = "stats_animation_preference";
+    private static String STAT_NUMBER_KEY = "stat_data_preference";
     int count;
     int rainbow[],new_rainbow[];
     NestedScrollView nestedScrollView;
@@ -57,10 +56,9 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
     LinearLayoutManager manager;
     HorizontalBarChart developer_chart,publisher_chart,franchise_chart,theme_chart,genre_chart,similar_game_chart;
     boolean is_developer_shown,is_publisher_shown,is_franchise_shown,is_theme_shown,is_genre_shown,is_similar_game_shown;
+    private Realm realm;
+    private RealmResults<GameDetailDatabase> result;
     private SharedPreferences preference;
-
-    private static String STAT_NUMBER_KEY = "stat_data_preference";
-    private static final String ANIMATION_KEY = "stats_animation_preference";
 
 
     public GameDetailStatPagerFragment() {
@@ -69,9 +67,7 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        realm = Realm.getDefaultInstance();
-        result = realm.where(GameDetailDatabase.class).findAll();
-        count = result.size();
+
         rainbow = getActivity().getResources().getIntArray(R.array.score_color);
         new_rainbow = Arrays.copyOfRange(rainbow,1,rainbow.length);
         preference = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -82,6 +78,10 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pager_other_stats,container,false);
+        realm = Realm.getDefaultInstance();
+        result = realm.where(GameDetailDatabase.class).findAll();
+        count = result.size();
+
         nestedScrollView = (NestedScrollView) view.findViewById(R.id.scroll_view);
         nestedScrollView.setOnScrollChangeListener(this);
         developer_list = (RecyclerView) view.findViewById(R.id.developer_list);
@@ -255,6 +255,12 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
         return false;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (realm != null && !realm.isClosed())
+            realm.close();
+    }
 
     private class CategoryBarChartXaxisFormatter implements IAxisValueFormatter {
 
@@ -277,8 +283,4 @@ public class GameDetailStatPagerFragment extends Fragment implements NestedScrol
             return label;
         }
     }
-
-
-
-
 }

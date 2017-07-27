@@ -104,7 +104,6 @@ public class GamesCharacterWikiFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        realm = Realm.getDefaultInstance();
         map = new HashMap<>();
         map.put(GiantBomb.KEY, GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");
@@ -117,6 +116,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        realm = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.fragment_games_character, container, false);
     }
 
@@ -491,5 +491,8 @@ public class GamesCharacterWikiFragment extends Fragment {
         super.onDestroyView();
         if(call!=null)
             call.cancel();
+        if (realm != null && !realm.isClosed())
+            realm.close();
+
     }
 }

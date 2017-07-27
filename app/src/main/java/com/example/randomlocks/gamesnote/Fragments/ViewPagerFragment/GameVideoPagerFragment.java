@@ -19,10 +19,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -139,15 +139,21 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_VIEW, false, getContext());
-        realm = Realm.getDefaultInstance();
 
         map = new HashMap<>();
         map.put(GiantBomb.KEY, GiantBomb.API_KEY);
         map.put(GiantBomb.FORMAT, "JSON");
         map.put(GiantBomb.OFFSET, "0");
         map.put(GiantBomb.LIMIT,LIMIT); //fix on endless scroll listener
-
         realmMap = new HashMap<>();
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -157,14 +163,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 }
             }
         });
-
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_games_video_pager, container, false);
     }
 
@@ -189,8 +187,12 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
         /********* SET NAVIGATION VIEW **********************/
 
-        mSelectedId = SharedPreference.getFromSharedPreferences(VIDEO_KEY, R.id.nav_all_videos, getContext());
-        mTitle = SharedPreference.getFromSharedPreferences(VIDEO_TITLE, getResources().getString(R.string.all_video), getContext());
+        mSelectedId = savedInstanceState == null ? SharedPreference
+                .getFromSharedPreferences(VIDEO_KEY, R.id.nav_all_videos,
+                        getContext()) : savedInstanceState.getInt(VIDEO_KEY);
+        mTitle = savedInstanceState == null ? SharedPreference.
+                getFromSharedPreferences(VIDEO_TITLE, getResources().getString(R.string.all_video),
+                        getContext()) : savedInstanceState.getString(VIDEO_TITLE);
         mNavigation.setCheckedItem(mSelectedId);
         mNavigation.setNavigationItemSelectedListener(this);
         manager = new ConsistentLinearLayoutManager(getContext());
@@ -339,17 +341,14 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
 
         if (savedInstanceState != null) {
-            Log.d("tag1", "onsaveinstance");
             listModals = savedInstanceState.getParcelableArrayList(MODAL);
             if(listModals!=null)
                 fillRecyclerView(listModals, savedInstanceState.getParcelable(SCROLL_POSITION));
             else
                 performSearch(savedInstanceState.getString(SEARCH_QUERY),false);
         } else if (listModals != null) {
-            Log.d("tag1", "not null");
             fillRecyclerView(listModals, null);
         } else {
-            Log.d("tag1", "perform searc");
             performSearch("",true);
         }
 
@@ -541,6 +540,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawers();
         }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mTitle);
+
 
     }
 
@@ -641,6 +642,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         if(adapter==null){
             adapter = new GameVideoAdapter(listModals, getContext(), isReduced,realm,GameVideoPagerFragment.this,realmMap,recyclerView);
         } else {
+            adapter.setRealm(realm);
             adapter.setSimple(isReduced);
             adapter.updateModal(realmMap);
         }
@@ -762,6 +764,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         if (recyclerView.getLayoutManager() != null) {
             outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
         }
+        outState.putString(VIDEO_TITLE, mTitle);
+        outState.putInt(VIDEO_KEY, mSelectedId);
     }
 
 
@@ -844,6 +848,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         super.onDestroyView();
         if(call!=null)
             call.cancel();
+        if (realm != null && !realm.isClosed())
+            realm.close();
     }
 
 
@@ -923,32 +929,40 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 final int time_elapsed = data.getIntExtra(GiantBomb.SEEK_POSITION, 0);
                 if (time_elapsed > 0) {
 
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            WatchedVideoDatabase database = new WatchedVideoDatabase(video_id, time_elapsed);
-                            realm.copyToRealmOrUpdate(database);
-                            RealmResults<WatchedVideoDatabase> realmResults = realm.where(WatchedVideoDatabase.class).findAll();
-                            for (WatchedVideoDatabase modal : realmResults) {
-                                realmMap.put(modal.id, modal.time_elapsed);
-                            }
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            parentFragment.updateViewPager();
-                            //  adapter.updateModal(adapterPosition, realmMap);
-                        }
-                    });
+                    saveWatchedVideo(time_elapsed);
+
                 }
 
 
+            }
+        } else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                saveWatchedVideo(0);
             }
         }
 
 
     }
 
+    private void saveWatchedVideo(final int time_elapsed) {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                WatchedVideoDatabase database = new WatchedVideoDatabase(video_id, time_elapsed);
+                realm.copyToRealmOrUpdate(database);
+                RealmResults<WatchedVideoDatabase> realmResults = realm.where(WatchedVideoDatabase.class).findAll();
+                for (WatchedVideoDatabase modal : realmResults) {
+                    realmMap.put(modal.id, modal.time_elapsed);
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                parentFragment.updateViewPager();
+                //  adapter.updateModal(adapterPosition, realmMap);
+            }
+        });
+    }
 
 
 }

@@ -119,7 +119,6 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-        realm = Realm.getDefaultInstance();
         viewType = SharedPreference.getFromSharedPreferences(GiantBomb.VIEW_TYPE,0,context);
         itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         spanCount = viewType==2 ? 2 : 1;
@@ -138,6 +137,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_game_wiki, container, false);
+        realm = Realm.getDefaultInstance();
 
         coordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.root_coordinator);
         floatingSearchView = (FloatingSearchView) v.findViewById(R.id.floating_search_view);

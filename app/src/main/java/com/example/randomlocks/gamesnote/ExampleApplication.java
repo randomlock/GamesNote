@@ -23,6 +23,7 @@ import io.realm.RealmConfiguration;
 public class ExampleApplication extends Application {
 
     public static final String DARK_THEME_KEY = "dark_theme_preference";
+    static RealmConfiguration configuration;
 
     private static ExampleApplication sInstance;
 
@@ -41,6 +42,10 @@ public class ExampleApplication extends Application {
 
     }
 
+    public static int getRealmInstanceCount() {
+        return Realm.getGlobalInstanceCount(configuration);
+    }
+
     public static ExampleApplication getInstance() {
         return sInstance;
     }
@@ -57,7 +62,7 @@ public class ExampleApplication extends Application {
         super.onCreate();
         sInstance = this;
         Realm.init(this);
-        RealmConfiguration configuration = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().schemaVersion(19).build();
+        configuration = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().schemaVersion(21).build();
         Realm.setDefaultConfiguration(configuration);
 
         /* Initialize Leak canary */
@@ -77,4 +82,6 @@ public class ExampleApplication extends Application {
         setNightTheme();
 
     }
+
+
 }

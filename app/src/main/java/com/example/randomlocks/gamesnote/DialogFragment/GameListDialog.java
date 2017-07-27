@@ -1,11 +1,13 @@
 package com.example.randomlocks.gamesnote.DialogFragment;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.DialogFragment;
@@ -63,17 +65,24 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_TITLE, R.style.MyDialogTheme);
-        realm = Realm.getDefaultInstance();
-        gameListDatabase = realm.where(GameListDatabase.class).equalTo("game_id",getArguments().getInt(PRIMARY_KEY)).findFirst();
+
     }
 
-
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        setRetainInstance(true);
+        return super.onCreateDialog(savedInstanceState);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.dialog_game_list,container,false);
+        realm = Realm.getDefaultInstance();
+        gameListDatabase = realm.where(GameListDatabase.class).equalTo("game_id", getArguments().getInt(PRIMARY_KEY)).findFirst();
+
         pager = (ViewPager) getActivity().findViewById(R.id.my_pager);
         startDate = (TextView) v.findViewById(R.id.start_date);
         startDate.setText(gameListDatabase.getStartDate());
@@ -209,7 +218,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
 
 
     void setSpinner(final Spinner spinner, String str , @ArrayRes final int array_id) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 array_id, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -221,13 +230,15 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
-                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
-                // gameListDatabase.setPlatform(spinner.getItemAtPosition(i).toString());
+                if (adapterView != null) {
+                    ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
+                    ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+                    // gameListDatabase.setPlatform(spinner.getItemAtPosition(i).toString());
 
-                if(array_id==R.array.status){
-                    ((TextView) adapterView.getChildAt(0)).setTypeface(Typeface.DEFAULT_BOLD);
+                    if (array_id == R.array.status) {
+                        ((TextView) adapterView.getChildAt(0)).setTypeface(Typeface.DEFAULT_BOLD);
 
+                    }
                 }
 
             }
@@ -278,6 +289,13 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
         return index;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (realm != null && !realm.isClosed())
+            realm.close();
+    }
+
     class CustomAdapter extends ArrayAdapter<CharSequence> {
 
 
@@ -297,18 +315,6 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
             return gameListDatabase.getPlatform_list().size()+1;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 } //inner class
 
 

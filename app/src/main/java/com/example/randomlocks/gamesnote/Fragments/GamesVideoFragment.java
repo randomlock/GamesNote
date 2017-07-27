@@ -196,6 +196,7 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         floatingSearchView.setTranslationY(verticalOffset);
+        mMediaRouteButton.setTranslationY(verticalOffset);
     }
 
     @Override

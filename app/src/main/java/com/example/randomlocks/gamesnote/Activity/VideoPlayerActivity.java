@@ -497,6 +497,14 @@ public class VideoPlayerActivity extends AppCompatActivity {
             }
         });
 
+        mVideoView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mToolbar.getAlpha() == 0)
+                    animateToolbar(false);
+                else animateToolbar(true);
+            }
+        });
 
         mVideoView.setOnCompletionListener(new OnCompletionListener() {
 

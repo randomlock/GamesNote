@@ -85,7 +85,6 @@
             android:layout_below="@+id/parentImage"
             android:layout_margin="12dp"
             android:gravity="end"
-            android:text="video title"
             android:textColor="?android:attr/textColorPrimary"
             android:textStyle="bold" />
 
@@ -99,7 +98,6 @@
             android:layout_below="@+id/title"
             android:layout_margin="12dp"
             android:gravity="end"
-            android:text="video description"
             android:textColor="?android:attr/textColorPrimary" />
 
         <TextView
@@ -112,7 +110,6 @@
             android:layout_margin="12dp"
             android:fontFamily="serif"
             android:gravity="center_vertical"
-            android:text="-"
             android:textColor="@color/accent"
             android:textSize="12sp"
             />
@@ -127,7 +124,6 @@
             android:layout_margin="12dp"
             android:fontFamily="serif"
             android:gravity="center_vertical"
-            android:text="-"
             android:textColor="@color/black_white"
             android:textSize="12sp"
             />

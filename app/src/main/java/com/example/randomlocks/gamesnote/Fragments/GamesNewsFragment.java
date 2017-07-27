@@ -108,7 +108,6 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        realm = Realm.getDefaultInstance();
         itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_NEWS_VIEW, true, getContext());
 
@@ -118,6 +117,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        realm = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.fragment_games_news, container, false);
     }
 
@@ -154,10 +154,11 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         toggle.syncState();
 
 
-
-        mSelectedId = SharedPreference.getFromSharedPreferences(KEY, R.id.nav_kotaku, getContext());
-        mTitle = SharedPreference.getFromSharedPreferences(TITLE, getResources().getString(R.string.kotaku), getContext());
-        Toaster.make(getContext(),mSelectedId+"");
+        mSelectedId = savedInstanceState == null ? SharedPreference
+                .getFromSharedPreferences(KEY, R.id.nav_kotaku, getContext()) : savedInstanceState.getInt(KEY);
+        mTitle = savedInstanceState == null ? SharedPreference
+                .getFromSharedPreferences(TITLE, getResources()
+                        .getString(R.string.kotaku), getContext()) : savedInstanceState.getString(TITLE);
         mNavigation.setCheckedItem(mSelectedId);
         selectDrawer(mSelectedId, mTitle);
         refreshLayout.setColorSchemeResources(R.color.primary, R.color.primary_dark, R.color.accent, R.color.primary_character);
@@ -716,6 +717,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         if (recyclerView != null && recyclerView.getLayoutManager() != null) {
             outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
         }
+        outState.putInt(KEY, mSelectedId);
+        outState.putString(TITLE, mTitle);
 
     }
 
@@ -736,6 +739,8 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         if (okHttpClient != null) {
             GiantBomb.cancelCallWithTag(okHttpClient, TAG);
         }
+        if (realm != null && !realm.isClosed())
+            realm.close();
 
     }
 }

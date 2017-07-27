@@ -3,7 +3,10 @@ package com.example.randomlocks.gamesnote.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -64,6 +67,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     ImageView coverImage;
     CircleImageView coverImage2;
     TextView mSmallDescription, mFirstAppearance, mAlias, mTitle;
+    TextView mOverviewHeading, mImagesHeading, mDescripionHeading;
     RecyclerView imageRecyclerView;
     LinearLayout parentLayout;
     GameCharacterInterface mGameCharacterInterface;
@@ -72,7 +76,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     CharacterModal characterDetailModal = null;
     ProgressBar progressBar;
     TextView mGender, mBirthDay, mTotalGames, mFriends, mEnemies, mEnemiesTitle, mFriendsTitle, mTotalGamesTitle;
-    TextView image_heading;
     View above_image_line;
     PicassoNestedScrollView scrollView;
     Toolbar toolbar;
@@ -80,6 +83,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
     AsyncTask asyncCharacterWikiImage = null;
     AppBarLayout appBarLayout;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    int drawable_color;
 
 
     @Override
@@ -90,6 +94,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         apiUrl = str[str.length - 1];
         imageUrl = getIntent().getStringExtra(GiantBomb.IMAGE_URL);
         title = getIntent().getStringExtra(GiantBomb.TITLE);
+        drawable_color = ContextCompat.getColor(this, R.color.primary);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_coordinator);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         collapsingToolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
@@ -103,6 +108,12 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         scrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         parentLayout = (LinearLayout) coordinatorLayout.findViewById(R.id.parentLinearLayout);
         progressBar = (ProgressBar) parentLayout.findViewById(R.id.progressBar);
+        mOverviewHeading = (TextView) parentLayout.findViewById(R.id.overview_heading);
+        setTextViewDrawableColor(mOverviewHeading, drawable_color);
+        mImagesHeading = (TextView) parentLayout.findViewById(R.id.image_heading);
+        setTextViewDrawableColor(mImagesHeading, drawable_color);
+        mDescripionHeading = (TextView) parentLayout.findViewById(R.id.description_heading);
+        setTextViewDrawableColor(mDescripionHeading, drawable_color);
         mTitle = (TextView) parentLayout.findViewById(R.id.character_name);
         mEnemies = (TextView) parentLayout.findViewById(R.id.enemies);
         mEnemiesTitle = (TextView) parentLayout.findViewById(R.id.enemies_title);
@@ -117,8 +128,6 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         mFirstAppearance = (TextView) parentLayout.findViewById(R.id.first_appearance);
         mAlias = (TextView) parentLayout.findViewById(R.id.alias);
         above_image_line = parentLayout.findViewById(R.id.above_image_line);
-        image_heading = (TextView) parentLayout.findViewById(R.id.image_heading);
-
 
 
         setSupportActionBar(toolbar);
@@ -211,6 +220,14 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
     }
 
+    private void setTextViewDrawableColor(TextView textView, int color) {
+        for (Drawable drawable : textView.getCompoundDrawables()) {
+            if (drawable != null) {
+                drawable.setColorFilter(new PorterDuffColorFilter(drawable_color, PorterDuff.Mode.SRC_IN));
+            }
+        }
+    }
+
     private void runAsyncTask() {
 
         asyncCharacterWikiImage = new JsoupCharacterWikiImage(new JsoupCharacterWikiImage.AsyncResponse() {
@@ -222,7 +239,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
                     imageRecyclerView.setAdapter(new CharacterDetailImageAdapter(imageUrls, CharacterDetailActivity.this,title));
                 }else {
                     above_image_line.setVisibility(View.GONE);
-                    image_heading.setVisibility(View.GONE);
+                    mImagesHeading.setVisibility(View.GONE);
                 }
             }
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,"http://www.giantbomb.com/character/" + apiUrl);
@@ -401,6 +418,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             case R.id.enemies_title:
                 if (characterDetailModal.enemies != null && characterDetailModal.enemies.size() > 0) {
                     intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.enemies));
+                    intent.putExtra(GiantBomb.TITLE, characterDetailModal.name + "\'s enemies");
                     intent.putExtra(GiantBomb.IS_GAME_DETAIL,false);
                     startActivity(intent);
                 } else {
@@ -412,6 +430,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             case R.id.friends_title:
                 if (characterDetailModal.friends != null && characterDetailModal.friends.size() > 0) {
                     intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.friends));
+                    intent.putExtra(GiantBomb.TITLE, characterDetailModal.name + "\'s friends");
                     intent.putExtra(GiantBomb.IS_GAME_DETAIL,false);
                     startActivity(intent);
                 } else {
@@ -423,6 +442,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
             case R.id.total_games_titles:
                 if (characterDetailModal.games != null && characterDetailModal.games.size() > 0) {
                     intent.putParcelableArrayListExtra(GiantBomb.MODAL, new ArrayList<>(characterDetailModal.games));
+                    intent.putExtra(GiantBomb.TITLE, characterDetailModal.name + "\'s games");
                     intent.putExtra(GiantBomb.IS_GAME_DETAIL,true);
                     startActivity(intent);
                 } else {

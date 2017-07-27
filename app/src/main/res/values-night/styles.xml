@@ -24,7 +24,7 @@
         <item name="floatingSearch_actionMenuOverflowColor">@color/floating_search_night_color</item>
     </style>
 
-    <style name="MyToolbarLight" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="MyToolbarLight" parent="Theme.AppCompat">
         <item name="searchViewStyle">@style/searchStyle</item>
         <item name="popupTheme">@style/popMenu</item>
 

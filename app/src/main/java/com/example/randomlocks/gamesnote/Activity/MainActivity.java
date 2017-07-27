@@ -159,8 +159,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } */
 
-
+        assert mNavigation != null;
+        mNavigation.setCheckedItem(mselectedId);
         selectDrawerItem(mselectedId, mtitle);
+
 
 
     }
@@ -456,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onYoutubeVideoClick(String url, int id) {
         if (url!=null) {
             Intent intent = YouTubeStandalonePlayer.createVideoIntent(this, GiantBomb.YOUTUBE_API_KEY, url, 0, true, false);
-            startActivity(intent);
+            startActivityForResult(intent, 1);
         }else {
             Toasty.error(this,"Not available on youtube").show();
         }

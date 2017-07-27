@@ -242,6 +242,10 @@ public class GameVideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return modalList==null ? 0:modalList.size();
     }
 
+    public void setRealm(Realm realm) {
+        this.realm = realm;
+    }
+
 
     public interface OnClickInterface {
         void onWatchLater(GamesVideoModal modal);

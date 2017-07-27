@@ -2,11 +2,11 @@ package com.example.randomlocks.gamesnote.RealmDatabase;
 
 import com.example.randomlocks.gamesnote.Modal.GameWikiPlatform;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
@@ -36,6 +36,9 @@ public class GameListDatabase extends RealmObject {
     private RealmList<GameWikiPlatform> platform_list;
     private Date date_added;
     private Date last_updated;
+
+    @Ignore
+    private boolean isAnimated;
 
 
    /* public static class Builder{
@@ -112,93 +115,98 @@ public class GameListDatabase extends RealmObject {
         last_updated = new Date();
     }
 
-
-
-    public void setStatus(int status) {
-        this.status = status;
+    public RealmList<GameWikiPlatform> getPlatform_list() {
+        return platform_list;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setPlatform_list(RealmList<GameWikiPlatform> platform_list) {
+        this.platform_list = platform_list;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setPlatform(String platform) {
-        this.platform = platform;
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setGameplay_hours(String gameplay_hours) {this.gameplay_hours = gameplay_hours;}
-
-    public void setMedium(String medium) {this.medium = medium;}
-
-    public void setPrice(String difficulty) {this.price = difficulty;}
-
-    public void setPlatform_list(RealmList<GameWikiPlatform> platform_list) {
-        this.platform_list = platform_list;
-    }
-
-    public RealmList<GameWikiPlatform> getPlatform_list() {
-        return platform_list;
-    }
-
-
-
-    public String getName() {
-        return name;
-    }
-
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public int getStatus() {
         return status;
     }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public int getScore() {
         return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public String getStartDate() {
         return startDate;
     }
 
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
     public String getEndDate() {
         return endDate;
     }
 
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     public String getPlatform() { return platform; }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
 
     public String getGameplay_hours() {
         return gameplay_hours;
+    }
+
+    public void setGameplay_hours(String gameplay_hours) {
+        this.gameplay_hours = gameplay_hours;
     }
 
     public String getMedium() {
         return medium;
     }
 
+    public void setMedium(String medium) {
+        this.medium = medium;
+    }
+
     public String getPrice() {
         return price;
     }
 
+    public void setPrice(String difficulty) {
+        this.price = difficulty;
+    }
 
     public Date getDate_added() {
         return date_added;
+    }
+
+    public void setDate_added(Date date_added) {
+        this.date_added = date_added;
     }
 
     public Date getLast_updated() {
@@ -225,7 +233,11 @@ public class GameListDatabase extends RealmObject {
         this.apiDetailUrl = apiDetailUrl;
     }
 
-    public void setDate_added(Date date_added) {
-        this.date_added = date_added;
+    public boolean isAnimated() {
+        return isAnimated;
+    }
+
+    public void setAnimated(boolean animated) {
+        isAnimated = animated;
     }
 }

@@ -1,9 +1,7 @@
 package com.example.randomlocks.gamesnote.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -44,7 +42,8 @@ public class CharacterFriendEnemyActivity extends AppCompatActivity implements A
             listView = (ListView) findViewById(R.id.list_view);
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setTitle(getIntent().getStringExtra(GiantBomb.TITLE));
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, name);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(this);

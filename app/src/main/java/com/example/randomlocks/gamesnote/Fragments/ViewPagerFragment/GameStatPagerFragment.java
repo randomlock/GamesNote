@@ -1,6 +1,5 @@
 package com.example.randomlocks.gamesnote.Fragments.ViewPagerFragment;
 
-import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,14 +10,10 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.randomlocks.gamesnote.Adapter.GameStatsAdapter;
-import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.RealmDatabase.GameListDatabase;
 import com.github.mikephil.charting.animation.Easing;
@@ -39,21 +34,14 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import at.grabner.circleprogress.CircleProgressView;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -63,6 +51,7 @@ import io.realm.Sort;
 
 public class GameStatPagerFragment extends Fragment implements NestedScrollView.OnScrollChangeListener {
 
+    private static final String ANIMATION_KEY = "stats_animation_preference";
     NestedScrollView nestedScrollView;
     CircleProgressView game_count;
     PieChart status_pie_chart;
@@ -73,16 +62,13 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     Realm realm;
     RealmResults<GameListDatabase> result;
     int count;
-    private int[] rainbow;
-    private int[] new_rainbow;
-    private int text_color;
-
-    private String[] status;
     boolean is_animated = false;
     boolean is_medium_animated = false;
     boolean is_animation_allowed_setting;
-
-    private static final String ANIMATION_KEY = "stats_animation_preference";
+    private int[] rainbow;
+    private int[] new_rainbow;
+    private int text_color;
+    private String[] status;
 
 
 
@@ -93,9 +79,6 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        realm = Realm.getDefaultInstance();
-        result = realm.where(GameListDatabase.class).findAll();
-        count = result.size();
         rainbow = getActivity().getResources().getIntArray(R.array.score_color);
         new_rainbow = Arrays.copyOfRange(rainbow,1,rainbow.length);
         status = getActivity().getResources().getStringArray(R.array.status);
@@ -108,6 +91,10 @@ public class GameStatPagerFragment extends Fragment implements NestedScrollView.
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_pager_game_stats,container,false);
+        realm = Realm.getDefaultInstance();
+        result = realm.where(GameListDatabase.class).findAll();
+        count = result.size();
+
         nestedScrollView = (NestedScrollView) view.findViewById(R.id.scroll_view);
         nestedScrollView.setOnScrollChangeListener(this);
         game_count = (CircleProgressView) view.findViewById(R.id.score_game_count);

@@ -154,6 +154,11 @@ public class GameVideoOtherAdapter extends RealmRecyclerViewAdapter<GamesVideoMo
         }
     }
 
+    public void setRealm(Realm realm) {
+        this.realm = realm;
+    }
+
+
 
     public interface OnClickInterface {
         void onVideoClick(GamesVideoModal modal, int adapter_position, int elapsed_time);

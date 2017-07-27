@@ -13,6 +13,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -172,9 +173,11 @@ public class GameReviewActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         Drawable drawable = menu.findItem(R.id.internet).getIcon();
-        if (drawable != null) {
-            drawable.mutate();
-            drawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+            if (drawable != null) {
+                drawable.mutate();
+                drawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+            }
         }
         return super.onPrepareOptionsMenu(menu);
     }
