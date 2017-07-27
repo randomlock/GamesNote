@@ -144,7 +144,7 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
      /*  CastButtonFactory.setUpMediaRouteButton(getActivity().getApplicationContext(),
                 menu,
                 R.id.media_route_menu_item);*/
-        /****DRAWER LAYOUT ***/
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -170,7 +170,6 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
 
             }
         });
-        /************* SETTING TOOLBAR *****************/
       /*  ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);*/
@@ -184,7 +183,6 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
         }
 
 
-        /************* SETTING Viewpager *****************/
         viewPager.setAdapter(new GameVideoPagerAdapter(getChildFragmentManager(), getContext()));
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
@@ -196,7 +194,6 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         floatingSearchView.setTranslationY(verticalOffset);
-        mMediaRouteButton.setTranslationY(verticalOffset);
     }
 
     @Override

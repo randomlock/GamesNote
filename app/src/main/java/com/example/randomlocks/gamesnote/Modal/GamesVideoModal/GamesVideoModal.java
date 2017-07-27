@@ -7,12 +7,12 @@ import com.example.randomlocks.gamesnote.Modal.GameCharacterModal.CharacterImage
 import com.example.randomlocks.gamesnote.Modal.GameDetailModal.GameVideoModalMinimal;
 import com.google.gson.annotations.Expose;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by randomlocks on 7/18/2016.
- */
+
 public class GamesVideoModal extends RealmObject implements Parcelable {
 
 
@@ -52,7 +52,9 @@ public class GamesVideoModal extends RealmObject implements Parcelable {
     public String youtubeId;
     public boolean isFavorite = false;
     public boolean isWatchLater = false;
-    public boolean isWatched = false;
+    public Date dateAdded;
+
+
 
 
     public GamesVideoModal(GameVideoModalMinimal modalMinimal) {

@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
@@ -73,9 +72,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * Created by randomlocks on 7/19/2016.
- */
+
 
 //TODO EDIT TEXT FIX for keyboard and cursor . Cancel the realmasynctask if query is not completed
 
@@ -180,12 +177,6 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         pacman = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
         setupCastListener();
 
-
-
-        /************* SWIPE TO REFRESH ************************/
-
-
-        /********* SET NAVIGATION VIEW **********************/
 
         mSelectedId = savedInstanceState == null ? SharedPreference
                 .getFromSharedPreferences(VIDEO_KEY, R.id.nav_all_videos,
@@ -434,7 +425,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
             errorText.setVisibility(View.GONE);
         }
 
-        String filter = null;
+        String filter;
         if (!allSearch) {
             filter = "name:" + text;
             map.put(GiantBomb.FILTER, filter);
@@ -540,7 +531,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawers();
         }
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mTitle);
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mTitle);
 
 
     }
@@ -812,6 +803,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     @Override
     public void onWatchLater(GamesVideoModal modal) {
         if (modal.isWatchLater) {
+            modal.dateAdded = new Date();
             writeToRealm(modal);
         } else {
             deleteFromRealm(modal);
@@ -821,6 +813,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     @Override
     public void onLike(GamesVideoModal modal) {
         if (modal.isFavorite) {
+            modal.dateAdded = new Date();
             writeToRealm(modal);
         } else {
             deleteFromRealm(modal);

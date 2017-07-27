@@ -45,12 +45,11 @@ import java.util.Date;
 
 import es.dmoral.toasty.Toasty;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-/**
- * Created by randomlocks on 3/17/2016.
- */
+
 public class GamesListPagerFragment extends Fragment implements SearchView.OnQueryTextListener,SearchFilterFragment.SearchFilterInterface, SearchManager.OnDismissListener, SearchManager.OnCancelListener {
 
     private static final String IS_SIMPLE = "is_view_simple" ;
@@ -62,7 +61,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     private int status;
     private RealmResults<GameListDatabase> realmResult;
     private Realm realm;
-    private TextView textView;
+    private TextView errorText;
     private GameListDatabase gameListDatabase;
     private GameListDialog dialog;
     private String sort_option;
@@ -111,6 +110,15 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                 realmResult = realm.where(GameListDatabase.class).equalTo("status", status).findAllSorted(sort_option, Sort.DESCENDING);
         }
 
+        realmResult.addChangeListener(new RealmChangeListener<RealmResults<GameListDatabase>>() {
+            @Override
+            public void onChange(RealmResults<GameListDatabase> element) {
+                if (element.size() > 0)
+                    errorText.setVisibility(View.GONE);
+                else
+                    errorText.setVisibility(View.VISIBLE);
+            }
+        });
 
     }
 
@@ -126,7 +134,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
         parentFragment = (GamesListFragment) getParentFragment();
         recyclerView = (FastScrollRecyclerView) view.findViewById(R.id.recycler_view);
 
-        textView = (TextView) view.findViewById(R.id.errortext);
+        errorText = (TextView) view.findViewById(R.id.errortext);
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
 
@@ -141,9 +149,9 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, Color.WHITE);
                 DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_ATOP);
-                textView.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+                errorText.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             }
-            textView.setVisibility(View.VISIBLE);
+            errorText.setVisibility(View.VISIBLE);
         } else {
             adapter = new GameListAdapter(getContext(), realm, realmResult, true, status, isSimple, new GameListAdapter.OnClickInterface() {
                 @Override

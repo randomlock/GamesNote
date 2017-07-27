@@ -37,13 +37,13 @@ import com.example.randomlocks.gamesnote.RealmDatabase.WatchedVideoDatabase;
 import java.util.HashMap;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * Created by randomlocks on 7/19/2016.
- */
+
 public class GameVideoOtherPagerFragment extends Fragment implements VideoOptionFragment.OnPlayInterface {
 
     private static final String MODAL = "list_modals";
@@ -134,11 +134,21 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
 
 
             if (position == LIKE_TYPE) {
-                listModals = realm.where(GamesVideoModal.class).equalTo("isFavorite", true).findAll();
+                listModals = realm.where(GamesVideoModal.class).equalTo("isFavorite", true).findAllSorted("dateAdded", Sort.DESCENDING);
                 Log.d("Tag1", "onlike modal");
             } else {
-                listModals = realm.where(GamesVideoModal.class).equalTo("isWatchLater", true).findAll();
+                listModals = realm.where(GamesVideoModal.class).equalTo("isWatchLater", true).findAllSorted("dateAdded", Sort.DESCENDING);
             }
+        listModals.addChangeListener(new RealmChangeListener<RealmResults<GamesVideoModal>>() {
+            @Override
+            public void onChange(RealmResults<GamesVideoModal> element) {
+                if (element.size() > 0)
+                    errorText.setVisibility(View.GONE);
+                else
+                    errorText.setVisibility(View.VISIBLE);
+
+            }
+        });
             fillRecyclerView(listModals);
 
 
@@ -208,7 +218,9 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         if (realm != null && !realm.isClosed()) {
+            realm.removeAllChangeListeners();
             realm.close();
         }
     }
