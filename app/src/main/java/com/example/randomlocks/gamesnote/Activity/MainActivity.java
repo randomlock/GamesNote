@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,8 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.randomlocks.gamesnote.DialogFragment.ImageUrlFragment;
 import com.example.randomlocks.gamesnote.Fragments.GameStatsFragment;
 import com.example.randomlocks.gamesnote.Fragments.GamesCharacterWikiFragment;
@@ -31,16 +34,21 @@ import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodHelper;
 import com.example.randomlocks.gamesnote.HelperClass.InputMethodLeak.IMMLeaks;
 import com.example.randomlocks.gamesnote.HelperClass.SharedPreference;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
+import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Interface.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.Modal.GamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.Modal.NewsModal.NewsModal;
 import com.example.randomlocks.gamesnote.R;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import io.fabric.sdk.android.Fabric;
+
 
 
 /*
@@ -63,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Fragment fragment;
     private DrawerLayout mDrawer;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
 
 
@@ -75,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         IMMLeaks.fixFocusedViewLeak(getApplication());
+        // Adding firebase analytics and crashlytics
+        Fabric.with(this, new Crashlytics());
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         fragment = null;
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView mNavigation = (NavigationView) findViewById(R.id.navigation_view);
@@ -215,10 +228,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         item.setChecked(true);
-        if (item.getItemId()!=R.id.nav_settings) {
+        if (item.getGroupId() != R.id.extra) {
             mselectedId = item.getItemId();
             mtitle = (String) item.getTitle();
         }
@@ -281,6 +294,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_wiki:
+
                 fragment = getSupportFragmentManager().findFragmentByTag("GamesWiki");
 
                 if (fragment == null) {
@@ -312,15 +326,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
 
-            default:
-                Toast.makeText(this, "default", Toast.LENGTH_SHORT).show();
+            case R.id.nav_giantbomb:
+                runBrowser("http://www.giantbomb.com/");
+                break;
 
+            case R.id.nav_contact_us:
+                String email = "abdullahh546@gmail.com";
+                ShareCompat.IntentBuilder.from(this)
+                        .setType("message/rfc822")
+                        .addEmailTo(email)
+                        .setSubject("Feedback")
+                        //.setHtmlText(body) //If you are using HTML in your body text
+                        .setChooserTitle("Send feedback")
+                        .startChooser();
+                break;
+
+
+            default:
+                fragment = getSupportFragmentManager().findFragmentByTag("GamesWiki");
+
+                if (fragment == null) {
+
+                    fragment = new GamesWikiFragment();
+                }
+                FragmentTransactionHelper("replace", fragment, "GamesWiki");
         }
 
         setTitle(title);
         mDrawer.closeDrawer(GravityCompat.START);
 
 
+    }
+
+    void runBrowser(String url) {
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).addDefaultShareMenuItem().build();
+        CustomTabActivityHelper.openCustomTab(
+                this, customTabsIntent, Uri.parse(url), new WebViewFallback());
     }
 
     // Fragment Transaction Method

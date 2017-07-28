@@ -314,7 +314,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
 
                         if (adapter != null) {
                             SharedPreference.saveToSharedPreference(GiantBomb.REDUCE_VIEW, isReduced, getContext());
-                            parentFragment.updateViewPager();
+                            adapter.setSimple(isReduced);
+                            parentFragment.updateViewPagerFragment(isReduced);
                         }
 
                         break;

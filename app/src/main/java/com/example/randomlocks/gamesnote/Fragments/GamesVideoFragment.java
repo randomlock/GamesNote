@@ -211,6 +211,17 @@ public class GamesVideoFragment extends Fragment implements AppBarLayout.OnOffse
         }
     }
 
+    public void updateViewPagerFragment(boolean isReduced) {
+        int pos = viewPager.getCurrentItem();
+        GameVideoPagerAdapter adapter = (GameVideoPagerAdapter) viewPager.getAdapter();
+        // if first or last fragment then update only the adjacent right fragment and
+        // left fragment respectively
+
+        ((GameVideoOtherPagerFragment) adapter.getItem(pos + 1)).updateAdapter(isReduced);
+        ((GameVideoOtherPagerFragment) adapter.getItem(pos + 2)).updateAdapter(isReduced);
+
+    }
+
 
     private static class GameVideoPagerAdapter extends FragmentStatePagerAdapter {
 

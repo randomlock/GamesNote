@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout;
 import com.example.randomlocks.gamesnote.HelperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.HelperClass.Toaster;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.HelperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.Interface.GameReviewInterface;
@@ -199,7 +200,11 @@ public class GameReviewActivity extends AppCompatActivity {
                 break;
 
             case R.id.internet:
-                runBrowser(modals.siteDetailUrl);
+                if (modals != null) {
+                    runBrowser(modals.siteDetailUrl);
+                } else {
+                    Toaster.makeSnackBar(coodinatorLayout, "Waiting to load data");
+                }
                 break;
 
             default:

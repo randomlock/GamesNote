@@ -52,7 +52,9 @@
     <item android:title="@string/help_and_support">
 
     <menu>
-        <group android:checkableBehavior="single">
+        <group
+            android:id="@+id/extra"
+            android:checkableBehavior="single">
 
 
             <item

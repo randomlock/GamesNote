@@ -28,18 +28,12 @@ import es.dmoral.toasty.Toasty;
 public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.MyViewHolder> {
 
 
-    public interface OnClickInterface {
-        void onItemClick(String apiUrl, String image);
-    }
-
-
     List<GameDetailIInnerJson> stringList;
     List<CharacterGamesImage> images = null;
     GameDetailFragment fragment;
     List<String> apiUrl;
     Context context;
     OnClickInterface onClickInterface;
-
     public SimilarGameAdapter(List<GameDetailIInnerJson> stringList, List<CharacterGamesImage> images, GameDetailFragment fragment, Context context, OnClickInterface onClickInterface) {
         this.stringList = stringList;
         this.context = context;
@@ -92,6 +86,10 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
 
     }
 
+    public interface OnClickInterface {
+        void onItemClick(String apiUrl, String image);
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         ImageView imageView;
@@ -122,6 +120,7 @@ public class SimilarGameAdapter extends RecyclerView.Adapter<SimilarGameAdapter.
                 fragment.getArguments().putString(GameDetailFragment.IMAGE_URL, images.get(getLayoutPosition()).imageUrl);
             }
             fragment.getArguments().putString(GameDetailFragment.NAME,stringList.get(getLayoutPosition()).name);*/
+            ft.addToBackStack(null);
             ft.remove(fragment);
             fragment = GameDetailFragment.newInstance(apiUrl.get(getLayoutPosition()), stringList.get(getLayoutPosition()).name, images != null ? images.get(getLayoutPosition()).imageUrl : null);
             ft.add(R.id.fragment_parent_layout, fragment, "GameDetail");

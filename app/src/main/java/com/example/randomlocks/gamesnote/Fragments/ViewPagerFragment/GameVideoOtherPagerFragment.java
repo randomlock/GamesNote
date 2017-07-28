@@ -304,4 +304,9 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
             }
         }
     }
+
+    public void updateAdapter(boolean isReduced) {
+        if (adapter != null)
+            adapter.setSimple(isReduced);
+    }
 }

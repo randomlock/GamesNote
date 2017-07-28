@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import com.example.randomlocks.gamesnote.HelperClass.SingleMediaScanner;
 import com.example.randomlocks.gamesnote.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -91,8 +93,14 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         viewPager.setAdapter(new ImageViewerPagerAdapter(this));
         //viewPager.setAdapter(new ImagePagerAdapter(getSupportFragmentManager()));
         viewPager.setOffscreenPageLimit(1);
-       // viewPager.setPageTransformer(false, new PagerDepthAnimation());
-        viewPager.setCurrentItem(position);
+        // viewPager.setPageTransformer(false, new PagerDepthAnimation());
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(position);
+
+            }
+        });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -307,12 +315,12 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
+            container.removeView((FrameLayout) object);
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((View) object);
+            return (view == ((FrameLayout) object));
         }
 
         @Override
@@ -325,29 +333,45 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
             imageView = (PhotoView) view.findViewById(R.id.image_preview);
-            imageView.setTag(GiantBomb.IMAGE_URL+ position);
+            // imageView.setTag(GiantBomb.IMAGE_URL+ position);
             imageView.setOnViewTapListener(this);
+            final Target target = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    imageView.setImageBitmap(bitmap);
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                    progressBar.setVisibility(View.GONE);
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    progressBar.setVisibility(View.VISIBLE);
+
+                }
+            };
+            imageView.setTag(target);
+
+            Picasso.with(context).load(imageUrl).into(target);
 
 
 
 
 
-
-
-
-
-
-            if (shouldFit) {
-                Picasso.with(context).load(imageUrl).into(imageView,callback);
+           /* if (shouldFit) {
+                Picasso.with(context).load(imageUrl).fit().into(imageView,callback);
             } else {
                 //   Picasso.with(context).load(imageUrl).resize(metrics.widthPixels, (int) ((int) (double)metrics.heightPixels/1.5)).centerCrop().into(imageView,callback);
                 Picasso.with(context).load(imageUrl).into(imageView, callback);
 
-            }
+            }*/
+
 
             container.addView(view);
-
-
             return view;
         }
 
