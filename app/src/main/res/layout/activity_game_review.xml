@@ -1,4 +1,4 @@
-<com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
@@ -184,7 +184,7 @@
 
             </LinearLayout>
 
-            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
+            <com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -198,4 +198,4 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-</com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoCoordinatorLayout>
+</com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoCoordinatorLayout>

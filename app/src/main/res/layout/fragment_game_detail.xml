@@ -38,7 +38,7 @@
                 android:background="@color/default_bg"
                 app:layout_collapseMode="parallax">
 
-                <com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomVideoView
+                <com.example.randomlocks.gamesnote.helperClass.CustomView.CustomVideoView
                     android:id="@+id/play_video_texture"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -103,13 +103,7 @@
     </android.support.design.widget.AppBarLayout>
 
 
-
-
-
-
-
-
-    <com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView
+    <com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoNestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -426,7 +420,7 @@
         </LinearLayout>
 
 
-            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
+            <com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -448,7 +442,7 @@
 
         </FrameLayout>
 
-    </com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoNestedScrollView>
+    </com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoNestedScrollView>
 
 
 

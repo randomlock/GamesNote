@@ -30,7 +30,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,23 +44,24 @@
                 android:resource="@xml/searchablewiki" />
         </activity>
         <activity
-            android:name=".Activity.GameDetailActivity"
+            android:name=".activity.GameDetailActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".Activity.MainActivity" />
-        <activity android:name=".Activity.ImageViewPagerActivity" />
-        <activity android:name=".Activity.GameReviewActivity" />
-        <activity android:name=".Activity.UserReviewActivity" />
-        <activity android:name=".Activity.UserReviewDetailActivity" />
-        <activity android:name=".Activity.ImprovedWebViewActivity" />
+            android:parentActivityName=".activity.MainActivity" />
+        <activity android:name=".activity.ImageViewPagerActivity" />
+        <activity android:name=".activity.GameReviewActivity" />
+        <activity android:name=".activity.UserReviewActivity" />
+        <activity android:name=".activity.UserReviewDetailActivity" />
+        <activity android:name=".activity.ImprovedWebViewActivity" />
         <activity
-            android:name=".Activity.CharacterDetailActivity"
+            android:name=".activity.CharacterDetailActivity"
             android:configChanges="keyboard|keyboardHidden" />
-        <activity android:name=".Activity.CharacterFriendEnemyActivity" />
-        <activity android:name=".Activity.SettingsActivity"
-            android:parentActivityName=".Activity.MainActivity"/>
+        <activity android:name=".activity.CharacterFriendEnemyActivity" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:parentActivityName=".activity.MainActivity" />
 
         <activity
-            android:name=".Activity.ExpandedControlsActivity"
+            android:name=".activity.ExpandedControlsActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance"
 
@@ -71,11 +72,11 @@
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.randomlocks.gamesnote.Activity.MainActivity" />
+                android:value="com.example.randomlocks.gamesnote.activity.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Activity.VideoPlayerActivity"
+            android:name=".activity.VideoPlayerActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">

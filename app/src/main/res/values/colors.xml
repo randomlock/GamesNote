@@ -42,6 +42,7 @@
     <color name="black_white">#000</color>
     <color name="white_black">#FFF</color>
     <color name="default_bg">#aa000000</color>
+    <color name="toolbar_background_white">#FAFAFA</color>
 
     <color name="fab_1">#7C4DFF</color>
     <color name="fab_2">#536DFE</color>

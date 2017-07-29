@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nav_header"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:alpha="0.8">
 
 
-</com.example.randomlocks.gamesnote.HelperClass.CustomView.PicassoFrameLayout>
+</com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoFrameLayout>

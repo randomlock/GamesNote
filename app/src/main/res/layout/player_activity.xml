@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.randomlocks.gamesnote.HelperClass.CustomView.CustomVideoView
+    <com.example.randomlocks.gamesnote.helperClass.CustomView.CustomVideoView
         android:id="@+id/videoView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

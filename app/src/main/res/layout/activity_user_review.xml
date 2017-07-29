@@ -40,7 +40,7 @@
                 android:layout_height="match_parent" />
 
 
-            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
+            <com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

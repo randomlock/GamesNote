@@ -4,7 +4,7 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.randomlocks.gamesnote.Fragments.GamesWikiFragment">
+    tools:context="com.example.randomlocks.gamesnote.fragment.GamesWikiFragment">
 
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/wikibackground"
-        tools:context="com.example.randomlocks.gamesnote.Fragments.GamesNewsFragment">
+        tools:context="com.example.randomlocks.gamesnote.fragment.GamesNewsFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 app:theme="@style/MyToolbar" />
 
 
-            <com.example.randomlocks.gamesnote.HelperClass.CustomView.AVLoadingIndicatorView
+            <com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView
                 android:id="@+id/indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
