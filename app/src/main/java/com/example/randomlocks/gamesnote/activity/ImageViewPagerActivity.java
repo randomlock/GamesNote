@@ -144,11 +144,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
             if (option_id == R.id.save) {
                 checkForPermission(ivImage);
             } else {
-                if (ivImage != null && ivImage.getDrawable() != null) {
-                    new DownloadFileTask().execute(ivImage);
-                } else {
-                    Toaster.make(this, "waiting to load image");
-                }
+                startAsyncTask();
             }
 
         }
@@ -156,6 +152,14 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
         return true;
 
+    }
+
+    private void startAsyncTask() {
+        if (ivImage != null && ivImage.getDrawable() != null) {
+            new DownloadFileTask().execute(ivImage);
+        } else {
+            Toaster.make(this, "waiting to load image");
+        }
     }
 
     private void shareImage(Uri bmpUri) {
@@ -236,11 +240,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         } else {
-            if (ivImage != null && ivImage.getDrawable() != null) {
-                new DownloadFileTask().execute(ivImage);
-            } else {
-                Toaster.make(this, "waiting to load image");
-            }
+            startAsyncTask();
         }
     }
 
@@ -251,6 +251,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+                    startAsyncTask();
 
                 } else {
 

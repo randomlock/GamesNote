@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.GameDetailFragment;
+import com.example.randomlocks.gamesnote.fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;

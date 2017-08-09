@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment.ViewPagerFragment;
+package com.example.randomlocks.gamesnote.fragments.ViewPagerFragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.adapter.GameVideoOtherAdapter;
 import com.example.randomlocks.gamesnote.dialogFragment.VideoOptionFragment;
-import com.example.randomlocks.gamesnote.fragment.GamesVideoFragment;
+import com.example.randomlocks.gamesnote.fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.GameDetailFragment;
+import com.example.randomlocks.gamesnote.fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.modals.GameDetailModal.CharacterGamesImage;
 import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailIInnerJson;
 import com.squareup.picasso.Picasso;

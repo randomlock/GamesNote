@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="com.example.randomlocks.gamesnote.Chromecast.CastOptionsProvider" />
+            android:value="com.example.randomlocks.gamesnote.chromecast.CastOptionsProvider" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

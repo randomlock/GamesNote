@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment;
+package com.example.randomlocks.gamesnote.fragments;
 
 
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.ViewPagerFragment.GamesListPagerFragment;
+import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GamesListPagerFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 

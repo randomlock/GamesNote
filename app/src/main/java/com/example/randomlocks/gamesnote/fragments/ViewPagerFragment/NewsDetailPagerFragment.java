@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment.ViewPagerFragment;
+package com.example.randomlocks.gamesnote.fragments.ViewPagerFragment;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.NewsDetailFragment;
+import com.example.randomlocks.gamesnote.fragments.NewsDetailFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;

@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment;
+package com.example.randomlocks.gamesnote.fragments;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.ViewPagerFragment.NewsDetailPagerFragment;
+import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.NewsDetailPagerFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.PagerZoomOutSlideAnimation;
 import com.example.randomlocks.gamesnote.modals.NewsModal.NewsModal;

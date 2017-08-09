@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment;
+package com.example.randomlocks.gamesnote.fragments;
 
 
 import android.content.Context;

@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.SettingFragment;
+import com.example.randomlocks.gamesnote.fragments.SettingFragment;
 
 /**
  * Created by randomlock on 6/14/2017.

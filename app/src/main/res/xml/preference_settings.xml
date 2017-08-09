@@ -2,11 +2,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory android:title="API">
+        <Preference
+            android:key="api_key_preference"
+            android:persistent="false"
+            android:summary="Generate your api key by creating giantbomb account"
+            android:title="API key" />
+
+    </PreferenceCategory>
+
 
     <PreferenceCategory android:title="General">
 
         <SwitchPreferenceCompat
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="dark_theme_preference"
             android:summary="Allow dark theme"
             android:title="Night mode" />

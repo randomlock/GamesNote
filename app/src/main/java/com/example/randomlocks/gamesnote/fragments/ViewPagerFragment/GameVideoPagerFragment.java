@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment.ViewPagerFragment;
+package com.example.randomlocks.gamesnote.fragments.ViewPagerFragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +36,7 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.adapter.GameVideoAdapter;
 import com.example.randomlocks.gamesnote.dialogFragment.VideoOptionFragment;
-import com.example.randomlocks.gamesnote.fragment.GamesVideoFragment;
+import com.example.randomlocks.gamesnote.fragments.GamesVideoFragment;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
@@ -184,8 +184,9 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         mTitle = savedInstanceState == null ? SharedPreference.
                 getFromSharedPreferences(VIDEO_TITLE, getResources().getString(R.string.all_video),
                         getContext()) : savedInstanceState.getString(VIDEO_TITLE);
-        mNavigation.setCheckedItem(mSelectedId);
         mNavigation.setNavigationItemSelectedListener(this);
+        mNavigation.setCheckedItem(mSelectedId);
+
         manager = new ConsistentLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         if(isReduced)
@@ -572,7 +573,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                             GamesVideoModalList listModal = response.body();
                             listModals = listModal.results;
                             if (!listModals.isEmpty()) {
-                                Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " characters");
+                                Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " videos");
                             }
                             adapter = new GameVideoAdapter(listModals, getContext(), isReduced,realm,GameVideoPagerFragment.this,realmMap,recyclerView);
                             recyclerView.setAdapter(adapter);
@@ -580,7 +581,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                         }else {  //searching the data after first time
                             GamesVideoModalList listModal = response.body();
                             listModals = listModal.results;
-                            Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " characters");
+                            Toaster.makeSnackBar(coordinatorLayout, "Showing " + listModals.size() + " of " + listModal.numberOfTotalResults + " videos");
                             adapter.swap(listModals);
 
                         }

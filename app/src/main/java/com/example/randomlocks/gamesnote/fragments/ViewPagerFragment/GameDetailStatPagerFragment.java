@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment.ViewPagerFragment;
+package com.example.randomlocks.gamesnote.fragments.ViewPagerFragment;
 
 
 import android.content.SharedPreferences;

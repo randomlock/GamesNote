@@ -40,7 +40,7 @@ dependencies {
     compile 'com.android.support:customtabs:25.4.0'
     compile 'com.takisoft.fix:preference-v7:25.4.0.3'
     compile 'com.android.support:mediarouter-v7:25.4.0'
-    compile 'com.google.android.gms:play-services-cast-framework:11.0.2'
+    compile 'com.google.android.gms:play-services-cast-framework:11.0.1'
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     /* Network libraries */
     compile 'com.squareup.retrofit2:retrofit:2.0.1'

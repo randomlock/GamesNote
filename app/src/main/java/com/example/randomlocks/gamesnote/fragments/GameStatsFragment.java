@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment;
+package com.example.randomlocks.gamesnote.fragments;
 
 
 import android.os.Bundle;
@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.ViewPagerFragment.GameDetailStatPagerFragment;
-import com.example.randomlocks.gamesnote.fragment.ViewPagerFragment.GameStatPagerFragment;
+import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GameDetailStatPagerFragment;
+import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GameStatPagerFragment;
 
 import java.util.ArrayList;
 

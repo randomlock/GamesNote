@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment;
+package com.example.randomlocks.gamesnote.fragments;
 
 
 import android.content.Context;
@@ -23,8 +23,8 @@ import android.view.ViewGroup;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragment.ViewPagerFragment.GameVideoOtherPagerFragment;
-import com.example.randomlocks.gamesnote.fragment.ViewPagerFragment.GameVideoPagerFragment;
+import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GameVideoOtherPagerFragment;
+import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GameVideoPagerFragment;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastState;

@@ -1,4 +1,4 @@
-package com.example.randomlocks.gamesnote.fragment.ViewPagerFragment;
+package com.example.randomlocks.gamesnote.fragments.ViewPagerFragment;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -34,7 +34,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.adapter.GameListAdapter;
 import com.example.randomlocks.gamesnote.dialogFragment.GameListDialog;
 import com.example.randomlocks.gamesnote.dialogFragment.SearchFilterFragment;
-import com.example.randomlocks.gamesnote.fragment.GamesListFragment;
+import com.example.randomlocks.gamesnote.fragments.GamesListFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
