@@ -55,11 +55,13 @@ public class ImageUrlFragment extends DialogFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.MyDialogTheme);
 
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getDialog().setTitle("Change navigation image");
         View view = inflater.inflate(R.layout.dialog_image_url,container,false);
         imageUrl = (EditText) view.findViewById(R.id.edit_text);
         view.findViewById(R.id.cancel).setOnClickListener(this);
@@ -71,9 +73,7 @@ public class ImageUrlFragment extends DialogFragment implements View.OnClickList
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.setTitle("My Title");
-        return dialog;
+        return super.onCreateDialog(savedInstanceState);
     }
 
     @Override

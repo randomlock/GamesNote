@@ -266,12 +266,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_youtube"
             android:gravity="center"
             android:linksClickable="true"
             android:textColor="@color/primary"
-            android:textSize="12sp"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:textSize="12sp" />
 
 
 
@@ -282,11 +282,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_google"
             android:gravity="center"
             android:textColor="@color/primary"
-            android:textSize="12sp"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:textSize="12sp" />
 
 
 
@@ -296,11 +296,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_wikipedia"
             android:gravity="center"
             android:textColor="@color/primary"
-            android:textSize="12sp"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:textSize="12sp" />
 
 
 
@@ -310,11 +310,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_hltb"
             android:gravity="center"
             android:textColor="@color/primary"
-            android:textSize="12sp"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:textSize="12sp" />
 
 
     </LinearLayout>
@@ -322,10 +322,10 @@
 
 
 <LinearLayout
+    style="?android:attr/buttonBarStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    style="?android:attr/buttonBarStyle"
     >
 
     <Button
@@ -334,7 +334,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/cancel_touch_feedback"
-        android:text="Close" />
+        android:text="@string/close" />
 
 
 
@@ -344,7 +344,7 @@
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:background="@drawable/touch_feedback"
-    android:text="Update" />
+    android:text="@string/update" />
 
 
 

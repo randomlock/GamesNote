@@ -37,6 +37,7 @@ import com.example.randomlocks.gamesnote.adapter.GameCharacterSearchAdapter;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.interfaces.GameCharacterSearchWikiInterface;
 import com.example.randomlocks.gamesnote.interfaces.OnLoadMoreListener;
@@ -105,7 +106,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         map = new HashMap<>();
-        map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+        map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext()));
         map.put(GiantBomb.FORMAT, "JSON");
         map.put(GiantBomb.LIMIT, LIMIT);
         map.put(GiantBomb.OFFSET, "0");

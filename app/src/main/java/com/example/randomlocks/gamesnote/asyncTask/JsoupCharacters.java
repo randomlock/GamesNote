@@ -20,7 +20,7 @@ import java.util.List;
 public class JsoupCharacters extends AsyncTask<String, Integer, List<CharacterGamesImage>> {
 
 
-    public AsyncResponse delegate = null;
+    private AsyncResponse delegate = null;
 
     public JsoupCharacters(AsyncResponse delegate) {
         this.delegate = delegate;

@@ -37,17 +37,20 @@ public class GameDetailOverviewAdapter extends RecyclerView.Adapter<GameDetailOv
 
         holder.key.setText(key.get(position));
         String valueStr = values.get(position);
-        valueStr = valueStr.substring(0, valueStr.length() - 2);
+        //  valueStr = valueStr.substring(0, valueStr.length() - 2);
 
-        if (!valueStr.equals("nu"))
+        if (!valueStr.equals("null"))
             holder.value.setText(valueStr);
+        else {
+            holder.value.setText("-");
+        }
 
 
     }
 
     @Override
     public int getItemCount() {
-        return key.size();
+        return key != null ? key.size() : 0;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

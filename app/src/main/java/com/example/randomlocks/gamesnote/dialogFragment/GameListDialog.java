@@ -170,6 +170,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
                 runBrowser("https://en.wikipedia.org/wiki/"+builder);
                 break;
             case R.id.htlb :
+                runBrowser("https://howlongtobeat.com/");
                 break;
 
             case R.id.close :

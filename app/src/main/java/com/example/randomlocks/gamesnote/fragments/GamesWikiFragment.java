@@ -123,7 +123,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         itemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         spanCount = viewType==2 ? 2 : 1;
         map = new HashMap<>(7);
-        map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+        map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext()));
         map.put(GiantBomb.FORMAT, "JSON");
         map.put(GiantBomb.LIMIT, LIMIT);
         map.put(GiantBomb.OFFSET, "0");
@@ -500,7 +500,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         if (gameWikiDetailInterface==null) {
             gameWikiDetailInterface = GiantBomb.createGameDetailService();
             map = new HashMap<>();
-            map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+            map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext()));
             map.put(GiantBomb.FORMAT, "JSON");
             String field_list = "id,developers,franchises,genres,publishers,similar_games,themes";
             map.put(GiantBomb.FIELD_LIST, field_list);

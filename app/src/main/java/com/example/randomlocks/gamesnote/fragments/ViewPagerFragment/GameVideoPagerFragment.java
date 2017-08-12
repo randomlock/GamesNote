@@ -138,7 +138,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         isReduced = SharedPreference.getFromSharedPreferences(GiantBomb.REDUCE_VIEW, false, getContext());
 
         map = new HashMap<>();
-        map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+        map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext()));
         map.put(GiantBomb.FORMAT, "JSON");
         map.put(GiantBomb.OFFSET, "0");
         map.put(GiantBomb.LIMIT,LIMIT); //fix on endless scroll listener
@@ -853,7 +853,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         String url;
         switch (video_option) {
             case 0:
-                url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
+                url = modal.lowUrl + "?api_key=" + SharedPreference
+                        .getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext());
                 if (use_inbuilt)
                     videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, 0);
                 else {
@@ -864,7 +865,8 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
                 break;
 
             case 1:
-                url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+                url = modal.highUrl + "?api_key=" + SharedPreference
+                        .getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext());
                 if (use_inbuilt)
                     videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, 0);
                 else {

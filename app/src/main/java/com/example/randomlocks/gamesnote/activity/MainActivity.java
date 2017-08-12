@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,9 +17,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.randomlocks.gamesnote.R;
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public String mtitle;
     public ActionBarDrawerToggle mDrawableToggle;
     PicassoFrameLayout navHeaderLayout;
+    ImageView nav_image_view;
     int mselectedId;
     Fragment fragment;
     private DrawerLayout mDrawer;
@@ -91,11 +95,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragment = null;
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView mNavigation = (NavigationView) findViewById(R.id.navigation_view);
+        disableNavigationViewScrollbars(mNavigation);
         View headerView = null;
         if (mNavigation != null) {
             headerView = mNavigation.inflateHeaderView(R.layout.navigaion_header);
 
             navHeaderLayout = (PicassoFrameLayout) headerView.findViewById(R.id.nav_header);
+            nav_image_view = (ImageView) navHeaderLayout.findViewById(R.id.nav_image_view);
 
 
             final String imageUrl = SharedPreference.getFromSharedPreferences(GiantBomb.NAV_HEADER_URL, null, this);
@@ -108,8 +114,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().error(R.drawable.news_image_drawable).into(navHeaderLayout);
                     }
                 });
-            } else
+
+            } else {
                 navHeaderLayout.setBackgroundResource(R.drawable.news_image_drawable);
+                nav_image_view.setImageResource(R.drawable.web_hi_res_512);
+
+            }
 
 
             mDrawableToggle = setupDrawerToggle(mDrawer);
@@ -173,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } */
 
         assert mNavigation != null;
+        Log.d("tag1", mselectedId + "------" + R.id.nav_wiki);
         mNavigation.setCheckedItem(mselectedId);
         selectDrawerItem(mselectedId, mtitle);
 
@@ -519,6 +530,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragment.onActivityResult(requestCode, resultCode, data);
 
 
+    }
+
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
 

@@ -36,6 +36,7 @@ import com.example.randomlocks.gamesnote.adapter.CharacterDetailImageAdapter;
 import com.example.randomlocks.gamesnote.asyncTask.JsoupCharacterWikiImage;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.interfaces.GameCharacterInterface;
 import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterImage;
@@ -207,7 +208,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
 
                 mGameCharacterInterface = GiantBomb.createGameCharacterService();
                 map = new HashMap<>();
-                map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+                map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, this));
                 map.put(GiantBomb.FORMAT, "JSON");
                 getCharacterDetail(mGameCharacterInterface, map);
 

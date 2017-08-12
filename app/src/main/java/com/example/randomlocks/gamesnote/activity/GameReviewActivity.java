@@ -32,6 +32,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoCoordinatorLayout;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
@@ -107,7 +108,7 @@ public class GameReviewActivity extends AppCompatActivity {
                 //coming for first time
                 gameReviewInterface = GiantBomb.createGameReviewService();
                 map = new HashMap<>();
-                map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+                map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, this));
                 map.put(GiantBomb.FORMAT, "JSON");
                 getGameReview(gameReviewInterface, map);
 

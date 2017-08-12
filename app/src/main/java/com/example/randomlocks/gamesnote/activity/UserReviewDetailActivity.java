@@ -2,12 +2,14 @@ package com.example.randomlocks.gamesnote.activity;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -52,6 +54,9 @@ public class UserReviewDetailActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         modal = getIntent().getParcelableExtra(GiantBomb.MODAL);
         circleImageView = (CircleImageView) findViewById(R.id.profile_image);
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            circleImageView.setColorFilter(Color.WHITE);
+        }
         user_name = (TextView) findViewById(R.id.user_name);
         ratingBar = (RatingBar) findViewById(R.id.myRatingBar);
         date = (TextView) findViewById(R.id.date);

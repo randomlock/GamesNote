@@ -2,6 +2,8 @@ package com.example.randomlocks.gamesnote.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -91,6 +93,9 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.My
         public MyViewHolder(View itemView) {
             super(itemView);
             circleImageView = (CircleImageView) itemView.findViewById(R.id.profile_image);
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                circleImageView.setColorFilter(Color.WHITE);
+            }
             userName = (TextView) itemView.findViewById(R.id.user_name);
             date = (TextView) itemView.findViewById(R.id.date);
             smallDescription = (TextView) itemView.findViewById(R.id.deck);

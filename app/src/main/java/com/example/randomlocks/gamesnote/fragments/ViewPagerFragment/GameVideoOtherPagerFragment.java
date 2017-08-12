@@ -230,7 +230,8 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         String url;
         switch (video_option) {
             case 0:
-                url = modal.lowUrl + "?api_key=" + GiantBomb.API_KEY;
+                url = modal.lowUrl + "?api_key=" + SharedPreference
+                        .getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext());
                 if (use_inbuilt)
                     videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, position);
                 else {
@@ -241,7 +242,8 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
                 break;
 
             case 1:
-                url = modal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+                url = modal.highUrl + "?api_key=" + SharedPreference
+                        .getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext());
                 if (use_inbuilt)
                     videoPlayInterface.onVideoClick(modal, url, modal.id, elapsed_time, position);
                 else {

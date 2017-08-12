@@ -4,22 +4,26 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.activity.SettingsActivity;
+import com.example.randomlocks.gamesnote.helperClass.ApiTokenHelper;
+import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
+import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.RealmBackupRestore;
+import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
-import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActivityHelper;
-import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
+import com.example.randomlocks.gamesnote.modals.apiTokenModel.ApiTokenModel;
 
 /**
  * Created by randomlocks on 6/17/2016.
@@ -28,6 +32,7 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
 
     public static final String DARK_THEME_KEY = "dark_theme_preference";
     public static final String API_KEY = "api_key_preference";
+    public static final String API_CATEGORY_PREFERENCE_KEY = "api_category_preference_key";
     private static final String IMAGE_QUALITY_KEY = "image_preference";
     private static final String BACKUP_KEY = "backup_preference";
     private static final String RESTORE_KEY = "restore_preference";
@@ -38,21 +43,44 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
+    PreferenceCategory api_preference_category;
+
+    View dimmer_view;
+    AVLoadingIndicatorView progressBar;
+    TextView progressBarText;
+
+
+
+
     RealmBackupRestore realmBackupRestore = null;
     String operation;
-    boolean is_browser_open;
+    ApiTokenHelper apiTokenHelper;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preference_settings);
-        findPreference(API_KEY).setOnPreferenceClickListener(this);
+        api_preference_category = (PreferenceCategory) findPreference(API_CATEGORY_PREFERENCE_KEY);
+        if (SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, null, getContext()) != null) {
+            Toaster.make(getContext(), "hello");
+            getPreferenceScreen().removePreference(api_preference_category);
+            //api_preference_category.removeAll();
+        } else {
+            findPreference(API_KEY).setOnPreferenceClickListener(this);
+        }
         findPreference(BACKUP_KEY).setOnPreferenceClickListener(this);
         findPreference(RESTORE_KEY).setOnPreferenceClickListener(this);
         findPreference(BACKUP_ONLINE_KEY).setOnPreferenceClickListener(this);
         findPreference(RESTORE_ONLINE_KEY).setOnPreferenceClickListener(this);
     }
 
-
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        dimmer_view = getActivity().findViewById(R.id.dim_view);
+        progressBar = (AVLoadingIndicatorView) getActivity().findViewById(R.id.progress_bar);
+        progressBarText = (TextView) getActivity().findViewById(R.id.progress_text);
+    }
 
     @Override
     public void onResume() {
@@ -60,9 +88,9 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
         //unregister the preferenceChange listener
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-        if (is_browser_open) {
-            is_browser_open = false;
-            getApikey();
+        if (apiTokenHelper != null && apiTokenHelper.is_browser_open()) {
+            apiTokenHelper.setIs_browser_open(false);
+            apiTokenHelper.getLoginInfo();
         }
     }
 
@@ -123,7 +151,55 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
         switch (preference.getKey()) {
 
             case API_KEY:
-                openDialog();
+                apiTokenHelper = new ApiTokenHelper(getContext(), new ApiTokenHelper.ApiTokenHelperInterface() {
+                    @Override
+                    public void onPreApiGenerate() {
+                        dimmer_view.setVisibility(View.VISIBLE);
+                        dimmer_view.animate().alpha(1);
+                        progressBar.setVisibility(View.VISIBLE);
+                        progressBarText.setVisibility(View.VISIBLE);
+                        progressBarText.setText("Getting API Key...");
+                    }
+
+                    @Override
+                    public void onPostApiGenerate(String api_token_code) {
+                        if (api_token_code == null) {
+                            dimmer_view.animate().alpha(0).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dimmer_view.setVisibility(View.GONE);
+                                }
+                            });
+                            progressBar.setVisibility(View.GONE);
+                            progressBarText.setVisibility(View.GONE);
+                            Toaster.make(getContext(), "Invalid giantbomb username/password , try again");
+                        } else {
+                            progressBarText.setText("Testing API key");
+                        }
+                    }
+
+                    @Override
+                    public void onApiTest(ApiTokenModel api_key) {
+                        dimmer_view.animate().alpha(0).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                dimmer_view.setVisibility(View.GONE);
+                            }
+                        });
+                        progressBar.setVisibility(View.GONE);
+                        progressBarText.setVisibility(View.GONE);
+
+                        if (api_key.getStatus().equals("success")) {
+                            SharedPreference.saveToSharedPreference(GiantBomb.API_KEY, api_key.getRegToken(), getContext());
+                            Toaster.make(getContext(), "Your API key is generated and saved. Happy browsing");
+                        } else {
+                            Toaster.make(getContext(), "Testing API key failed . Try again");
+                        }
+                    }
+
+
+                });
+                apiTokenHelper.getApiTokenCode();
                 return true;
 
             case BACKUP_KEY:
@@ -143,47 +219,9 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
         }
     }
 
-    private void openDialog() {
-        Toaster.make(getContext(), "hello");
-        final AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setMessage("A browser will open where you need to sign up and login to " +
-                        "giantbomb account. After successful login, close" +
-                        " the browser. If you are already logged in skip this")
-                .setPositiveButton("Open browser", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        runBrowser();
-                    }
-                })
-                .setNegativeButton("Skip", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getApikey();
-                    }
-                })
-                .create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.black_white));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
 
-            }
-        });
-        dialog.show();
 
-    }
 
-    private void getApikey() {
-        Toaster.make(getContext(), "getApiKey");
-    }
-
-    private void runBrowser() {
-        is_browser_open = true;
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().setShowTitle(true).addDefaultShareMenuItem().build();
-        CustomTabActivityHelper.openCustomTab(
-                getActivity(), customTabsIntent, Uri.parse("https://auth.giantbomb.com/signup/"), new WebViewFallback());
-    }
 
     private void checkStoragePermissions() {
         // Check if we have write permission

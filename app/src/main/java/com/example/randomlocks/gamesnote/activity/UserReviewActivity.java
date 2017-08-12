@@ -17,6 +17,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.adapter.UserReviewAdapter;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
+import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.interfaces.UserReviewInterface;
 import com.example.randomlocks.gamesnote.modals.UserReviewModal.UserReviewModal;
 import com.example.randomlocks.gamesnote.modals.UserReviewModal.UserReviewModalList;
@@ -70,7 +71,7 @@ public class UserReviewActivity extends AppCompatActivity {
 
             if (modalList == null) {
                 map = new HashMap<>();
-                map.put(GiantBomb.KEY, GiantBomb.API_KEY);
+                map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, this));
                 map.put(GiantBomb.FORMAT, "JSON");
                 map.put(GiantBomb.FILTER, release_id + getIntent().getStringExtra(GiantBomb.REVIEW));
                 userReviewInterface = GiantBomb.createUserReviewService();

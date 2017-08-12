@@ -47,6 +47,7 @@ import com.example.randomlocks.gamesnote.adapter.GameDetailVideoCharacter;
 import com.example.randomlocks.gamesnote.adapter.SimilarGameAdapter;
 import com.example.randomlocks.gamesnote.asyncTask.JsoupCharacters;
 import com.example.randomlocks.gamesnote.asyncTask.JsoupGames;
+import com.example.randomlocks.gamesnote.asyncTask.JsoupHltbStats;
 import com.example.randomlocks.gamesnote.dialogFragment.AddToBottomFragment;
 import com.example.randomlocks.gamesnote.dialogFragment.ReviewListDialogFragment;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
@@ -56,6 +57,7 @@ import com.example.randomlocks.gamesnote.helperClass.CustomView.CustomVideoView;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.PicassoNestedScrollView;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.MyAnimation;
+import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
@@ -124,6 +126,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     private static final int HIGH_VIDEO_URL = 1;
     private static final int OPEN_IN_BROWSER = 2;
     private static final int OPEN_IN_YOUTUBE = 3;
+    private static final String HLTB_KEY = "hltb_key";
+    private static final String HLTB_VALUE = "hltb_value";
+
     Realm realm;
     int list_category;
     int game_id;
@@ -136,7 +141,8 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     GamesVideoModal videoModal;
     CollapsingToolbarLayout toolbarLayout;
     AppBarLayout appBarLayout;
-    RecyclerView recyclerView, similarGameRecycleView, characterRecycleView, imageRecycleView, videoRecyclerView;
+    RecyclerView recyclerView, similarGameRecycleView, characterRecycleView,
+            imageRecycleView, videoRecyclerView, hltbRecyclerView;
     PicassoNestedScrollView nestedScrollView;
     TextView description;
     GameDetailOverviewAdapter adapter;
@@ -152,7 +158,8 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     ImageView appbarImage;
     TextView  review, userReview;
     TextView status , score , platform , hours;
-    TextView stats_heading,overview_heading,description_heading,characters_heading,image_heading,related_video_heading,similar_game_heading;
+    TextView stats_heading, overview_heading, description_heading, characters_heading,
+            image_heading, related_video_heading, similar_game_heading, hltb_heading;
     TextView description_open_in_internet;
     RelativeLayout relativeLayout;
     FloatingActionMenu floatingActionsMenu;
@@ -173,6 +180,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     ProgressBar videoProgress;
     int current_video_pos = 0;
     GameDetailVideo showcase_video = null;
+    ArrayList<String> hltb_key, htlb_value;
     private int stopPosition;
     private DisplayMetrics metrics;
     private String video_url;
@@ -333,6 +341,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         overview_heading = (TextView) nestedScrollView.findViewById(R.id.overview_heading);
         setTextViewDrawableColor(overview_heading,drawable_color);
         recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
+        hltbRecyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.hltb_recyclerview);
+        hltb_heading = (TextView) nestedScrollView.findViewById(R.id.hltb_heading);
+        setTextViewDrawableColor(hltb_heading, drawable_color);
         imageRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.image_recycler_view);
         image_heading = (TextView) nestedScrollView.findViewById(R.id.image_heading);
         setTextViewDrawableColor(image_heading,drawable_color);
@@ -411,25 +422,23 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             characterImage = savedInstanceState.getParcelableArrayList(GAME_CHARACTER);
             similarGameImage = savedInstanceState.getParcelableArrayList(GAME_SIMILAR);
             fillData(gameDetailModal);
+            fillHLTB(savedInstanceState.getStringArrayList(HLTB_KEY), savedInstanceState.getStringArrayList(HLTB_VALUE));
         } else {
             if (gameDetailModal != null) {
                 fillData(gameDetailModal);
             }else {
-            gameWikiDetailInterface = GiantBomb.createGameDetailService();
-            map = new HashMap<>();
-            map.put(GiantBomb.KEY, GiantBomb.API_KEY);
-            map.put(GiantBomb.FORMAT, "JSON");
-            String field_list = "description,name,platforms,images,id,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
-            map.put(GiantBomb.FIELD_LIST, field_list);
-            getGameDetail(gameWikiDetailInterface, map);
+                gameWikiDetailInterface = GiantBomb.createGameDetailService();
+                map = new HashMap<>();
+                map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext()));
+                map.put(GiantBomb.FORMAT, "JSON");
+                String field_list = "description,name,platforms,images,id,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
+                map.put(GiantBomb.FIELD_LIST, field_list);
+                getGameDetail(gameWikiDetailInterface, map);
+                runAsyncTask();
+                runHLTBAsyncTask();
 
-
-
-
-            runAsyncTask();
-
-        }
             }
+        }
 
 
 
@@ -511,6 +520,30 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
     }
 
+
+    private void runHLTBAsyncTask() {
+        new JsoupHltbStats(new JsoupHltbStats.AsyncResponse() {
+            @Override
+            public void processFinish(ArrayList<String> key, ArrayList<String> value) {
+                if (value != null) {
+                    hltb_key = key;
+                    htlb_value = value;
+                    fillHLTB(key, value);
+                } else {
+                    hltb_heading.setVisibility(View.GONE);
+                }
+            }
+        }).execute("https://howlongtobeat.com/search_main.php?page=1", title);
+    }
+
+    private void fillHLTB(ArrayList<String> key, ArrayList<String> value) {
+        if (hltbRecyclerView.getLayoutManager() == null) {
+            hltbRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+        if (hltbRecyclerView.getAdapter() == null)
+            hltbRecyclerView.setAdapter(new GameDetailOverviewAdapter(key, value));
+    }
+
     private void setTextViewDrawableColor(TextView textView, int color) {
         for (Drawable drawable : textView.getCompoundDrawables()) {
             if (drawable != null) {
@@ -569,6 +602,12 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         if (similarGameImage!=null) {
             outState.putParcelableArrayList(GAME_SIMILAR,new ArrayList<>(similarGameImage));
         }
+
+        if (hltb_key != null && htlb_value != null) {
+            outState.putStringArrayList(HLTB_KEY, hltb_key);
+            outState.putStringArrayList(HLTB_VALUE, htlb_value);
+        }
+
     }
 
     private void getGameDetail(final GameWikiDetailInterface gameWikiDetailInterface, final Map<String, String> map) {
@@ -919,11 +958,11 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onStop() {
         super.onStop();
-        if (appBarLayout != null) {
+       /* if (appBarLayout != null) {
             appBarLayout.addOnOffsetChangedListener(null);
             appBarLayout = null;
 
-        }
+        }*/
         gameWikiDetailInterface = null;
 
     }
@@ -978,7 +1017,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         //geting video url from the api
         if (videoMap == null) {
             videoMap = new HashMap<>();
-            videoMap.put(GiantBomb.KEY, GiantBomb.API_KEY);
+            videoMap.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext()));
             String field_list = "site_detail_url,youtube_id,high_url,low_url,length_seconds,name,image";
             videoMap.put(GiantBomb.FIELD_LIST, field_list);
             videoMap.put(GiantBomb.FORMAT, "JSON");
@@ -1020,7 +1059,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     }
 
     private void setUpVideoView() {
-        video_url = videoType == LOW_VIDEO_URL ? videoModal.lowUrl : videoModal.highUrl + "?api_key=" + GiantBomb.API_KEY;
+        video_url = videoType == LOW_VIDEO_URL ? videoModal.lowUrl : videoModal.highUrl
+                + "?api_key=" + SharedPreference
+                .getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext());
 
         if (getResources() != null && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mCommunicationInterface.onVideoClick(video_url, false, 0, videoModal);

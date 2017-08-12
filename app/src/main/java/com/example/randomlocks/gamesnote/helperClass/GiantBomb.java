@@ -17,6 +17,7 @@ import com.example.randomlocks.gamesnote.interfaces.GameReviewInterface;
 import com.example.randomlocks.gamesnote.interfaces.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.interfaces.GameWikiListInterface;
 import com.example.randomlocks.gamesnote.interfaces.GamesVideosInterface;
+import com.example.randomlocks.gamesnote.interfaces.GiantBombApiTokenInteraface;
 import com.example.randomlocks.gamesnote.interfaces.UserReviewInterface;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.FieldNamingPolicy;
@@ -37,10 +38,6 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by randomlocks on 4/24/2016.
- */
-
 
 //TODO run restadapter and okhttp adatper in separate thread to remove skipped frame problem
 
@@ -49,7 +46,8 @@ public class GiantBomb {
 
     public static final String BASE_URL = "http://www.giantbomb.com/api/";
     public static final String KEY = "api_key";
-    public static final String API_KEY = "b318d66445bfc79e6d74a65fe52744b45b345948";
+    public static final String DEFAULT_API_KEY = "b318d66445bfc79e6d74a65fe52744b45b345948";
+    public static final String API_KEY = "api_key_token";
     public static final String YOUTUBE_API_KEY = "AIzaSyBU189k9G4pa1nej-1SsIzLWVihafwLNAA";
     public static final String FORMAT = "format";
     public static final String SORT = "sort";
@@ -88,6 +86,7 @@ public class GiantBomb {
     public static final int PLAYING = 4;
     public static final int COMPLETED = 5;
     public static final String REQUEST_CODE = "request_code";
+    public static final String REG_CODE = "regCode";
     public static String REDUCE_VIEW = "reduce_view";
     private static OkHttpClient httpClient = null;
     private static Request request = null;
@@ -100,6 +99,7 @@ public class GiantBomb {
     private static GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
     private static GamesVideosInterface gamesVideoInterface = null;
     private static GameDetailVideoInterface gameDetailVideoInterface = null;
+    private static GiantBombApiTokenInteraface giantBombApiTokenInteraface = null;
 
     private GiantBomb() {
     }
@@ -133,7 +133,7 @@ public class GiantBomb {
         }
     }
 
-    public static Retrofit getRetrofit() {
+    private static Retrofit getRetrofit() {
         if (retrofit == null) {
             Log.d("net", "one instance");
             Gson gson = new GsonBuilder()
@@ -174,7 +174,7 @@ public class GiantBomb {
         return httpClient;
     }
 
-    public static Interceptor provideOfflineCacheInterceptor() {
+    private static Interceptor provideOfflineCacheInterceptor() {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -252,7 +252,7 @@ public class GiantBomb {
         };
     }
 
-    public static Interceptor provideCacheInterceptor() {
+    private static Interceptor provideCacheInterceptor() {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -330,6 +330,15 @@ public class GiantBomb {
         }
         return gameDetailVideoInterface;
     }
+
+    public static GiantBombApiTokenInteraface createApiTokenHelper() {
+        if (giantBombApiTokenInteraface == null) {
+            giantBombApiTokenInteraface = getRetrofit().create(GiantBombApiTokenInteraface.class);
+        }
+
+        return giantBombApiTokenInteraface;
+    }
+
 
     public static void showErrorDialog(Context context, String errorString) {
         new AlertDialog.Builder(context).setTitle(R.string.error)
