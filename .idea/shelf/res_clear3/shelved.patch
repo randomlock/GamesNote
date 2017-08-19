@@ -1,0 +1,17 @@
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision e7e5d528cb6b063a4f40fa1db9cc257496930741)
++++ .idea/modules.xml	(revision )
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/GamesNote.iml" filepath="$PROJECT_DIR$/GamesNote.iml" />
++      <module fileurl="file://$PROJECT_DIR$/GamesNotes.iml" filepath="$PROJECT_DIR$/GamesNotes.iml" />
+       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+     </modules>
+   </component>
+\ No newline at end of file

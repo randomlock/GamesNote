@@ -1,0 +1,396 @@
+Index: app/src/main/res/drawable-v21/ic_menu_manage.xml
+===================================================================
+--- app/src/main/res/drawable-v21/ic_menu_manage.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable-v21/ic_menu_manage.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,9 +0,0 @@
+-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:width="24dp"
+-    android:height="24dp"
+-    android:viewportHeight="24.0"
+-    android:viewportWidth="24.0">
+-    <path
+-        android:fillColor="#FF000000"
+-        android:pathData="M22.7,19l-9.1,-9.1c0.9,-2.3 0.4,-5 -1.5,-6.9 -2,-2 -5,-2.4 -7.4,-1.3L9,6 6,9 1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1c1.9,1.9 4.6,2.4 6.9,1.5l9.1,9.1c0.4,0.4 1,0.4 1.4,0l2.3,-2.3c0.5,-0.4 0.5,-1.1 0.1,-1.4z" />
+-</vector>
+\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ build.gradle	(revision )
+@@ -8,7 +8,6 @@
+     dependencies {
+         classpath 'com.android.tools.build:gradle:2.2.3'
+         classpath "io.realm:realm-gradle-plugin:3.0.0"
+-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.5'
+ 
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+Index: app/src/main/res/drawable/fab_label_background.xml
+===================================================================
+--- app/src/main/res/drawable/fab_label_background.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable/fab_label_background.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,11 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+-    <solid android:color="@color/black_semi_transparent"/>
+-    <padding
+-        android:left="16dp"
+-        android:top="4dp"
+-        android:right="16dp"
+-        android:bottom="4dp"/>
+-    <corners
+-        android:radius="2dp"/>
+-</shape>
+\ No newline at end of file
+Index: app/src/main/res/drawable-v21/ic_menu_gallery.xml
+===================================================================
+--- app/src/main/res/drawable-v21/ic_menu_gallery.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable-v21/ic_menu_gallery.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,9 +0,0 @@
+-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:width="24dp"
+-    android:height="24dp"
+-    android:viewportHeight="24.0"
+-    android:viewportWidth="24.0">
+-    <path
+-        android:fillColor="#FF000000"
+-        android:pathData="M22,16V4c0,-1.1 -0.9,-2 -2,-2H8c-1.1,0 -2,0.9 -2,2v12c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2zm-11,-4l2.03,2.71L16,11l4,5H8l3,-4zM2,6v14c0,1.1 0.9,2 2,2h14v-2H4V6H2z" />
+-</vector>
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1252
+===================================================================
+--- gradle/wrapper/gradle-wrapper.properties	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ gradle/wrapper/gradle-wrapper.properties	(revision )
+@@ -1,6 +1,6 @@
+-#Wed Jan 04 03:39:16 IST 2017
++#Fri Mar 31 03:33:54 IST 2017
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip
+Index: app/src/main/res/layout/activity_character_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_character_detail.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/layout/activity_character_detail.xml	(revision )
+@@ -446,7 +446,7 @@
+         android:id="@+id/character_image2"
+         android:layout_width="96dp"
+         android:layout_height="96dp"
+-        android:src="@drawable/headerbackground"
++        android:src="@drawable/news_image_drawable"
+         app:layout_anchor="@+id/character_image"
+         app:layout_anchorGravity="bottom|center" />
+ 
+\ No newline at end of file
+Index: app/src/main/res/layout/dialog_game_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/dialog_game_list.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/layout/dialog_game_list.xml	(revision )
+@@ -264,7 +264,7 @@
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+-            android:drawableTop="@drawable/youtube"
++            android:drawableTop="@drawable/ic_youtube"
+             android:gravity="center"
+             android:linksClickable="true"
+             android:textColor="@color/primary"
+@@ -279,7 +279,7 @@
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+-            android:drawableTop="@drawable/google_48"
++            android:drawableTop="@drawable/ic_google"
+             android:gravity="center"
+             android:textColor="@color/primary"
+             android:textSize="12sp" />
+@@ -292,7 +292,7 @@
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+-            android:drawableTop="@drawable/wikipedia_48"
++            android:drawableTop="@drawable/ic_wikipedia"
+             android:gravity="center"
+             android:textColor="@color/primary"
+             android:textSize="12sp" />
+@@ -305,7 +305,7 @@
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+-            android:drawableTop="@drawable/header_48"
++            android:drawableTop="@drawable/ic_hltb"
+             android:gravity="center"
+             android:textColor="@color/primary"
+             android:textSize="12sp" />
+Index: app/src/main/res/layout/fragment_games_video_pager.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_games_video_pager.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/layout/fragment_games_video_pager.xml	(revision )
+@@ -33,7 +33,7 @@
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="No Videos Found"
+-        android:drawableTop="@drawable/ic_error_outline_black_48dp"
++        android:drawableTop="@drawable/ic_error"
+         android:layout_gravity="center"
+         android:textColor="?android:attr/textColorPrimary"
+         android:visibility="gone" />
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_game_wiki.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_game_wiki.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/layout/fragment_game_wiki.xml	(revision )
+@@ -104,7 +104,7 @@
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="No Result Found"
+-                android:drawableTop="@drawable/ic_error_outline_black_48dp"
++                android:drawableTop="@drawable/ic_error"
+                 android:layout_gravity="center"
+                 android:textColor="?android:attr/textColorPrimary"
+                 android:visibility="gone"
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ .idea/modules.xml	(revision )
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/GamesNote.iml" filepath="$PROJECT_DIR$/GamesNote.iml" />
++      <module fileurl="file://$PROJECT_DIR$/GamesNotes.iml" filepath="$PROJECT_DIR$/GamesNotes.iml" />
+       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+     </modules>
+   </component>
+\ No newline at end of file
+Index: app/src/main/res/drawable/corner.xml
+===================================================================
+--- app/src/main/res/drawable/corner.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable/corner.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,12 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+-    <solid
+-        android:color="@color/white"/>
+-    <corners
+-        android:radius="30dp" />
+-    <padding
+-        android:left="10dp"
+-        android:top="10dp"
+-        android:right="10dp"
+-        android:bottom="10dp" />
+-</shape>
+\ No newline at end of file
+Index: app/src/main/res/drawable-v21/ic_menu_share.xml
+===================================================================
+--- app/src/main/res/drawable-v21/ic_menu_share.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable-v21/ic_menu_share.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,9 +0,0 @@
+-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:width="24dp"
+-    android:height="24dp"
+-    android:viewportHeight="24.0"
+-    android:viewportWidth="24.0">
+-    <path
+-        android:fillColor="#FF000000"
+-        android:pathData="M18,16.08c-0.76,0 -1.44,0.3 -1.96,0.77L8.91,12.7c0.05,-0.23 0.09,-0.46 0.09,-0.7s-0.04,-0.47 -0.09,-0.7l7.05,-4.11c0.54,0.5 1.25,0.81 2.04,0.81 1.66,0 3,-1.34 3,-3s-1.34,-3 -3,-3 -3,1.34 -3,3c0,0.24 0.04,0.47 0.09,0.7L8.04,9.81C7.5,9.31 6.79,9 6,9c-1.66,0 -3,1.34 -3,3s1.34,3 3,3c0.79,0 1.5,-0.31 2.04,-0.81l7.12,4.16c-0.05,0.21 -0.08,0.43 -0.08,0.65 0,1.61 1.31,2.92 2.92,2.92 1.61,0 2.92,-1.31 2.92,-2.92s-1.31,-2.92 -2.92,-2.92z" />
+-</vector>
+Index: app/src/main/res/layout/fragment_game_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_game_detail.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/layout/fragment_game_detail.xml	(revision )
+@@ -158,8 +158,8 @@
+                     <TextView
+                         android:id="@+id/overview_heading"
+                         style="@style/cardview_textstyle"
+-                        android:drawableLeft="@drawable/ic_insert_comment"
+-                        android:drawableStart="@drawable/ic_insert_comment"
++                        android:drawableLeft="@drawable/ic_action_overview"
++                        android:drawableStart="@drawable/ic_action_overview"
+                         android:text="Overview"
+                         />
+ 
+@@ -202,8 +202,8 @@
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1"
+                         android:background="?android:attr/selectableItemBackground"
+-                        android:drawableLeft="@drawable/ic_star"
+-                        android:drawableStart="@drawable/ic_star"
++                        android:drawableLeft="@drawable/ic_action_star"
++                        android:drawableStart="@drawable/ic_action_star"
+                         android:text="Review" />
+ 
+                     <View
+@@ -219,7 +219,6 @@
+                         android:layout_weight="1"
+                         android:background="?android:attr/selectableItemBackground"
+                         android:drawableLeft="@drawable/ic_child_care"
+-
+                         android:drawableStart="@drawable/ic_child_care"
+                         android:text="User review" />
+ 
+@@ -327,8 +326,8 @@
+                 <TextView
+                     android:id="@+id/image_heading"
+                     style="@style/cardview_textstyle"
+-                    android:drawableLeft="@drawable/ic_image"
+-                    android:drawableStart="@drawable/ic_image"
++                    android:drawableLeft="@drawable/ic_wikipedia"
++                    android:drawableStart="@drawable/ic_wikipedia"
+                     android:text="Images"
+                     />
+ 
+Index: app/src/main/res/layout/fragment_games_character.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_games_character.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/layout/fragment_games_character.xml	(revision )
+@@ -85,7 +85,7 @@
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="No Result Found"
+-            android:drawableTop="@drawable/ic_error_outline_black_48dp"
++            android:drawableTop="@drawable/ic_error"
+             android:layout_gravity="center"
+             android:textColor="?android:attr/textColorPrimary"
+             android:visibility="gone" />
+\ No newline at end of file
+Index: app/src/main/res/drawable/side_nav_bar.xml
+===================================================================
+--- app/src/main/res/drawable/side_nav_bar.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable/side_nav_bar.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,9 +0,0 @@
+-<shape xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:shape="rectangle">
+-    <gradient
+-        android:angle="135"
+-        android:centerColor="#4CAF50"
+-        android:endColor="#2E7D32"
+-        android:startColor="#81C784"
+-        android:type="linear" />
+-</shape>
+\ No newline at end of file
+Index: app/src/main/java/com/example/randomlocks/gamesnote/Activity/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/randomlocks/gamesnote/Activity/MainActivity.java	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/java/com/example/randomlocks/gamesnote/Activity/MainActivity.java	(revision )
+@@ -91,11 +91,11 @@
+                     @Override
+                     public void onGlobalLayout() {
+                         navHeaderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+-                        Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.headerbackground).error(R.drawable.headerbackground).into(navHeaderLayout);
++                        Picasso.with(MainActivity.this).load(imageUrl).resize(navHeaderLayout.getWidth(), navHeaderLayout.getHeight()).centerCrop().placeholder(R.drawable.news_image_drawable).error(R.drawable.headerbackground).into(navHeaderLayout);
+                     }
+                 });
+             } else
+-                navHeaderLayout.setBackgroundResource(R.drawable.headerbackground);
++                navHeaderLayout.setBackgroundResource(R.drawable.news_image_drawable);
+ 
+ 
+             mDrawableToggle = setupDrawerToggle(mDrawer);
+Index: app/src/main/res/layout/fragment_pager_games_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_pager_games_list.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/layout/fragment_pager_games_list.xml	(revision )
+@@ -22,7 +22,7 @@
+         android:layout_height="wrap_content"
+         android:layout_gravity="center|top"
+         android:layout_marginTop="12dp"
+-        android:drawableTop="@drawable/ic_error_outline_black_48dp"
++        android:drawableTop="@drawable/ic_error"
+         android:text="No Games Added"
+         android:textColor="?android:attr/textColorPrimary"
+         android:visibility="gone"
+Index: app/src/main/res/drawable-v21/ic_menu_slideshow.xml
+===================================================================
+--- app/src/main/res/drawable-v21/ic_menu_slideshow.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable-v21/ic_menu_slideshow.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,9 +0,0 @@
+-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:width="24dp"
+-    android:height="24dp"
+-    android:viewportHeight="24.0"
+-    android:viewportWidth="24.0">
+-    <path
+-        android:fillColor="#FF000000"
+-        android:pathData="M4,6H2v14c0,1.1 0.9,2 2,2h14v-2H4V6zm16,-4H8c-1.1,0 -2,0.9 -2,2v12c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2V4c0,-1.1 -0.9,-2 -2,-2zm-8,12.5v-9l6,4.5 -6,4.5z" />
+-</vector>
+Index: app/src/main/res/drawable-v21/ic_menu_send.xml
+===================================================================
+--- app/src/main/res/drawable-v21/ic_menu_send.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable-v21/ic_menu_send.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,9 +0,0 @@
+-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:width="24dp"
+-    android:height="24dp"
+-    android:viewportHeight="24.0"
+-    android:viewportWidth="24.0">
+-    <path
+-        android:fillColor="#FF000000"
+-        android:pathData="M2.01,21L23,12 2.01,3 2,10l15,2 -15,2z" />
+-</vector>
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/build.gradle	(revision )
+@@ -1,6 +1,5 @@
+ apply plugin: 'com.android.application'
+ apply plugin: 'realm-android'
+-apply plugin: 'com.getkeepsafe.dexcount'
+ 
+ 
+ 
+Index: app/src/main/res/drawable-v21/ic_menu_camera.xml
+===================================================================
+--- app/src/main/res/drawable-v21/ic_menu_camera.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
++++ app/src/main/res/drawable-v21/ic_menu_camera.xml	(revision 90a2576802b55b03f3153c9bb7f4dc85bc5806cb)
+@@ -1,12 +0,0 @@
+-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:width="24dp"
+-    android:height="24dp"
+-    android:viewportHeight="24.0"
+-    android:viewportWidth="24.0">
+-    <path
+-        android:fillColor="#FF000000"
+-        android:pathData="M12,12m-3.2,0a3.2,3.2 0,1 1,6.4 0a3.2,3.2 0,1 1,-6.4 0" />
+-    <path
+-        android:fillColor="#FF000000"
+-        android:pathData="M9,2L7.17,4H4c-1.1,0 -2,0.9 -2,2v12c0,1.1 0.9,2 2,2h16c1.1,0 2,-0.9 2,-2V6c0,-1.1 -0.9,-2 -2,-2h-3.17L15,2H9zm3,15c-2.76,0 -5,-2.24 -5,-5s2.24,-5 5,-5 5,2.24 5,5 -2.24,5 -5,5z" />
+-</vector>

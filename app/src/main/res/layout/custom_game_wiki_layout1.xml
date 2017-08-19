@@ -70,6 +70,7 @@
             android:layout_below="@id/date"
             android:layout_toEndOf="@+id/imageView"
             android:layout_toRightOf="@+id/imageView"
+            android:visibility="gone"
             android:background="@color/linecolor"
             />
 
@@ -106,7 +107,7 @@
             android:background="@null"
             android:gravity="center"
             android:text="-"
-            android:textColor="@color/primary" />
+            android:textColor="@color/accent" />
 
             <Button
                 android:id="@+id/platform1"
@@ -117,7 +118,7 @@
                 android:gravity="center"
                 android:text="-"
 
-                android:textColor="@color/primary" />
+                android:textColor="@color/accent" />
 
             <Button
                 android:id="@+id/platform2"
@@ -131,7 +132,7 @@
                 android:background="@null"
                 android:gravity="center"
                 android:text="-"
-                android:textColor="@color/primary" />
+                android:textColor="@color/accent" />
 
 
         </RelativeLayout>

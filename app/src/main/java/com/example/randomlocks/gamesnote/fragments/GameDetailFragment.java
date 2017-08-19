@@ -246,7 +246,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         apiUrl = str[str.length - 1];
         title = getArguments().getString(NAME);
         imageUrl = getArguments().getString(IMAGE_URL);
-        drawable_color = ContextCompat.getColor(getContext(),R.color.primary);
+        drawable_color = ContextCompat.getColor(getContext(),R.color.accent);
         videoType = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString(IMAGE_QUALITY_KEY, "1"));
 
     }

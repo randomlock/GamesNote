@@ -95,7 +95,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         apiUrl = str[str.length - 1];
         imageUrl = getIntent().getStringExtra(GiantBomb.IMAGE_URL);
         title = getIntent().getStringExtra(GiantBomb.TITLE);
-        drawable_color = ContextCompat.getColor(this, R.color.primary);
+        drawable_color = ContextCompat.getColor(this, R.color.accent);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.root_coordinator);
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         collapsingToolbarLayout = (CollapsingToolbarLayout) appBarLayout.findViewById(R.id.collapsing_toolbar_layout);

@@ -1,0 +1,379 @@
+<changelist name="res_clear" date="1490983805022" recycled="false">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/shelved.patch" />
+  <option name="DESCRIPTION" value="res clear" />
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_keyboard_arrow_left_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_left_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_child_care.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_child_care.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_sort_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_sort_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_pie_chart.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_pie_chart.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_action_overview.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_overview.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_description.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_description.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_open_in_browser_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_error.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_error.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_search_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_search_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_action_star.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_star.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_child_care.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_child_care.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_people.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_people.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_error.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_error.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_open_in_browser_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_action_overview.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_overview.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_error.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_error.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_view_compact_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_view_compact_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_ondemand_video.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_ondemand_video.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_view_compact_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_view_compact_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_action_star.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_star.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_wikipedia.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_wikipedia.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_view_compact_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_view_compact_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_compare_arrows.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_compare_arrows.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_open_in_browser_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_action_navigation_more_vert.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_navigation_more_vert.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".idea/.name" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_wikipedia.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_wikipedia.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_ondemand_video.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_ondemand_video.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_action_navigation_more_vert.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_navigation_more_vert.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_action_navigation_more_vert.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_navigation_more_vert.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_people.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_people.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_description.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_description.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_action_star.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_star.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_keyboard_arrow_left_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_left_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/drawable/menu.png" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_search_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_search_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_action_overview.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_overview.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_compare_arrows.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_compare_arrows.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_sort_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_sort_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_error.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_error.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_open_in_browser_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_action_overview.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_overview.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_child_care.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_child_care.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_open_in_browser_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_sort_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_sort_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_open_in_browser_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_pie_chart.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_pie_chart.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_people.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_people.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_search_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_search_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_pie_chart.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_pie_chart.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_wikipedia.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_wikipedia.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_action_star.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_star.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_description.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_description.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_wikipedia.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_wikipedia.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_keyboard_arrow_down_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_down_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_keyboard_arrow_down_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_down_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_ondemand_video.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_ondemand_video.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_description.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_description.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_action_navigation_more_vert.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_action_navigation_more_vert.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_people.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_people.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_open_in_browser_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_keyboard_arrow_down_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_down_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_search_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_search_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_keyboard_arrow_down_black_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_down_black_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="app/src/main/res/drawable/headerbackground.jpg" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_child_care.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_child_care.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_ondemand_video.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_ondemand_video.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_compare_arrows.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_compare_arrows.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_open_in_browser_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_open_in_browser_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_keyboard_arrow_left_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_left_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_pie_chart.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_pie_chart.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xhdpi/ic_keyboard_arrow_left_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_keyboard_arrow_left_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-hdpi/ic_compare_arrows.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_compare_arrows.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-mdpi/ic_sort_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_sort_white_24dp.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_view_compact_white_24dp.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/res_clear/ic_view_compact_white_24dp.png" />
+  </binary>
+</changelist>

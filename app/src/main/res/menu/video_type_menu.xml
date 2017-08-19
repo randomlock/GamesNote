@@ -7,32 +7,31 @@
 
                 <item
                     android:id="@+id/nav_all_videos"
-                    android:icon="@mipmap/ic_launcher"
                     android:title="@string/all_video" />
 
                 <item
                     android:id="@+id/nav_reviews"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/reviews" />
 
                 <item
                     android:id="@+id/nav_quick_looks"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/quick_looks" />
 
                 <item
                     android:id="@+id/nav_events"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/events" />
 
                 <item
                     android:id="@+id/nav_trailer"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/game_videos" />
 
                 <item
                     android:id="@+id/nav_features"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/features" />
 
 
@@ -51,66 +50,66 @@
 
                 <item
                     android:id="@+id/nav_tang"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/tang" />
 
                 <item
                     android:id="@+id/nav_endurance_run"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/endurance_run"
 
                     />
 
                 <item
                     android:id="@+id/nav_premium"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/premium" />
 
                 <item
                     android:id="@+id/nav_extra_life"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/extra_life" />
 
                 <item
                     android:id="@+id/nav_encyclopedia"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/encyclopedia" />
 
                 <item
                     android:id="@+id/nav_unfinished"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/unfinished" />
 
                 <item
                     android:id="@+id/nav_metal_gear"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/metal_gear" />
 
                 <item
                     android:id="@+id/nav_vinny"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/vinny" />
 
                 <item
                     android:id="@+id/nav_breaking_bad"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/breaking_bad" />
 
 
                 <item
                     android:id="@+id/nav_best"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/best" />
 
 
                 <item
                     android:id="@+id/nav_game_tapes"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/game_tapes" />
 
                 <item
                     android:id="@+id/nav_kerbal"
-                    android:icon="@mipmap/ic_launcher"
+                    
                     android:title="@string/kerbal" />
 
 

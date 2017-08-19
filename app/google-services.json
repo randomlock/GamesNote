@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "293539854176",
+    "firebase_url": "https://gamesnotes-37ab8.firebaseio.com",
+    "project_id": "gamesnotes-37ab8",
+    "storage_bucket": "gamesnotes-37ab8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293539854176:android:e243dde124e15583",
+        "android_client_info": {
+          "package_name": "com.example.randomlocks.gamesnote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "293539854176-m67avke1fs82pbkb8fbhf8vmp1r6kdho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.randomlocks.gamesnote",
+            "certificate_hash": "062c3664d3a7fc1db778fc442a7bcc5c5b697230"
+          }
+        },
+        {
+          "client_id": "293539854176-322s4g8jk7skf7d64nodq3ds0qic7q00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjIgyfiG8XL5-Gm3j-R9IRiB18H9pCV9I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "293539854176-322s4g8jk7skf7d64nodq3ds0qic7q00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

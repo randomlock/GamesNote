@@ -40,6 +40,7 @@
         android:scrollbars="none"
         app:itemTextAppearance="@style/Widget.Design.NavigationView"
         app:itemTextColor="@color/state_list"
+        app:itemIconTint="@color/state_list"
         app:menu="@menu/nav_main_menu"
         >
 
