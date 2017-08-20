@@ -198,7 +198,7 @@ public class GameWikiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
 
-            /**************** SETTING PLATFORMS*************************/
+            /************** SETTING PLATFORMS*************************/
             List<GameWikiPlatform> platform = modal.platforms;
 
 
