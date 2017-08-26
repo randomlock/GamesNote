@@ -2,12 +2,15 @@ package com.example.randomlocks.gamesnote.activity;
 
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +29,7 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.CustomVideoView;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.framework.CastContext;
@@ -79,7 +82,6 @@ public class VideoPlayerActivity extends AppCompatActivity {
         setupControlsCallbacks();
         setupCastListener();
         mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.registerLifecycleCallbacksBeforeIceCreamSandwich(this, savedInstanceState);
         mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
         // see what we need to play and where
         Bundle bundle = getIntent().getExtras();
@@ -624,14 +626,37 @@ public class VideoPlayerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         mVideoView = (CustomVideoView) findViewById(R.id.videoView1);
+        // TODO not working
+      /*  mVideoView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean isToolbarVisible = mToolbar.getAlpha() == 1;
+                animateToolbar(isToolbarVisible);
+                return true;
+            }
+        });*/
         mProgressBar = (ProgressBar) findViewById(R.id.video_progress);
         mProgressBar.setVisibility(View.VISIBLE);
         mStartText = (TextView) findViewById(R.id.startText);
+        findViewById(R.id.exit_fullscreen).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         mStartText.setText(GiantBomb.formatMillis(0));
         mEndText = (TextView) findViewById(R.id.endText);
         mSeekbar = (SeekBar) findViewById(R.id.seekBar1);
+        int accent_color = ContextCompat.getColor(this, R.color.accent);
+        mSeekbar.getProgressDrawable().setColorFilter(
+                new PorterDuffColorFilter(accent_color, PorterDuff.Mode.SRC_IN)
+        );
+        mSeekbar.getThumb().setColorFilter(accent_color, PorterDuff.Mode.SRC_IN);
         mPlayPause = (ImageView) findViewById(R.id.imageView2);
         mLoading = (ProgressBar) findViewById(R.id.progressBar1);
+        mLoading.getIndeterminateDrawable().setColorFilter(
+                new PorterDuffColorFilter(accent_color, PorterDuff.Mode.SRC_IN)
+        );
         mControllers = findViewById(R.id.controllers);
         mContainer = findViewById(R.id.container);
         mCoverArt = (ImageView) findViewById(R.id.coverArtView);

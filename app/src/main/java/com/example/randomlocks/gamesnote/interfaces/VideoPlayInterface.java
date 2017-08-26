@@ -1,6 +1,6 @@
 package com.example.randomlocks.gamesnote.interfaces;
 
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 
 /**
  * Created by randomlock on 3/14/2017.

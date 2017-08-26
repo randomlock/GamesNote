@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 import com.flyco.labelview.LabelView;
 import com.squareup.picasso.Picasso;
 

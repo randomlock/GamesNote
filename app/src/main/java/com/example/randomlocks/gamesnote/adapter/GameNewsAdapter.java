@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.activity.MainActivity;
-import com.example.randomlocks.gamesnote.modals.NewsModal.NewsModal;
+import com.example.randomlocks.gamesnote.modals.newsModal.NewsModal;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;

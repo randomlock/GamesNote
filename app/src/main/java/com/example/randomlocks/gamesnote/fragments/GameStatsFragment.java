@@ -18,15 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GameDetailStatPagerFragment;
+import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GameStatDetailPagerFragment;
 import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.GameStatPagerFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.interfaces.GameWikiDetailInterface;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailIInnerJson;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailListModal;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailModal;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailIInnerJson;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailListModal;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.realmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.GameListDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.RealmInteger;
@@ -233,7 +233,12 @@ public class GameStatsFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (realm != null && !realm.isClosed())
+            realm.close();
+    }
 
     private class GameStatsPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -245,7 +250,7 @@ public class GameStatsFragment extends Fragment {
             super(fm);
             fragments = new ArrayList<>();
             fragments.add(new GameStatPagerFragment());
-            fragments.add(new GameDetailStatPagerFragment());
+            fragments.add(new GameStatDetailPagerFragment());
         }
 
         @Override
@@ -264,14 +269,10 @@ public class GameStatsFragment extends Fragment {
             return pageTitle[position];
         }
 
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(realm!=null && !realm.isClosed())
-            realm.close();
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
     }
 
 

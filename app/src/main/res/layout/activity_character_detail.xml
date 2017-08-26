@@ -129,7 +129,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:linksClickable="true"
-                        android:textColor="@color/primary" />
+                        android:textColor="@color/accent" />
 
 
                     <View
@@ -144,7 +144,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/primary" />
+                        android:textColor="@color/accent" />
 
                     <View
                         android:layout_width="0.5dp"
@@ -158,7 +158,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@color/primary" />
+                        android:textColor="@color/accent" />
 
 
                 </LinearLayout>
@@ -251,7 +251,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/gender"
-                        android:textAllCaps="true"
                         android:textColor="@color/primary_text_light" />
 
                     <TextView
@@ -302,7 +301,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/birthday"
-                        android:textAllCaps="true"
                         android:textColor="@color/primary_text_light"/>
 
                     <TextView
@@ -328,7 +326,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/first_appearance"
-                        android:textAllCaps="true"
                         android:textColor="@color/primary_text_light"
                         />
 
@@ -354,7 +351,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/alias"
-                        android:textAllCaps="true"
                         android:textColor="@color/primary_text_light" />
 
 

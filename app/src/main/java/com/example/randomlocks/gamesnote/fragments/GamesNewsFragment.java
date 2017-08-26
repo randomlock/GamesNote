@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -46,7 +47,7 @@ import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicat
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
-import com.example.randomlocks.gamesnote.modals.NewsModal.NewsModal;
+import com.example.randomlocks.gamesnote.modals.newsModal.NewsModal;
 import com.example.randomlocks.gamesnote.realmDatabase.NewsSourceDatabase;
 
 import org.jsoup.Jsoup;
@@ -126,6 +127,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         super.onActivityCreated(savedInstanceState);
         mDrawer = (DrawerLayout) getView().findViewById(R.id.drawer);
         mNavigation = (NavigationView) mDrawer.findViewById(R.id.navigation);
+        disableNavigationViewScrollbars(mNavigation);
         mNavigation.setItemIconTintList(null);
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             Menu menu = mNavigation.getMenu();
@@ -194,6 +196,15 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         mNavigation.setNavigationItemSelectedListener(this);
 
 
+    }
+
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
     private void runModel() {
@@ -549,7 +560,7 @@ public class GamesNewsFragment extends Fragment implements NavigationView.OnNavi
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
 
             }
         });

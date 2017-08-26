@@ -19,13 +19,7 @@
 
         </FrameLayout>
 
-        <fragment
-            android:id="@+id/castMiniController"
-            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:visibility="gone" />
+
 
 
     </FrameLayout>
@@ -37,10 +31,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:scrollbars="none"
+        android:background="@color/white_black"
+        app:itemIconTint="@color/state_list"
         app:itemTextAppearance="@style/Widget.Design.NavigationView"
         app:itemTextColor="@color/state_list"
-        app:itemIconTint="@color/state_list"
         app:menu="@menu/nav_main_menu"
         >
 

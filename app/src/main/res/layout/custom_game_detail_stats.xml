@@ -3,13 +3,13 @@
     android:id="@+id/stats_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="6dp"
     android:layout_marginBottom="6dp"
-    app:cardCornerRadius="4dp"
-    app:elevation="4dp"
-    app:cardBackgroundColor="@color/cardColor"
+    android:layout_marginTop="6dp"
     android:animateLayoutChanges="true"
     android:visibility="gone"
+    app:cardBackgroundColor="@color/cardColor"
+    app:cardCornerRadius="4dp"
+    app:elevation="4dp"
     >
 
 
@@ -27,22 +27,22 @@
         <TextView
             android:id="@+id/stats_heading"
             style="@style/cardview_textstyle"
-            android:text="Stats"
             android:drawableLeft="@drawable/ic_pie_chart"
             android:drawableStart="@drawable/ic_pie_chart"
+            android:text="Stats"
             />
 
         <ImageView
             android:id="@+id/stats_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:scaleType="matrix"
             android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="6dp"
+            android:layout_centerInParent="true"
             android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:scaleType="matrix"
+            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
             />
 
 
@@ -53,35 +53,34 @@
             android:id="@+id/hide_parent_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="6dp"
             android:orientation="vertical"
+            android:padding="6dp"
             android:visibility="gone"
             >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginBottom="6dp"
+                android:orientation="horizontal"
                 >
 
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="STATUS"
-                android:textAllCaps="true"
+                android:text="@string/status"
                 android:textColor="@color/primary_text_light" />
 
             <TextView
                 android:id="@+id/status_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="-"
                 android:layout_gravity="end"
                 android:gravity="end"
-                android:paddingRight="6dp"
                 android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:text="-"
                 android:textColor="@color/primary_text" />
 
             </LinearLayout>
@@ -89,27 +88,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginBottom="6dp"
+                android:orientation="horizontal"
                 >
 
                 <TextView
                     android:id="@+id/score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SCORE"
-                    android:textAllCaps="true"
-                    android:textColor="@color/primary_text_light" />
+                    android:text="@string/score"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
                     android:id="@+id/score_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="-"
                     android:layout_gravity="end"
                     android:gravity="end"
-                    android:paddingRight="6dp"
                     android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:text="-"
                     android:textColor="@color/primary_text" />
 
             </LinearLayout>
@@ -117,25 +115,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="6dp">
+                android:layout_marginBottom="6dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/platform"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PLATFORM"
-                    android:textAllCaps="true"
-                    android:textColor="@color/primary_text_light" />
+                    android:text="@string/platform"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
                     android:id="@+id/platfom_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="-"
                     android:gravity="end"
-                    android:paddingRight="6dp"
                     android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:text="-"
                     android:textColor="@color/primary_text" />
 
             </LinearLayout>
@@ -143,25 +140,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="6dp">
+                android:layout_marginBottom="6dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/hours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="HOURS"
-                    android:textAllCaps="true"
-                    android:textColor="@color/primary_text_light" />
+                    android:text="@string/hours"
+                    android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
                     android:id="@+id/hours_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="-"
                     android:gravity="end"
-                    android:paddingRight="6dp"
                     android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:text="-"
                     android:textColor="@color/primary_text" />
 
             </LinearLayout>

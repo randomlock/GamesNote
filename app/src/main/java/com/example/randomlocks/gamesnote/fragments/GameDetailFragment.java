@@ -27,6 +27,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,16 +64,16 @@ import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActi
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.interfaces.GameDetailVideoInterface;
 import com.example.randomlocks.gamesnote.interfaces.GameWikiDetailInterface;
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterImage;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.CharacterGamesImage;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailIInnerJson;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailListModal;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailModal;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailVideo;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameVideoMinimal;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameVideoModalMinimal;
 import com.example.randomlocks.gamesnote.modals.GameWikiPlatform;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.CharacterGamesImage;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailIInnerJson;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailListModal;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailModal;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailVideo;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameVideoMinimal;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameVideoModalMinimal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.realmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.GameListDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.RealmInteger;
@@ -181,6 +182,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     int current_video_pos = 0;
     GameDetailVideo showcase_video = null;
     ArrayList<String> hltb_key, htlb_value;
+    RelativeLayout game_info_layout;
+    ImageView game_image;
+    TextView game_title, game_date, game_platform, game_deck;
     private int stopPosition;
     private DisplayMetrics metrics;
     private String video_url;
@@ -278,7 +282,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         super.onActivityCreated(savedInstanceState);
 
 
-        /************************************** FindViewById *********************************/
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.root_coordinator);
         floatingActionsMenu = (FloatingActionMenu) coordinatorLayout.findViewById(R.id.floating_menu);
         coordinatorLayout.findViewById(R.id.replaying).setOnClickListener(this);
@@ -300,7 +303,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         playViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(gameDetailModal==null){
                     Toaster.makeSnackBar(coordinatorLayout,"waiting to load data");
                 }else if(gameDetailModal.videos.size()==0){
@@ -309,6 +311,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                 } else {
                     appbarImage.setVisibility(View.INVISIBLE);
                     playViewButton.setVisibility(View.GONE);
+
                     getInit(showcase_video);
                 }
 
@@ -319,42 +322,50 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         toolbar = (Toolbar) toolbarLayout.findViewById(R.id.my_toolbar);
         nestedScrollView = (PicassoNestedScrollView) coordinatorLayout.findViewById(R.id.scroll_view);
         parentLayout = (LinearLayout) nestedScrollView.findViewById(R.id.parent_layout);
+        game_deck = (TextView) parentLayout.findViewById(R.id.game_deck);
         statsCardView = (CardView) parentLayout.findViewById(R.id.stats_cardview);
         stats_heading = (TextView) statsCardView.findViewById(R.id.stats_heading);
         setTextViewDrawableColor(stats_heading,drawable_color);
         statsDetailView = (LinearLayout) statsCardView.findViewById(R.id.hide_parent_layout);
         toggleArrow = (ImageView) statsCardView.findViewById(R.id.stats_toggle);
-        toggleArrow.setColorFilter(ContextCompat.getColor(getContext(), R.color.primary));
+        toggleArrow.setColorFilter(ContextCompat.getColor(getContext(), R.color.accent));
         statsCardView.setOnClickListener(this);
-        similarGameRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.similar_game_list);
-        similar_game_heading = (TextView) nestedScrollView.findViewById(R.id.similar_game_heading);
+        similarGameRecycleView = (RecyclerView) parentLayout.findViewById(R.id.similar_game_list);
+        similar_game_heading = (TextView) parentLayout.findViewById(R.id.similar_game_heading);
         setTextViewDrawableColor(similar_game_heading,drawable_color);
-        characterRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.character_game_list);
-        characters_heading = (TextView) nestedScrollView.findViewById(R.id.character_heading);
+        characterRecycleView = (RecyclerView) parentLayout.findViewById(R.id.character_game_list);
+        characters_heading = (TextView) parentLayout.findViewById(R.id.character_heading);
         setTextViewDrawableColor(characters_heading,drawable_color);
-        description_heading = (TextView) nestedScrollView.findViewById(R.id.description_heading);
-        description_open_in_internet = (TextView) nestedScrollView.findViewById(R.id.description_internet);
+        description_heading = (TextView) parentLayout.findViewById(R.id.description_heading);
+        description_open_in_internet = (TextView) parentLayout.findViewById(R.id.description_internet);
         setTextViewDrawableColor(description_open_in_internet,drawable_color);
         description_open_in_internet.setOnClickListener(this);
         setTextViewDrawableColor(description_heading,drawable_color);
-        description = (TextView) nestedScrollView.findViewById(R.id.description);
-        overview_heading = (TextView) nestedScrollView.findViewById(R.id.overview_heading);
+        description = (TextView) parentLayout.findViewById(R.id.description);
+        overview_heading = (TextView) parentLayout.findViewById(R.id.overview_heading);
         setTextViewDrawableColor(overview_heading,drawable_color);
-        recyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.list);
-        hltbRecyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.hltb_recyclerview);
-        hltb_heading = (TextView) nestedScrollView.findViewById(R.id.hltb_heading);
+        recyclerView = (RecyclerView) parentLayout.findViewById(R.id.list);
+        hltbRecyclerView = (RecyclerView) parentLayout.findViewById(R.id.hltb_recyclerview);
+        hltb_heading = (TextView) parentLayout.findViewById(R.id.hltb_heading);
         setTextViewDrawableColor(hltb_heading, drawable_color);
-        imageRecycleView = (RecyclerView) nestedScrollView.findViewById(R.id.image_recycler_view);
-        image_heading = (TextView) nestedScrollView.findViewById(R.id.image_heading);
+        imageRecycleView = (RecyclerView) parentLayout.findViewById(R.id.image_recycler_view);
+        image_heading = (TextView) parentLayout.findViewById(R.id.image_heading);
         setTextViewDrawableColor(image_heading,drawable_color);
-        videoRecyclerView = (RecyclerView) nestedScrollView.findViewById(R.id.video_recycler_view);
-        related_video_heading = (TextView) nestedScrollView.findViewById(R.id.video_heading);
+        videoRecyclerView = (RecyclerView) parentLayout.findViewById(R.id.video_recycler_view);
+        related_video_heading = (TextView) parentLayout.findViewById(R.id.video_heading);
         setTextViewDrawableColor(related_video_heading,drawable_color);
-        review = (TextView) nestedScrollView.findViewById(R.id.review);
+        review = (TextView) parentLayout.findViewById(R.id.review);
         setTextViewDrawableColor(review,drawable_color);
-        userReview = (TextView) nestedScrollView.findViewById(R.id.user_review);
+        userReview = (TextView) parentLayout.findViewById(R.id.user_review);
         setTextViewDrawableColor(userReview,drawable_color);
         pacman = (AVLoadingIndicatorView) nestedScrollView.findViewById(R.id.progressBar);
+        game_info_layout = (RelativeLayout) coordinatorLayout.findViewById(R.id.game_info_layout);
+        game_image = (ImageView) game_info_layout.findViewById(R.id.game_image);
+        Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.news_image_drawable).fit().centerCrop().into(game_image);
+        game_title = (TextView) game_info_layout.findViewById(R.id.game_title);
+        game_title.setText(title);
+        game_date = (TextView) game_info_layout.findViewById(R.id.game_date);
+        game_platform = (TextView) game_info_layout.findViewById(R.id.game_platform);
 
      /*   if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             setIconColor(characters_heading);
@@ -369,7 +380,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
         /************************** APPBARLATOUT ********************************/
 
-        if (imageUrl != null) {
+       /* if (imageUrl != null) {
             Picasso.with(getContext()).load(imageUrl).fit().centerCrop().into(appbarImage);
         }
 
@@ -378,7 +389,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             public void onClick(View v) {
 
             }
-        });
+        });*/
 
 
 
@@ -395,10 +406,16 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                     media_Controller.hide();
 
                 if (toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
-
-                    if(videoView!=null && videoView.isPlaying()){
-                        videoView.pause();
+                    if (game_info_layout != null) {
+                        game_info_layout.setVisibility(View.INVISIBLE);
                     }
+                    if (videoView != null) {
+                        if (videoView.isPlaying())
+                            videoView.pause();
+                    }
+                } else if (verticalOffset == 0) {
+                    if (game_info_layout != null && game_info_layout.getVisibility() == View.INVISIBLE)
+                        game_info_layout.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -417,7 +434,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         /**************** RETROFIT ************************/
 
         if (savedInstanceState != null) {
-            Toaster.make(getContext(),"hell osave instance");
+            Toaster.make(getContext(), "hello save instance");
             gameDetailModal = savedInstanceState.getParcelable(MODAL);
             characterImage = savedInstanceState.getParcelableArrayList(GAME_CHARACTER);
             similarGameImage = savedInstanceState.getParcelableArrayList(GAME_SIMILAR);
@@ -431,7 +448,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                 map = new HashMap<>();
                 map.put(GiantBomb.KEY, SharedPreference.getFromSharedPreferences(GiantBomb.API_KEY, GiantBomb.DEFAULT_API_KEY, getContext()));
                 map.put(GiantBomb.FORMAT, "JSON");
-                String field_list = "description,name,platforms,images,id,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
+                String field_list = "deck,description,name,original_release_date,platforms,images,id,videos,characters,developers,franchises,genres,publishers,similar_games,themes,reviews,releases";
                 map.put(GiantBomb.FIELD_LIST, field_list);
                 getGameDetail(gameWikiDetailInterface, map);
                 runAsyncTask();
@@ -647,18 +664,39 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         pacman.setVisibility(View.GONE);
         parentLayout.setVisibility(View.VISIBLE);
         game_id = gameDetailModal.id;
-
-        if (imageUrl == null && gameDetailModal.images.size() > 0) {
+        if (gameDetailModal.original_release_date != null) {
+            String date[] = gameDetailModal.original_release_date.split(" ");
+            if (date != null && date.length > 0) {
+                game_date.setText(date[0]);
+            }
+        }
+        if (gameDetailModal.images != null && gameDetailModal.images.size() > 0) {
             Picasso.with(getContext()).load(gameDetailModal.images.get(0).mediumUrl).fit().centerCrop().into(appbarImage);
         }
 
         platforms = gameDetailModal.platforms;
         if(platforms==null)
             platforms = new ArrayList<>();
+        if (platforms.size() > 0) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0, length = platforms.size(); i < length; i++) {
+                if (i == length - 1) {
+                    builder.append(platforms.get(i).abbreviation);
+                } else {
+                    builder.append(platforms.get(i).abbreviation).append(" \u2022 ");
+                }
+            }
+            builder.replace(builder.length() - 6, builder.length(), "");
+            game_platform.setText(builder.toString());
+        }
+        if (gameDetailModal.deck != null) {
+            game_deck.setText(gameDetailModal.deck);
+        }
+        game_info_layout.setVisibility(View.VISIBLE);
         //Toaster.make(getContext(),platforms.size()+"5");
         List<CharacterImage> image = gameDetailModal.images;
         List<GameDetailVideo> videos = gameDetailModal.videos;
-        if (videos != null && !videos.isEmpty()) {
+        if (videos != null && !videos.isEmpty() && showcase_video == null) {
             showcase_video = videos.remove(0);
         }
 
@@ -1013,6 +1051,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     }*/
 
     public void getInit(final GameDetailVideo gameDetailVideo) {
+        if (game_info_layout != null) {
+            game_info_layout.setVisibility(View.INVISIBLE);
+        }
         videoProgress = (ProgressBar) toolbarLayout.findViewById(R.id.video_progress);
         //geting video url from the api
         if (videoMap == null) {
@@ -1027,6 +1068,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         String str[] = path.split("/");
         final String videoUrl = str[str.length - 1];
         videoInterface = GiantBomb.createGameDetailVideoService();
+        Log.d("video_url", videoUrl);
         videoInterface.getResult(videoUrl, videoMap).enqueue(new Callback<GameVideoMinimal>() {
             @Override
             public void onResponse(Call<GameVideoMinimal> call, Response<GameVideoMinimal> response) {
@@ -1161,12 +1203,16 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                 mediaPlayer.reset();
                 animateToolbar(false);
                 mediaPlayer.setDisplay(videoView.getHolder());
+                appbarImage.setVisibility(View.VISIBLE);
+                game_info_layout.setVisibility(View.VISIBLE);
+                playViewButton.setVisibility(View.VISIBLE);
             }
         });
 
         videoView.setPlayPauseListener(new CustomVideoView.PlayPauseListener() {
             @Override
             public void onPlay() {
+                game_info_layout.setVisibility(View.GONE);
                 animateToolbar(true);
             }
 
@@ -1175,7 +1221,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                 animateToolbar(false);
             }
         });
-
 
         media_Controller.setListener(new CustomMediaController.OnMediaControllerInteractionListener() {
             @Override

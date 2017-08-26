@@ -31,7 +31,7 @@ import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.interfaces.VideoPlayInterface;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.realmDatabase.WatchedVideoDatabase;
 
 import java.util.HashMap;

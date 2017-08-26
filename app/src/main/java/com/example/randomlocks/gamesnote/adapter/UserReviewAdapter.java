@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.activity.UserReviewDetailActivity;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.modals.UserReviewModal.UserReviewModal;
+import com.example.randomlocks.gamesnote.modals.userReviewModal.UserReviewModal;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -2,6 +2,7 @@ package com.example.randomlocks.gamesnote.fragments;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -20,7 +21,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.fragments.ViewPagerFragment.NewsDetailPagerFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.PagerZoomOutSlideAnimation;
-import com.example.randomlocks.gamesnote.modals.NewsModal.NewsModal;
+import com.example.randomlocks.gamesnote.modals.newsModal.NewsModal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class NewsDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt(GiantBomb.POSITION);
         modalList = getArguments().getParcelableArrayList(GiantBomb.MODAL);
-        fab_closed_color = ContextCompat.getColor(getContext(), R.color.toolbar_background_white);
+        fab_closed_color = Color.TRANSPARENT;
         fab_open_color = ContextCompat.getColor(getContext(), R.color.lightaccent);
 
         setHasOptionsMenu(true);

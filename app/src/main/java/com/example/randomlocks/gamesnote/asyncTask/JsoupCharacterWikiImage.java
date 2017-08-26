@@ -2,7 +2,7 @@ package com.example.randomlocks.gamesnote.asyncTask;
 
 import android.os.AsyncTask;
 
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.CharacterImage;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

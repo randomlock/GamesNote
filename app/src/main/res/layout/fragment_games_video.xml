@@ -171,7 +171,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_gravity="end"
-        android:scrollbars="none"
+        android:background="@color/white_black"
         app:itemTextAppearance="@style/Widget.Design.NavigationView"
         app:itemTextColor="@color/state_list"
         app:menu="@menu/video_type_menu">

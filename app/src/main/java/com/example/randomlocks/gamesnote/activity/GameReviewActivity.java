@@ -37,8 +37,8 @@ import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.interfaces.GameReviewInterface;
-import com.example.randomlocks.gamesnote.modals.GameReviewModal.GameReviewModal;
-import com.example.randomlocks.gamesnote.modals.GameReviewModal.GameReviewModalList;
+import com.example.randomlocks.gamesnote.modals.gameReviewModal.GameReviewModal;
+import com.example.randomlocks.gamesnote.modals.gameReviewModal.GameReviewModalList;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;

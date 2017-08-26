@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.GameAppearance;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.GameAppearance;
 
 import java.util.ArrayList;
 import java.util.List;

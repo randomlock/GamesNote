@@ -53,6 +53,7 @@
     <color name="touch_color">#404CAF50</color>
     <color name="cancel_color">#F44336</color>
     <color name="cancel_touch_color">#40F44336</color>
+    <color name="gradient_color">@color/black</color>
 
 
     <array name="score_color">

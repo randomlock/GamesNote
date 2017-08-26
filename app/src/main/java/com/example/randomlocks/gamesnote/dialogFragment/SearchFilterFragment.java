@@ -1,5 +1,6 @@
 package com.example.randomlocks.gamesnote.dialogFragment;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,14 +24,14 @@ import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 
-/**
- * Created by randomlocks on 5/2/2016.
- */
-public class SearchFilterFragment extends DialogFragment {
+import java.util.Calendar;
+
+public class SearchFilterFragment extends DialogFragment implements View.OnClickListener {
 
     boolean isAscending;
     CheckBox checkbox;
     Spinner spinner;
+    TextView start_date, end_date;
     View view;
     SearchFilterInterface searchFilterInterface = null;
     int which_one;
@@ -90,6 +92,10 @@ public class SearchFilterFragment extends DialogFragment {
         checkbox = (CheckBox) view.findViewById(R.id.checkbox);
         checkbox.setChecked(!isAscending);
 
+        start_date = (TextView) view.findViewById(R.id.start_date);
+        start_date.setOnClickListener(this);
+        end_date = (TextView) view.findViewById(R.id.end_date);
+        end_date.setOnClickListener(this);
 
 
         final AlertDialog dialog =  new AlertDialog.Builder(getContext(),R.style.MyDialogTheme)
@@ -119,7 +125,7 @@ public class SearchFilterFragment extends DialogFragment {
                             SharedPreference.saveToSharedPreference(GiantBomb.SORT_WHICH, which_one, getContext());
                             SharedPreference.saveToSharedPreference(GiantBomb.SORT_ASCENDING, !checkbox.isChecked(), getContext());
                         }
-                        searchFilterInterface.onSelect(which_one, !checkbox.isChecked());
+                        searchFilterInterface.onSelect(which_one, !checkbox.isChecked(), start_date.getText().toString(), end_date.getText().toString());
                         dismiss();
                     }
                 }).create();
@@ -127,7 +133,7 @@ public class SearchFilterFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.black_white));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
 
             }
         });
@@ -151,6 +157,8 @@ public class SearchFilterFragment extends DialogFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
+
                 // gameListDatabase.setPlatform(spinner.getItemAtPosition(i).toString());
             }
 
@@ -163,12 +171,37 @@ public class SearchFilterFragment extends DialogFragment {
 
     }
 
+    @Override
+    public void onClick(final View v) {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+
+        new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                month++;
+                if (v.getId() == R.id.start_date) {
+                    start_date.setText(year + "/" + month + "/" + day);
+                } else {
+                    end_date.setText(year + "/" + month + "/" + day);
+                }
+            }
+        }, year, month, day).show();
+
+
+    }
+
     public interface SearchFilterInterface {
 
-        void onSelect(int which, boolean asc);
+        void onSelect(int which, boolean asc, String start_date, String end_date);
     }
 
 
 }
+
+
 
 

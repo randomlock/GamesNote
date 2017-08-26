@@ -233,7 +233,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (adapterView != null) {
                     ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
-                    ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+                    ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
                     // gameListDatabase.setPlatform(spinner.getItemAtPosition(i).toString());
 
                     if (array_id == R.array.status) {
@@ -265,7 +265,7 @@ public  class GameListDialog extends DialogFragment implements View.OnClickListe
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.CENTER);
-                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
 
             }
 

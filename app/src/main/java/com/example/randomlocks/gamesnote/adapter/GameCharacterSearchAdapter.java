@@ -17,7 +17,7 @@ import com.example.randomlocks.gamesnote.dialogFragment.CoverImageViewerFragment
 import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.interfaces.OnLoadMoreListener;
-import com.example.randomlocks.gamesnote.modals.CharacterSearchModal.CharacterSearchModal;
+import com.example.randomlocks.gamesnote.modals.characterSearchModal.CharacterSearchModal;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

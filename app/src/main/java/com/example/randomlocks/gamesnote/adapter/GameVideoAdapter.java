@@ -20,7 +20,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicatorView;
 import com.example.randomlocks.gamesnote.helperClass.CustomView.ConsistentLinearLayoutManager;
 import com.example.randomlocks.gamesnote.interfaces.OnLoadMoreListener;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 import com.flyco.labelview.LabelView;
 import com.squareup.picasso.Picasso;
 

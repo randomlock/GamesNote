@@ -17,7 +17,7 @@
     <PreferenceCategory android:title="General">
 
         <SwitchPreferenceCompat
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="dark_theme_preference"
             android:summary="Allow dark theme"
             android:title="Night mode" />

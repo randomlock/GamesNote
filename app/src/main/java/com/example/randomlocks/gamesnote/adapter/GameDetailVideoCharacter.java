@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterImage;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailVideo;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailVideo;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

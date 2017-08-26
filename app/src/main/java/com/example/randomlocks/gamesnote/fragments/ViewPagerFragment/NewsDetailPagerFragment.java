@@ -39,7 +39,7 @@ import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActi
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.VideoEnabledWebChromeClient;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.VideoEnabledWebView;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
-import com.example.randomlocks.gamesnote.modals.NewsModal.NewsModal;
+import com.example.randomlocks.gamesnote.modals.newsModal.NewsModal;
 import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;

@@ -1,6 +1,6 @@
 package com.example.randomlocks.gamesnote.interfaces;
 
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModalList;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModalList;
 
 import java.util.Map;
 

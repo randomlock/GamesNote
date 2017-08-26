@@ -2,8 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
 
     <android.support.design.widget.AppBarLayout
@@ -68,6 +67,7 @@
                 android:id="@+id/appbar_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="@drawable/gradient"
                 app:layout_collapseMode="parallax"
                 />
 
@@ -122,11 +122,22 @@
             android:id="@+id/parent_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="78dp"
             android:animateLayoutChanges="true"
             android:orientation="vertical"
-            android:visibility="invisible"
-            >
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/game_deck"
+                style="@style/SubTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:gravity="center"
+                android:textColor="?android:attr/textColorPrimary" />
 
 
             <include
@@ -565,6 +576,61 @@
 
 
     </com.github.clans.fab.FloatingActionMenu>
+
+    <RelativeLayout
+        android:id="@+id/game_info_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
+        app:layout_anchor="@id/scroll_view"
+        app:layout_anchorGravity="top|left">
+
+        <ImageView
+            android:id="@+id/game_image"
+            android:layout_width="98dp"
+            android:layout_height="144dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/news_image_drawable" />
+
+        <TextView
+            android:id="@+id/game_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_toEndOf="@+id/game_image"
+            android:layout_toRightOf="@+id/game_image"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/game_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/game_title"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_toEndOf="@+id/game_image"
+            android:layout_toRightOf="@+id/game_image"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/game_platform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/game_date"
+            android:layout_margin="6dp"
+            android:layout_toEndOf="@id/game_image"
+            android:layout_toRightOf="@+id/game_image"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+
+    </RelativeLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

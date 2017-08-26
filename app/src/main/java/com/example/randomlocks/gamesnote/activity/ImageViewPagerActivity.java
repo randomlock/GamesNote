@@ -103,7 +103,12 @@ public class ImageViewPagerActivity extends AppCompatActivity {
         //viewPager.setAdapter(new ImagePagerAdapter(getSupportFragmentManager()));
         viewPager.setOffscreenPageLimit(1);
         viewPager.setPageTransformer(false, new PagerDepthAnimation());
-        viewPager.setCurrentItem(position);
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(position);
+            }
+        });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -359,7 +364,7 @@ public class ImageViewPagerActivity extends AppCompatActivity {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return (view == ((FrameLayout) object));
+            return (view == object);
         }
 
         @Override

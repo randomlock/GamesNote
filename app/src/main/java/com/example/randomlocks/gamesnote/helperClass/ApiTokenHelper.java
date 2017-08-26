@@ -77,7 +77,7 @@ public class ApiTokenHelper {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context, R.color.black_white));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, R.color.primary));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, R.color.accent));
 
             }
         });
@@ -139,7 +139,7 @@ public class ApiTokenHelper {
             public void onShow(DialogInterface dialogInterface) {
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context, R.color.black_white));
                 Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setTextColor(ContextCompat.getColor(context, R.color.primary));
+                button.setTextColor(ContextCompat.getColor(context, R.color.accent));
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

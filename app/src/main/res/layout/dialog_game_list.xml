@@ -37,14 +37,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="FROM"
+            android:text="@string/from"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@color/primary_light" />
+            android:background="@color/linecolor" />
 
 
         <TextView
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="TO"
+            android:text="@string/to"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp" />
 
@@ -98,7 +98,7 @@
             android:gravity="center"
             android:linksClickable="true"
             android:text="-"
-            android:textColor="@color/primary" />
+            android:textColor="@color/accent" />
 
 
 
@@ -111,7 +111,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="-"
-            android:textColor="@color/primary" />
+            android:textColor="@color/accent" />
 
 
 
@@ -121,7 +121,6 @@
             style="@style/AddtoListStyle"
             android:layout_height="wrap_content"
             android:background="@null"
-
             android:gravity="right" />
 
 
@@ -171,7 +170,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="MEDIUM"
+            android:text="@string/medium"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp" />
 
@@ -187,7 +186,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Price($)"
+            android:text="@string/price"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp"
 
@@ -210,7 +209,7 @@
             android:id="@+id/platform_spinner"
             style="@style/AddtoListStyle"
             android:background="@null"
-            android:gravity="right"
+            android:gravity="end"
 
             />
 
@@ -222,7 +221,7 @@
             android:id="@+id/medium_spinner"
             style="@style/AddtoListStyle"
             android:background="@null"
-            android:gravity="right"
+            android:gravity="end"
 
             />
 
@@ -232,7 +231,7 @@
             android:id="@+id/price_spinner"
             style="@style/AddtoListStyle"
             android:background="@null"
-            android:gravity="right"
+            android:gravity="end"
 
             />
 

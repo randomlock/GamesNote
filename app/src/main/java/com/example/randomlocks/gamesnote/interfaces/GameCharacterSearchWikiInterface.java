@@ -1,7 +1,7 @@
 package com.example.randomlocks.gamesnote.interfaces;
 
 
-import com.example.randomlocks.gamesnote.modals.CharacterSearchModal.CharacterSearchModalList;
+import com.example.randomlocks.gamesnote.modals.characterSearchModal.CharacterSearchModalList;
 
 import java.util.Map;
 

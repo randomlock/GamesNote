@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.randomlocks.gamesnote.R;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.CharacterGamesImage;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailIInnerJson;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.CharacterGamesImage;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailIInnerJson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

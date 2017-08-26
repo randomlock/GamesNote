@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.activity.ImageViewPagerActivity;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.CharacterImage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

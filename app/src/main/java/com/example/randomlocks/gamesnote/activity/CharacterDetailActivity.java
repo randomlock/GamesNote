@@ -39,9 +39,9 @@ import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.interfaces.GameCharacterInterface;
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterImage;
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterListModal;
-import com.example.randomlocks.gamesnote.modals.GameCharacterModal.CharacterModal;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.CharacterImage;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.CharacterListModal;
+import com.example.randomlocks.gamesnote.modals.gameCharacterModal.CharacterModal;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -339,7 +339,7 @@ public class CharacterDetailActivity extends AppCompatActivity implements View.O
         if (characterDetailModal.aliases != null) {
             mAlias.setText(characterDetailModal.aliases);
         } else {
-            mFirstAppearance.setText("-");
+            mAlias.setText("-");
         }
         Document doc = null;
         if (characterDetailModal.description != null) {

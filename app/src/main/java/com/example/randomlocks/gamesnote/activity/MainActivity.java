@@ -41,8 +41,8 @@ import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
 import com.example.randomlocks.gamesnote.interfaces.VideoPlayInterface;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
-import com.example.randomlocks.gamesnote.modals.NewsModal.NewsModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.newsModal.NewsModal;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             } else {
                 navHeaderLayout.setBackgroundResource(R.drawable.news_image_drawable);
-                nav_image_view.setImageResource(R.drawable.web_hi_res_512);
+                nav_image_view.setImageResource(R.drawable.app_icon_high_res);
 
             }
 

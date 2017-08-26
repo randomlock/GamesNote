@@ -27,7 +27,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.CustomTabActivityHelper;
 import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallback;
-import com.example.randomlocks.gamesnote.modals.UserReviewModal.UserReviewModal;
+import com.example.randomlocks.gamesnote.modals.userReviewModal.UserReviewModal;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;

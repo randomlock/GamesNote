@@ -219,7 +219,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
                         @Override
                         public void onShow(DialogInterface dialogInterface) {
                             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.black_white));
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
 
                         }
                     });
@@ -393,7 +393,7 @@ public class GamesListPagerFragment extends Fragment implements SearchView.OnQue
     }
 
     @Override
-    public void onSelect(int which, boolean asc) {
+    public void onSelect(int which, boolean asc, String start_date, String end_date) {
         if(adapter==null || adapter.getItemCount()==0){
             Toaster.make(getContext(),"No game added");
         }else {

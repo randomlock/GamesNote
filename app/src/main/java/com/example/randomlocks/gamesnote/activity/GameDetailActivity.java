@@ -11,7 +11,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.fragments.GameDetailFragment;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 
 public class GameDetailActivity extends AppCompatActivity implements GameDetailFragment.CommunicationInterface {
 

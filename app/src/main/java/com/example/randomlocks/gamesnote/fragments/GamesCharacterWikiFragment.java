@@ -41,9 +41,9 @@ import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.interfaces.GameCharacterSearchWikiInterface;
 import com.example.randomlocks.gamesnote.interfaces.OnLoadMoreListener;
-import com.example.randomlocks.gamesnote.modals.CharacterSearchModal.CharacterSearchModal;
-import com.example.randomlocks.gamesnote.modals.CharacterSearchModal.CharacterSearchModalList;
 import com.example.randomlocks.gamesnote.modals.SearchSuggestionModel;
+import com.example.randomlocks.gamesnote.modals.characterSearchModal.CharacterSearchModal;
+import com.example.randomlocks.gamesnote.modals.characterSearchModal.CharacterSearchModalList;
 import com.example.randomlocks.gamesnote.realmDatabase.SearchHistoryDatabase;
 
 import java.util.ArrayList;

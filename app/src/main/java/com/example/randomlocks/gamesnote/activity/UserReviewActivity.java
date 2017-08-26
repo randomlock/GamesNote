@@ -19,8 +19,8 @@ import com.example.randomlocks.gamesnote.helperClass.CustomView.AVLoadingIndicat
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.interfaces.UserReviewInterface;
-import com.example.randomlocks.gamesnote.modals.UserReviewModal.UserReviewModal;
-import com.example.randomlocks.gamesnote.modals.UserReviewModal.UserReviewModalList;
+import com.example.randomlocks.gamesnote.modals.userReviewModal.UserReviewModal;
+import com.example.randomlocks.gamesnote.modals.userReviewModal.UserReviewModalList;
 
 import java.util.ArrayList;
 import java.util.HashMap;

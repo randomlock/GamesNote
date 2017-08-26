@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -47,9 +48,9 @@ import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallba
 import com.example.randomlocks.gamesnote.interfaces.GamesVideosInterface;
 import com.example.randomlocks.gamesnote.interfaces.OnLoadMoreListener;
 import com.example.randomlocks.gamesnote.interfaces.VideoPlayInterface;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModalList;
 import com.example.randomlocks.gamesnote.modals.SearchSuggestionModel;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModalList;
 import com.example.randomlocks.gamesnote.realmDatabase.SearchHistoryDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.WatchedVideoDatabase;
 import com.google.android.gms.cast.framework.CastContext;
@@ -169,6 +170,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         parentFragment = (GamesVideoFragment) getParentFragment();
         mDrawer = (DrawerLayout) getActivity().findViewById(R.id.drawer);
         mNavigation = (NavigationView) getActivity().findViewById(R.id.navigation);
+        disableNavigationViewScrollbars(mNavigation);
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.root_coordinator);
         floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
         floatingSearchView.setShowMoveUpSuggestion(true);
@@ -346,10 +348,15 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         }
 
 
+    }
 
-
-
-
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
     private void setupCastListener() {

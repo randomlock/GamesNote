@@ -18,11 +18,7 @@ import com.example.randomlocks.gamesnote.R;
 import com.example.randomlocks.gamesnote.helperClass.GiantBomb;
 import com.example.randomlocks.gamesnote.helperClass.SharedPreference;
 import com.example.randomlocks.gamesnote.helperClass.Toaster;
-import com.example.randomlocks.gamesnote.modals.GamesVideoModal.GamesVideoModal;
-
-/**
- * Created by randomlock on 3/13/2017.
- */
+import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 
 public class VideoOptionFragment extends DialogFragment {
 
@@ -98,7 +94,7 @@ public class VideoOptionFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.black_white));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.primary));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
             }
         });
         return dialog;

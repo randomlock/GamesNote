@@ -10,33 +10,87 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="?dialogPreferredPadding">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sort_by"
-            android:textColor="@color/black_white" />
+            android:textColor="@color/black_white"
+            android:textStyle="bold" />
 
         <Spinner
             android:id="@+id/spinner"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
             android:textAlignment="center" />
     </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="?dialogPreferredPadding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_date"
+            android:textColor="@color/black_white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/start_date"
+            style="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="-"
+            android:textColor="@color/accent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="?dialogPreferredPadding"
+        android:paddingTop="?dialogPreferredPadding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end_date"
+            android:textColor="@color/black_white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/end_date"
+            style="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="-"
+            android:textColor="@color/accent" />
+
+    </LinearLayout>
+
     <CheckBox android:id="@+id/checkbox"
-        style="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@android:color/transparent"
-        android:drawablePadding="12dp"
+        android:drawablePadding="?dialogPreferredPadding"
         android:drawableStart="@android:color/transparent"
         android:text="@string/descending"
         android:textColor="@color/black_white"
+        android:textStyle="bold"
         />
+
+
 </LinearLayout>
 
 

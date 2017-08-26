@@ -126,10 +126,10 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         if (view_id == R.id.start_date){
                             startDate.setText(month + 1 + "/" + day + "/" + year);
-                            startDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                            startDate.setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
                         } else {
                             endDate.setText(month + 1 + "/" + day + "/" + year);
-                            endDate.setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                            endDate.setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
                         }
                     }
                 },year,month,day).show();
@@ -177,7 +177,7 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END);
-                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
 
 
             }
@@ -203,7 +203,7 @@ public class AddToBottomFragment extends BottomSheetDialogFragment implements Vi
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) adapterView.getChildAt(0)).setGravity(Gravity.END);
-                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(),R.color.primary));
+                ((TextView) adapterView.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.accent));
 
             }
 

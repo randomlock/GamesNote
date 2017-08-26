@@ -41,13 +41,13 @@ import com.example.randomlocks.gamesnote.helperClass.Toaster;
 import com.example.randomlocks.gamesnote.interfaces.GameWikiDetailInterface;
 import com.example.randomlocks.gamesnote.interfaces.GameWikiListInterface;
 import com.example.randomlocks.gamesnote.interfaces.OnLoadMoreListener;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailIInnerJson;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailListModal;
-import com.example.randomlocks.gamesnote.modals.GameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.modals.GameWikiListModal;
 import com.example.randomlocks.gamesnote.modals.GameWikiModal;
 import com.example.randomlocks.gamesnote.modals.GameWikiPlatform;
 import com.example.randomlocks.gamesnote.modals.SearchSuggestionModel;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailIInnerJson;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailListModal;
+import com.example.randomlocks.gamesnote.modals.gameDetailModal.GameDetailModal;
 import com.example.randomlocks.gamesnote.realmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.GameListDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.RealmInteger;
@@ -734,7 +734,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     }
 
     @Override
-    public void onSelect(int which, boolean asc) {
+    public void onSelect(int which, boolean asc, String start_date, String end_date) {
 
         String sort = sortValue(which);
 
@@ -744,6 +744,36 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
 
         map.put(GiantBomb.SORT, sort);
         map.put(GiantBomb.OFFSET, "0");
+
+        if (!start_date.equals("-")) {
+            if (!end_date.equals("-"))
+                map.put(GiantBomb.FILTER, "original_release_date:" + start_date + "|" + end_date);
+            else map.put(GiantBomb.FILTER, "original_release_date:" + start_date);
+            Log.d("filters", map.get(GiantBomb.FILTER));
+
+
+
+          /*  if(map.containsKey(GiantBomb.FILTER)){
+                String key = map.get(GiantBomb.FILTER);
+                String filter_array[] = key.split(",");
+                String new_filters="";
+                //check if it contain original release date filter
+                for (String aFilter_array : filter_array) {
+                if(aFilter_array.contains("name"))
+                    new_filters = aFilter_array;
+                }
+                new_filters+=",original_release_date:"+start_date;
+                if(!end_date.equals("-")){
+                    new_filters+="|"+end_date;
+                }
+                map.put(GiantBomb.FILTER,new_filters);
+                Log.d("filters",new_filters);
+
+            }else {
+                map.put(GiantBomb.FILTER,"original_release_date:"+start_date+"|"+end_date);
+                Log.d("filters",)
+            }*/
+        }
 
         if (adapter != null) {
             adapter.removeAll();
