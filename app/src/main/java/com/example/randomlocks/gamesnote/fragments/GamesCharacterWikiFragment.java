@@ -17,7 +17,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +44,7 @@ import com.example.randomlocks.gamesnote.modals.SearchSuggestionModel;
 import com.example.randomlocks.gamesnote.modals.characterSearchModal.CharacterSearchModal;
 import com.example.randomlocks.gamesnote.modals.characterSearchModal.CharacterSearchModalList;
 import com.example.randomlocks.gamesnote.realmDatabase.SearchHistoryDatabase;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,7 +73,7 @@ public class GamesCharacterWikiFragment extends Fragment {
     CoordinatorLayout coordinator;
     AppBarLayout appBarLayout;
     ImageView imageView;
-    RecyclerView recyclerView;
+    FastScrollRecyclerView recyclerView;
     AVLoadingIndicatorView pacman;
     TextView errorText;
     GameCharacterSearchWikiInterface gameCharacterSearchWikiInterface = null;
@@ -129,7 +129,7 @@ public class GamesCharacterWikiFragment extends Fragment {
         appBarLayout = (AppBarLayout) coordinator.findViewById(R.id.app_bar_layout);
         imageView = (ImageView) appBarLayout.findViewById(R.id.imageView);
         floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
-        recyclerView = (RecyclerView) coordinator.findViewById(R.id.recycler_view);
+        recyclerView = (FastScrollRecyclerView) coordinator.findViewById(R.id.recycler_view);
         pacman = (AVLoadingIndicatorView) coordinator.findViewById(R.id.progressBar);
         errorText = (TextView) coordinator.findViewById(R.id.errortext);
 

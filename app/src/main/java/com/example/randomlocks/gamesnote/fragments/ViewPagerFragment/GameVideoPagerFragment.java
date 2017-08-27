@@ -22,7 +22,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,6 +55,7 @@ import com.example.randomlocks.gamesnote.realmDatabase.WatchedVideoDatabase;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManagerListener;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -88,7 +88,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
     public DrawerLayout mDrawer;
     ConsistentLinearLayoutManager manager;
     GamesVideosInterface gamesVideoInterface = null;
-    RecyclerView recyclerView;
+    FastScrollRecyclerView recyclerView;
     List<GamesVideoModal> listModals;
     GameVideoAdapter adapter;
     Map<String, String> map;
@@ -174,7 +174,7 @@ public class GameVideoPagerFragment extends Fragment implements NavigationView.O
         coordinatorLayout = (CoordinatorLayout) mDrawer.findViewById(R.id.root_coordinator);
         floatingSearchView = (FloatingSearchView) getActivity().findViewById(R.id.floating_search_view);
         floatingSearchView.setShowMoveUpSuggestion(true);
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
+        recyclerView = (FastScrollRecyclerView) getActivity().findViewById(R.id.recycler_view);
         errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
         pacman = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
         setupCastListener();

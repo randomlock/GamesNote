@@ -571,7 +571,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
             hltbRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
         if (hltbRecyclerView.getAdapter() == null)
-            hltbRecyclerView.setAdapter(new GameDetailOverviewAdapter(key, value));
+            hltbRecyclerView.setAdapter(new GameDetailOverviewAdapter(key, value, true));
     }
 
     private void setTextViewDrawableColor(TextView textView, int color) {
@@ -788,7 +788,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
 
         recyclerView.setLayoutManager(new ConsistentLinearLayoutManager(getContext()));
-        adapter = new GameDetailOverviewAdapter(key, values);
+        adapter = new GameDetailOverviewAdapter(key, values, false);
         recyclerView.setAdapter(adapter);
 
 

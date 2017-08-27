@@ -17,10 +17,12 @@ public class GameDetailOverviewAdapter extends RecyclerView.Adapter<GameDetailOv
 
     private ArrayList<String> key;
     private ArrayList<String> values;
+    private boolean is_hltb;
 
-    public GameDetailOverviewAdapter(ArrayList<String> key, ArrayList<String> values) {
+    public GameDetailOverviewAdapter(ArrayList<String> key, ArrayList<String> values, boolean is_hltb) {
         this.key = key;
         this.values = values;
+        this.is_hltb = is_hltb;
     }
 
 
@@ -35,7 +37,28 @@ public class GameDetailOverviewAdapter extends RecyclerView.Adapter<GameDetailOv
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        holder.key.setText(key.get(position));
+        if (is_hltb) {
+            boolean is_first_time = true;
+            String str = key.get(position);
+            String[] strArray = str.split(" ");
+            StringBuilder builder = new StringBuilder();
+            String cap;
+            for (String s : strArray) {
+                if (is_first_time) {
+                    is_first_time = false;
+                    cap = s.substring(0, 1).toUpperCase() + s.substring(1);
+
+                } else {
+                    cap = s.substring(0, 1).toLowerCase() + s.substring(1);
+
+                }
+                builder.append(cap).append(" ");
+            }
+            holder.key.setText(builder.toString());
+        } else {
+            holder.key.setText(key.get(position));
+        }
+
         String valueStr = values.get(position);
         //  valueStr = valueStr.substring(0, valueStr.length() - 2);
 

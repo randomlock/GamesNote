@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +32,7 @@ import com.example.randomlocks.gamesnote.helperClass.WebViewHelper.WebViewFallba
 import com.example.randomlocks.gamesnote.interfaces.VideoPlayInterface;
 import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.realmDatabase.WatchedVideoDatabase;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.HashMap;
 
@@ -50,7 +50,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
     private static final String SCROLL_POSITION = "scroll_position";
     private static final int LIKE_TYPE = 1;
     Realm realm;
-    RecyclerView recyclerView;
+    FastScrollRecyclerView recyclerView;
     boolean isReduced = false;
     int position;
     GameVideoOtherAdapter adapter;
@@ -113,7 +113,7 @@ public class GameVideoOtherPagerFragment extends Fragment implements VideoOption
         });
 
         parentFragment = (GamesVideoFragment) getParentFragment();
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = (FastScrollRecyclerView) view.findViewById(R.id.recycler_view);
         errorText = (TextView) view.findViewById(R.id.errortext);
 
       /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

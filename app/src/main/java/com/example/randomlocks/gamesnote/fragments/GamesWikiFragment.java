@@ -19,7 +19,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -52,6 +51,7 @@ import com.example.randomlocks.gamesnote.realmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.GameListDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.RealmInteger;
 import com.example.randomlocks.gamesnote.realmDatabase.SearchHistoryDatabase;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +80,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
     private static final String SEARCH_QUERY = "search_query" ;
     private static final String LIMIT = "50";
     ViewPager viewPager;
-    RecyclerView recyclerView;
+    FastScrollRecyclerView recyclerView;
     DividerItemDecoration itemDecoration;
     AVLoadingIndicatorView progressBar;
     FloatingSearchView floatingSearchView;
@@ -145,7 +145,7 @@ public class GamesWikiFragment extends Fragment implements SearchFilterFragment.
         appBarLayout = (AppBarLayout) coordinatorLayout.findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(this);
         //  viewPager = (ViewPager) coordinatorLayout.findViewById(R.id.viewpager);
-        recyclerView = (RecyclerView) coordinatorLayout.findViewById(R.id.recycler_view);
+        recyclerView = (FastScrollRecyclerView) coordinatorLayout.findViewById(R.id.recycler_view);
         progressBar = (AVLoadingIndicatorView) coordinatorLayout.findViewById(R.id.progressBar);
         errorText = (TextView) coordinatorLayout.findViewById(R.id.errortext);
 
