@@ -132,12 +132,12 @@
 
             <TextView
                 android:id="@+id/game_deck"
-                style="@style/SubTitleText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?android:attr/textColorPrimary" />
+                android:padding="6dp"
+                android:textColor="@color/primary_text" />
 
 
             <include
@@ -279,7 +279,7 @@
                         android:layout_margin="2dp"
                         android:drawableEnd="@drawable/ic_open_in_browser"
                         android:drawableRight="@drawable/ic_open_in_browser"
-                        android:foreground="?selectableItemBackgroundBorderless"
+                        android:foreground="?selectableItemBackground"
                         />
 
 
@@ -583,25 +583,43 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:animateLayoutChanges="true"
+        android:foreground="@drawable/gradient"
         android:visibility="gone"
         app:layout_anchor="@id/scroll_view"
         app:layout_anchorGravity="top|left">
 
-        <ImageView
+        <android.support.v7.widget.CardView
+            android:id="@+id/game_image_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            app:cardElevation="6dp">
+
+            <ImageView
             android:id="@+id/game_image"
             android:layout_width="98dp"
             android:layout_height="144dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:src="@drawable/news_image_drawable" />
+
+            <com.flyco.labelview.LabelView
+                android:id="@+id/game_image_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:lv_background_color="@color/primary"
+                app:lv_text="-"
+                app:lv_text_size="12sp" />
+
+        </android.support.v7.widget.CardView>
 
         <TextView
             android:id="@+id/game_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
-            android:layout_toEndOf="@+id/game_image"
-            android:layout_toRightOf="@+id/game_image"
+            android:layout_toEndOf="@+id/game_image_parent"
+            android:layout_toRightOf="@+id/game_image_parent"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -613,8 +631,8 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_marginTop="6dp"
-            android:layout_toEndOf="@+id/game_image"
-            android:layout_toRightOf="@+id/game_image"
+            android:layout_toEndOf="@+id/game_image_parent"
+            android:layout_toRightOf="@+id/game_image_parent"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
@@ -624,8 +642,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/game_date"
             android:layout_margin="6dp"
-            android:layout_toEndOf="@id/game_image"
-            android:layout_toRightOf="@+id/game_image"
+            android:layout_toEndOf="@id/game_image_parent"
+            android:layout_toRightOf="@+id/game_image_parent"
             android:textColor="@color/white"
             android:textSize="12sp" />
 

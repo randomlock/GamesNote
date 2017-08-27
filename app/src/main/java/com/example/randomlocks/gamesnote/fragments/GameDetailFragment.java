@@ -77,6 +77,7 @@ import com.example.randomlocks.gamesnote.modals.gamesVideoModal.GamesVideoModal;
 import com.example.randomlocks.gamesnote.realmDatabase.GameDetailDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.GameListDatabase;
 import com.example.randomlocks.gamesnote.realmDatabase.RealmInteger;
+import com.flyco.labelview.LabelView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
@@ -185,6 +186,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
     RelativeLayout game_info_layout;
     ImageView game_image;
     TextView game_title, game_date, game_platform, game_deck;
+    LabelView game_image_label;
     private int stopPosition;
     private DisplayMetrics metrics;
     private String video_url;
@@ -205,8 +207,11 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                     score = (TextView) statsDetailView.findViewById(R.id.score_value);
                     platform = (TextView) statsDetailView.findViewById(R.id.platfom_value);
                     hours = (TextView) statsDetailView.findViewById(R.id.hours_value);
-
-                    status.setText(getResources().getStringArray(R.array.status)[statsDatabase.getStatus() - 1]);
+                    game_image_label = (LabelView) game_info_layout.findViewById(R.id.game_image_label);
+                    game_image_label.setVisibility(View.VISIBLE);
+                    String game_status = getResources().getStringArray(R.array.status)[statsDatabase.getStatus() - 1];
+                    game_image_label.setText(game_status);
+                    status.setText(game_status);
                     score.setText(String.valueOf(statsDatabase.getScore()));
                     platform.setText(statsDatabase.getPlatform());
                     hours.setText(statsDatabase.getGameplay_hours());
@@ -276,6 +281,14 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
 
     }
+
+/*
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.game_detail_menu, menu);
+    }
+*/
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -678,7 +691,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         if(platforms==null)
             platforms = new ArrayList<>();
         if (platforms.size() > 0) {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder("");
             for (int i = 0, length = platforms.size(); i < length; i++) {
                 if (i == length - 1) {
                     builder.append(platforms.get(i).abbreviation);
@@ -686,7 +699,6 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
                     builder.append(platforms.get(i).abbreviation).append(" \u2022 ");
                 }
             }
-            builder.replace(builder.length() - 6, builder.length(), "");
             game_platform.setText(builder.toString());
         }
         if (gameDetailModal.deck != null) {
@@ -956,11 +968,9 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
 
         switch (item.getItemId()) {
 
-
-
-
             case android.R.id.home:
                 getActivity().onBackPressed();
+
 
         }
 
@@ -968,6 +978,7 @@ public class GameDetailFragment extends Fragment implements View.OnClickListener
         return true;
 
     }
+
 
     public <T> String listToString(List<T> list) {
 

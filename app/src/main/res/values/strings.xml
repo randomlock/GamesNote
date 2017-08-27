@@ -320,6 +320,7 @@
     <string name="to">TO</string>
     <string name="medium">MEDIUM</string>
     <string name="price">Price($)</string>
+    <string name="remove_from_list">Remove from list</string>
 
 
 </resources>
