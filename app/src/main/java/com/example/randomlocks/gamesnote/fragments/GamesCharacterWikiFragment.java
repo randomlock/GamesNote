@@ -91,6 +91,7 @@ public class GamesCharacterWikiFragment extends Fragment {
 
     RealmResults<SearchHistoryDatabase> search_results;
     List<SearchSuggestionModel> search_list;
+    boolean isSuggestionClicked;
 
 
 
@@ -178,43 +179,48 @@ public class GamesCharacterWikiFragment extends Fragment {
         floatingSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                if (!oldQuery.equals("") && newQuery.equals("")) {
+                if (isSuggestionClicked) {
+                    isSuggestionClicked = false;
                     floatingSearchView.clearSuggestions();
                 } else {
+                    if (!oldQuery.equals("") && newQuery.equals("")) {
+                        floatingSearchView.clearSuggestions();
+                    } else {
 
-                    //this shows the top left circular progress
-                    //you can call it where ever you want, but
-                    //it makes sense to do it when loading something in
-                    //the background.
+                        //this shows the top left circular progress
+                        //you can call it where ever you want, but
+                        //it makes sense to do it when loading something in
+                        //the background.
 
-                    //simulates a query call to a data source
-                    //with a new query.
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            search_results = SearchHistoryDatabase.search(realm,newQuery,SearchHistoryDatabase.CHARACTER_WIKI, true);
+                        //simulates a query call to a data source
+                        //with a new query.
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                search_results = SearchHistoryDatabase.search(realm, newQuery, SearchHistoryDatabase.CHARACTER_WIKI, true);
+                                search_list = new ArrayList<>();
+                                int i = 0;
+                                for (SearchHistoryDatabase search_result : search_results) {
+                                    search_list.add(new SearchSuggestionModel(search_result.getTitle()));
+                                    if (++i > 5)
+                                        break;
+                                }
 
-                            search_list = new ArrayList<>();
-                            int i=0;
-                            for(SearchHistoryDatabase search_result : search_results){
-                                search_list.add(new SearchSuggestionModel(search_result.getTitle()));
-                                if(++i > 5)
-                                    break;
                             }
-
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            if (search_list.size() == 1 && search_list.get(0).getBody().equals(newQuery)) {
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                          /*  if (search_list.size() == 1 && search_list.get(0).getBody().equals(newQuery)) {
                                 floatingSearchView.clearSuggestions();
                                 floatingSearchView.clearSearchFocus();
                             } else {
                                 floatingSearchView.swapSuggestions(search_list);
+                            }*/
+                                floatingSearchView.swapSuggestions(search_list);
                             }
-                        }
-                    });
+                        });
 
+                    }
                 }
             }
         });
@@ -224,12 +230,14 @@ public class GamesCharacterWikiFragment extends Fragment {
             public void onFocus() {
 
                 //show suggestions when search bar gains focus (typically history suggestions)
+                isSuggestionClicked = false;
                 floatingSearchView.swapSuggestions(SearchHistoryDatabase.getHistory(realm,SearchHistoryDatabase.CHARACTER_WIKI,3));
 
             }
 
             @Override
             public void onFocusCleared() {
+                isSuggestionClicked = false;
                 // floatingSearchView.setSearchBarTitle(mLastQuery);
             }
         });
@@ -240,12 +248,17 @@ public class GamesCharacterWikiFragment extends Fragment {
         floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+                isSuggestionClicked = true;
                 floatingSearchView.setSearchBarTitle(searchSuggestion.getBody());
                 performSearch(searchSuggestion.getBody(),false);
+                floatingSearchView.clearSuggestions();
+                floatingSearchView.clearSearchFocus();
+                floatingSearchView.setSearchBarTitle(searchSuggestion.getBody());
             }
 
             @Override
             public void onSearchAction(final String currentQuery) {
+                isSuggestionClicked = false;
                 if (currentQuery.trim().length() > 0) {
 
                     realm.executeTransactionAsync(new Realm.Transaction() {

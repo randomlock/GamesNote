@@ -50,7 +50,7 @@ public class SearchHistoryDatabase extends RealmObject {
         String[] keywords = query.split(" ");
         for (String keyword : keywords) {
             String spacedKeyword = " " + keyword;
-            realmResults = realmResults.where().beginsWith(TITLE, keyword, Case.INSENSITIVE).or().contains(TITLE, spacedKeyword, Case.SENSITIVE).equalTo(SEARCH_TYPE,search_type).findAll();
+            realmResults = realmResults.where().equalTo(SEARCH_TYPE, search_type).beginsWith(TITLE, keyword, Case.INSENSITIVE).or().contains(TITLE, spacedKeyword, Case.SENSITIVE).findAll();
         }
         return realmResults;
     }
@@ -95,4 +95,6 @@ public class SearchHistoryDatabase extends RealmObject {
     public interface OnPerformSearchListener {
         public void onPerform();
     }
+
+
 }
