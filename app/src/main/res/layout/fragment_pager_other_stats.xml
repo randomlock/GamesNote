@@ -399,7 +399,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="6dp"
-            android:text="@string/no_of_games" />
+            android:text="@string/no_of_times" />
 
 
     </RelativeLayout>

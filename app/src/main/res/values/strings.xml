@@ -321,6 +321,7 @@
     <string name="medium">MEDIUM</string>
     <string name="price">Price($)</string>
     <string name="remove_from_list">Remove from list</string>
+    <string name="no_of_times">No of times</string>
 
 
 </resources>
